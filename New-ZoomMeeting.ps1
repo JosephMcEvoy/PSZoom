@@ -45,7 +45,7 @@ function New-ZoomMeeting {
     Tracking fields. An array of objects where each object contains two keys (field, value). Example: @(@{field = value, value = value}, @{field = value, value = value})
 
     .PARAMETER Recurrence
-    Recurrence object.
+    Recurrence object. Pass an entire recurrence object directly. Cannot be used with other recurrence parameters.
 
     .PARAMETER RecurrenceType
     Recurrence meeting types: 
@@ -54,15 +54,30 @@ function New-ZoomMeeting {
     3 - Monthly
 
     .PARAMETER RecurrenceRepeatInterval
-    At which interval should the meeting repeat? For a daily meeting there's a maximum of 90 days. For a weekly meeting there is a maximum of 12 weeks. 
+    At which interval should the meeting repeat? For a daily meeting there's a maximum of 90 days. 
+    For a weekly meeting there is a maximum of 12 weeks. 
     For a monthly meeting there is a maximum of 3 months.
 
     .PARAMETER RecurrenceWeeklyDays
     Days of the week the meeting should repeat. Note: Multiple values should be separated by a comma. 
-    1  - Sunday. 2 - Monday. 3 - Tuesday. 4 -  Wednesday. 5 -  Thursday. 6 - Friday. 7 - Saturday.
+    1 - Sunday
+    2 - Monday
+    3 - Tuesday
+    4 - Wednesday
+    5 - Thursday
+    6 - Friday
+    7 - Saturday
     
     .PARAMETER RecurrenceMonthlyDay
     Day in the month the meeting is to be scheduled. The value is from 1 to 31.
+
+    .PARAMETER RecurrenceMonthlyWeek
+    The week a meeting will recur each month.
+    -1 - Last wek
+    1 - First week
+    2 - Second week
+    3 - Third week
+    4 - Fourth week
 
     .PARAMETER RecurrenceMonthlyWeekDay
     The weekday a meeting should recur each month.
@@ -153,11 +168,11 @@ function New-ZoomMeeting {
     #>
                       
 
-  [CmdletBinding(DefaultParameterSetName='NoRecurrence')]
+  [CmdletBinding(DefaultParameterSetName="All")]
   param (
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName=$True)]
     [ValidateNotNullOrEmpty()]
-    [string]$ApiIKey,
+    [string]$ApiKey,
 
     [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName=$True)]
     [ValidateNotNullOrEmpty()]
@@ -176,13 +191,13 @@ function New-ZoomMeeting {
     [ValidateNotNullOrEmpty()]
     [int[]]$Type = 2,
 
-    [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName=$True)]
+    [Parameter(ValueFromPipelineByPropertyName=$True)]
     [string]$StartTime,
 
-    [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName=$True)]
+    [Parameter(ValueFromPipelineByPropertyName=$True)]
     [int]$Duration,
 
-    [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName=$True)]
+    [Parameter(ValueFromPipelineByPropertyName=$True)]
     [string]$Timezone,
 
     [ValidatePattern("[A-Za-z0-9@-_\*]*")]
@@ -192,39 +207,85 @@ function New-ZoomMeeting {
 
     [hashtable[]]$TrackingFields,
 
-    [Parameter(Mandatory=$True, ParameterSetName='Recurrence')]
     [hashtable]$Recurrence,
 
-    [Parameter(Mandatory=$True, ParameterSetName='Recurrence')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
     [ValidateRange(1,3)]
     [int]$RecurrenceType,
 
-    [Parameter(Mandatory=$True, ParameterSetName='Recurrence')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
+    [ValidateRange(1,90)]
+    [ValidateScript({
+        if ($RecurrenceType -eq 2 -and $_ -le 12){
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceRepeatInterval only accepts values between 1 and 12 when RecurrenceType is set to 2 (Weekly).'
+        } elseif ($RecurrenceType -eq 3 -and $_ -le 3){
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceRepeatInterval only accepts values between 1 and 3 when RecurrenceType is set to 3 (Monthly).'
+        } else {
+            $true
+        }
+    })]
     [int]$RecurrenceRepeatInterval,
 
-    [Parameter(Mandatory=$True, ParameterSetName='Recurrence')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
     [ValidateRange(1,7)]
-    [int]$RecurrenceWeeklyDays,
+    [ValidateScript({
+        if ($RecurrenceType -ne 2) {
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceWeeklyDays requires RecurrenceType to be set to 2 (Weekly).'
+        }
+    })]
+    [int[]]$RecurrenceWeeklyDays,
 
-    [Parameter(Mandatory=$True, ParameterSetName='Recurrence')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
     [ValidateRange(1,31)]
+    [ValidateScript({
+        if ($RecurrenceType -ne 3) {
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceMonthlyDay requires RecurrenceType to be set to 3 (Monthly).'
+        }
+    })]
     [int]$RecurrenceMonthlyDay,
 
-    [Parameter(Mandatory=$True, ParameterSetName='Recurrence')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
     [ValidateSet(-1,1,2,3,4)]
+    [ValidateScript({
+        if ($RecurrenceType -ne 3) {
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceMonthlyDay requires RecurrenceType to be set to 3 (Monthly).'
+        }
+    })]
     [int]$RecurrenceMonthlyWeek,
 
-    [Parameter(ParameterSetName='Recurrence')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
     [ValidateRange(1,7)]
     [int]$RecurrenceMonthlyWeekDay,
 
-    [Parameter(ParameterSetName='Recurrence')]
+    [Parameter(ParameterSetName='RecurrenceByDay')]
+    [Parameter(ParameterSetName='RecurrenceByWeek')]
+    [Parameter(ParameterSetName='RecurrenceByMonthDay')]
+    [Parameter(ParameterSetName='RecurrenceByMonthWeek')]
     [ValidateRange(1,50)]
-    [int]$RecurrenceEndTimes = 1,
-
-    #Example: 2016-04-06T10:10:09Z. Regex takenf rom https://www.regextester.com/94925
-    [Parameter(ParameterSetName='Recurrence')]
+    [ValidateScript({
+        if ($RecurrenceEndDateTime) {
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceEndTimes cannot be used in conjunction with RecurrenceEndDateTime.'
+        }
+    })]
+    [int]$RecurrenceEndTimes,
+    
+    [Parameter(ParameterSetName='RecurrenceByDay')]
+    [Parameter(ParameterSetName='RecurrenceByWeek')]
+    [Parameter(ParameterSetName='RecurrenceByMonthDay')]
+    [Parameter(ParameterSetName='RecurrenceByMonthWeek')]
     [ValidatePattern("^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$")] 
+    #Example: 2016-04-06T10:10:09Z. Regex taken from https://www.regextester.com/94925
+    [ValidateScript({
+        if ($RecurrenceEndTimes) {
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceEndDateTime cannot be used in conjunction with RecurrenceEndTimes.'
+        }
+    })]
     [string]$RecurrenceEndDateTime,
 
     [hashtable]$Settings,
@@ -257,7 +318,7 @@ function New-ZoomMeeting {
 
     [bool]$EnforceLogin,
 
-    [string]$EnforceLoginDomains,
+    [bool]$EnforceLoginDomains,
 
     [string]$AlternativeHosts,
 
@@ -269,7 +330,7 @@ function New-ZoomMeeting {
 
     [string]$ContactName,
 
-    [string]$ContacEmail
+    [string]$ContactEmail
   )
   
   begin {
@@ -281,11 +342,16 @@ function New-ZoomMeeting {
         'api_secret'   = $ApiSecret
         'schedule_for' = $ScheduleFor
         'topic'        = $Topic
-        'type'         = $Type
-        'start_time'   = $StartTime
-        'duration'     = $Duration
     }
-
+    if ($Type) {
+        $RequestBody.Add('type', $Type)
+    }
+    if ($StartTime) {
+        $RequestBody.Add('start_time', $StartTime)
+    }
+    if ($Duration) {
+        $RequestBody.Add('duration', $Duration)
+    }
     if ($Timezone) {
         $RequestBody.Add('timezone', $Timezone)
     }
@@ -299,104 +365,130 @@ function New-ZoomMeeting {
         $RequestBody.Add('tracking_fields', $TrackingFields)
     }
     
-    $RecurrenceBody = @{}
+    $RecurrenceObject = @{}
+
+    if (('RecurrenceByDay', 'RecurrenceByWeek', 'RecurrenceByMonthDay', 'RecurrenceByMonthWeek').Contains($PSCmdlet.ParameterSetName)) {
+        if (-not $RecurrenceEndTimes -and -not $RecurrenceEndDateTime) {
+            $RecurrenceEndTimes = 1
+        }
+    }
+    
+
 
     if ($Recurrence) {
         $RequestBody.Add('reccurence', $Recurrence)
     } else {
         if ($RecurrenceType) {
-            RecurrenceBody.Add('type', $RecurrenceType)
+            RecurrenceObject.Add('type', $RecurrenceType)
         }
         if ($RecurrenceRepeatInterval) {
-            RecurrenceBody.Add('_repeat_interval', $RecurrenceRepeatInterval)
+            RecurrenceObject.Add('repeat_interval', $RecurrenceRepeatInterval)
         }
         if ($RecurrenceWeeklyDays) {
-            RecurrenceBody.Add('weeklydays', $RecurrenceWeeklyDays)
+            RecurrenceObject.Add('weekly_days', $RecurrenceWeeklyDays)
         }
         if ($RecurrenceMonthlyDay) {
-            RecurrenceBody.Add('monthlyday', $RecurrenceMonthlyDay)
+            RecurrenceObject.Add('monthly_day', $RecurrenceMonthlyDay)
         }
         if ($RecurrenceMonthlyWeek) {
-            RecurrenceBody.Add('monthlyweek', $RecurrenceMonthlyWeek)
+            RecurrenceObject.Add('monthly_week', $RecurrenceMonthlyWeek)
         }
         if ($RecurrenceMonthlyWeekDay) {
-            RecurrenceBody.Add('monthlyweekday', $RecurrenceMonthlyWeekDay)
+            RecurrenceObject.Add('monthly_weekday', $RecurrenceMonthlyWeekDay)
         }
         if ($RecurrenceEndTimes) {
-            RecurrenceBody.Add('endtimes', $RecurrenceEndTimes)
+            RecurrenceObject.Add('end_times', $RecurrenceEndTimes)
         }
         if ($RecurrenceEndDateTime) {
-            RecurrenceBody.Add('enddatetime', $RecurrenceEndDateTime)
+            RecurrenceObject.Add('end_date_time', $RecurrenceEndDateTime)
+        }
+        if ($RecurrenceObject -ne $Null) {
+            $RequestBody.Add('recurrence', $RecurrenceObject)
         }
     }
 
-    $SettingsBody = @{}
+    $SettingsObject = @{}
+
     if ($Settings) {
         $RequestBody.Add('settings', $Settings)
+    } else {
+        if ($HostVideo) {
+            $SettingsObject.Add('host_video', $HostVideo)
+        }
+        if ($CNMeeting) {
+            $SettingsObject.Add('cn_meeting', $CNMeeting)
+        }
+        if ($INMeeting) {
+            $SettingsObject.Add('in_meeting', $INMeeting)
+        }
+        if ($JoinBeforeHost) {
+            $SettingsObject.Add('join_before_host', $JoinBeforeHost)
+        }
+        if ($MuteUponEntry) {
+            $SettingsObject.Add('mute_upon_entry', $MuteUponEntry)
+        }
+        if ($Watermark) {
+            $SettingsObject.Add('watermark', $Watermark)
+        }
+        if ($UsePMI) {
+            $SettingsObject.Add('use_pmi', $UsePMI)
+        }
+        if ($ApprovalType) {
+            $SettingsObject.Add('approval_type', $ApprovalType)
+        }
+        if ($RegistrationType) {
+            $SettingsObject.Add('registration_type', $RegistrationType)
+        }
+        if ($Audio) {
+            $SettingsObject.Add('audio', $Audio)
+        }
+        if ($AutoRecording) {
+            $SettingsObject.Add('auto_recording', $AutoRecording)
+        }
+        if ($EnforceLogin) {
+            $SettingsObject.Add('enforce_login', $EnforceLogin)
+        }
+        if ($EnforceLoginDomains) {
+            $SettingsObject.Add('enforce_login_domains', $EnforceLoginDomains)
+        }
+        if ($AlternativeHosts) {
+            $SettingsObject.Add('alternative_hosts', $AlternativeHosts)
+        }
+        if ($CloseRegistration) {
+            $SettingsObject.Add('close_registration', $CloseRegistration)
+        }
+        if ($WaitingRoom) {
+            $SettingsObject.Add('waiting_room', $WaitingRoom)
+        }
+        if ($GlobalDialInCountries) {
+            $SettingsObject.Add('global_dialin_countries', $GlobalDialInCountries)
+        }
+        if ($ContactName) {
+            $SettingsObject.Add('contact_name', $ContactName)
+        }
+        if ($ContactEmail) {
+            $SettingsObject.Add('contact_email', $ContacEmail)
+        }
+        if ($SettingsObject -ne $Null) {
+            $RequestBody.Add('settings', $SettingsObject)
+        }
     }
-    if ($HostVideo) {
-        $RequestBody.Add('hostvideo', $HostVideo)
-    }
-    if ($CNMeeting) {
-        $RequestBody.Add('cnmeeting', $CNMeeting)
-    }
-    if ($INMeeting) {
-        $RequestBody.Add('inmeeting', $INMeeting)
-    }
-    if ($JoinBeforeHost) {
-        $RequestBody.Add('joinbeforehost', $JoinBeforeHost)
-    }
-    if ($MuteUponEntry) {
-        $RequestBody.Add('muteuponentry', $MuteUponEntry)
-    }
-    if ($Watermark) {
-        $RequestBody.Add('watermark', $Watermark)
-    }
-    if ($UsePMI) {
-        $RequestBody.Add('usepmi', $UsePMI)
-    }
-    if ($ApprovalType) {
-        $RequestBody.Add('approvaltype', $ApprovalType)
-    }
-    if ($RegistrationType) {
-        $RequestBody.Add('registrationtype', $RegistrationType)
-    }
-    if ($Audio) {
-        $RequestBody.Add('audio', $Audio)
-    }
-    if ($AutoRecording) {
-        $RequestBody.Add('autorecording', $AutoRecording)
-    }
-    if ($EnforceLogin) {
-        $RequestBody.Add('enforcelogin', $EnforceLogin)
-    }
-    if ($EnforceLoginDomains) {
-        $RequestBody.Add('enforcelogindomains', $EnforceLoginDomains)
-    }
-    if ($AlternativeHosts) {
-        $RequestBody.Add('alternativehosts', $AlternativeHosts)
-    }
-    if ($CloseRegistration) {
-        $RequestBody.Add('closeregistration', $CloseRegistration)
-    }
-    if ($WaitingRoom) {
-        $RequestBody.Add('waitingroom', $WaitingRoom)
-    }
-    if ($GlobalDialInCountries) {
-        $RequestBody.Add('globaldialincountries', $GlobalDialInCountries)
-    }
-    if ($ContactName) {
-        $RequestBody.Add('contactname', $ContactName)
-    }
-    if ($ContacEmail) {
-        $RequestBody.Add('contacemail', $ContacEmail)
-    }
-    
-    $Result = Invoke-RestMethod -Uri $Endpoint -Body $RequestBody -Method Post |
-            Read-ZoomResponse -RequestBody $RequestBody -Endpoint $Endpoint
+
+    Write-Output $RequestBody,$RecurrenceObject,$SettingsObject
+
+    <#    
+        $Result = Invoke-RestMethod -Uri $Endpoint -Body $RequestBody -Method Post |
+                Read-ZoomResponse -RequestBody $RequestBody -Endpoint $Endpoint
+    #>
 
   }
   
   end {
   }
 }
+
+new-zoommeeting -ApiKey 'apikey123' -ApiSecret 'apisecret123' -ScheduleFor 'jmcevoy@gmail.com' -Topic 'Powershell Test' -StartTime "1970-01-01 00:00:00Z" -Duration 60 `
+-Type 2 -Timezone 'EST' -Password '123' -Agenda 'Test Agenda' <#[-TrackingFields <hashtable[]>]#> <#[-Recurrence <hashtable>]#> <#[-Settings <hashtable>]#> `
+-HostVideo $true -CNMeeting $false -INMeeting $false -JoinBeforeHost $false -MuteUponEntry $false -Watermark $false -UsePMI $false -ApprovalType 2 -RegistrationType 1 `
+-Audio 'both' -AutoRecording 'cloud' -EnforceLogin $false -EnforceLoginDomains $false -AlternativeHosts '896712' -CloseRegistration $false -WaitingRoom $false `
+-GlobalDialInCountries 'France, UK' -ContactName 'Joseph Mcevoy' -ContactEmail 'joe.maci@gmail.com'

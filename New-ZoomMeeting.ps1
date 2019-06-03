@@ -24,6 +24,7 @@ function New-ZoomMeeting {
     .PARAMETER Type
     Meeting type. 1 - Instant meeting, 2 - Scheduled meeting, 3 - Recurring meeting with no fixed time, 8 - Recurring meeting with fixed time.
 
+
     .PARAMETER StartTime
     Meeting start time. When using a format like \"yyyy-MM-dd'T'HH:mm:ss'Z'\", always use GMT time. When using a format like \"yyyy-MM-dd'T'HH:mm:ss\", 
     you should use local time and specify the time zone. This is only used for scheduled meetings and recurring meetings with a fixed time.
@@ -192,9 +193,24 @@ function New-ZoomMeeting {
     [int[]]$Type = 2,
 
     [Parameter(ValueFromPipelineByPropertyName=$True)]
+    [Parameter(Mandatory=$True, ParameterSetName='ScheduledMeeting')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
+    [ValidateScript({
+        if ($Type -eq 1){
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter StartTime cannot be used with Type 1 (Instant Meeting).'
+        }
+    })]
     [string]$StartTime,
 
     [Parameter(ValueFromPipelineByPropertyName=$True)]
+    [Parameter(Mandatory=$True, ParameterSetName='ScheduledMeeting')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
     [int]$Duration,
 
     [Parameter(ValueFromPipelineByPropertyName=$True)]
@@ -207,6 +223,11 @@ function New-ZoomMeeting {
 
     [hashtable[]]$TrackingFields,
 
+    [ValidateScript({
+        if ($Type -eq 1 -or $Type -eq 2){
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter Recurrence requres Type to be set to 3(Recurring meeting with no fixed time) or 8 (Recurring meeting with fixed time).'
+        }
+    })]
     [hashtable]$Recurrence,
 
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
@@ -214,6 +235,11 @@ function New-ZoomMeeting {
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
     [ValidateRange(1,3)]
+    [ValidateScript({
+        if ($Type -eq 1 -or $Type -eq 2){
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceType requres Type to be set to 3(Recurring meeting with no fixed time) or 8 (Recurring meeting with fixed time).'
+        }
+    })]
     [int]$RecurrenceType,
 
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
@@ -367,9 +393,10 @@ function New-ZoomMeeting {
     
     $RecurrenceObject = @{}
 
+    #Sets default to 1 if neither value is provided
     if (('RecurrenceByDay', 'RecurrenceByWeek', 'RecurrenceByMonthDay', 'RecurrenceByMonthWeek').Contains($PSCmdlet.ParameterSetName)) {
         if (-not $RecurrenceEndTimes -and -not $RecurrenceEndDateTime) {
-            $RecurrenceEndTimes = 1
+            $RecurrenceEndTimes = 1 
         }
     }
     

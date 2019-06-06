@@ -97,7 +97,8 @@ function New-ZoomMeeting {
     Select a date the meeting will recur before it is canceled. Should be in UTC time, such as 2017-11-25T12:00:00Z. (Cannot be used with "RecurrenceEndTimes".)
 
     .PARAMETER Settings
-    Meeting settings.
+    Meeting settings object. Pass an entire settings object directly.
+
 
     .PARAMETER HostVideo
     Start video when the host joins the meeting.
@@ -171,23 +172,23 @@ function New-ZoomMeeting {
 
   [CmdletBinding(DefaultParameterSetName="All")]
   param (
-    [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName=$True)]
+    [Parameter(Mandatory=$True)]
     [ValidateNotNullOrEmpty()]
     [string]$ApiKey,
 
-    [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName=$True)]
+    [Parameter(Mandatory=$True)]
     [ValidateNotNullOrEmpty()]
     [string]$ApiSecret,
     
-    [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName=$True)]
+    [Parameter(Mandatory=$True)]
     [ValidateNotNullOrEmpty()]
     [string]$ScheduleFor,
 
-    [Parameter(Mandatory=$True, ValueFromPipelineByPropertyName=$True)]
+    [Parameter(Mandatory=$True)]
     [ValidateNotNullOrEmpty()]
     [string]$Topic,
 
-    [Parameter(ValueFromPipelineByPropertyName=$True)]
+    [Parameter(Mandatory=$True)]
     [ValidateSet(1,2,3,8)]
     [ValidateNotNullOrEmpty()]
     [int[]]$Type = 2,
@@ -213,7 +214,6 @@ function New-ZoomMeeting {
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
     [int]$Duration,
 
-    [Parameter(ValueFromPipelineByPropertyName=$True)]
     [string]$Timezone,
 
     [ValidatePattern("[A-Za-z0-9@-_\*]*")]
@@ -225,7 +225,7 @@ function New-ZoomMeeting {
 
     [ValidateScript({
         if ($Type -eq 1 -or $Type -eq 2){
-            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter Recurrence requres Type to be set to 3(Recurring meeting with no fixed time) or 8 (Recurring meeting with fixed time).'
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter Recurrence requres Type to be set to 3 (Recurring meeting with no fixed time) or 8 (Recurring meeting with fixed time).'
         }
     })]
     [hashtable]$Recurrence,
@@ -363,145 +363,104 @@ function New-ZoomMeeting {
   }
   
   process {
+    #The following parameters are added by default as they are requierd by all parameter sets.
     $RequestBody = @{
         'api_key'      = $ApiKey
         'api_secret'   = $ApiSecret
         'schedule_for' = $ScheduleFor
         'topic'        = $Topic
+        'type'         = $Type
     }
-    if ($Type) {
-        $RequestBody.Add('type', $Type)
+
+    #These are optional meeting parameters.
+    $OptionalParameters = @{
+        'timezone'        = $Timezone
+        'password'        = $Password
+        'agenda'          = $Agenda
+        'tracking_fields' = $TrackingFields
     }
-    if ($StartTime) {
+
+    $OptionalParameters.Keys | ForEach-Object {
+        if ($null -ne $OptionalParameters.$_) {
+            $RequestBody.Add($_, $OptionalParameters.$_)
+        }
+    }
+   
+    #The following parameters are mandatory for 5 parameter sets. If one of these parameter sets is being used, the corresponding keys are added to the RequestBody
+    if (('ScheduledMeeting', 'RecurrenceByDay', 'RecurrenceByWeek', 'RecurrenceByMonthDay', 'RecurrenceByMonthWeek').Contains($PSCmdlet.ParameterSetName)) {
         $RequestBody.Add('start_time', $StartTime)
-    }
-    if ($Duration) {
         $RequestBody.Add('duration', $Duration)
     }
-    if ($Timezone) {
-        $RequestBody.Add('timezone', $Timezone)
-    }
-    if ($Password) {
-        $RequestBody.Add('password', $Password)
-    }
-    if ($Agenda) {
-        $RequestBody.Add('agenda', $Agenda)
-    }
-    if ($TrackingFields) {
-        $RequestBody.Add('tracking_fields', $TrackingFields)
-    }
-    
-    $RecurrenceObject = @{}
 
-    #Sets default to 1 if neither value is provided
+
     if (('RecurrenceByDay', 'RecurrenceByWeek', 'RecurrenceByMonthDay', 'RecurrenceByMonthWeek').Contains($PSCmdlet.ParameterSetName)) {
-        if (-not $RecurrenceEndTimes -and -not $RecurrenceEndDateTime) {
-            $RecurrenceEndTimes = 1 
+        if (-not $Recurrence) {
+            $Recurrence = @{}
         }
-    }
-    
-
-
-    if ($Recurrence) {
-        $RequestBody.Add('reccurence', $Recurrence)
-    } else {
-        if ($RecurrenceType) {
-            RecurrenceObject.Add('type', $RecurrenceType)
-        }
-        if ($RecurrenceRepeatInterval) {
-            RecurrenceObject.Add('repeat_interval', $RecurrenceRepeatInterval)
-        }
-        if ($RecurrenceWeeklyDays) {
-            RecurrenceObject.Add('weekly_days', $RecurrenceWeeklyDays)
-        }
-        if ($RecurrenceMonthlyDay) {
-            RecurrenceObject.Add('monthly_day', $RecurrenceMonthlyDay)
-        }
-        if ($RecurrenceMonthlyWeek) {
-            RecurrenceObject.Add('monthly_week', $RecurrenceMonthlyWeek)
-        }
-        if ($RecurrenceMonthlyWeekDay) {
-            RecurrenceObject.Add('monthly_weekday', $RecurrenceMonthlyWeekDay)
-        }
+        #Sets $RecurrenceEndTimes to 1 if no value is provided for $RecurrenceEndTimes or $RecurrenceEndDatetime. This is in line with Zoom's documentaiton which declares a default value for EndTimes.
         if ($RecurrenceEndTimes) {
-            RecurrenceObject.Add('end_times', $RecurrenceEndTimes)
+                Recurrence.Add('end_times', $RecurrenceEndTimes)
+        } elseif ($RecurrenceEndDateTime) {
+                Recurrence.Add('end_date_time', $RecurrenceEndDateTime)
+        } else {
+            $RecurrenceEndTimes = 1  
+            Recurrence.Add('end_times', $RecurrenceEndTimes)
         }
-        if ($RecurrenceEndDateTime) {
-            RecurrenceObject.Add('end_date_time', $RecurrenceEndDateTime)
+
+        #Default values for recurrence
+        Recurrence.Add('type', $RecurrenceType)
+        Recurrence.Add('repeat_interval', $RecurrenceRepeatInterval)
+        
+        if ($RecurrenceWeeklyDays) {
+            Recurrence.Add('weekly_days', $RecurrenceWeeklyDays)
+        }elseif ($RecurrenceMonthlyDay) {
+            Recurrence.Add('monthly_day', $RecurrenceMonthlyDay)
+        }elseif ($RecurrenceMonthlyWeek) {
+            Recurrence.Add('monthly_week', $RecurrenceMonthlyWeek)
+            Recurrence.Add('monthly_weekday', $RecurrenceMonthlyWeekDay)
         }
-        if ($RecurrenceObject -ne $Null) {
-            $RequestBody.Add('recurrence', $RecurrenceObject)
+
+        $RequestBody.Add('recurrence', $Recurrence)
+    }
+
+    if (-not $Settings) {
+        $Settings = @{}
+    }
+
+    $AllSettings = @{
+        'host_video'              = $HostVideo
+        'cn_meeting'              = $CNMeeting
+        'in_meeting'              = $INMeeting
+        'join_before_host'        = $JoinBeforeHost
+        'mute_upon_entry'         = $Mutentry
+        'watermark'               = $Watermark
+        'use_pmi'                 = $UsePMI
+        'approval_type'           = $ApprovalType
+        'registration_type'       = $RegistrationType
+        'audio'                   = $Audio
+        'auto_recording'          = $AutoRecording
+        'enforce_login'           = $Enfogin
+        'enforce_login_domains'   = $EnforceLoginDomains
+        'alternative_hosts'       = $AlternativeHosts
+        'close_registration'      = $CloseRegistration
+        'waiting_room'            = $WaitingRoom
+        'global_dialin_countries' = $GlobalDialInCountries
+        'contact_name'            = $ContactName
+        'contact_email'           = $ContacEmail
+    }
+
+    #Adds additional setting parameters to Settings object, makes sure settuimg was not entered already from settings object
+    $AllSettings.Keys | ForEach-Object {
+        if ($null -ne $AllSettings.$_) {
+            if (-not $settings.Contains($_)) {
+                $settings.Add($_, $AllSettings.$_)
+            }
         }
     }
 
-    $SettingsObject = @{}
+    $RequestBody.Add('settings', $Settings)
 
-    if ($Settings) {
-        $RequestBody.Add('settings', $Settings)
-    } else {
-        if ($HostVideo) {
-            $SettingsObject.Add('host_video', $HostVideo)
-        }
-        if ($CNMeeting) {
-            $SettingsObject.Add('cn_meeting', $CNMeeting)
-        }
-        if ($INMeeting) {
-            $SettingsObject.Add('in_meeting', $INMeeting)
-        }
-        if ($JoinBeforeHost) {
-            $SettingsObject.Add('join_before_host', $JoinBeforeHost)
-        }
-        if ($MuteUponEntry) {
-            $SettingsObject.Add('mute_upon_entry', $MuteUponEntry)
-        }
-        if ($Watermark) {
-            $SettingsObject.Add('watermark', $Watermark)
-        }
-        if ($UsePMI) {
-            $SettingsObject.Add('use_pmi', $UsePMI)
-        }
-        if ($ApprovalType) {
-            $SettingsObject.Add('approval_type', $ApprovalType)
-        }
-        if ($RegistrationType) {
-            $SettingsObject.Add('registration_type', $RegistrationType)
-        }
-        if ($Audio) {
-            $SettingsObject.Add('audio', $Audio)
-        }
-        if ($AutoRecording) {
-            $SettingsObject.Add('auto_recording', $AutoRecording)
-        }
-        if ($EnforceLogin) {
-            $SettingsObject.Add('enforce_login', $EnforceLogin)
-        }
-        if ($EnforceLoginDomains) {
-            $SettingsObject.Add('enforce_login_domains', $EnforceLoginDomains)
-        }
-        if ($AlternativeHosts) {
-            $SettingsObject.Add('alternative_hosts', $AlternativeHosts)
-        }
-        if ($CloseRegistration) {
-            $SettingsObject.Add('close_registration', $CloseRegistration)
-        }
-        if ($WaitingRoom) {
-            $SettingsObject.Add('waiting_room', $WaitingRoom)
-        }
-        if ($GlobalDialInCountries) {
-            $SettingsObject.Add('global_dialin_countries', $GlobalDialInCountries)
-        }
-        if ($ContactName) {
-            $SettingsObject.Add('contact_name', $ContactName)
-        }
-        if ($ContactEmail) {
-            $SettingsObject.Add('contact_email', $ContacEmail)
-        }
-        if ($SettingsObject -ne $Null) {
-            $RequestBody.Add('settings', $SettingsObject)
-        }
-    }
-
-    Write-Output $RequestBody,$RecurrenceObject,$SettingsObject
+    Write-Output $RequestBody,$Recurrence,$Settings
 
     <#    
         $Result = Invoke-RestMethod -Uri $Endpoint -Body $RequestBody -Method Post |
@@ -514,7 +473,7 @@ function New-ZoomMeeting {
   }
 }
 
-new-zoommeeting -ApiKey 'apikey123' -ApiSecret 'apisecret123' -ScheduleFor 'jmcevoy@gmail.com' -Topic 'Powershell Test' -StartTime "1970-01-01 00:00:00Z" -Duration 60 `
+new-zoommeeting -ApiKey 'apikey123' -ApiSecret 'apisecret123' -ScheduleFor 'jmcevoy@gmail.com' -Topic 'Powershell Test' -Duration 60 `
 -Type 2 -Timezone 'EST' -Password '123' -Agenda 'Test Agenda' <#[-TrackingFields <hashtable[]>]#> <#[-Recurrence <hashtable>]#> <#[-Settings <hashtable>]#> `
 -HostVideo $true -CNMeeting $false -INMeeting $false -JoinBeforeHost $false -MuteUponEntry $false -Watermark $false -UsePMI $false -ApprovalType 2 -RegistrationType 1 `
 -Audio 'both' -AutoRecording 'cloud' -EnforceLogin $false -EnforceLoginDomains $false -AlternativeHosts '896712' -CloseRegistration $false -WaitingRoom $false `

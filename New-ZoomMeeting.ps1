@@ -1,6 +1,3 @@
-$ApiKey = '' 
-$ApiSecret = ''
-
 function New-ZoomMeeting {
     <#
     .SYNOPSIS
@@ -179,8 +176,7 @@ function New-ZoomMeeting {
     [Parameter(Mandatory=$True)]
     [ValidateNotNullOrEmpty()]
     [string]$ApiSecret,
-    
-    [Parameter(Mandatory=$True)]
+
     [ValidateNotNullOrEmpty()]
     [string]$ScheduleFor,
 
@@ -188,25 +184,17 @@ function New-ZoomMeeting {
     [ValidateNotNullOrEmpty()]
     [string]$Topic,
 
-    [Parameter(Mandatory=$True)]
     [ValidateSet(1,2,3,8)]
     [ValidateNotNullOrEmpty()]
-    [int[]]$Type = 2,
+    [int]$Type = 2,
 
-    [Parameter(ValueFromPipelineByPropertyName=$True)]
     [Parameter(Mandatory=$True, ParameterSetName='ScheduledMeeting')]
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
-    [ValidateScript({
-        if ($Type -eq 1){
-            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter StartTime cannot be used with Type 1 (Instant Meeting).'
-        }
-    })]
     [string]$StartTime,
 
-    [Parameter(ValueFromPipelineByPropertyName=$True)]
     [Parameter(Mandatory=$True, ParameterSetName='ScheduledMeeting')]
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
@@ -223,11 +211,6 @@ function New-ZoomMeeting {
 
     [hashtable[]]$TrackingFields,
 
-    [ValidateScript({
-        if ($Type -eq 1 -or $Type -eq 2){
-            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter Recurrence requres Type to be set to 3 (Recurring meeting with no fixed time) or 8 (Recurring meeting with fixed time).'
-        }
-    })]
     [hashtable]$Recurrence,
 
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
@@ -235,11 +218,6 @@ function New-ZoomMeeting {
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
     [ValidateRange(1,3)]
-    [ValidateScript({
-        if ($Type -eq 1 -or $Type -eq 2){
-            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceType requres Type to be set to 3(Recurring meeting with no fixed time) or 8 (Recurring meeting with fixed time).'
-        }
-    })]
     [int]$RecurrenceType,
 
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
@@ -247,42 +225,18 @@ function New-ZoomMeeting {
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
     [ValidateRange(1,90)]
-    [ValidateScript({
-        if ($RecurrenceType -eq 2 -and $_ -le 12){
-            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceRepeatInterval only accepts values between 1 and 12 when RecurrenceType is set to 2 (Weekly).'
-        } elseif ($RecurrenceType -eq 3 -and $_ -le 3){
-            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceRepeatInterval only accepts values between 1 and 3 when RecurrenceType is set to 3 (Monthly).'
-        } else {
-            $true
-        }
-    })]
     [int]$RecurrenceRepeatInterval,
 
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
     [ValidateRange(1,7)]
-    [ValidateScript({
-        if ($RecurrenceType -ne 2) {
-            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceWeeklyDays requires RecurrenceType to be set to 2 (Weekly).'
-        }
-    })]
     [int[]]$RecurrenceWeeklyDays,
 
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
     [ValidateRange(1,31)]
-    [ValidateScript({
-        if ($RecurrenceType -ne 3) {
-            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceMonthlyDay requires RecurrenceType to be set to 3 (Monthly).'
-        }
-    })]
     [int]$RecurrenceMonthlyDay,
 
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
     [ValidateSet(-1,1,2,3,4)]
-    [ValidateScript({
-        if ($RecurrenceType -ne 3) {
-            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceMonthlyDay requires RecurrenceType to be set to 3 (Monthly).'
-        }
-    })]
     [int]$RecurrenceMonthlyWeek,
 
     [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
@@ -294,11 +248,6 @@ function New-ZoomMeeting {
     [Parameter(ParameterSetName='RecurrenceByMonthDay')]
     [Parameter(ParameterSetName='RecurrenceByMonthWeek')]
     [ValidateRange(1,50)]
-    [ValidateScript({
-        if ($RecurrenceEndDateTime) {
-            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceEndTimes cannot be used in conjunction with RecurrenceEndDateTime.'
-        }
-    })]
     [int]$RecurrenceEndTimes,
     
     [Parameter(ParameterSetName='RecurrenceByDay')]
@@ -307,11 +256,6 @@ function New-ZoomMeeting {
     [Parameter(ParameterSetName='RecurrenceByMonthWeek')]
     [ValidatePattern("^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$")] 
     #Example: 2016-04-06T10:10:09Z. Regex taken from https://www.regextester.com/94925
-    [ValidateScript({
-        if ($RecurrenceEndTimes) {
-            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceEndDateTime cannot be used in conjunction with RecurrenceEndTimes.'
-        }
-    })]
     [string]$RecurrenceEndDateTime,
 
     [hashtable]$Settings,
@@ -363,6 +307,11 @@ function New-ZoomMeeting {
   }
   
   process {
+    # Additional StartTime and Duration parameter validation
+    if (($Type -eq 1) -and ($StartTime -or $Duration)){
+        Throw [System.Management.Automation.ValidationMetadataException] 'Parameter StartTime cannot be used with Type 1 (Instant Meeting).'
+    }
+
     #The following parameters are added by default as they are requierd by all parameter sets.
     $RequestBody = @{
         'api_key'      = $ApiKey
@@ -394,9 +343,37 @@ function New-ZoomMeeting {
 
 
     if (('RecurrenceByDay', 'RecurrenceByWeek', 'RecurrenceByMonthDay', 'RecurrenceByMonthWeek').Contains($PSCmdlet.ParameterSetName)) {
+        #Recurrence parameter validation
+        if (($Type -eq 1 -or $Type -eq 2) -and ($Recurrence -or $RecurrenceType)){
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter Recurrence and RecurrenceType requres Type to be set to 3 (Recurring meeting with no fixed time) or 8 (Recurring meeting with fixed time).'
+        }
+    
+        if ($RecurrenceType -ne 2 -and $RecurrenceWeeklyDays) {
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceWeeklyDays requires RecurrenceType to be set to 2 (Weekly).'
+        }
+    
+        if ($RecurrenceType -eq 2 -and $RecurrenceRepeatInterval -le 12){
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceRepeatInterval only accepts values between 1 and 12 when RecurrenceType is set to 2 (Weekly).'
+        } elseif ($RecurrenceType -eq 3 -and $RecurrenceRepeatInterval -le 3){
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceRepeatInterval only accepts values between 1 and 3 when RecurrenceType is set to 3 (Monthly).'
+        }
+    
+        if ($RecurrenceType -ne 3 -and $RecurrenceMonthlyDay) {
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceMonthlyDay requires RecurrenceType to be set to 3 (Monthly).'
+        }
+    
+        if ($RecurrenceType -ne 3 -and $RecurrenceMonthlyWeek) {
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceMonthlyWeek requires RecurrenceType to be set to 3 (Monthly).'
+        }
+        
+        if ($RecurrenceEndTimes =and $RecurrenceEndDateTime) {
+            Throw [System.Management.Automation.ValidationMetadataException] 'Parameter RecurrenceEndDateTime cannot be used in conjunction with RecurrenceEndTimes.'
+        }
+        
         if (-not $Recurrence) {
             $Recurrence = @{}
         }
+
         #Sets $RecurrenceEndTimes to 1 if no value is provided for $RecurrenceEndTimes or $RecurrenceEndDatetime. This is in line with Zoom's documentaiton which declares a default value for EndTimes.
         if ($RecurrenceEndTimes) {
                 Recurrence.Add('end_times', $RecurrenceEndTimes)
@@ -460,7 +437,7 @@ function New-ZoomMeeting {
 
     $RequestBody.Add('settings', $Settings)
 
-    Write-Output $RequestBody,$Recurrence,$Settings
+    Write-Output $PSCmdlet.ParameterSetName, $RequestBody, $Settings, $Recurrence
 
     <#    
         $Result = Invoke-RestMethod -Uri $Endpoint -Body $RequestBody -Method Post |
@@ -473,8 +450,38 @@ function New-ZoomMeeting {
   }
 }
 
-new-zoommeeting -ApiKey 'apikey123' -ApiSecret 'apisecret123' -ScheduleFor 'jmcevoy@gmail.com' -Topic 'Powershell Test' -Duration 60 `
--Type 2 -Timezone 'EST' -Password '123' -Agenda 'Test Agenda' <#[-TrackingFields <hashtable[]>]#> <#[-Recurrence <hashtable>]#> <#[-Settings <hashtable>]#> `
--HostVideo $true -CNMeeting $false -INMeeting $false -JoinBeforeHost $false -MuteUponEntry $false -Watermark $false -UsePMI $false -ApprovalType 2 -RegistrationType 1 `
--Audio 'both' -AutoRecording 'cloud' -EnforceLogin $false -EnforceLoginDomains $false -AlternativeHosts '896712' -CloseRegistration $false -WaitingRoom $false `
--GlobalDialInCountries 'France, UK' -ContactName 'Joseph Mcevoy' -ContactEmail 'joe.maci@gmail.com'
+$params = @{
+    ApiKey                = 'apikey123' 
+    ApiSecret             = 'apisecret123' 
+    ScheduleFor           = 'jmcevoy@gmail.com' 
+    Topic                 = 'Powershell Test' 
+    StartTime             = 5
+    Duration              = 60
+    Type                  = 3
+    RecurrenceType       = 3
+    Timezone              = 'EST' 
+    Password              = '123' 
+    Agenda                = 'Test Agenda' 
+    HostVideo             = $true 
+    CNMeeting             = $false 
+    INMeeting             = $false 
+    JoinBeforeHost        = $false 
+    MuteUponEntry         = $false 
+    Watermark             = $false 
+    UsePMI                = $false 
+    ApprovalType          = 2 
+    RegistrationType      = 1
+    Audio                 = 'both' 
+    AutoRecording         = 'cloud' 
+    EnforceLogin          = $false 
+    EnforceLoginDomains   = $false 
+    AlternativeHosts      = '896712' 
+    CloseRegistration     = $false 
+    WaitingRoom           = $false
+    GlobalDialInCountries = 'France, UK' 
+    ContactName           = 'Joseph Mcevoy' 
+    ContactEmail          = 'joe.maci@gmail.com'
+    <#[-TrackingFields <hashtable[]>]#> <#[-Recurrence <hashtable>]#> <#[-Settings <hashtable>]#> `
+}
+
+new-zoommeeting @params

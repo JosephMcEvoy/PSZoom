@@ -570,7 +570,7 @@ function New-ZoomMeeting {
   
   end {}
 }
-
+<#Example Params
 $paramsScheduled = @{
     UserId                = 'foleyav@foleyhoag.com'
     ScheduleFor           = 'foleyav@foleyhoag.com' 
@@ -603,4 +603,5 @@ $paramsScheduled = @{
 }
 
 New-ZoomMeeting @paramsScheduled
+#>
 #show-command new-zoommeeting

@@ -1,5 +1,5 @@
-$Global:ZoomApiKey = 'xemREbnhSGyiH9dZ32obng'
-$Global:ZoomApiSecret = 'OmVJSguTdBrh9YezNsJBqNkJ7Gpaax9rteQY'
+$Global:ZoomApiKey = ''
+$Global:ZoomApiSecret = ''
 
 <#
 

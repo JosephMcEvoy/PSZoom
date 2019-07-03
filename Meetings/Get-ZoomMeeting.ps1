@@ -63,5 +63,3 @@ function Get-ZoomMeeting {
         Write-Output $Response
     }
 }
-
-Get-ZoomMeeting

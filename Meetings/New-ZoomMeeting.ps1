@@ -519,8 +519,8 @@ function New-ZoomMeeting {
 
     Write-Output $Response
   }
-
 }
+
 #Example Params
 <#
 $paramsScheduled = @{

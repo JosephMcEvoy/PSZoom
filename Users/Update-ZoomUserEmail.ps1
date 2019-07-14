@@ -1,17 +1,19 @@
 <#
 
 .SYNOPSIS
-List users on a Zoom account.
+Update a user's email.
 .DESCRIPTION
-List users on a Zoom account.
+Update a user's email.
 .PARAMETER UserId
 The user ID or email address.
+.PARAMETER Email
+User's email. The length should be less than 128 characters.
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
 .EXAMPLE
-Get-ZoomSpecificUser jsmith@lawfirm.com
+Update-ZoomUserEmail jsmith@lawfirm.com
 .OUTPUTS
 A hastable with the Zoom API response.
 
@@ -20,20 +22,25 @@ A hastable with the Zoom API response.
 $Parent = Split-Path $PSScriptRoot -Parent
 import-module "$Parent\ZoomModule.psm1"
 
-function Get-ZoomSpecificUser {
+function Update-ZoomUserEmail {
     [CmdletBinding()]
     param (
         [Parameter(
             Mandatory = $True, 
             Position = 0, 
-            ValueFromPipeline = $True
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('Email', 'EmailAddress', 'Id')]
+        [Alias('EmailAddress', 'Id', 'UserId')]
         [string]$UserId,
 
-        [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
-        [Alias('login_type')]
-        [string]$LoginType,
+        [Parameter(
+            Mandatory = $True,
+            Position = 1,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [ValidateLength(0,128)]
+        [string]$Email,
 
         [string]$ApiKey,
 
@@ -53,24 +60,13 @@ function Get-ZoomSpecificUser {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
-
-        if ($LoginType) {
-            $LoginType = switch ($LoginType) {
-                'Facebook' { 0 }
-                'Google' { 1 }
-                'API' { 99 }
-                'Zoom' { 100 }
-                'SSO' { 101 }
-                Default { $LoginType }
-            }
-            $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('login_type', $LoginType)
-            $Request.Query = $Query.ToString()
-        }
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/email"
+        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+        $Query.Add('email', $Email)
+        $Request.Query = $Query.ToString()
 
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET
+            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method PUT
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         }

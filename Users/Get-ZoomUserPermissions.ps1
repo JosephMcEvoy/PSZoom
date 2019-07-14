@@ -1,9 +1,9 @@
 <#
 
 .SYNOPSIS
-List users on a Zoom account.
+Retrieve a user’s permissions.
 .DESCRIPTION
-List users on a Zoom account.
+Retrieve a user’s permissions.
 .PARAMETER UserId
 The user ID or email address.
 .PARAMETER ApiKey
@@ -11,7 +11,7 @@ The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
 .EXAMPLE
-Get-ZoomSpecificUser jsmith@lawfirm.com
+Get-ZoomUserPermissions jsmith@lawfirm.com
 .OUTPUTS
 A hastable with the Zoom API response.
 
@@ -20,7 +20,7 @@ A hastable with the Zoom API response.
 $Parent = Split-Path $PSScriptRoot -Parent
 import-module "$Parent\ZoomModule.psm1"
 
-function Get-ZoomSpecificUser {
+function Get-ZoomUserPermissions {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -30,10 +30,6 @@ function Get-ZoomSpecificUser {
         )]
         [Alias('Email', 'EmailAddress', 'Id')]
         [string]$UserId,
-
-        [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
-        [Alias('login_type')]
-        [string]$LoginType,
 
         [string]$ApiKey,
 
@@ -53,21 +49,7 @@ function Get-ZoomSpecificUser {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
-
-        if ($LoginType) {
-            $LoginType = switch ($LoginType) {
-                'Facebook' { 0 }
-                'Google' { 1 }
-                'API' { 99 }
-                'Zoom' { 100 }
-                'SSO' { 101 }
-                Default { $LoginType }
-            }
-            $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('login_type', $LoginType)
-            $Request.Query = $Query.ToString()
-        }
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/permissions"
 
         try {
             $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET

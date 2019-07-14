@@ -6,6 +6,8 @@ Retrieve the details of a meeting.
 Retrieve the details of a meeting.
 .PARAMETER MeetingId
 The meeting ID.
+.PARAMETER OcurrenceId
+The occurence ID.
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret
@@ -23,10 +25,17 @@ import-module "$Parent\ZoomModule.psm1"
 function Get-ZoomMeeting {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $True, ValueFromPipeline=$True, Position=0)]
+        [Parameter(
+            Mandatory = $True, 
+            ValueFromPipeline = $True, 
+            Position = 0
+        )]
         [string]$MeetingId,
 
-        [Parameter(Position=1)]
+        [Parameter(
+            ValueFromPipelineByPropertyName = $True, 
+            Position=1
+        )]
         [string]$OcurrenceId,
 
         [string]$ApiKey,

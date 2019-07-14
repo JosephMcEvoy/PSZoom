@@ -1,9 +1,9 @@
 <#
 
 .SYNOPSIS
-List users on a Zoom account.
+Revoke a user’s SSO token.
 .DESCRIPTION
-List users on a Zoom account.
+Revoke a user’s SSO token.
 .PARAMETER UserId
 The user ID or email address.
 .PARAMETER ApiKey
@@ -11,7 +11,7 @@ The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
 .EXAMPLE
-Get-ZoomSpecificUser jsmith@lawfirm.com
+Revoke-UserSsoToken jsmith@lawfirm.com
 .OUTPUTS
 A hastable with the Zoom API response.
 
@@ -20,7 +20,7 @@ A hastable with the Zoom API response.
 $Parent = Split-Path $PSScriptRoot -Parent
 import-module "$Parent\ZoomModule.psm1"
 
-function Get-ZoomSpecificUser {
+function Revoke-ZoomUserSsoToken {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -31,9 +31,8 @@ function Get-ZoomSpecificUser {
         [Alias('Email', 'EmailAddress', 'Id')]
         [string]$UserId,
 
-        [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
-        [Alias('login_type')]
-        [string]$LoginType,
+        [ValidateSet('token', 'zpk', 'zap')]
+        [string]$Type,
 
         [string]$ApiKey,
 
@@ -41,9 +40,9 @@ function Get-ZoomSpecificUser {
     )
 
     begin {
-        #Get Zoom Api Credentials
+        #Revoke Zoom Api Credentials
         if (-not $ApiKey -or -not $ApiSecret) {
-            $ApiCredentials = Get-ZoomApiCredentials
+            $ApiCredentials = Revoke-ZoomApiCredentials
             $ApiKey = $ApiCredentials.ApiKey
             $ApiSecret = $ApiCredentials.ApiSecret
         }
@@ -53,24 +52,16 @@ function Get-ZoomSpecificUser {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/token"
 
-        if ($LoginType) {
-            $LoginType = switch ($LoginType) {
-                'Facebook' { 0 }
-                'Google' { 1 }
-                'API' { 99 }
-                'Zoom' { 100 }
-                'SSO' { 101 }
-                Default { $LoginType }
-            }
+        if ($Type) {
             $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('login_type', $LoginType)
+            $Query.Add('login_type', $Type)
             $Request.Query = $Query.ToString()
         }
 
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET
+            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         }

@@ -1,9 +1,9 @@
 <#
 
 .SYNOPSIS
-List users on a Zoom account.
+Retrieve a user’s settings.
 .DESCRIPTION
-List users on a Zoom account.
+Retrieve a user’s settings.
 .PARAMETER UserId
 The user ID or email address.
 .PARAMETER ApiKey
@@ -11,7 +11,7 @@ The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
 .EXAMPLE
-Get-ZoomSpecificUser jsmith@lawfirm.com
+Get-ZoomUserSettings jsmith@lawfirm.com
 .OUTPUTS
 A hastable with the Zoom API response.
 
@@ -20,7 +20,7 @@ A hastable with the Zoom API response.
 $Parent = Split-Path $PSScriptRoot -Parent
 import-module "$Parent\ZoomModule.psm1"
 
-function Get-ZoomSpecificUser {
+function Get-ZoomUserSettings {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -53,7 +53,7 @@ function Get-ZoomSpecificUser {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/settings"
 
         if ($LoginType) {
             $LoginType = switch ($LoginType) {

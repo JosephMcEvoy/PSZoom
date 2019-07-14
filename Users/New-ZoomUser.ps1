@@ -39,26 +39,26 @@ The Zoom API response as a hashtable.
 
 $Parent = Split-Path $PSScriptRoot -Parent
 import-module "$Parent\ZoomModule.psm1"
-. "$Parent\Users\Get-ZoomSpecificUserps1"
+. "$Parent\Users\Get-ZoomSpecificUser.ps1"
 
 
 function New-ZoomUser {    
     [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact='Medium')]
     Param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $True)]
         [ValidateSet('create', 'autoCreate', 'custCreate', 'ssoCreate')]
         [string]$Action,
 
         [Parameter(
-            Mandatory = $true,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true
+            Mandatory = $True,
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
         )]
         [ValidateLength(1, 128)]
         [Alias('EmailAddress')]
         [string]$Email,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $True)]
         [ValidateSet('Basic', 'Pro', 'Corp', 1, 2, 3)]
         [string]$Type,
 
@@ -92,8 +92,9 @@ function New-ZoomUser {
 
     process {
         #Request Body
-        $RequestBody = @{ }
-        $RequestBody.Add('action', $Action)
+        $RequestBody = @{
+            'action' = $Action
+        }
 
         if ($Type) {
             $Type = switch ($Type) {
@@ -104,27 +105,31 @@ function New-ZoomUser {
             }
         }
 
-        #User Info Object
+        #These parameters are mandatory and are added automatically.
         $UserInfo = @{
             'email' = $Email
             'type'  = $Type
         }
 
+        #These parameters are optional.
         $UserInfoKeyValues = @{
-            'first_name' = $FirstName
-            'last_name'  = $LastName
-            'password'   = $Password
+            'first_name' = 'FirstName'
+            'last_name'  = 'LastName'
+            'password'   = 'Password'
         }
 
-        #Adds parameters to UserInfo object if not Null
+        #Determines if optional parameters were provided in the function call.
+        $UserInfoKeyValues = Remove-NonPSBoundParameters($UserInfoKeyValues)
+
+        #Adds parameters to UserInfo object.
         $UserInfoKeyValues.Keys | ForEach-Object {
-            if (-not [string]::IsNullOrEmpty($UserInfoKeyValues.$_)) {
                 $UserInfo.Add($_, $UserInfoKeyValues.$_)
-            }
         }
-
+        $UserInfoKeyValues
+        <#
         $RequestBody.add('user_info', $UserInfo)
-
+        $RequestBody.User_Info#>
+        <#
         if ($pscmdlet.ShouldProcess) {
             try {
                 Invoke-RestMethod -Uri $Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Post
@@ -134,6 +139,7 @@ function New-ZoomUser {
             }
             
             Write-Output (Get-ZoomSpecificUser -Email $Email)
-        }
+        }#>
     }
 }
+new-zoomuser -action ssoCreate -Email 'jmcevoy@foleyhoag.com' -FirstName 'Joseph' -type pro

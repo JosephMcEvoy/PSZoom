@@ -1,17 +1,17 @@
 <#
 
 .SYNOPSIS
-List users on a Zoom account.
+Verify if a user’s email is registered with Zoom (check a user's email).
 .DESCRIPTION
-List users on a Zoom account.
-.PARAMETER UserId
-The user ID or email address.
+Verify if a user’s email is registered with Zoom (check a user's email).
+.PARAMETER Email
+The email address to be verified.
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
 .EXAMPLE
-Get-ZoomSpecificUser jsmith@lawfirm.com
+Get-ZoomUserEmailStatus jsmith@lawfirm.com
 .OUTPUTS
 A hastable with the Zoom API response.
 
@@ -20,7 +20,7 @@ A hastable with the Zoom API response.
 $Parent = Split-Path $PSScriptRoot -Parent
 import-module "$Parent\ZoomModule.psm1"
 
-function Get-ZoomSpecificUser {
+function Get-ZoomUserEmailStatus {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -28,8 +28,8 @@ function Get-ZoomSpecificUser {
             Position = 0, 
             ValueFromPipeline = $True
         )]
-        [Alias('Email', 'EmailAddress', 'Id')]
-        [string]$UserId,
+        [Alias('EmailAddress', 'Id', 'UserId')]
+        [string]$Email,
 
         [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
         [Alias('login_type')]
@@ -54,20 +54,9 @@ function Get-ZoomSpecificUser {
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
-
-        if ($LoginType) {
-            $LoginType = switch ($LoginType) {
-                'Facebook' { 0 }
-                'Google' { 1 }
-                'API' { 99 }
-                'Zoom' { 100 }
-                'SSO' { 101 }
-                Default { $LoginType }
-            }
             $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('login_type', $LoginType)
+            $Query.Add('email', $Email)
             $Request.Query = $Query.ToString()
-        }
 
         try {
             $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET

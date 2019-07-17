@@ -6,6 +6,7 @@ Revoke a user’s SSO token.
 Revoke a user’s SSO token.
 .PARAMETER UserId
 The user ID or email address.
+.PARAMETER LoginType
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret
@@ -32,7 +33,7 @@ function Revoke-ZoomUserSsoToken {
         [string]$UserId,
 
         [ValidateSet('token', 'zpk', 'zap')]
-        [string]$Type,
+        [string]$LoginType,
 
         [string]$ApiKey,
 
@@ -54,9 +55,9 @@ function Revoke-ZoomUserSsoToken {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/token"
 
-        if ($Type) {
+        if ($PSBoundParameters.ContainsKey('LoginType')) {
             $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('login_type', $Type)
+            $Query.Add('login_type', $LoginType)
             $Request.Query = $Query.ToString()
         }
 

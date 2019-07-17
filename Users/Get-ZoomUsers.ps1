@@ -23,8 +23,6 @@ Get-ZoomUsers
 Get-ZoomUsers -Status active -PageSize 50
 .EXAMPLE
 (Get-ZoomUsers -PageSize 100 -pagenumber 3 -status active).Users.Email
-.OUTPUTS
-A hastable with the Zoom API response.
 
 #>
 

@@ -108,7 +108,7 @@ function Update-ZoomUser {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
         $RequestBody = @{ }   
 
-        if ($LoginType) {
+        if ($PSBoundParameters.ContainsKey('LoginType')) {
             $LoginType = switch ($LoginType) {
                 'Facebook' { 0 }
                 'Google' { 1 }

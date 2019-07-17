@@ -118,6 +118,25 @@ function New-ZoomUser {
             'password'   = 'Password'
         }
 
+        function Remove-NonPSBoundParameters {
+            param (
+                $Obj,
+                $Parameters = $PSBoundParameters
+            )
+
+            process {
+                $NewObj = @{}
+        
+                foreach ($Key in $Obj.Keys) {
+                    if ($Parameters.ContainsKey($Obj.$Key)){
+                        $Newobj.Add($Key, (get-variable $Obj.$Key).value)
+                    }
+                }
+        
+                return $NewObj
+            }
+        }
+
         #Determines if optional parameters were provided in the function call.
         $UserInfoKeyValues = Remove-NonPSBoundParameters($UserInfoKeyValues)
 
@@ -125,11 +144,10 @@ function New-ZoomUser {
         $UserInfoKeyValues.Keys | ForEach-Object {
                 $UserInfo.Add($_, $UserInfoKeyValues.$_)
         }
-        $UserInfoKeyValues
-        <#
+
         $RequestBody.add('user_info', $UserInfo)
-        $RequestBody.User_Info#>
-        <#
+        $RequestBody.User_Info
+
         if ($pscmdlet.ShouldProcess) {
             try {
                 Invoke-RestMethod -Uri $Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Post
@@ -139,7 +157,7 @@ function New-ZoomUser {
             }
             
             Write-Output (Get-ZoomSpecificUser -Email $Email)
-        }#>
+        }
     }
 }
-new-zoomuser -action ssoCreate -Email 'jmcevoy@foleyhoag.com' -FirstName 'Joseph' -type pro
+#new-zoomuser -action ssoCreate -Email 'jmcevoy@foleyhoag.com' -FirstName 'Joseph' -type pro

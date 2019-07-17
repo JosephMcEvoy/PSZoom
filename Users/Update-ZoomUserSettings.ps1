@@ -435,7 +435,7 @@ function Update-ZoomUserSettings {
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/settings"
-        
+
         $ScheduleMeeting = @{
             'host_video'                      = 'HostVideo'
             'participants_video'              = 'ParticipantsVideo'
@@ -546,17 +546,24 @@ function Update-ZoomUserSettings {
         $Telephony = Remove-NonPSBoundParameters($Telephony)
         $Feature = Remove-NonPSBoundParameters($Feature)
         $Tsp = Remove-NonPSBoundParameters($Tsp)
-       
-        $RequestBody = @{
-            'schedule_meeting'               = $ScheduleMeeting
-            'in_meeting'                     = $InMeeting
-            'email_notification'             = $EmailNotification
-            'recording'                      = $Recording
-            'telephony'                      = $Telephony
-            'feature'                        = $Feature
-            'tsp'                            = $Tsp
-       }
-       $RequestBody|convertto-json
+
+        $AllObjects = @{
+            'schedule_meeting' = $ScheduleMeeting
+            'in_meeting' = $InMeeting
+            'email_notification' = $EmailNotification
+            'recording' = $Recording
+            'telephony' = $Telephony
+            'feature' = $Feature
+            'tsp' = $Tsp
+        }
+
+        #Add objects to RequestBody if not empty.
+        foreach ($Key in $AllObjects.Keys) {
+            if ($AllObjects.$Key -gt 0) {
+                $RequestBody.Add($Key, $AllObjects.$Key)
+            }
+        }
+
        if ($pscmdlet.ShouldProcess) {
             try {
                 Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Patch
@@ -573,4 +580,4 @@ function Update-ZoomUserSettings {
     }
 }
 
-Update-ZoomUserSettings -UserId 'jmcevoy@foleyhoag.com' -JoinBeforeHost $True
+#Update-ZoomUserSettings -UserId 'jmcevoy@foleyhoag.com' -JoinBeforeHost $True

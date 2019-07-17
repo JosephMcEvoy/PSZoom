@@ -71,17 +71,17 @@ function Remove-ZoomUser {
         $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
 
         $UserInfoKeyValues = @{
-            'action' = $Action
-            'transfer_email' = $TransferEmail
-            'transfer_meeting' = $TransferMeeting
-            'transfer_webinar' = $TransferWebinar
-            'transfer_recording' = $TransferRecording
+            'action'             = 'Action'
+            'transfer_email'     = 'TransferEmail'
+            'transfer_meeting'   = 'TransferMeeting'
+            'transfer_webinar'   = 'TransferWebinar'
+            'transfer_recording' = 'TransferRecording'
         }
 
         #Adds parameters to UserInfo object if not Null
         $UserInfoKeyValues.Keys | ForEach-Object {
-            if ($UserInfoKeyValues.$_) {
-                $Query.Add($_, $UserInfoKeyValues.$_)
+            if ($PSBoundParameters.ContainsKey("$($UserInfoKeyValues.$_)")) {
+                $Query.Add($_, (get-variable $UserInfoKeyValues.$_))
             }
         }
         

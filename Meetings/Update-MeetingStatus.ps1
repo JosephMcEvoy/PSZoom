@@ -1,27 +1,26 @@
 <#
 
 .SYNOPSIS
-Retrieve the details of a meeting.
+Update a meeting’s status.
 .DESCRIPTION
-Retrieve the details of a meeting.
+Update a meeting’s status.
 .PARAMETER MeetingId
 The meeting ID.
-.PARAMETER OcurrenceId
-The occurence ID.
+.PARAMETER Action
+The update action. Available actions: end.
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
 .EXAMPLE
-Get-ZoomMeeting 123456789
-
+Update-MeetingStatus -MeetingId '123456789' -Action 'End'
 
 #>
 
 $Parent = Split-Path $PSScriptRoot -Parent
 import-module "$Parent\ZoomModule.psm1"
 
-function Get-ZoomMeeting {
+function Update-MeetingStatus {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -33,9 +32,10 @@ function Get-ZoomMeeting {
 
         [Parameter(
             ValueFromPipelineByPropertyName = $True, 
-            Position=1
+            Position = 1
         )]
-        [string]$OcurrenceId,
+        [ValidateSet('end')]
+        [string]$Action,
 
         [string]$ApiKey,
 
@@ -55,15 +55,16 @@ function Get-ZoomMeeting {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId"
-        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/status"
 
-        if ($PSBoundParameters.ContainsKey($OcurrenceId)) {
-            $Query.Add('occurrence_id', $OcurrenceId)
-            $Request.Query = $Query.toString()
-        }        
+        if ($PSBoundParameters.ContainsKey('Action')) {
+            $RequestBody = @{
+                'action' = $Action
+            }
+        }
+
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $RequestBody -Method GET
+            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $RequestBody -Method PUT
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         }

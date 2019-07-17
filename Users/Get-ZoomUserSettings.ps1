@@ -55,7 +55,7 @@ function Get-ZoomUserSettings {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/settings"
 
-        if ($LoginType) {
+        if ($PSBoundParameters.ContainsKey('LoginType')) {
             $LoginType = switch ($LoginType) {
                 'Facebook' { 0 }
                 'Google' { 1 }

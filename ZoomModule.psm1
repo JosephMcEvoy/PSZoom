@@ -282,43 +282,4 @@ function New-ZoomHeaders {
     Write-Output $Headers
 }
 
-function Remove-NonPSBoundParameters {
-    <#  
-    .DESCRIPTION
-    This is used to filter Hashtables and retrieve PSBoundParameter values.
-    
-    Here's how it works:
-    It determines if each value in a given hash is in PSBoundParameters. 
-    If so, adds the key and the bound parameter value to $NewObj object. Returns $NewObj.
-
-    Hashtable should be formatted in this way:
-
-    $MyHash = @{
-        'zoom_setting' = 'ParameterName'
-    }
-
-    Example:
-    $ScheduleMeeting
-    $Settings = @{
-        'schedule_meeting' = 'ScheduleMeeting'
-    }
-    #>
-    param (
-        $Obj,
-        $Parameters
-    )
-
-    process {
-        $NewObj = @{}
-
-        foreach ($Key in $Obj.Keys) {
-            if ($Parameters.ContainsKey($Obj.$Key)){
-                $Newobj.Add($Key, (get-variable $Obj.$Key).value)
-            }
-        }
-
-        return $NewObj
-    }
-}
-
 Export-ModuleMember -function *

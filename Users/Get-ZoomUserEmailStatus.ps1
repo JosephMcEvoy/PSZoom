@@ -54,9 +54,9 @@ function Get-ZoomUserEmailStatus {
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
-            $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('email', $Email)
-            $Request.Query = $Query.ToString()
+        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+        $Query.Add('email', $Email)
+        $Request.Query = $Query.ToString()
 
         try {
             $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET

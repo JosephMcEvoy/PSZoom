@@ -70,7 +70,7 @@ function Get-ZoomSpecificUser {
         }
 
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET
+            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Method GET
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         }

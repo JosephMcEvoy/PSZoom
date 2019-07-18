@@ -1,9 +1,11 @@
 <#
 
 .SYNOPSIS
-List of ended meeting instances
+List polls  of a meeting.
 .DESCRIPTION
-List of ended meeting instances
+List polls  of a meeting. 
+Host user must be in a Pro plan.
+Meeting must be a scheduled meeting. Instant meetings do not have polling features enabled.
 .PARAMETER MeetingId
 The meeting ID.
 .PARAMETER ApiKey
@@ -11,7 +13,7 @@ The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
 .EXAMPLE
-Get-ZoomEndedMeetingInstances 123456789
+Get-ZoomMeetingsPolls 123456789
 
 
 #>
@@ -19,7 +21,7 @@ Get-ZoomEndedMeetingInstances 123456789
 $Parent = Split-Path $PSScriptRoot -Parent
 import-module "$Parent\ZoomModule.psm1"
 
-function Get-ZoomEndedMeetingInstances {
+function Get-ZoomMeetingsPolls {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -47,7 +49,7 @@ function Get-ZoomEndedMeetingInstances {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/past_meetings/$MeetingId/instances"
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/polls"
    
         try {
             $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $RequestBody -Method GET

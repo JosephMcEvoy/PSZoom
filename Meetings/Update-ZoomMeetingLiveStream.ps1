@@ -72,7 +72,7 @@ function Update-ZoomMeetingLiveStream {
         }
                 
         try {
-            $Response = Invoke-RestMethod -Uri $Uri -Headers $headers -Body $RequestBody -Method GET
+            $Response = Invoke-RestMethod -Uri $Uri -Headers $headers -Body $RequestBody -Method PATCH
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         }

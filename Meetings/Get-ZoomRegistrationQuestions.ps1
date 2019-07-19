@@ -1,19 +1,17 @@
 <#
 
 .SYNOPSIS
-Retrieve the details of a meeting.
+List registration questions that will be displayed to users while registering for a meeeting.
 .DESCRIPTION
-Retrieve the details of a meeting.
+List registration questions that will be displayed to users while registering for a meeeting.
 .PARAMETER MeetingId
 The meeting ID.
-.PARAMETER OcurrenceId
-The occurence ID.
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
 .EXAMPLE
-Get-ZoomMeeting 123456789
+Get-ZoomRegistrationQuestions 123456789
 
 
 #>
@@ -21,7 +19,7 @@ Get-ZoomMeeting 123456789
 $Parent = Split-Path $PSScriptRoot -Parent
 import-module "$Parent\ZoomModule.psm1"
 
-function Get-ZoomMeeting {
+function Get-ZoomRegistrationQuestions {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -32,10 +30,11 @@ function Get-ZoomMeeting {
         [string]$MeetingId,
 
         [Parameter(
+            Mandatory = $True,
             ValueFromPipelineByPropertyName = $True, 
             Position=1
         )]
-        [string]$OcurrenceId,
+        [string]$PollId,
 
         [string]$ApiKey,
 
@@ -55,13 +54,8 @@ function Get-ZoomMeeting {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId"
-        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-
-        if ($PSBoundParameters.ContainsKey('OcurrenceId')) {
-            $Query.Add('occurrence_id', $OcurrenceId)
-            $Request.Query = $Query.toString()
-        }        
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/registrants/questions"
+    
         try {
             $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $RequestBody -Method GET
         } catch {

@@ -50,7 +50,7 @@ function Get-ZoomMeetingInvitation {
         $Uri = "https://api.zoom.us/v2/meetings/$MeetingId/invitation"
         
         try {
-            $Response = Invoke-RestMethod -Uri $Uri -Headers $headers -Body $RequestBody -Method GET
+            $Response = Invoke-RestMethod -Uri $Uri -Headers $headers -Method GET
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         }

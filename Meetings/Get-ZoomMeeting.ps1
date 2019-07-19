@@ -29,12 +29,14 @@ function Get-ZoomMeeting {
             ValueFromPipeline = $True, 
             Position = 0
         )]
+        [Alias('meeting_id')]
         [string]$MeetingId,
 
         [Parameter(
             ValueFromPipelineByPropertyName = $True, 
             Position=1
         )]
+        [Alias('ocurrence_id')]
         [string]$OcurrenceId,
 
         [string]$ApiKey,

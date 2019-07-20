@@ -32,6 +32,9 @@ function Update-ZoomRegistrationQuestions {
         [Alias('question')]
         [hashtable[]]$Questions,
 
+        [Alias('custom_question')]
+        [hashtable[]]$CustomQuestions,
+
         [string]$ApiKey,
 
         [string]$ApiSecret
@@ -47,6 +50,15 @@ function Update-ZoomRegistrationQuestions {
 
         #Generate JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+    }
+    $RequestBody = @{}
+    
+    if ($PSBoundParameters.ContainsKey('Questions')) {
+        $RequestBody.Add('questions', $Questions)
+    }
+
+    if ($PSBoundParameters.ContainsKey('Questions')) {
+        $RequestBody.Add('customquestions', $CustomQuestions)
     }
 
     process {

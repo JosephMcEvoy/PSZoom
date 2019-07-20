@@ -5,9 +5,6 @@ A collection of helper functions that support the primary functions.
 
 #>
 
-$Global:ZoomApiKey = 'xemREbnhSGyiH9dZ32obng'
-$Global:ZoomApiSecret = '8InebJpSh00cbcf7tuRfKVRFFwUgFwbnjnwn'
-
 function Get-ZoomApiCredentials {
     <#
     .SYNOPSIS

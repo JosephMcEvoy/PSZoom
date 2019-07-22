@@ -29,6 +29,7 @@ function Get-ZoomPersonalMeetingRoomName {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
+        [Alias('vanity_name')]
         [string]$VanityName,
 
         [string]$ApiKey,

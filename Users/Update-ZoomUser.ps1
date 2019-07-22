@@ -49,40 +49,59 @@ function Update-ZoomUser {
             Position = 0
         )]
         [ValidateLength(1, 128)]
-        [Alias('Email')]
+        [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
         [string]$UserId,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
+        [Alias('login_type')]
         [string]$LoginType,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('Basic', 'Pro', 'Corp', 1, 2, 3)]
         [string]$Type,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateLength(1, 64)]
+        [Alias('first_name')]
         [string]$FirstName,
         
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateLength(1, 64)]
+        [Alias('last_name')]
         [string]$LastName,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateRange(1000000000, 9999999999)]
         [long]$Pmi = $null,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('use_pmi')]
         [bool]$UsePmi,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateScript({
             (Get-ZoomTimeZones).Contains($_)
         })]
         [string]$Timezone,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Language,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Dept,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('vanity_name')]
         [string]$VanityName,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidatePattern("[0-9]{6,10}")] #A six to ten digit number.
+        [Alias('host_key')]
         [string]$HostKey,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('cms_user_id')]
         [string]$CmsUserId,
 
         [string]$ApiKey,

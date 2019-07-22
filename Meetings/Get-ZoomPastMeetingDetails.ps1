@@ -24,16 +24,18 @@ function Get-ZoomPastMeetingDetails {
     param (
         [Parameter(
             Mandatory = $True, 
-            ValueFromPipeline = $True, 
-            Position = 0
+            Position = 0,
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
         )]
         [Alias('uuid')]
-        [string]$Meetinguuid,
+        [string]$MeetingUuid,
 
         [Parameter(
-            ValueFromPipelineByPropertyName = $True, 
-            Position=1
+            Position = 1,
+            ValueFromPipelineByPropertyName = $True
         )]
+        [Alias('occurence_id')]
         [string]$OcurrenceId,
 
         [string]$ApiKey,

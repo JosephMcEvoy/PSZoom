@@ -26,15 +26,18 @@ function Remove-ZoomSpecificUserScheduler {
         [Parameter(
             Mandatory = $True, 
             Position = 0, 
-            ValueFromPipeline = $True
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('Email', 'EmailAddress', 'Id')]
+        [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
         [string]$UserId,
 
         [Parameter(
             Mandatory = $True, 
-            Position = 1
+            Position = 1,
+            ValueFromPipelineByPropertyName = $True
         )]
+        [Alias('scheduler_id')]
         [string]$schedulerId,
 
         [string]$ApiKey,

@@ -45,7 +45,10 @@ import-module "$Parent\ZoomModule.psm1"
 function New-ZoomUser {    
     [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact='Medium')]
     Param(
-        [Parameter(Mandatory = $True)]
+        [Parameter(
+            Mandatory = $True,
+            ValueFromPipelineByPropertyName = $True        
+        )]
         [ValidateSet('create', 'autoCreate', 'custCreate', 'ssoCreate')]
         [string]$Action,
 
@@ -58,16 +61,24 @@ function New-ZoomUser {
         [Alias('EmailAddress')]
         [string]$Email,
 
-        [Parameter(Mandatory = $True)]
+        [Parameter(
+            Mandatory = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
         [ValidateSet('Basic', 'Pro', 'Corp', 1, 2, 3)]
         [string]$Type,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateLength(1, 64)]
+        [Alias('first_name')]
         [string]$FirstName,
-        
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]        
         [ValidateLength(1, 64)]
+        [Alias('last_name')]
         [string]$LastName,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Password,
         
         [string]$ApiKey,

@@ -32,12 +32,17 @@ import-module "$Parent\ZoomModule.psm1"
 function Get-ZoomUsers {
     [CmdletBinding()]
     param (
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('active', 'inactive', 'pending')]
         [string]$Status = 'active',
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateRange(1, 300)]
+        [Alias('page_size')]
         [int]$PageSize = 30,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('page_number')]
         [int]$PageNumber = 1,
 
         [string]$ApiKey,

@@ -30,11 +30,13 @@ function Get-ZoomUserToken {
         [Parameter(
             Mandatory = $True, 
             Position = 0, 
-            ValueFromPipeline = $True
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('Email', 'EmailAddress', 'Id')]
+        [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
         [string]$UserId,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('token', 'zpk', 'zap')]
         [string]$Type,
 

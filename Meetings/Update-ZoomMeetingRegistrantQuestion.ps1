@@ -41,15 +41,17 @@ function Update-ZoomRegistrationQuestions {
     param (
         [Parameter(
             Mandatory = $True, 
-            ValueFromPipeline = $True, 
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True,
             Position = 0
         )]
         [string]$MeetingId,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('question')]
         [hashtable[]]$Questions,
 
-        [Alias('custom_question')]
+        [Alias('custom_question', 'customquestion')]
         [hashtable[]]$CustomQuestions,
 
         [string]$ApiKey,

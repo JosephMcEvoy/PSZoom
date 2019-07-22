@@ -76,58 +76,91 @@ function Add-ZoomMeetingRegistrant {
         [Parameter(
             Mandatory = $True, 
             ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True, 
             Position = 0
         )]
+        [Alias('meeting_id')]
         [string]$MeetingId,
 
         [Parameter(
             ValueFromPipelineByPropertyName = $True, 
             Position=1
         )]
+        [Alias('')]
         [string]$OcurrenceIdS,
 
-        [Parameter(Mandatory = $True)]
+        [Parameter(
+            Mandatory = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
         [string]$Email,
 
-        [Parameter(Mandatory = $True)]
+        [Parameter(
+            Mandatory = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('first_name')]
         [string]$FirstName,
 
-        [Parameter(Mandatory = $True)]
+        [Parameter(
+            Mandatory = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('last_name')]
         [string]$LastName,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Address,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$City,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Country,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Zip,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$State,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Phone,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Industry,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Org,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('job_title')]
         [string]$JobTitle,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('Within a month', '1-3 months', '4-6 months', 'more than 6 months', 'no timeframe')]
+        [Alias('purchasing_time_Frame')]
         [string]$PurchasingTimeFrame,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('Decision Maker', 'Evaluator/Recommender', 'Influencer', 'Not involved')]
+        [Alias('role_in_purchase_process')]
         [string]$RoleInPurchaseProcess,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('1-20', '21-50', '51-100', '101-500', '500-1,000', '1,001-5,000', '5,001-10,000', 'More than 10,000')]
+        [Alias('no_of_employees')]
         [string]$NoOfEmployees,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Comments,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('custom_questions')]
         [hashtable]$CustomQuestions,
-
+        
         [string]$ApiKey,
-
+        
         [string]$ApiSecret
     )
 

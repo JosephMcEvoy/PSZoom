@@ -141,49 +141,138 @@ import-module "$Parent\ZoomModule.psm1"
 function New-ZoomMeeting {
   [CmdletBinding(DefaultParameterSetName="Instant")]
   param (
-    [Parameter(Mandatory=$True, ParameterSetName='Instant')]
-    [Parameter(Mandatory=$True, ParameterSetName='ScheduledMeeting')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='Instant', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='ScheduledMeeting', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByMonthDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
     [ValidateNotNullOrEmpty()]
+    [Alias('user_id', 'id')]
     [string]$UserId,
 
-    [Parameter(Mandatory=$True, ParameterSetName='Instant')]
-    [Parameter(Mandatory=$True, ParameterSetName='ScheduledMeeting')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='Instant', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='ScheduledMeeting', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByMonthDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
     [ValidateNotNullOrEmpty()]
+    [Alias('schedule_for')]
     [string]$ScheduleFor,
 
-    [Parameter(Mandatory=$True, ParameterSetName='Instant')]
-    [Parameter(Mandatory=$True, ParameterSetName='ScheduledMeeting')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
-    [Parameter(Mandatory=$True)]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='Instant', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='ScheduledMeeting', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByMonthDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
     [ValidateNotNullOrEmpty()]
     [string]$Topic,
 
-    [Parameter(ParameterSetName='Instant')]
-    [Parameter(ParameterSetName='ScheduledMeeting')]
-    [Parameter(ParameterSetName='RecurrenceByDay')]
-    [Parameter(ParameterSetName='RecurrenceByWeek')]
-    [Parameter(ParameterSetName='RecurrenceByMonthDay')]
-    [Parameter(ParameterSetName='RecurrenceByMonthWeek')]
+    [Parameter(
+        ParameterSetName='Instant', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        ParameterSetName='ScheduledMeeting', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        ParameterSetName='RecurrenceByDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        ParameterSetName='RecurrenceByWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        ParameterSetName='RecurrenceByMonthDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        ParameterSetName='RecurrenceByMonthWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
     [ValidateSet('Instant', 'Scheduled', 'RecurringNoFixedTime', 'RecurringFixedTime', 1, 2, 3, 8)]
     [ValidateNotNullOrEmpty()]
     [string]$Type = 'Scheduled',
 
-    [Parameter(Mandatory=$True, ParameterSetName='ScheduledMeeting')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='ScheduledMeeting', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByMonthDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Alias('start_time')]
     [string]$StartTime,
 
     [Parameter(Mandatory=$True, ParameterSetName='ScheduledMeeting')]
@@ -200,93 +289,174 @@ function New-ZoomMeeting {
 
     [string]$Agenda,
 
+    [Alias('tracking_fields')]
     [hashtable[]]$TrackingFields,
 
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByDay',
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByWeek',
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByMonthDay',
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek',
+        ValueFromPipelineByPropertyName = $True
+    )]
     [ValidateSet('Daily', 'Weekly', 'Monthly', 1, 2, 3)]
+    [Alias('recurrence_type')]
     [string]$RecurrenceType,
 
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByDay', ValueFromPipelineByPropertyName = $True)]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek', ValueFromPipelineByPropertyName = $True)]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay', ValueFromPipelineByPropertyName = $True)]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek', ValueFromPipelineByPropertyName = $True)]
     [ValidateRange(1,90)]
+    [Alias('recurrence_repeat_interval')]
     [int]$RecurrenceRepeatInterval,
 
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByWeek', ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 1, 2, 3, 4, 5, 6, 7)]
+    [Alias('recurrence_weekly_days')]
     [string[]]$RecurrenceWeeklyDays,
 
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthDay', ValueFromPipelineByPropertyName = $True)]
     [ValidateRange(1,31)]
+    [Alias('recurrence_monthly_day')]
     [int]$RecurrenceMonthlyDay,
 
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek', ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('LastWeek', 'FirstWeek', 'SecondWeek', 'ThirdWeek', 'FourthWeek')]
+    [Alias('recurrence_monthly_week')]
     [string]$RecurrenceMonthlyWeek,
 
-    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek')]
+    [Parameter(Mandatory=$True, ParameterSetName='RecurrenceByMonthWeek', ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 1, 2, 3, 4, 5, 6, 7)]
+    [Alias('recurrence_monthly_weekday')]
     [string]$RecurrenceMonthlyWeekDay,
 
-    [Parameter(ParameterSetName='RecurrenceByDay')]
-    [Parameter(ParameterSetName='RecurrenceByWeek')]
-    [Parameter(ParameterSetName='RecurrenceByMonthDay')]
-    [Parameter(ParameterSetName='RecurrenceByMonthWeek')]
+    [Parameter(
+        ParameterSetName = 'RecurrenceByDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        ParameterSetName = 'RecurrenceByWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        ParameterSetName = 'RecurrenceByMonthDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        ParameterSetName = 'RecurrenceByMonthWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
     [ValidateRange(1,50)]
+    [Alias('recurrence_end_times')]
     [int]$RecurrenceEndTimes,
     
-    [Parameter(ParameterSetName='RecurrenceByDay')]
-    [Parameter(ParameterSetName='RecurrenceByWeek')]
-    [Parameter(ParameterSetName='RecurrenceByMonthDay')]
-    [Parameter(ParameterSetName='RecurrenceByMonthWeek')]
+    [Parameter(
+        ParameterSetName = 'RecurrenceByDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        ParameterSetName = 'RecurrenceByWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        ParameterSetName = 'RecurrenceByMonthDay', 
+        ValueFromPipelineByPropertyName = $True
+    )]
+    [Parameter(
+        ParameterSetName = 'RecurrenceByMonthWeek', 
+        ValueFromPipelineByPropertyName = $True
+    )]
     [ValidatePattern("^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$")] 
     #Example: 2016-04-06T10:10:09Z. Regex taken from https://www.regextester.com/94925
+    [Alias('recurrence_end_datetime')]
     [string]$RecurrenceEndDateTime,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('host_video')]
     [bool]$HostVideo,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('cn_meeting')]
     [bool]$CNMeeting = $false,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('in_meeting')]
     [bool]$INMeeting = $false,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('join_before_host')]
     [bool]$JoinBeforeHost = $false,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('join_before_host')]
     [bool]$MuteUponEntry = $false,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [bool]$Watermark = $false,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('use_pmi')]
     [bool]$UsePMI = $false,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('Automatic', 'Manual', 'None', 0, 1, 2)]
+    [Alias('approval_type')]
     [string]$ApprovalType = 'None',
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('RegisterOnceAndAttendAll', 'RegisterForEachOccurence', 'RegisterOnceAndChooseOccurences', 0, 1, 2)]
+    [Alias('registration_type')]
     [string]$RegistrationType = 'RegisterOnceAndAttendAll',
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('both', 'telephony', 'voip')]
     [string]$Audio,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('local','cloud','none')]
+    [Alias('auto_recording')]
     [string]$AutoRecording = $false,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('enforce_login')]
     [bool]$EnforceLogin,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('enforce_login_domains')]
     [bool]$EnforceLoginDomains,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('alternative_hosts')]
     [string]$AlternativeHosts,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('close_registration')]
     [bool]$CloseRegistration = $false,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('waiting_room')]
     [bool]$WaitingRoom = $false,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('global_dialin_countries')]
     [string[]]$GlobalDialInCountries,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('contact_name')]
     [string]$ContactName,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('contact_email')]
     [string]$ContactEmail,
 
     [string]$ApiKey,

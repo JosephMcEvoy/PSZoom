@@ -32,17 +32,20 @@ function Get-ZoomMeetingsFromUser {
         [Parameter(
             Mandatory = $True, 
             Position = 0, 
-            ValueFromPipeline = $True
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('Email', 'EmailAddress', 'Id')]
+        [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
         [string]$UserId,
 
         [ValidateSet('scheduled', 'live', 'upcoming')]
         [string]$Type = 'live',
         
         [ValidateRange(1, 300)]
+        [Alias('page_size')]
         [int]$PageSize = 30,
 
+        [Alias('page_number')]
         [int]$PageNumber = 1,
 
         [string]$ApiKey,

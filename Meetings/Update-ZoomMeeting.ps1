@@ -140,101 +140,180 @@ function Update-ZoomMeeting {
   param (
     [Parameter(
         Mandatory = $True, 
-        ValueFromPipeline = $True, 
-        Position = 0
+        Position = 0,
+        ValueFromPipeline = $True,
+        ValueFromPipelineByPropertyName = $True
     )]
+    [Alias('meeting_id')]
     [string]$MeetingId,
 
     [Parameter(
-        ValueFromPipelineByPropertyName = $True, 
-        Position=1
+        Position=1,
+        ValueFromPipelineByPropertyName = $True
     )]
+    [Alias('ocurrence_ids')]
     [string]$OcurrenceIds,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateNotNullOrEmpty()]
+    [Alias('schedule_for')]
     [string]$ScheduleFor,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateNotNullOrEmpty()]
     [string]$Topic,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('Instant', 'Scheduled', 'RecurringNoFixedTime', 'RecurringFixedTime', 1, 2, 3, 8)]
     [ValidateNotNullOrEmpty()]
     [string]$Type = 'Scheduled',
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('start_time')]
     [string]$StartTime,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [int]$Duration,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [string]$Timezone,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidatePattern("[A-Za-z0-9@\-_\*]{1,10}")] #Letters, numbers, '@', '-', '_', '*' from 1 to 10 chars
     [string]$Password,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [string]$Agenda,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('tracking_fields')]
     [hashtable[]]$TrackingFields,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('Daily', 'Weekly', 'Monthly', 1, 2, 3)]
+    [Alias('recurrence_type')]
     [string]$RecurrenceType,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateRange(1,90)]
+    [Alias('recurrence_repeat_interval')]
     [int]$RecurrenceRepeatInterval,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 1, 2, 3, 4, 5, 6, 7)]
+    [Alias('weekley_days')]
     [string[]]$WeeklyDays,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateRange(1,31)]
+    [Alias('monthly_day')]
     [int]$MonthlyDay,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('LastWeek', 'FirstWeek', 'SecondWeek', 'ThirdWeek', 'FourthWeek')]
+    Alias('monthly_week')
     [string]$MonthlyWeek,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 1, 2, 3, 4, 5, 6, 7)]
+    [Alias('monthly_week_day')]
     [string]$MonthlyWeekDay,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateRange(1,50)]
+    [Alias('end_times')]
     [int]$EndTimes,
     
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidatePattern("^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(\\.[0-9]+)?(Z)?$")] 
     #Example: 2016-04-06T10:10:09Z. Regex taken from https://www.regextester.com/94925
+    [Alias('end_datetime')]
     [string]$EndDateTime,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('host_video')]
     [bool]$HostVideo,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('cn_meeting')]
     [bool]$CNMeeting,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('in_meeting')]
     [bool]$INMeeting,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('join_before_host')]
     [bool]$JoinBeforeHost,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('mute_upon_entry')]
     [bool]$MuteUponEntry,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [bool]$Watermark,
-
+    
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('use_pmi')]
     [bool]$UsePMI,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('Automatic', 'Manual', 'None', 0, 1, 2)]
+    [Alias('approval_type')]
     [string]$ApprovalType,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('RegisterOnceAndAttendAll', 'RegisterForEachOccurence', 'RegisterOnceAndChooseOccurences', 0, 1, 2)]
+    [Alias('registration_type')]
     [string]$RegistrationType,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('both', 'telephony', 'voip')]
     [string]$Audio,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateSet('local','cloud','none')]
+    [Alias('auto_recording')]
     [string]$AutoRecording,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('enforc_elogin')]
     [bool]$EnforceLogin,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('enforce_login_domains')]
     [bool]$EnforceLoginDomains,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('alternative_hosts')]
     [string]$AlternativeHosts,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('close_registration')]
     [bool]$CloseRegistration,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('waitin_groom')]
     [bool]$WaitingRoom,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('global_dial_in_countries')]
     [string[]]$GlobalDialInCountries,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('contact_name')]
     [string]$ContactName,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('contact_email')]
     [string]$ContactEmail,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('global_dial_in_numbers')]
     [hashtable[]]$GlobalDialInNumbers,
+
     [string]$ApiKey,
+
     [string]$ApiSecret
   )
   

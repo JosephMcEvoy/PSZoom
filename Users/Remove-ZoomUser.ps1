@@ -23,8 +23,6 @@ The Api Key.
 The Api Secret.
 .EXAMPLE
 Remove-ZoomUser 'sjackson@lawfirm.com' -action 'delete' -TransferEmail 'jsmith@lawfirm.com' -TransferMeeting
-.OUTPUTS
-A hastable with the Zoom API response.
 
 #>
 
@@ -34,19 +32,33 @@ import-module "$Parent\ZoomModule.psm1"
 function Remove-ZoomUser {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True)]
-        [Alias('Email')]
+        [Parameter(
+            Mandatory = $True, 
+            Position = 0, 
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('Email', 'id')]
         [string]$UserId,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('disassociate', 'delete')]
         [string]$Action = 'disassociate',
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('transfer_email')]
         [string]$TransferEmail,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('transfer_meeting')]
         [switch]$TransferMeeting,
         
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('transfer_webinar')]
         [switch]$TransferWebinar,
-
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('transfer_recording')]
         [switch]$TransferRecording,
 
         [string]$ApiKey,

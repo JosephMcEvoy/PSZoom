@@ -27,7 +27,7 @@ function Get-ZoomPastMeetingParticipants {
             ValueFromPipelineByPropertyName = $True,
             Position = 0
         )]
-        [Alias('id', 'uuid')]
+        [Alias('id', 'meeting_uuid', 'uuid')]
         [string]$MeetingUuid,
         
         [Parameter(ValueFromPipelineByPropertyName = $True)]

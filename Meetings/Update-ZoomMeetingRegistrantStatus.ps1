@@ -24,7 +24,8 @@ function Update-ZoomMeetingRegistrantStatus {
     param (
         [Parameter(
             Mandatory = $True, 
-            ValueFromPipeline = $True, 
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True,
             Position = 0
         )]
         [Alias('meeting_id')]

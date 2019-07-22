@@ -35,16 +35,20 @@ function Get-ZoomMeetingRegistrants {
         [Parameter(
             Mandatory = $True, 
             Position = 0, 
-            ValueFromPipeline = $True
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
         )]
+        [Alias('meeting_id')]
         [string]$MeetingId,
 
         [ValidateSet('pending', 'approved', 'denied')]
         [string]$Status = 'approved',
         
         [ValidateRange(1, 300)]
+        [Alias('page_size')]
         [int]$PageSize = 30,
 
+        [Alias('page_number')]
         [int]$PageNumber = 1,
 
         [string]$ApiKey,

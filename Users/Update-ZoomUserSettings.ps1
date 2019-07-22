@@ -154,263 +154,451 @@ function Update-ZoomUserSettings {
         [ValidateLength(1, 128)]
         [Alias('Email', 'EmailAddress', 'Id')]
         [string]$UserId,
-            
-        #scheduleMeeting
-        [Parameter(HelpMessage = 'Start meetings with host video on.')]
+
+        [Parameter(
+            HelpMessage = 'Start meetings with host video on.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('host_video')]
         [bool]$HostVideo, 
             
-        [Parameter(HelpMessage = 'Start meetings with participants video on.')]
+        [Parameter(
+            HelpMessage = 'Start meetings with participants video on.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('participants_video')]
         [bool]$ParticipantsVideo, 
     
-        [Parameter(HelpMessage = 'Determine how participants can join the audio portion of the meeting<br>`both` - Telephony and VoIP.<br>`telephony` - Audio PSTN telephony only.<br>`voip` - VoIP only.<br>`thirdParty` - Third party audio conference.')]
+        [Parameter(
+            HelpMessage = 'Determine how participants can join the audio portion of the meeting<br>`both` - Telephony and VoIP.<br>`telephony` - Audio PSTN telephony only.<br>`voip` - VoIP only.<br>`thirdParty` - Third party audio conference.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [ValidateSet('both', 'telephony', 'voip', 'thirdparty')]
         [Alias('audio_type')]
         [string]$AudioType, 
 
-        [Parameter(HelpMessage = 'Join the meeting before host arrives.')]
+        [Parameter(
+            HelpMessage = 'Join the meeting before host arrives.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('join_before_host')]
         [bool]$JoinBeforeHost, 
             
-        [Parameter(HelpMessage = 'Require a password for personal meetings if attendees can join before host.')]
+        [Parameter(
+            HelpMessage = 'Require a password for personal meetings if attendees can join before host.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('force_pmi_jbh_password')]
         [bool]$ForcePmiJbhPassword, 
             
-        [Parameter(HelpMessage = 'Generate and require password for participants joining by phone.')]
+        [Parameter(
+            HelpMessage = 'Generate and require password for participants joining by phone.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('pstn_password_protected')]
         [bool]$PstnPasswordProtected, 
             
-        [Parameter(HelpMessage = 'Use Personal Meeting ID (PMI) when scheduling a meeting\n')]
+        [Parameter(
+            HelpMessage = 'Use Personal Meeting ID (PMI) when scheduling a meeting\n', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('use_pmi_for_scheduled_meetings')]
         [bool]$UsePmiForScheduledMeetings, 
             
-        [Parameter(HelpMessage = 'Use Personal Meeting ID (PMI) when starting an instant meeting\n')]
+        [Parameter(
+            HelpMessage = 'Use Personal Meeting ID (PMI) when starting an instant meeting\n', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('use_pmi_for_instant_meetings')]
         [bool]$UsePmiForInstantMeetings, 
 
         #inMeeting 
-        [Parameter(HelpMessage = 'End-to-end encryption required for all meetings.')]
+        [Parameter(
+            HelpMessage = 'End-to-end encryption required for all meetings.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('e2e_encryption')]
         [bool]$E2eEncryption, 
             
-        [Parameter(HelpMessage = 'Enable chat during meeting for all participants.')]
+        [Parameter(
+            HelpMessage = 'Enable chat during meeting for all participants.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [bool]$Chat,           
 
-        [Parameter(HelpMessage = 'Enable 11 private chat between participants during meetings.')]
+        [Parameter(
+            HelpMessage = 'Enable 11 private chat between participants during meetings.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('private_chat')]
         [bool]$PrivateChat,           
 
-        [Parameter(HelpMessage = 'Auto save all in-meeting chats.')]
+        [Parameter(
+            HelpMessage = 'Auto save all in-meeting chats.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('auto_saving_chat')]
         [bool]$AutoSavingChat,       
 
-        [Parameter(HelpMessage = 'Play sound when participants join or leave<br>`host` - When host joins or leaves.<br>`all` - When any participant joins or leaves.<br>`none` - No join or leave sound.')]
+        [Parameter(
+            HelpMessage = 'Play sound when participants join or leave<br>`host` - When host joins or leaves.<br>`all` - When any participant joins or leaves.<br>`none` - No join or leave sound.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [ValidateSet('host', 'all', 'none')]
         [Alias('entry_exit_chime')]
         [string]$EntryExitChime, 
 
-        [Parameter(HelpMessage = 'Record and play their own voice.')]
+        [Parameter(
+            HelpMessage = 'Record and play their own voice.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('record_play_voice')]
         [bool]$RecordPlayVoice, 
 
-        [Parameter(HelpMessage = 'Enable file transfer through in-meeting chat.')]
+        [Parameter(
+            HelpMessage = 'Enable file transfer through in-meeting chat.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('file_transfer')]
         [bool]$FileTransfer, 
 
-        [Parameter(HelpMessage = 'Enable option to send feedback to Zoom at the end of the meeting.')]
+        [Parameter(
+            HelpMessage = 'Enable option to send feedback to Zoom at the end of the meeting.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [bool]$Feedback, 
 
-        [Parameter(HelpMessage = 'Allow the host to add co-hosts.')]
+        [Parameter(
+            HelpMessage = 'Allow the host to add co-hosts.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('co_host ')]
         [bool]$CoHost, 
 
-        [Parameter(HelpMessage = 'Add polls to the meeting controls.')]
+        [Parameter(
+            HelpMessage = 'Add polls to the meeting controls.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [bool]$Polling, 
 
-        [Parameter(HelpMessage = 'Allow host to put attendee on hold.')]
+        [Parameter(
+            HelpMessage = 'Allow host to put attendee on hold.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('attendee_on_hold')]
         [bool]$AttendeeOnHold, 
 
-        [Parameter(HelpMessage = 'Allow participants to use annotation tools.')]
+        [Parameter(
+            HelpMessage = 'Allow participants to use annotation tools.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [bool]$Annotation, 
 
-        [Parameter(HelpMessage = 'Enable remote control during screensharing.')]
+        [Parameter(
+            HelpMessage = 'Enable remote control during screensharing.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('remote_control')]
         [bool]$RemoteControl, 
 
-        [Parameter(HelpMessage = 'Enable non-verbal feedback through screens.')]
+        [Parameter(
+            HelpMessage = 'Enable non-verbal feedback through screens.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('non_verbal_feedback ')]
         [bool]$NonVerbalFeedback, 
 
-        [Parameter(HelpMessage = 'Allow host to split meeting participants into separate breakout rooms.')]
+        [Parameter(
+            HelpMessage = 'Allow host to split meeting participants into separate breakout rooms.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('breakout_room')]
         [bool]$BreakoutRoom, 
 
-        [Parameter(HelpMessage = 'Allow host to provide 11 remote support to a participant.')]
+        [Parameter(
+            HelpMessage = 'Allow host to provide 11 remote support to a participant.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('remote_support')]
         [bool]$RemoteSupport, 
 
-        [Parameter(HelpMessage = 'Enable closed captions.')]
+        [Parameter(
+            HelpMessage = 'Enable closed captions.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('closed_caption')]
         [bool]$ClosedCaption, 
 
-        [Parameter(HelpMessage = 'Enable group HD video.')]
+        [Parameter(
+            HelpMessage = 'Enable group HD video.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('group_hd')]
         [bool]$GroupHd, 
 
-        [Parameter(HelpMessage = 'Enable virtual background.')]
+        [Parameter(
+            HelpMessage = 'Enable virtual background.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('virtual_background')]
         [bool]$VirtualBackground, 
 
-        [Parameter(HelpMessage = 'Allow another user to take control of the camera.')]
+        [Parameter(
+            HelpMessage = 'Allow another user to take control of the camera.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('far_end_camera_control')]
         [bool]$FarEndCameraControl, 
 
-        [Parameter(HelpMessage = 'Share dual camera (deprecated).')]
+        [Parameter(
+            HelpMessage = 'Share dual camera (deprecated).', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('share_dual_camera')]
         [bool]$ShareDualCamera, 
 
-        [Parameter(HelpMessage = 'Allow host to see if a participant does not have Zoom in focus during screen sharing.')]
+        [Parameter(
+            HelpMessage = 'Allow host to see if a participant does not have Zoom in focus during screen sharing.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('attention_tracking')]
         [bool]$AttentionTracking, 
 
-        [Parameter(HelpMessage = 'Enable Waiting room - if enabled, attendees can only join after host approves.')]
+        [Parameter(
+            HelpMessage = 'Enable Waiting room - if enabled, attendees can only join after host approves.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('waiting_room ')]
         [bool]$WaitingRoom, 
 
-        [Parameter(HelpMessage = 'Allow live streaming.')]
+        [Parameter(
+            HelpMessage = 'Allow live streaming.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('allow_live_streaming')]
         [bool]$AllowLiveStreaming, 
 
-        [Parameter(HelpMessage = 'Allow livestreaming by host through Workplace by Facebook.')]
+        [Parameter(
+            HelpMessage = 'Allow livestreaming by host through Workplace by Facebook.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('workplace_by_facebook')]
         [bool]$WorkplaceByFacebook, 
 
-        [Parameter(HelpMessage = 'Allow custom live streaming.')]
+        [Parameter(
+            HelpMessage = 'Allow custom live streaming.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('custom_live_streaming')]
         [bool]$CustomLiveStreaming, 
 
-        [Parameter(HelpMessage = 'Custom service instructions.')]
+        [Parameter(
+            HelpMessage = 'Custom service instructions.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('custom_service_instructions')]
         [string]$CustomServiceInstructions, 
 
         #emailNotification
-        [Parameter(HelpMessage = 'When attendees join meeting before host.')]
+        [Parameter(
+            HelpMessage = 'When attendees join meeting before host.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('jbh_reminder')]
         [bool]$JbhReminder, 
 
-        [Parameter(HelpMessage = 'When a meeting is cancelled.')]
+        [Parameter(
+            HelpMessage = 'When a meeting is cancelled.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('cancel_meeting_reminder')]
         [bool]$CancelMeetingReminder, 
 
-        [Parameter(HelpMessage = 'When an alternative host is set or removed from a meeting.')]
+        [Parameter(
+            HelpMessage = 'When an alternative host is set or removed from a meeting.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('alternative_host_reminder')]
         [bool]$AlternativeHostReminder, 
             
-        [Parameter(HelpMessage = 'Notify the host there is a meeting is scheduled, rescheduled, or cancelled.')]
+        [Parameter(
+            HelpMessage = 'Notify the host there is a meeting is scheduled, rescheduled, or cancelled.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('schedule_for_reminder')]
         [bool]$ScheduleForReminder, 
         
         #recording
-        [Parameter(HelpMessage = 'Local recording.')]
+        [Parameter(
+            HelpMessage = 'Local recording.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('local_recording')]
         [bool]$LocalRecording, 
 
-        [Parameter(HelpMessage = 'Cloud recording.')]
+        [Parameter(
+            HelpMessage = 'Cloud recording.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('cloud_recording')]
         [bool]$CloudRecording, 
 
-        [Parameter(HelpMessage = 'Record the active speaker view.')]
+        [Parameter(
+            HelpMessage = 'Record the active speaker view.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('record_speaker_view')]
         [bool]$RecordSpeakerView, 
 
-        [Parameter(HelpMessage = 'Record the gallery view.')]
+        [Parameter(
+            HelpMessage = 'Record the gallery view.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('record_gallery_view')]
         [bool]$RecordGalleryView, 
 
-        [Parameter(HelpMessage = 'Record an audio only file.')]
+        [Parameter(
+            HelpMessage = 'Record an audio only file.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('record_audio_file')]
         [bool]$RecordAudioFile, 
 
-        [Parameter(HelpMessage = 'Save chat text from the meeting.')]
+        [Parameter(
+            HelpMessage = 'Save chat text from the meeting.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('save_chat_text')]
         [bool]$SaveChatText, 
 
-        [Parameter(HelpMessage = 'Show timestamp on video.')]
+        [Parameter(
+            HelpMessage = 'Show timestamp on video.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('show_timestamp')]
         [bool]$ShowTimestamp, 
 
-        [Parameter(HelpMessage = 'Audio transcript.')]
+        [Parameter(
+            HelpMessage = 'Audio transcript.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('recording_audio_transcript')]
         [bool]$RecordingAudioTranscript, 
 
-        [Parameter(HelpMessage = 'Automatic recording<br>`local` - Record on local.<br>`cloud` - Record on cloud.<br>`none` - Disabled.')]
+        [Parameter(
+            HelpMessage = 'Automatic recording<br>`local` - Record on local.<br>`cloud` - Record on cloud.<br>`none` - Disabled.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [ValidateSet('local', 'cloud', 'none')]
         [Alias('auto_recording ')]
         [string]$AutoRecording, 
 
-        [Parameter(HelpMessage = 'Host can pause/stop the auto recording in the cloud.')]
+        [Parameter(
+            HelpMessage = 'Host can pause/stop the auto recording in the cloud.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('host_pause_stop_recording')]
         [bool]$HostPauseStopRecording, 
 
-        [Parameter(HelpMessage = 'Auto delete cloud recordings.')]
+        [Parameter(
+            HelpMessage = 'Auto delete cloud recordings.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('auto_delete_cmr')]
         [bool]$AutoDeleteCmr, 
         
-        [Parameter(HelpMessage = 'A specified number of days of auto delete cloud recordings.')]
+        [Parameter(
+            HelpMessage = 'A specified number of days of auto delete cloud recordings.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [ValidateRange(0,60)]
         [Alias('auto_delete_cmr_days')]
         [int]$AutoDeleteCmrDays, 
 
         #telephony
-        [Parameter(HelpMessage = 'Third party audio conference.')]
+        [Parameter(
+            HelpMessage = 'Third party audio conference.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('third_party_audio')]
         [bool]$ThirdPartyAudio, 
 
-        [Parameter(HelpMessage = 'Third party audio conference info.')]
+        [Parameter(
+            HelpMessage = 'Third party audio conference info.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [ValidateLength(0, 2048)]
-        [Alias('audio_conference_info ')]
+        [Alias(
+            'audio_conference_info ', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [string]$AudioConferenceInfo, 
 
-        [Parameter(HelpMessage = 'Show the international numbers link on the invitation email.')]
+        [Parameter(
+            HelpMessage = 'Show the international numbers link on the invitation email.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('show_international_numbers_link')]
         [bool]$ShowInternationalNumbersLink, 
 
         #feature
-        [Parameter(HelpMessage = "User's meeting capacity.")]
+        [Parameter(
+            HelpMessage = "User's meeting capacity.", 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('meeting_capacity')]
         [int]$MeetingCapacity, 
 
-        [Parameter(HelpMessage = 'Large meeting feature.')]
+        [Parameter(
+            HelpMessage = 'Large meeting feature.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('large_meeting')]
         [bool]$LargeMeeting, 
 
-        [Parameter(HelpMessage = 'Large meeting capacity can be 500 or 1000, depending on the user has a large meeting capacity plan subscription or not.')]
+        [Parameter(
+            HelpMessage = 'Large meeting capacity can be 500 or 1000, depending on the user has a large meeting capacity plan subscription or not.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('large_meeting_capacity')]
         [int]$LargeMeetingCapacity, 
 
         [Parameter(HelpMessage = 'Webinar feature.')]
         [bool]$Webinar, 
 
-        [Parameter(HelpMessage = 'Webinar capacity can be 100, 500, 1000, 3000, 5000 or 10000, depending on if the user has a webinar capacity plan subscription or not.')]
+        [Parameter(
+            HelpMessage = 'Webinar capacity can be 100, 500, 1000, 3000, 5000 or 10000, depending on if the user has a webinar capacity plan subscription or not.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('webinar_capacity')]
         [int]$WebinarCapacity, 
 
-        [Parameter(HelpMessage = 'Zoom phone feature.')]
+        [Parameter(
+            HelpMessage = 'Zoom phone feature.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('zoom_phone')]
         [bool]$ZoomPhone, 
 
         #tsp
-        [Parameter(HelpMessage = 'Call Out')]
+        [Parameter(
+            HelpMessage = 'Call Out', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('call_out')]
         [bool]$CallOut, 
 
-        [Parameter(HelpMessage = 'Call Out Countries/Regions')]
+        [Parameter(
+            HelpMessage = 'Call Out Countries/Regions', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('call_out_countries')]
         [string[]]$CallOutCountries, 
 
-        [Parameter(HelpMessage = 'Show international numbers link on the invitation email')]
+        [Parameter(
+            HelpMessage = 'Show international numbers link on the invitation email', 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('feature_show_international_numbers_link')]
         [bool]$FeatureShowInternationalNumbersLink,
 

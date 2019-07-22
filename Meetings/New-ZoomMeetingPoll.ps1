@@ -51,6 +51,7 @@ function New-ZoomMeetingPoll {
             ValueFromPipelineByPropertyName = $True,
             Position = 0
         )]
+        [Alias('meeting_id')]
         [string]$MeetingId,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]

@@ -27,8 +27,10 @@ function Remove-ZoomMeetingPoll {
         [Parameter(
             Mandatory = $True, 
             ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True, 
             Position = 0
         )]
+        [Alias('meeting_id')]
         [string]$MeetingId,
 
         [Parameter(
@@ -36,6 +38,7 @@ function Remove-ZoomMeetingPoll {
             ValueFromPipelineByPropertyName = $True, 
             Position=1
         )]
+        [Alias('poll_id')]
         [string]$PollId,
 
         [string]$ApiKey,

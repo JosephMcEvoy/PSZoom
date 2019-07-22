@@ -27,6 +27,7 @@ function Get-ZoomMeeting {
         [Parameter(
             Mandatory = $True, 
             ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True,
             Position = 0
         )]
         [Alias('meeting_id')]

@@ -26,11 +26,13 @@ function Get-ZoomUserSettings {
         [Parameter(
             Mandatory = $True, 
             Position = 0, 
-            ValueFromPipeline = $True
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('Email', 'EmailAddress', 'Id')]
+        [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
         [string]$UserId,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
         [Alias('login_type')]
         [string]$LoginType,

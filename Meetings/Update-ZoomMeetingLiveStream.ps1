@@ -25,17 +25,25 @@ function Update-ZoomMeetingLiveStream {
         [Parameter(
             Mandatory = $True, 
             ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True,
             Position = 0
         )]
+        [Alias('meeting_id')]
         [string]$MeetingId,
-        
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateLength(0, 1024)]
+        [Alias('stream_url')]
         [string]$StreamUrl,
-        
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateLength(0, 512)]
+        [Alias('stream_key')]
         [string]$StreamKey,
-        
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateLength(0, 1024)]
+        [Alias('page_url')]
         [string]$PageUrl,
 
         [string]$ApiKey,

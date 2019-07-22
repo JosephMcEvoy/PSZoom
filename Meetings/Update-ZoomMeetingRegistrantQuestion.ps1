@@ -134,7 +134,7 @@ function New-ZoomRegistrantCustomQuestion {
 
     if ($PSBoundParameters.ContainsKey('Answers')) {
         if ($Type -eq 'single') {
-            throw 'Answers parameter rquires type to be set to "short".'
+            throw 'Answers parameter requires type to be set to "short".'
         } else {
             $CustomQuestion.Add('answers', $Answers)
         }

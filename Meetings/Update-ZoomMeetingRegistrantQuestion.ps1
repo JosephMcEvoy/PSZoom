@@ -6,6 +6,23 @@ Update registration questions that will be displayed to users while registering 
 Update registration questions that will be displayed to users while registering for a meeeting.
 .PARAMETER MeetingId
 The meeting ID.
+.PARAMETER Questions
+Array of registrant questions. Format of question object: 
+Title <string>
+Required <bool>
+Valid Title fields are 'address', 'city', 'country', 'zip', 'state', 'phone', 'industry', 'org', 'job_title', 
+'purchasing_time_frame', 'role_in_purchase_process', 'no_of_employees' and 'comments'.
+Can also use New-RegistrantQuestion. Example:
+$Questions = (New-RegistrantQuestion -Fieldname City - Required $True), (...)
+.PARAMETER CustomQuestions
+Array of custom registrant questions. Format:
+Title <string>
+Type <string>
+Required <bool>
+Answers <string array>
+Valid types are 'short' and 'single'. Answers can only be used with 'short' type.
+Can also use New-ZoomRegistrantCustomQuestion. Example:
+$CustomQuestions = (New-ZoomRegistrantCustomQuestion -Title 'Favorite Color' -Type Short -Required $True -Answers 'Blue','Red','Green')
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret

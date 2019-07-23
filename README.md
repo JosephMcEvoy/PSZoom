@@ -2,7 +2,7 @@
 A collection of Powershell tools to interface with the Zoom Api. 
 
 # Setup
-Clone project. 
+git clone https://github.com/JosephMcEvoy/PowerShell-Zoom-Wrapper.git
 
 # Using your API Key and API Secret
 All of the wrapper functions will first look for the Key/Secret as passed as parameters.  

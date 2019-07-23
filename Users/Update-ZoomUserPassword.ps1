@@ -44,8 +44,10 @@ function Update-ZoomUserpassword {
         [ValidateLength(8,31)]
         [string]$Password,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
         
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret,
 
         [switch]$PassThru

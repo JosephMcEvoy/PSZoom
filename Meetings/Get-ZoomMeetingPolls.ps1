@@ -33,8 +33,10 @@ function Get-ZoomMeetingsPolls {
         [Alias('meeting_id')]
         [string]$MeetingId,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

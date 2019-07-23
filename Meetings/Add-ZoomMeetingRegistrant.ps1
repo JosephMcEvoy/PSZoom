@@ -235,8 +235,8 @@ function Add-ZoomMeetingRegistrant {
             $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $RequestBody -Method POST
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
-        }
-        
-        Write-Output $Response
+        } finally {
+            Write-Output $Response
+        }        
     }
 }

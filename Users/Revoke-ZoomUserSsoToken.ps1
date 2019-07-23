@@ -32,13 +32,14 @@ function Revoke-ZoomUserSsoToken {
         )]
         [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
         [string]$UserId,
-
-        [ValidateSet('token', 'zpk', 'zap')]
-        [string]$LoginType,
-
+        
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
-        [string]$ApiSecret
+        [ValidateNotNullOrEmpty()]
+        [string]$ApiSecret,
+
+        [switch]$Passthru
     )
 
     begin {
@@ -56,16 +57,14 @@ function Revoke-ZoomUserSsoToken {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/token"
 
-        if ($PSBoundParameters.ContainsKey('LoginType')) {
-            $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('login_type', $LoginType)
-            $Request.Query = $Query.ToString()
-        }
-
         try {
             $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+        } finally {
+            if ($Passthru) {
+                Get-ZoomSpecificUser -UserId $UserId -ApiKey $ApiKey -ApiSecret $ApiSecret
+            }
         }
 
         Write-Output $Response

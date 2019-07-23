@@ -40,8 +40,10 @@ function Get-ZoomRegistrationQuestions {
         [Alias('poll_id')]
         [string]$PollId,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

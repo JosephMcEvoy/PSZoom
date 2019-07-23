@@ -36,8 +36,10 @@ function Get-ZoomSpecificUser {
         [Alias('login_type')]
         [string]$LoginType,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 
@@ -56,7 +58,7 @@ function Get-ZoomSpecificUser {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
 
-        if ($LoginType) {
+        if ($PSBoundParameters.ContainsKey('LoginType')) {
             $LoginType = switch ($LoginType) {
                 'Facebook' { 0 }
                 'Google' { 1 }

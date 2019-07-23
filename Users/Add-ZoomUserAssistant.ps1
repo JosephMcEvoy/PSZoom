@@ -43,8 +43,10 @@ function Add-ZoomUserAssistants {
         [Alias('assistant')]
         [string[]]$Assistants,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret,
 
         [switch]$Passthru
@@ -72,16 +74,9 @@ function Add-ZoomUserAssistants {
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         } finally {
-            Write-Verbose $Response
-            if ($Passthru) {
-                Write-Output $UserId
-            } else {
                 Write-Output $Response
-            }
         }
-
-        
-    }
+    }      
 }
 
 function New-ZoomUserAssistant {

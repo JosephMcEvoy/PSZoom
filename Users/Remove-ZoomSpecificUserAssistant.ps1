@@ -40,8 +40,10 @@ function Remove-ZoomSpecificUserAssistant {
         [Alias('assistant_id')]
         [string]$AssistantId,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

@@ -32,8 +32,10 @@ function Get-ZoomPersonalMeetingRoomName {
         [Alias('vanity_name')]
         [string]$VanityName,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

@@ -38,8 +38,10 @@ function Update-ZoomMeetingRegistrantStatus {
         [Alias('occurence_id')]
         [string]$OcurrenceId,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

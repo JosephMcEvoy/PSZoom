@@ -59,8 +59,10 @@ function Update-ZoomMeetingPoll {
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string[]]$Questions,
         
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

@@ -61,9 +61,11 @@ function Remove-ZoomUser {
         [Alias('transfer_recording')]
         [switch]$TransferRecording,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
-        [string]$ApiSecret
+        [ValidateNotNullOrEmpty()]
+        [string]$ApiSecret,
 
         [bool]$Passthru
     )

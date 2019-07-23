@@ -39,8 +39,10 @@ function Update-MeetingStatus {
         [ValidateSet('end')]
         [string]$Action,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

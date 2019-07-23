@@ -40,8 +40,10 @@ function Remove-ZoomSpecificUserScheduler {
         [Alias('scheduler_id')]
         [string]$schedulerId,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

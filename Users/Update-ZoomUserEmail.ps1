@@ -42,8 +42,10 @@ function Update-ZoomUserEmail {
         [ValidateLength(0,128)]
         [string]$Email,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

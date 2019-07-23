@@ -54,8 +54,10 @@ function Update-ZoomRegistrationQuestions {
         [Alias('custom_question', 'customquestion')]
         [hashtable[]]$CustomQuestions,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

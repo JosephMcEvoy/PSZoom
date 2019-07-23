@@ -37,8 +37,10 @@ function Get-ZoomUserSettings {
         [Alias('login_type')]
         [string]$LoginType,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

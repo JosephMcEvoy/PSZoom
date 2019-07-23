@@ -32,8 +32,10 @@ function Get-ZoomUserSchedulers {
         [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
         [string]$UserId,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

@@ -46,8 +46,10 @@ function Update-ZoomUserStatus {
         [ValidateSet('activate', 'deactivate')]
         [string]$Action,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
         
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret,
 
         [switch]$PassThru

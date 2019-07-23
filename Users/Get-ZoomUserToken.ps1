@@ -40,8 +40,10 @@ function Get-ZoomUserToken {
         [ValidateSet('token', 'zpk', 'zap')]
         [string]$Type,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 
@@ -60,7 +62,7 @@ function Get-ZoomUserToken {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/token"
 
-        if ($PSBoundParameters.ContainsKey(Type)) {
+        if ($PSBoundParameters.ContainsKey('Type')) {
             $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
             $Query.Add('login_type', $Type)
             $Request.Query = $Query.ToString()

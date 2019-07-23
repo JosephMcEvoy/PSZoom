@@ -38,8 +38,10 @@ function Get-ZoomPastMeetingDetails {
         [Alias('occurence_id')]
         [string]$OcurrenceId,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

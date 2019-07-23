@@ -39,8 +39,10 @@ function Get-ZoomPastMeetingParticipants {
         [Alias('next_page_token')]
         [string]$NextPageToken,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

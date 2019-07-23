@@ -35,8 +35,10 @@ function Get-ZoomUserEmailStatus {
         [Alias('login_type')]
         [string]$LoginType,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

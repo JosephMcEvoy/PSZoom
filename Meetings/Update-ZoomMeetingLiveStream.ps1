@@ -46,8 +46,10 @@ function Update-ZoomMeetingLiveStream {
         [Alias('page_url')]
         [string]$PageUrl,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

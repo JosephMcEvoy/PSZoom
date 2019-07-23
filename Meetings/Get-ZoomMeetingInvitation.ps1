@@ -31,8 +31,10 @@ function Get-ZoomMeetingInvitation {
         [Alias('meeting_id')]
         [string]$MeetingId,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

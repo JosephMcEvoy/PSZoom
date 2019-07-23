@@ -312,8 +312,10 @@ function Update-ZoomMeeting {
     [Alias('global_dial_in_numbers')]
     [hashtable[]]$GlobalDialInNumbers,
 
+    [ValidateNotNullOrEmpty()]
     [string]$ApiKey,
 
+    [ValidateNotNullOrEmpty()]
     [string]$ApiSecret
   )
   

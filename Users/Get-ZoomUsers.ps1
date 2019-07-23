@@ -45,8 +45,10 @@ function Get-ZoomUsers {
         [Alias('page_number')]
         [int]$PageNumber = 1,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

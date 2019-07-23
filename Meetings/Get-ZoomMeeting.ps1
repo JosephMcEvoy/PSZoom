@@ -40,8 +40,10 @@ function Get-ZoomMeeting {
         [Alias('ocurrence_id')]
         [string]$OcurrenceId,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

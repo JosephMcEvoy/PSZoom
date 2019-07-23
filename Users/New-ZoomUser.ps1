@@ -81,8 +81,10 @@ function New-ZoomUser {
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Password,
         
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
         
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret,
 
         [switch]$PassThru
@@ -107,7 +109,7 @@ function New-ZoomUser {
             'action' = $Action
         }
 
-        if ($Type) {
+        if ($PSBoundParameters.ContainsKey('Type')) {
             $Type = switch ($Type) {
                 'Basic' { 1 }
                 'Pro' { 2 }
@@ -157,7 +159,6 @@ function New-ZoomUser {
         }
 
         $RequestBody.add('user_info', $UserInfo)
-        $RequestBody.User_Info
 
         if ($PScmdlet.ShouldProcess) {
             try {

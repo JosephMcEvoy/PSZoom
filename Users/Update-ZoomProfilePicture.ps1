@@ -42,8 +42,10 @@ function Update-ZoomProfilePicture {
         [ValidateScript({Test-Path $_})]
         [string]$FileName,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
     )
 

@@ -604,9 +604,11 @@ function Update-ZoomUserSettings {
 
         [bool]$PassThru,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret,
 
-        [string]$ApiKey
+        [ValidateNotNullOrEmpty()]
+[string]$ApiKey
     )
     
     begin {

@@ -104,8 +104,10 @@ function Update-ZoomUser {
         [Alias('cms_user_id')]
         [string]$CmsUserId,
 
+        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
         
+        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret,
 
         [switch]$PassThru

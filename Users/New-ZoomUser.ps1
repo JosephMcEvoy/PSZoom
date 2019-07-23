@@ -34,7 +34,7 @@ THe API secret.
 .EXAMPLE
 New-ZoomUser -Action ssoCreate -Email helpdesk@lawfirm.com -Type Pro -FirstName Joseph -LastName McEvoy -ApiKey $ApiKey -ApiSecret $ApiSecret
 .OUTPUTS
-The Zoom API response as a hashtable.
+The newly created Zoom user object.
 #>
 
 $Parent = Split-Path $PSScriptRoot -Parent
@@ -43,7 +43,7 @@ import-module "$Parent\ZoomModule.psm1"
 
 
 function New-ZoomUser {    
-    [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact='Medium')]
+    [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact='Low')]
     Param(
         [Parameter(
             Mandatory = $True,
@@ -159,15 +159,14 @@ function New-ZoomUser {
         $RequestBody.add('user_info', $UserInfo)
         $RequestBody.User_Info
 
-        if ($pscmdlet.ShouldProcess) {
+        if ($PScmdlet.ShouldProcess) {
             try {
                 Invoke-RestMethod -Uri $Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Post
-            }
-            catch {
+            } catch {
                 Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            } finally {
+                Write-Output (Get-ZoomSpecificUser -Email $Email)
             }
-            
-            Write-Output (Get-ZoomSpecificUser -Email $Email)
         }
     }
 }

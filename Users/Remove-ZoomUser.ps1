@@ -64,6 +64,8 @@ function Remove-ZoomUser {
         [string]$ApiKey,
 
         [string]$ApiSecret
+
+        [bool]$Passthru
     )
 
     begin {
@@ -103,6 +105,10 @@ function Remove-ZoomUser {
             Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+        } finally {
+            if ($Passthru) {
+                Write-Output $UserId
+            }
         }
     }
 }

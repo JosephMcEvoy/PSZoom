@@ -11,10 +11,13 @@ The user ID or email address.
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
+.OUTPUTS
+No output. Can use Passthru switch to pass UserId to output.
 .EXAMPLE
 Revoke-UserSsoToken jsmith@lawfirm.com
-.OUTPUTS
-A hastable with the Zoom API response.
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userssotokendelete
+
 
 #>
 
@@ -63,7 +66,7 @@ function Revoke-ZoomUserSsoToken {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         } finally {
             if ($Passthru) {
-                Get-ZoomSpecificUser -UserId $UserId -ApiKey $ApiKey -ApiSecret $ApiSecret
+                Write-Output $UserId
             }
         }
 

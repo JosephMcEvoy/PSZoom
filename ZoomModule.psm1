@@ -5,6 +5,8 @@ A collection of helper functions that support the primary functions.
 
 #>
 
+
+
 function Get-ZoomApiCredentials {
     <#
     .SYNOPSIS
@@ -273,8 +275,8 @@ function New-ZoomHeaders {
 
     Write-Verbose 'Generating Headers'
     $Headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-    $Headers.Add('Content-Type' , 'application/json')
-    $Headers.Add('Authorization', 'Bearer ' + $Token)
+    $Headers.Add('content-type' , 'application/json')
+    $Headers.Add('authorization', 'bearer ' + $Token)
 
     Write-Output $Headers
 }

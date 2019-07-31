@@ -14,10 +14,12 @@ ZAP - Used for generating the start meeting url. The expiration time is two hour
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
-.EXAMPLE
-Get-ZoomUserToken jsmith@lawfirm.com
 .OUTPUTS
 A hastable with the Zoom API response.
+.EXAMPLE
+Get-ZoomUserToken jsmith@lawfirm.com
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/usertoken
 
 #>
 

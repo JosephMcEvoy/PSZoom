@@ -63,5 +63,3 @@ function Get-ZoomUserAssistants {
         Write-Output $Response
     }
 }
-
-Get-ZoomUserAssistants jmcevoy@foleyhoag.com

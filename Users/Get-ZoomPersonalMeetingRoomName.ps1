@@ -10,10 +10,12 @@ Personal meeting room name.
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
-.EXAMPLE
-Get-ZoomUserSchedulers jmcevoy@lawfirm.com
 .OUTPUTS
-A hastable with the Zoom API response.
+An object with the Zoom API response.
+.EXAMPLE
+Get-ZoomPersonalMeetingRoomName 'Joes Room'
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/uservanityname
 
 #>
 
@@ -53,11 +55,11 @@ function Get-ZoomPersonalMeetingRoomName {
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/vanity_name"
-        if ($PSBoundParameters.ContainsKey('Vanity')) {
-            $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('vanity_name', $VanityName)
-            $Request.Query = $Query.ToString()
-        }
+
+        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+        $Query.Add('vanity_name', $VanityName)
+        $Request.Query = $Query.ToString()
+    
 
         try {
             $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Method GET

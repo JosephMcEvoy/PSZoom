@@ -31,10 +31,12 @@ It should not contain only one identical character repeatedly ('11111111' or 'aa
 The API key.
 .PARAMETER ApiSecret
 THe API secret.
+.OUTPUTS
+An object with the Zoom API response. 
 .EXAMPLE
 New-ZoomUser -Action ssoCreate -Email helpdesk@lawfirm.com -Type Pro -FirstName Joseph -LastName McEvoy -ApiKey $ApiKey -ApiSecret $ApiSecret
-.OUTPUTS
-The newly created Zoom user object.
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/usercreate
 #>
 
 $Parent = Split-Path $PSScriptRoot -Parent
@@ -85,9 +87,7 @@ function New-ZoomUser {
         [string]$ApiKey,
         
         [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret,
-
-        [switch]$PassThru
+        [string]$ApiSecret
     )
 
     begin {
@@ -162,13 +162,12 @@ function New-ZoomUser {
 
         if ($PScmdlet.ShouldProcess) {
             try {
-                Invoke-RestMethod -Uri $Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Post
+                $Response = Invoke-RestMethod -Uri $Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Post
             } catch {
                 Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
-            } finally {
-                Write-Output (Get-ZoomSpecificUser -Email $Email)
             }
+
+            Write-Output $Response
         }
     }
 }
-#new-zoomuser -action ssoCreate -Email 'jmcevoy@foleyhoag.com' -FirstName 'Joseph' -type pro

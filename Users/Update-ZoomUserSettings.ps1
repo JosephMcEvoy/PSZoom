@@ -136,6 +136,12 @@ Call Out.
 Call Out Countries/Regions. 
 .PARAMETER ShowInternationalNumbersLink
 Show international numbers link on the invitation email.
+.OUTPUTS
+No output. Can use Passthru switch to pass the UserId as an output.
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/usersettingsupdate
+.EXAMPLE
+Update-ZoomUserSettings -UserId 'jsmith@lawfirm.com' -JoinBeforeHost $True
 #>
 
 $Parent = Split-Path $PSScriptRoot -Parent
@@ -738,13 +744,13 @@ function Update-ZoomUserSettings {
         $Tsp = Remove-NonPSBoundParameters($Tsp)
 
         $AllObjects = @{
-            'schedule_meeting' = $ScheduleMeeting
-            'in_meeting' = $InMeeting
-            'email_notification' = $EmailNotification
-            'recording' = $Recording
-            'telephony' = $Telephony
-            'feature' = $Feature
-            'tsp' = $Tsp
+            'schedule_meeting'     = $ScheduleMeeting
+            'in_meeting'           = $InMeeting
+            'email_notification'   = $EmailNotification
+            'recording'            = $Recording
+            'telephony'            = $Telephony
+            'feature'              = $Feature
+            'tsp'                  = $Tsp
         }
 
         #Add objects to RequestBody if not empty.
@@ -761,13 +767,9 @@ function Update-ZoomUserSettings {
                 Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
             } finally {
                 if ($PassThru) {
-                    if ($_.Exception.Code -ne 404) {
-                        Get-ZoomSpecificUser -UserId $UserId
-                    }
+                    Write-Output $UserId
                 }
             }
         }      
     }
 }
-
-#Update-ZoomUserSettings -UserId 'jmcevoy@foleyhoag.com' -JoinBeforeHost $True

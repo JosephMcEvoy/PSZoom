@@ -1,9 +1,9 @@
 <#
 
 .SYNOPSIS
-Verify if a user’s email is registered with Zoom (check a user's email).
+Verify if a user’s email is registered with Zoom..
 .DESCRIPTION
-Verify if a user’s email is registered with Zoom (check a user's email).
+Verify if a user’s email is registered with Zoom..
 .PARAMETER Email
 The email address to be verified.
 .PARAMETER ApiKey
@@ -12,6 +12,8 @@ The Api Key.
 The Api Secret.
 .EXAMPLE
 Get-ZoomUserEmailStatus jsmith@lawfirm.com
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/useremail
 .OUTPUTS
 A hastable with the Zoom API response.
 
@@ -30,10 +32,6 @@ function Get-ZoomUserEmailStatus {
         )]
         [Alias('EmailAddress', 'Id', 'UserId')]
         [string]$Email,
-
-        [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
-        [Alias('login_type')]
-        [string]$LoginType,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -55,8 +53,8 @@ function Get-ZoomUserEmailStatus {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
-        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/email"
+        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $Query.Add('email', $Email)
         $Request.Query = $Query.ToString()
 

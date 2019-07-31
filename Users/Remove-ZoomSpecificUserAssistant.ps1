@@ -10,10 +10,12 @@ The user ID or email address.
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
-.EXAMPLE
-Remove-ZoomSpecificUserAssistant jmcevoy@lawfirm.com
 .OUTPUTS
 A hastable with the Zoom API response.
+.EXAMPLE
+Remove-ZoomSpecificUserAssistant jmcevoy@lawfirm.com
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userassistantdelete
 
 #>
 

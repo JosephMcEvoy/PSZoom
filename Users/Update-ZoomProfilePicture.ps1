@@ -12,10 +12,13 @@ The path to the file to be uploaded.
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
-.EXAMPLE
-Update-ZoomProfilePicture -UserId 'jmcevoy@lawfirm.com' -FileName "C:\Development\Zoom\PowerShell-Zoom-Wrapper-master\mcevoy.jpg"
 .OUTPUTS
 A hastable with the Zoom API response.
+.EXAMPLE
+Update-ZoomProfilePicture -UserId 'jmcevoy@lawfirm.com' -FileName "C:\Development\Zoom\PowerShell-Zoom-Wrapper-master\mcevoy.jpg"
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userpicture
+
 
 #>
 
@@ -79,9 +82,11 @@ function Update-ZoomProfilePicture {
 
         
         try {
-            Invoke-RestMethod -Uri $Request.Uri -ContentType "multipart/form-data; boundary=`"$Boundary`"" -Headers $headers -Body $RequestBody -Method POST
+            $Response = Invoke-RestMethod -Uri $Request.Uri -ContentType "multipart/form-data; boundary=`"$Boundary`"" -Headers $headers -Body $RequestBody -Method POST
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         }
+
+        Write-Output $Response
     }
 }

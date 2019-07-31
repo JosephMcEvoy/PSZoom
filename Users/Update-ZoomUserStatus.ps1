@@ -14,10 +14,12 @@ Deactivate - Set user status to inactive.
 The API key.
 .PARAMETER ApiSecret
 THe API secret.
+.OUTPUTS
+No output. Can use Passthru switch to pass the UserId as an output.
 .EXAMPLE`
 Update-ZoomUserStatus -UserId helpdesk@lawfirm.com
-.OUTPUTS
-The Zoom API response as a hashtable.
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userstatus
 
 #>
 
@@ -80,9 +82,7 @@ function Update-ZoomUserStatus {
                 Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
             } finally {
                 if ($PassThru) {
-                    if ($_.Exception.Code -ne 404) {
-                        Get-ZoomSpecificUser -UserId $UserId
-                    }
+                    Write-Output $UserId
                 }
             }
         }

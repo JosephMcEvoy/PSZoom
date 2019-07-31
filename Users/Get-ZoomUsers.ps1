@@ -17,6 +17,8 @@ The current page number of returned records. Default value is 1.
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/users
 .EXAMPLE
 Get-ZoomUsers
 .EXAMPLE
@@ -67,14 +69,16 @@ function Get-ZoomUsers {
 
     process {
         $RequestBody = @{
-            'status' = $Status
-            'page_size' = $PageSize
+            'status'      = $Status
+            'page_size'   = $PageSize
             'page_number' = $PageNumber
         }    
         try {
-            Invoke-RestMethod -Uri $Uri -Headers $headers -Body $RequestBody -Method GET
+            $Response = Invoke-RestMethod -Uri $Uri -Headers $headers -Body $RequestBody -Method GET
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         }
+
+        Write-Output $Response
     }
 }

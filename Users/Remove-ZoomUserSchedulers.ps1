@@ -10,10 +10,12 @@ The user ID or email address.
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
+.OUTPUTS
+No output. Can use Passthru switch to pass UserId to output.
 .EXAMPLE
 Remove-ZoomUserSchedulers jmcevoy@lawfirm.com
-.OUTPUTS
-A hastable with the Zoom API response.
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userschedulersdelete
 
 #>
 
@@ -36,7 +38,9 @@ function Remove-ZoomUserSchedulers {
         [string]$ApiKey,
 
         [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [string]$ApiSecret,
+
+        [switch]$Passthru
     )
 
     begin {
@@ -55,12 +59,14 @@ function Remove-ZoomUserSchedulers {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/schedulers"
 
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
+            Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+        } finally {
+            if ($Passthru) {
+                Write-Output $UserId
+            }
         }
-
-        Write-Output $Response
     }
 }
 

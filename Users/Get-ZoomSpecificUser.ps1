@@ -10,10 +10,12 @@ The user ID or email address.
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
+.OUTPUTS
+An object with the Zoom API response.
 .EXAMPLE
 Get-ZoomSpecificUser jsmith@lawfirm.com
-.OUTPUTS
-A hastable with the Zoom API response.
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/user
 
 #>
 

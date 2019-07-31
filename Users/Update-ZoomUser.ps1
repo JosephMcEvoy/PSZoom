@@ -28,10 +28,12 @@ Kaltura user ID.
 The API key.
 .PARAMETER ApiSecret
 THe API secret.
+.OUTPUTS
+No output. Can use Passthru switch to pass UserId to output.
 .EXAMPLE`
 Update-ZoomUser -UserId helpdesk@lawfirm.com -Type Pro -FirstName Joseph -LastName McEvoy -ApiKey $ApiKey -ApiSecret $ApiSecret
-.OUTPUTS
-The Zoom API response as a hashtable.
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userupdate
 
 #>
 
@@ -81,7 +83,7 @@ function Update-ZoomUser {
         
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateScript({
-            (Get-ZoomTimeZones).Contains($_)
+                (Get-ZoomTimeZones).Contains($_)
         })]
         [string]$Timezone,
         
@@ -142,14 +144,15 @@ function Update-ZoomUser {
             $Query.Add('login_type', $LoginType)
             $Request.Query = $Query.ToString()
         }
-     
+
         if ($Type) {
             $Type = switch ($Type) {
-                    'Basic' { 1 }
-                    'Pro' { 2 }
-                    'Corp' { 3 }
-                    Default { $Type }
-                }
+                'Basic' { 1 }
+                'Pro' { 2 }
+                'Corp' { 3 }
+                Default { $Type }
+            }
+
             $RequestBody.Add('type', $Type)
         }
 
@@ -158,13 +161,13 @@ function Update-ZoomUser {
         }
 
         $KeyValuePairs = @{
-            'last_name' = $LastName
-            'timezone' = $Timezone
-            'language' = $Language
-            'use_pmi' = $UsePmi
-            'dept' = $Dept
+            'last_name'   = $LastName
+            'timezone'    = $Timezone
+            'language'    = $Language
+            'use_pmi'     = $UsePmi
+            'dept'        = $Dept
             'vanity_name' = $VanityName
-            'host_key' = $HostKey
+            'host_key'    = $HostKey
             'cms_user_id' = $CmsUserId
         }
 
@@ -176,14 +179,14 @@ function Update-ZoomUser {
 
         if ($pscmdlet.ShouldProcess) {
             try {
-                Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Patch
-            } catch {
+                Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method PATCH
+            }
+            catch {
                 Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
-            } finally {
+            }
+            finally {
                 if ($PassThru) {
-                    if ($_.Exception.Code -ne 404) {
-                        Get-ZoomSpecificUser -UserId $UserId
-                    }
+                    Write-Output $UserId
                 }
             }
         }

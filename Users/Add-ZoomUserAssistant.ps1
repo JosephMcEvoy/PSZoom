@@ -3,7 +3,7 @@
 .SYNOPSIS
 Add assistants to a user.
 .DESCRIPTION
-Add assistants to a user. Assistants are the users to whom the current user has assigned  on the user’s behalf.
+Add assistants to a user. Assistants are the users to whom the current user has assigned scheduling privilege on the user’s behalf.
 .PARAMETER UserId
 The user ID or email address.
 .PARAMETER Assistants
@@ -16,9 +16,11 @@ The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
 .EXAMPLE
-Add-ZoomUserAssistants jmcevoy@lawfirm.com -Assistant (New-ZoomUserAssistant -Id 'jsmith@lawfirm.com' -email 'jsmith@lawfirm.com')
+Add-ZoomUserAssistants jmcevoy@lawfirm.com -Assistant @((New-ZoomUserAssistant -Id 'foleyav@foleyhoag.com' -email 'foleyav@foleyhoag.com'))
 Add-ZoomUserAssistants jmcevoy@lawfirm.com -Assistant (@{'id' = 'jsmith@lawfirm.com', 'email' = 'jsmith@lawfirm.com'})
 Add-ZoomUserAssistants jmcevoy@lawfirm.com -Assistants (@{'id' = 'jsmith@lawfirm.com', 'email' = 'jsmith@lawfirm.com'}, @{'id' = 'jrogers@lawfirm.com', 'email' = 'jrogers@lawfirm.com'})
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userassistantcreate
 .OUTPUTS
 A hastable with the Zoom API response.
 
@@ -26,6 +28,7 @@ A hastable with the Zoom API response.
 
 $Parent = Split-Path $PSScriptRoot -Parent
 import-module "$Parent\ZoomModule.psm1"
+. "$Parent\Users\Get-ZoomSpecificUser.ps1"
 
 function Add-ZoomUserAssistants {
     [CmdletBinding()]
@@ -41,7 +44,7 @@ function Add-ZoomUserAssistants {
 
         [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
         [Alias('assistant')]
-        [string[]]$Assistants,
+        [System.Array]$Assistants,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -66,32 +69,53 @@ function Add-ZoomUserAssistants {
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/assistants"
-        $RequestBody.Add('assistants', $Assistants)
-        $RequestBody = $RequestBody | ConvertTo-Json
+        $RequestBody = @{
+            'assistants' = $Assistants
+        }
+        
+        $RequestBody = $RequestBody | convertto-json
 
+        $RequestBody
+        
         try {
             $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $RequestBody -Method POST
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         } finally {
-                Write-Output $Response
+            if ($Passthru) {
+                Write-Output $UserId
+            }
         }
+        
+        Write-Output $Response
     }      
 }
 
 function New-ZoomUserAssistant {
+    [CmdletBinding(DefaultParameterSetName = 'Email')]
     param (
-        [Parameter(Mandatory = $True)]
-        [string]$Id,
-        
-        [Parameter(Mandatory = $True)]
-        [string]$Email
-    )
+        [Parameter(
+            Mandatory = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [string]$Email,
 
-    $Assistant = @{
-        'id' = $Id
-        'email' = $Email
+        [Parameter(
+            Mandatory = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [string]$Id
+    )
+     
+    $Assistant = @{}
+
+    if ($PSBoundParameters.ContainsKey('Email')) {
+        $Assistant.Add('email', $Email)
     }
 
+    if ($PSBoundParameters.ContainsKey('Id')) {
+        $Assistant.Add('id', $id)
+    }
+    
     Write-Output $Assistant
 }

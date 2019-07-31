@@ -12,10 +12,12 @@ User's email. The length should be less than 128 characters.
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
+.OUTPUTS
+No output. Can use Passthru switch to pass UserId to output.
 .EXAMPLE
 Update-ZoomUserEmail jsmith@lawfirm.com
-.OUTPUTS
-A hastable with the Zoom API response.
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/useremailupdate
 
 #>
 
@@ -46,7 +48,9 @@ function Update-ZoomUserEmail {
         [string]$ApiKey,
 
         [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [string]$ApiSecret,
+
+        [switch]$Passthru
     )
 
     begin {
@@ -68,11 +72,13 @@ function Update-ZoomUserEmail {
         $Request.Query = $Query.ToString()
 
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method PUT
+            Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method PUT
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+        } finally {
+            if ($Passthru) {
+                Write-Output $UserId
+            }
         }
-
-        Write-Output $Response
     }
 }

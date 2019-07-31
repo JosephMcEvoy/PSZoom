@@ -12,10 +12,13 @@ User password. Minimum of 8 characters. Maximum of 31 characters.
 The API key.
 .PARAMETER ApiSecret
 THe API secret.
-.EXAMPLE`
-Update-ZoomUserPassword -UserId helpdesk@lawfirm.com -Password 'Zoompassword'
 .OUTPUTS
-The Zoom API response as a hashtable.
+No output. Can use Passthru switch to pass the UserId as an output.
+.EXAMPLE
+Update-ZoomUserPassword -UserId helpdesk@lawfirm.com -Password 'Zoompassword'
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userpassword
+
 
 #>
 
@@ -71,16 +74,14 @@ function Update-ZoomUserpassword {
             'password' = $Password
         }
 
-        if ($pscmdlet.ShouldProcess) {
+        if ($PSCmdlet.ShouldProcess) {
             try {
                 Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method PUT
             } catch {
                 Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
             } finally {
                 if ($PassThru) {
-                    if ($_.Exception.Code -ne 404) {
-                        Get-ZoomSpecificUser -UserId $UserId
-                    }
+                    Write-Output $UserId
                 }
             }
         }

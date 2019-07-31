@@ -21,8 +21,13 @@ Transfer recording.
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
+.OUTPUTS
+No output. Can use Passthru switch to pass UserId to output.
 .EXAMPLE
 Remove-ZoomUser 'sjackson@lawfirm.com' -action 'delete' -TransferEmail 'jsmith@lawfirm.com' -TransferMeeting
+.LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userdelete
+
 
 #>
 
@@ -67,7 +72,7 @@ function Remove-ZoomUser {
         [ValidateNotNullOrEmpty()]
         [string]$ApiSecret,
 
-        [bool]$Passthru
+        [switch]$Passthru
     )
 
     begin {

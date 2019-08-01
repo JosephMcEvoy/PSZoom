@@ -61,7 +61,7 @@ function Revoke-ZoomUserSsoToken {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/token"
 
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
+            Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         } finally {
@@ -69,7 +69,5 @@ function Revoke-ZoomUserSsoToken {
                 Write-Output $UserId
             }
         }
-
-        Write-Output $Response
     }
 }

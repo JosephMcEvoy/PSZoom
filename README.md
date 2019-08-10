@@ -12,7 +12,9 @@ Import-Module PSZoom
 ## Using Git ##
 ```
 git clone "https://github.com/JosephMcEvoy/PSZoom.git"
+```
 Place directory into a module directory (use $env:PSModulePath to find valid paths).
+```
 Import-Module PSZoom
 ```
 

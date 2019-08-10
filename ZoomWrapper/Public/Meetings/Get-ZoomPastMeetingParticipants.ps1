@@ -46,12 +46,10 @@ function Get-ZoomPastMeetingParticipants {
     )
 
     begin {
-        #Get Zoom Api Credentials
-        if (-not $ApiKey -or -not $ApiSecret) {
-            $ApiCredentials = Get-ZoomApiCredentials
-            $ApiKey = $ApiCredentials.ApiKey
-            $ApiSecret = $ApiCredentials.ApiSecret
-        }
+       #Get Zoom Api Credentials
+        $Credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
+        $ApiKey = $Credentials.ApiKey
+        $ApiSecret = $Credentials.ApiSecret
 
         #Generate JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret

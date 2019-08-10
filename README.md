@@ -2,7 +2,7 @@
 - - - - 
 A collection of Powershell tools to interface with the Zoom Api (Zoom Video Communications). 
 
-# Setup #
+# Getting Started #
 ## Using PowershellGallery ##
 ```
 Install-Module ZoomWrapper

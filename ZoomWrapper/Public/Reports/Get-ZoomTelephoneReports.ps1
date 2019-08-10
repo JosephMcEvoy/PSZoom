@@ -66,12 +66,10 @@ function Get-ZoomTelephoneReports {
     )
 
     begin {
-        #Get Zoom Api Credentials
-        if (-not $ApiKey -or -not $ApiSecret) {
-            $ApiCredentials = Get-ZoomApiCredentials
-            $ApiKey = $ApiCredentials.ApiKey
-            $ApiSecret = $ApiCredentials.ApiSecret
-        }
+       #Get Zoom Api Credentials
+        $Credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
+        $ApiKey = $Credentials.ApiKey
+        $ApiSecret = $Credentials.ApiSecret
 
         #Generate JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
@@ -152,5 +150,3 @@ function Get-YtdTelephoneReports {
     }
     write-output $AllTelephoneReports
 }
-
-Get-YtdTelephoneReports | Export-CSV zoomreports.csv

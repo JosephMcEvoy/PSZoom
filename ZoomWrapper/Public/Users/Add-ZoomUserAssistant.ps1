@@ -25,7 +25,7 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userassistantcreat
 A hastable with the Zoom API response.
 
 #>
-. "$Parent\Users\Get-ZoomSpecificUser.ps1"
+
 
 function Add-ZoomUserAssistants {
     [CmdletBinding()]
@@ -53,12 +53,10 @@ function Add-ZoomUserAssistants {
     )
 
     begin {
-        #Get Zoom Api Credentials
-        if (-not $ApiKey -or -not $ApiSecret) {
-            $ApiCredentials = Get-ZoomApiCredentials
-            $ApiKey = $ApiCredentials.ApiKey
-            $ApiSecret = $ApiCredentials.ApiSecret
-        }
+       #Get Zoom Api Credentials
+        $Credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
+        $ApiKey = $Credentials.ApiKey
+        $ApiSecret = $Credentials.ApiSecret
 
         #Generate Header with JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret

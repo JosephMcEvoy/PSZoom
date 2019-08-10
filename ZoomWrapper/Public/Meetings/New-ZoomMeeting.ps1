@@ -778,5 +778,3 @@ $paramsScheduled = @{
 
 New-ZoomMeeting @paramsScheduled
 #>
-
-New-ZoomMeeting -UserId 'jmcevoy@foleyhoag.com' -ScheduleFor 'jmcevoy@foleyhoag.com' -Topic 'test' -StartTime (get-date)

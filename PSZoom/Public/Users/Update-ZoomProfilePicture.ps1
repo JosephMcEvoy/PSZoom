@@ -15,7 +15,7 @@ The Api Secret.
 .OUTPUTS
 A hastable with the Zoom API response.
 .EXAMPLE
-Update-ZoomProfilePicture -UserId 'jmcevoy@lawfirm.com' -FileName "C:\Development\Zoom\PowerShell-Zoom-Wrapper-master\mcevoy.jpg"
+Update-ZoomProfilePicture -UserId 'jmcevoy@lawfirm.com' -FileName "C:\Development\Zoom\PSZoom\mcevoy.jpg"
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userpicture
 

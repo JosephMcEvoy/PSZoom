@@ -1,6 +1,6 @@
 # Powershell Zoom Wrapper #
 - - - - 
-A collection of Powershell tools to interface with the Zoom Api (Zoom Video Communications). 
+A Powershell wrapper to interface with the Zoom Api (Zoom Video Communications). 
 
 # Getting Started #
 ## Using PowershellGallery ##

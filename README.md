@@ -5,14 +5,15 @@ A Powershell wrapper to interface with the Zoom Api (Zoom Video Communications).
 # Getting Started #
 ## Using PowershellGallery ##
 ```
-Install-Module ZoomWrapper
-Import-Module ZoomWrapper
+Install-Module PSZoom
+Import-Module PSZoom
 ```
 
 ## Using Git ##
 ```
-git clone "https://github.com/JosephMcEvoy/PowerShell-Zoom-Wrapper.git"
-Import-Module '.\ZoomWrapper\ZoomWrapper.psm1'
+git clone "https://github.com/JosephMcEvoy/PSZoom.git"
+Place directory into a module directory (use $env:PSModulePath to find valid paths).
+Import-Module PSZoom
 ```
 
 # Using your API Key and API Secret #
@@ -23,9 +24,9 @@ automatically in the following order:
     As an AutomationVariable
     A prompt to host to enter Key/Secret manually
 
-# Example #
+# Example Script #
 ```
-#requires ZoomWrapper
+import-module PSZoom
 $Global:ZoomApiKey    = 'API_Key_Goes_Here'  
 $Global:ZoomApiSecret = 'API_Secret_Goes_Here'  
 Get-ZoomMeeting 123456789

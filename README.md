@@ -1,4 +1,4 @@
-# Powershell Zoom Wrapper #
+# PSZoom #
 - - - - 
 A Powershell wrapper to interface with the Zoom Api (Zoom Video Communications). 
 
@@ -13,7 +13,7 @@ Import-Module PSZoom
 ```
 git clone "https://github.com/JosephMcEvoy/PSZoom.git"
 ```
-Place directory into a module directory (use $env:PSModulePath to find valid paths).
+Place directory into a module directory (e.g. $env:USERPROFILE\Documents\WindowsPowerShell\Modules\).
 ```
 Import-Module PSZoom
 ```

@@ -16,7 +16,7 @@ The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
 .EXAMPLE
-Add-ZoomUserAssistants jmcevoy@lawfirm.com -Assistant @((New-ZoomUserAssistant -Id 'foleyav@foleyhoag.com' -email 'foleyav@foleyhoag.com'))
+Add-ZoomUserAssistants jmcevoy@lawfirm.com -Assistant @((New-ZoomUserAssistant -Id 'jmcevoy@lawfirm.com' -email 'jmcevoy@lawfirm.com'))
 Add-ZoomUserAssistants jmcevoy@lawfirm.com -Assistant (@{'id' = 'jsmith@lawfirm.com', 'email' = 'jsmith@lawfirm.com'})
 Add-ZoomUserAssistants jmcevoy@lawfirm.com -Assistants (@{'id' = 'jsmith@lawfirm.com', 'email' = 'jsmith@lawfirm.com'}, @{'id' = 'jrogers@lawfirm.com', 'email' = 'jrogers@lawfirm.com'})
 .LINK

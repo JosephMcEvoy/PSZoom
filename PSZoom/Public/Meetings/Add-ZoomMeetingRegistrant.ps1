@@ -65,7 +65,7 @@ The Api Secret.
 .OUTPUTS
 .LINK
 .EXAMPLE
-Add-ZoomMeetingRegistrant 123456789 -email jsmith@foleyhoag.com -firstname joe -lastname smith
+Add-ZoomMeetingRegistrant 123456789 -email jsmith@lawfirm.com -firstname joe -lastname smith
 
 #>
 

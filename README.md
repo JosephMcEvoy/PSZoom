@@ -21,10 +21,10 @@ Import-Module PSZoom
 # Using your API Key and API Secret #
 All commands require an API Key and Api Secret. For ease of use, each command looks for these variables
 automatically in the following order:
-    In the global scope for ZoomApiKey and ZoomApiSecret 
-    As passed as parameters to the command
-    As an AutomationVariable
-    A prompt to host to enter Key/Secret manually
+    In the global scope for ZoomApiKey and ZoomApiSecret  
+    As passed as parameters to the command  
+    As an AutomationVariable  
+    A prompt to host to enter Key/Secret manually  
 
 # Example Script #
 ```

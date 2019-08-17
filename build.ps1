@@ -1,8 +1,8 @@
 param($Task = 'Default')
 Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
 
-Install-Module 'Psake', 'PSDeploy', 'Pester', 'BuildHelpers'
-Import-Module 'Psake', 'PSDeploy', 'Pester', 'BuildHelpers' 
+Install-Module 'Psake', 'PSDeploy', 'Pester', 'BuildHelpers' -force
+Import-Module 'Psake', 'BuildHelpers'
 
 Set-BuildEnvironment
 

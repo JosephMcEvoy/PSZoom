@@ -1,6 +1,6 @@
 $Public  = @(Get-ChildItem -Path "$PSScriptRoot\Public\" -include '*.ps1' -recurse -ErrorAction SilentlyContinue)
 $Private = @(Get-ChildItem -Path "$PSScriptRoot\Private\" -include '*.ps1' -recurse -ErrorAction SilentlyContinue)
-$Public
+
 foreach ($ps1 in @($Public + $Private)) {
     try {
         . $ps1.fullname

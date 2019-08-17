@@ -66,29 +66,33 @@ Describe "PSZoom User Tests" {
         Set-StrictMode -Version 'latest'
 
         It 'Should load' {
-            $MeetingCommands = @(
-                'Add-ZoomMeetingRegistrant',
-                'Get-ZoomEndedMeetingInstances',
-                'Get-ZoomMeeting',
-                'Get-ZoomMeetingInvitation',
-                'Get-ZoomMeetingPoll',
-                'Get-ZoomMeetingRegistrants',
-                'Get-ZoomMeetingsFromUser',
-                'Get-ZoomPastMeetingDetails',
-                'Get-ZoomPastMeetingParticipants',
+            $UserCommands = @(
                 'Get-ZoomRegistrationQuestions',
+                'Get-ZoomSpecificUser',
                 'Get-ZoomTelephoneReports',
-                'New-ZoomMeetingPoll',
-                'Remove-ZoomMeeting',
-                'Update-MeetingStatus',
-                'Remove-ZoomMeetingPoll',
-                'Update-ZoomMeeting',
-                'Update-ZoomMeetingLiveStream',
-                'Update-ZoomMeetingPoll',
-                'Update-ZoomMeetingRegistrantStatus'
+                'Get-ZoomUserAssistants',
+                'Get-ZoomUserEmailStatus',
+                'Get-ZoomUserPermissions',
+                'Get-ZoomUsers',
+                'Get-ZoomUserSchedulers',
+                'Get-ZoomUserSettings',
+                'Get-ZoomUserToken',
+                'New-ZoomUser',
+                'Remove-ZoomSpecificUserAssistant',
+                'Remove-ZoomSpecificUserScheduler',
+                'Remove-ZoomUser',
+                'Remove-ZoomUserAssistants',
+                'Remove-ZoomUserSchedulers',
+                'Revoke-ZoomUserSsoToken',
+                'Update-ZoomProfilePicture',
+                'Update-ZoomUser',
+                'Update-ZoomUserEmail',
+                'Update-ZoomUserpassword',
+                'Update-ZoomUserSettings',
+                'Update-ZoomUserStatus'
             )
             
-            $MeetingCommands, $UserCommands | ForEach-Object {
+            $UserCommands | ForEach-Object {
                 $Commands -contains $_ | Should Be $true
             }
         }

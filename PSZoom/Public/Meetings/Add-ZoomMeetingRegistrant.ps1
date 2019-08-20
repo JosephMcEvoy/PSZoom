@@ -208,17 +208,15 @@ function Add-ZoomMeetingRegistrant {
                 $Parameters = $PSBoundParameters
             )
 
-            process {
-                $NewObj = @{}
-        
-                foreach ($Key in $Obj.Keys) {
-                    if ($Parameters.ContainsKey($Obj.$Key)){
-                        $Newobj.Add($Key, (get-variable $Obj.$Key).value)
-                    }
+            $NewObj = @{}
+    
+            foreach ($Key in $Obj.Keys) {
+                if ($Parameters.ContainsKey($Obj.$Key)){
+                    $Newobj.Add($Key, (get-variable $Obj.$Key).value)
                 }
-        
-                return $NewObj
             }
+    
+            return $NewObj
         }
 
         $RequestParameters = Remove-NonPSBoundParameters($RequestParameters)

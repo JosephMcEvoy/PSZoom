@@ -69,7 +69,7 @@ function Remove-ZoomMeeting {
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         }
-        
-        Write-Output $Response
+
+        Write-Verbose "Meeting $MeetingId Removed."
     }
 }

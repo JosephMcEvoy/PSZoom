@@ -1,4 +1,6 @@
-param($Task = 'Default')
+param(
+    $Task = 'Default'
+)
 Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
 
 Install-Module 'Psake', 'PSDeploy', 'Pester', 'BuildHelpers' -force

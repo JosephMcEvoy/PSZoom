@@ -13,7 +13,7 @@
 # Publish to gallery with a few restrictions
 if(
     $env:BHProjectName -and $env:BHProjectName.Count -eq 1 -and
-    $env:BHBuildSystem -ne 'Unknown' -and
+    #$env:BHBuildSystem -ne 'Unknown' -and
     $env:BHBranchName -eq "master" -and
     $env:BHCommitMessage -like '*!deploy*'
 ){
@@ -35,7 +35,11 @@ if(
 }
 
 # Publish to AppVeyor if we're in AppVeyor
-if($env:BHProjectName -and $ENV:BHProjectName.Count -eq 1 -and $env:BHBuildSystem -eq 'AppVeyor'){
+if(
+    $env:BHProjectName -and 
+    $ENV:BHProjectName.Count -eq 1 -and 
+    $env:BHBuildSystem -eq 'AppVeyor'
+){
     Deploy DeveloperBuild {
         By AppVeyorModule {
             FromSource $ENV:BHProjectName

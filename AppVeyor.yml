@@ -13,4 +13,4 @@ build: false
 
 #Kick off the CI/CD pipeline
 test_script:
-  - ps: . .\build.ps1 -Task 'Deploy'
+  - ps: . .\Build\start-build.ps1 -Task 'Deploy'

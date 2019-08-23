@@ -1,8 +1,9 @@
-version: 1.0.{build}
-image: WMF 5
 environment:
   nugetapikey:
     secure: tAkkkFKh8xHVEvdwkizGSdi8p6ETgJ+3x5eSHR/7GQTADsbbuXfSDUWC9UHgON23
+
+# Allow WMF5 (i.e. PowerShellGallery functionality)
+os: WMF 5
 
 # Skip on updates to the readme.
 # We can force this by adding [skip ci] or [ci skip] anywhere in commit message

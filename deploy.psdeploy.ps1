@@ -13,8 +13,8 @@
 # Publish to gallery with a few restrictions
 if(
     $env:BHProjectName -and $env:BHProjectName.Count -eq 1 -and
-    #$env:BHBuildSystem -ne 'Unknown' -and
-    $env:BHBranchName -eq "master" -and
+    $env:BHBuildSystem -ne 'Unknown' -and
+    $env:BHBranchName -eq 'master' -and
     $env:BHCommitMessage -like '*!deploy*'
 ){
     Deploy Module {

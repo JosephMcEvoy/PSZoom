@@ -11,7 +11,6 @@ Properties {
     $Timestamp = Get-Date -UFormat "%Y%m%d-%H%M%S"
     $PSVersion = $PSVersionTable.PSVersion.Major
     $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"
-    $lines = '----------------------------------------------------------------------'
     $Verbose = @{}
 
     if ($ENV:BHCommitMessage -match "!verbose") {
@@ -19,7 +18,7 @@ Properties {
     }
 }
 
-FormatTaskName $lines
+FormatTaskName '----------------------------------------------------------------------'
 
 Task Default -Depends Test
 

@@ -3,8 +3,7 @@
 Properties {
     # Find the build folder based on build system
         $ProjectRoot = $ENV:BHProjectPath
-        if(-not $ProjectRoot)
-        {
+        if (-not $ProjectRoot) {
             $ProjectRoot = Resolve-Path "$PSScriptRoot\.."
         }
 
@@ -14,8 +13,7 @@ Properties {
     $lines = '----------------------------------------------------------------------'
 
     $Verbose = @{}
-    if($ENV:BHCommitMessage -match "!verbose")
-    {
+    if($ENV:BHCommitMessage -match "!verbose") {
         $Verbose = @{Verbose = $True}
     }
 }
@@ -38,8 +36,7 @@ Task Test -Depends Init  {
     $TestResults = Invoke-Pester -Path $ProjectRoot\Test -PassThru -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile"
 
     # In Appveyor?  Upload our tests! #Abstract this into a function?
-    If($ENV:BHBuildSystem -eq 'AppVeyor')
-    {
+    if ($ENV:BHBuildSystem -eq 'AppVeyor') {
         (New-Object 'System.Net.WebClient').UploadFile(
             "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)",
             "$ProjectRoot\$TestFile" )
@@ -49,8 +46,7 @@ Task Test -Depends Init  {
 
     # Failed tests?
     # Need to tell psake or it will proceed to the deployment. Danger!
-    if($TestResults.FailedCount -gt 0)
-    {
+    if ($TestResults.FailedCount -gt 0) {
         Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
     }
     "`n"
@@ -63,16 +59,13 @@ Task Build -Depends Test {
     Set-ModuleFunctions
 
     # Bump the module version if we didn't already
-    Try
-    {
+    try {
         [version]$GalleryVersion = Get-NextNugetPackageVersion -Name $env:BHProjectName -ErrorAction Stop
         [version]$GithubVersion = Get-MetaData -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -ErrorAction Stop
         if($GalleryVersion -ge $GithubVersion) {
             Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value $GalleryVersion -ErrorAction stop
         }
-    }
-    Catch
-    {
+    } catch {
         "Failed to update version for '$env:BHProjectName': $_.`nContinuing with existing version"
     }
 }
@@ -81,9 +74,10 @@ Task Deploy -Depends Build {
     $lines
 
     $Params = @{
-        Path = "$ProjectRoot\Build"
+        Path = "$ProjectRoot\Build\deploy.psdeploy.ps1"
         Force = $true
         Recurse = $false
     }
+
     Invoke-PSDeploy @Verbose @Params
 }

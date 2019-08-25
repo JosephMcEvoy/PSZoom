@@ -1,6 +1,6 @@
 environment:
   nugetapikey:
-    secure: tAkkkFKh8xHVEvdwkizGSdi8p6ETgJ+3x5eSHR/7GQTADsbbuXfSDUWC9UHgON23
+    secure: /wkBebPoOhfZSU+7O0z+jpst5N+PDX+iD02S3z37lkDYqZ6CHixD/4xCXElBpth1
 
 # Allow WMF5 (i.e. PowerShellGallery functionality)
 os: WMF 5

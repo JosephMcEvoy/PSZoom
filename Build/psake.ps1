@@ -29,7 +29,7 @@ Task Init {
 }
 
 Task Test -Depends Init  {
-    "`n`tSTATUS: Testing with PowerShell $PSVersion"
+    Write-Verbose "`n`tSTATUS: Testing with PowerShell $PSVersion"
 
     # Gather test results. Store them in a variable and file
     $TestResults = Invoke-Pester -Path $ProjectRoot\Test -PassThru -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile"
@@ -50,9 +50,6 @@ Task Test -Depends Init  {
     }
 }
 
-Task Whatever -Depends Test {
-    "Ok."
-}
 Task Build -Depends Test {    
     # Load the module, read the exported functions, update the psd1 FunctionsToExport
     Set-ModuleFunctions

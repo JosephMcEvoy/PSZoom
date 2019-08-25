@@ -18,9 +18,9 @@ Properties {
     }
 }
 
-FormatTaskName ('-' * 115)
+FormatTaskName "$('-' * (57 - {0}.length)){0}$('-' * (57 - {0}.length))" #Max width guidelines for Powershell is ~115
 
-Task Default -Depends Test
+Task Default -Depends Deploy
 
 Task Init {
     Set-Location $ProjectRoot
@@ -47,7 +47,7 @@ Task Test -Depends Init  {
     }
 } -description 'Run tests'
 
-Task Build -Depends Init {    
+Task Build -Depends Test {   
     # Load the module, read the exported functions, update the psd1 FunctionsToExport
     Set-ModuleFunctions
 
@@ -66,7 +66,7 @@ Task Build -Depends Init {
 
 Task Deploy -Depends Build {
     $Params = @{
-        Path = "$ProjectRoot"
+        Path = $ProjectRoot
         Force = $true
         Recurse = $true
     }

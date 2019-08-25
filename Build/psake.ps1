@@ -47,7 +47,7 @@ Task Test -Depends Init  {
     }
 } -description 'Run tests'
 
-Task Build -Depends Test {    
+Task Build -Depends Init {    
     # Load the module, read the exported functions, update the psd1 FunctionsToExport
     Set-ModuleFunctions
 

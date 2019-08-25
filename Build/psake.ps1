@@ -3,6 +3,7 @@
 Properties {
     # Find the build folder based on build system
         $ProjectRoot = $ENV:BHProjectPath
+
         if (-not $ProjectRoot) {
             $ProjectRoot = Resolve-Path "$PSScriptRoot\.."
         }
@@ -11,17 +12,18 @@ Properties {
     $PSVersion = $PSVersionTable.PSVersion.Major
     $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"
     $lines = '----------------------------------------------------------------------'
-
     $Verbose = @{}
-    if($ENV:BHCommitMessage -match "!verbose") {
+
+    if ($ENV:BHCommitMessage -match "!verbose") {
         $Verbose = @{Verbose = $True}
     }
 }
 
+FormatTaskName $lines
+
 Task Default -Depends Test
 
 Task Init {
-    $lines
     Set-Location $ProjectRoot
     "Build System Details:"
     Get-Item ENV:BH*
@@ -29,7 +31,6 @@ Task Init {
 }
 
 Task Test -Depends Init  {
-    $lines
     "`n`tSTATUS: Testing with PowerShell $PSVersion"
 
     # Gather test results. Store them in a variable and file
@@ -49,12 +50,11 @@ Task Test -Depends Init  {
     if ($TestResults.FailedCount -gt 0) {
         Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
     }
+    
     "`n"
 }
 
-Task Build -Depends Test {
-    $lines
-    
+Task Build -Depends Test {    
     # Load the module, read the exported functions, update the psd1 FunctionsToExport
     Set-ModuleFunctions
 
@@ -62,6 +62,7 @@ Task Build -Depends Test {
     try {
         [version]$GalleryVersion = Get-NextNugetPackageVersion -Name $env:BHProjectName -ErrorAction Stop
         [version]$GithubVersion = Get-MetaData -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -ErrorAction Stop
+
         if($GalleryVersion -ge $GithubVersion) {
             Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value $GalleryVersion -ErrorAction stop
         }
@@ -71,12 +72,10 @@ Task Build -Depends Test {
 }
 
 Task Deploy -Depends Build {
-    $lines
-
     $Params = @{
-        Path = "$ProjectRoot\Build\deploy.psdeploy.ps1"
+        Path = "$ProjectRoot"
         Force = $true
-        Recurse = $false
+        Recurse = $true
     }
 
     Invoke-PSDeploy @Verbose @Params

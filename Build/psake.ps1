@@ -18,7 +18,7 @@ Properties {
     }
 }
 
-FormatTaskName '----------------------------------------------------------------------'
+FormatTaskName ('-' * 115)
 
 Task Default -Depends Test
 
@@ -26,7 +26,6 @@ Task Init {
     Set-Location $ProjectRoot
     "Build System Details:"
     Get-Item ENV:BH*
-    "`n"
 }
 
 Task Test -Depends Init  {
@@ -49,10 +48,11 @@ Task Test -Depends Init  {
     if ($TestResults.FailedCount -gt 0) {
         Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
     }
-    
-    "`n"
 }
 
+Task Whatever -Depends Test {
+    "Ok."
+}
 Task Build -Depends Test {    
     # Load the module, read the exported functions, update the psd1 FunctionsToExport
     Set-ModuleFunctions

@@ -24,13 +24,10 @@ Task Default -Depends Test
 
 Task Init {
     Set-Location $ProjectRoot
-    "Build System Details:"
     Get-Item ENV:BH*
-}
+} -description 'Initialize build environment'
 
 Task Test -Depends Init  {
-    Write-Verbose "`n`tSTATUS: Testing with PowerShell $PSVersion"
-
     # Gather test results. Store them in a variable and file
     $TestResults = Invoke-Pester -Path $ProjectRoot\Test -PassThru -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile"
 
@@ -48,13 +45,13 @@ Task Test -Depends Init  {
     if ($TestResults.FailedCount -gt 0) {
         Write-Error "Failed '$($TestResults.FailedCount)' tests, build failed"
     }
-}
+} -description 'Run tests'
 
 Task Build -Depends Test {    
     # Load the module, read the exported functions, update the psd1 FunctionsToExport
     Set-ModuleFunctions
 
-    # Bump the module version if we didn't already
+    # Bump the module version if not done already
     try {
         [version]$GalleryVersion = Get-NextNugetPackageVersion -Name $env:BHProjectName -ErrorAction Stop
         [version]$GithubVersion = Get-MetaData -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -ErrorAction Stop
@@ -65,7 +62,7 @@ Task Build -Depends Test {
     } catch {
         "Failed to update version for '$env:BHProjectName': $_.`nContinuing with existing version"
     }
-}
+} -description 'Increment version'
 
 Task Deploy -Depends Build {
     $Params = @{
@@ -75,4 +72,4 @@ Task Deploy -Depends Build {
     }
 
     Invoke-PSDeploy @Verbose @Params
-}
+} -description 'Deploy to PowerShellGallery'

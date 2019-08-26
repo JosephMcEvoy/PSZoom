@@ -44,19 +44,19 @@ function New-ZoomUser {
     Param(
         [Parameter(
             Mandatory = $True,
-            ValueFromPipelineByPropertyName = $True        
-        )]
-        [ValidateSet('create', 'autoCreate', 'custCreate', 'ssoCreate')]
-        [string]$Action,
-
-        [Parameter(
-            Mandatory = $True,
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
         [ValidateLength(1, 128)]
-        [Alias('EmailAddress')]
+        [Alias('EmailAddress', 'UserId', 'User_Id', 'Id')]
         [string]$Email,
+        
+        [Parameter(
+            Mandatory = $True,
+            ValueFromPipelineByPropertyName = $True        
+        )]
+        [ValidateSet('create', 'autoCreate', 'custCreate', 'ssoCreate')]
+        [string]$Action,
 
         [Parameter(
             Mandatory = $True,

@@ -1,5 +1,5 @@
 TOPIC
-    about_PSNeo4j
+    about_PSZoom
 
 SHORT DESCRIPTION
     PSZoom is a Powershell Api wrapper.

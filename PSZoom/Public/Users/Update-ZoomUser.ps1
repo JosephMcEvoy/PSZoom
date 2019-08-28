@@ -48,7 +48,7 @@ function Update-ZoomUser {
             Position = 0
         )]
         [ValidateLength(1, 128)]
-        [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
+        [Alias('Email', 'EmailAddress', 'Id', 'user_id', 'identity')]
         [string]$UserId,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]

@@ -84,7 +84,7 @@ function New-ZoomUser {
         [ValidateNotNullOrEmpty()]
         [string]$ApiSecret,
 
-        [bool]$Passthru
+        [switch]$Passthru
     )
 
     begin {

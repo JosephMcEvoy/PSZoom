@@ -1,30 +1,72 @@
 $PSVersion = $PSVersionTable.PSVersion.Major
 $ModuleName = $ENV:BHProjectName
 $ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
-
-# Verbose output for non-master builds on appveyor
-# Handy for troubleshooting.
-# Splat @Verbose against commands as needed (here or in pester tests)
-$Verbose = @{}
-if($ENV:BHBranchName -notlike "master" -or $env:BHCommitMessage -match "!verbose") {
-    $Verbose.add("Verbose",$True)
-}
-
-Import-Module $ModulePath -Force
-
 $TestUri = 'TestUri'
 $TestToken = 'TestToken'
 $TestArchive = 'TestArchive'
 $TestProxy = 'TestProxy'
 
+# Verbose output for non-master builds on appveyor
+# Handy for troubleshooting.
+# Splat @Verbose against commands as needed (here or in pester tests)
+
+$Verbose = @{}
+if($ENV:BHBranchName -notlike "master" -or $env:BHCommitMessage -match "!verbose") {
+    $Verbose.add("Verbose", $True)
+}
+
+Import-Module $ModulePath -Force
+
+#Import private functions
+$Private = @(Get-ChildItem -Path "$ModulePath\Private\" -include '*.ps1' -recurse -ErrorAction SilentlyContinue)
+
+foreach ($file in $Private) {
+    try {
+        . $file.fullname
+    } catch {
+        Write-Error -Message "Failed to import function $($ps1.fullname): $_"
+    }
+}
+
+
+
 $Module = Get-Module $ModuleName
 $Commands = $Module.ExportedCommands.Keys
 
-Describe "PSZoom General Tests" {
-    It 'Should be the correct name' {
-        $Module.Name | Should Be $ModuleName
+function ShowMockInfo($functionName, [String[]] $params) {
+    if ($ShowMockData)
+    {
+        Write-Host " Mocked $functionName" -ForegroundColor Cyan
+        foreach ($p in $params) {
+            Write-Host " [$p] $(Get-Variable -Name $p -ValueOnly)" -ForegroundColor Cyan
+        }
     }
 }
+<#
+InModuleScope $ModuleName {
+    Describe "PSZoom General Tests" {
+        It 'Should be the correct name' {
+            $Module.Name | Should Be $ModuleName
+        }
+
+        It 'Should generate a JWT correctly' {
+            $token = (New-JWT -Algorithm 'HS256' -type 'JWT' -Issuer 123 -SecretKey 456 -ValidforSeconds 30)
+            $parsedToken = (Parse-JWTtoken -Token $token)
+            $(parsedToken.alg) | Should -Be 'HS256'
+            $parsedToken.typ | Should -Be 'JWT'
+            $parsedToken.iss | Should -Be '123'
+            $parsedToken.exp | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should create the correct headers' {
+            $headers = New-ZoomHeaders -ApiKey 123 -ApiSecret 456
+            $headers.'content-type' | Should -Be 'application/json'
+            $headers.authorization  | Should -BeLike '*bearer*'
+        }
+    }
+}
+#>
+
 Describe "PSZoom Meeting Tests" {
     Context 'Strict mode' {
         Set-StrictMode -Version 'latest'
@@ -59,7 +101,6 @@ Describe "PSZoom Meeting Tests" {
 
     }
 }
-
 
 Describe "PSZoom User Tests" {
     Context 'Strict mode' {
@@ -96,6 +137,21 @@ Describe "PSZoom User Tests" {
                 $Commands -contains $_ | Should Be $true
             }
         }
-
     }
 }
+<#
+Mock Invoke-RestMethod {
+    ShowMockInfo 'Invoke-RestMethod' -Params 'Uri', 'Headers', 'Body', 'Method'
+}
+
+Describe "New-ZoomUser Tests" {
+    It "Calls the correct URI, Method, and Body" {
+        $y = New-ZoomUser -Action 'ssoCreate' -Email 'kren@darkside.com' -Type 'Pro' -FirstName 'Kylo' -LastName 'Ren' -ApiKey '123' -ApiSecret '456'
+        Assert-MockCalled -CommandName Invoke-WebRequest -ParameterFilter {`
+            $Uri -eq 'https://api.zoom.us/v2/users' -and`
+            $Method -eq 'Post' -and`
+            $Body.
+        } -Scope It
+    }
+}
+#>

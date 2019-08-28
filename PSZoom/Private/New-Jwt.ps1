@@ -5,7 +5,7 @@ Encodes a JWT header, payload and signature.
 .EXAMPLE
 New-JWT -Algorithm 'HS256' -type 'JWT' -Issuer $api_key -SecretKey $api_secret -ValidforSeconds 30
 .EXAMPLE
-$Token = New-JWT -Algorithm 'HS256' -type 'JWT' -Issuer $api_key -SecretKey $api_secret -ValidforSeconds 30
+$Token = New-JWT -Algorithm 'HS256' -type 'JWT' -Issuer 123 -SecretKey 456 -ValidforSeconds 30
 .LINK
 https://marketplace.zoom.us/docs/guides/authorization/jwt/jwt-with-zoom
 

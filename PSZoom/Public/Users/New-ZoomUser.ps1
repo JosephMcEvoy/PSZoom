@@ -34,7 +34,7 @@ THe API secret.
 .OUTPUTS
 An object with the Zoom API response. 
 .EXAMPLE
-New-ZoomUser -Action ssoCreate -Email helpdesk@lawfirm.com -Type Pro -FirstName Joseph -LastName McEvoy -ApiKey $ApiKey -ApiSecret $ApiSecret
+New-ZoomUser -Action ssoCreate -Email jsmith@lawfirm.com -Type Pro -FirstName Joseph -LastName Smith -ApiKey $ApiKey -ApiSecret $ApiSecret
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/usercreate
 #>
@@ -48,7 +48,7 @@ function New-ZoomUser {
             ValueFromPipelineByPropertyName = $True
         )]
         [ValidateLength(1, 128)]
-        [Alias('EmailAddress', 'UserId', 'User_Id', 'Id')]
+        [Alias('EmailAddress', 'UserId', 'User_Id', 'Id', 'Identity')]
         [string]$Email,
         
         [Parameter(
@@ -82,23 +82,25 @@ function New-ZoomUser {
         [string]$ApiKey,
         
         [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [string]$ApiSecret,
+
+        [bool]$Passthru
     )
 
     begin {
         $Uri = 'https://api.zoom.us/v2/users'
        #Get Zoom Api Credentials
-        $Credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
+        $credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
         $ApiKey = $Credentials.ApiKey
         $ApiSecret = $Credentials.ApiSecret
 
         #Generate Headers with JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 
     process {
         #Request Body
-        $RequestBody = @{
+        $requestBody = @{
             'action' = $Action
         }
 
@@ -118,7 +120,7 @@ function New-ZoomUser {
         }
 
         #These parameters are optional.
-        $UserInfoKeyValues = @{
+        $userInfoKeyValues = @{
             'first_name' = 'FirstName'
             'last_name'  = 'LastName'
             'password'   = 'Password'
@@ -131,36 +133,40 @@ function New-ZoomUser {
             )
 
             process {
-                $NewObj = @{}
+                $newObj = @{}
         
                 foreach ($Key in $Obj.Keys) {
                     if ($Parameters.ContainsKey($Obj.$Key)){
-                        $Newobj.Add($Key, (get-variable $Obj.$Key).value)
+                        $newobj.Add($Key, (get-variable $Obj.$Key).value)
                     }
                 }
         
-                return $NewObj
+                return $newObj
             }
         }
 
         #Determines if optional parameters were provided in the function call.
-        $UserInfoKeyValues = Remove-NonPSBoundParameters($UserInfoKeyValues)
+        $userInfoKeyValues = Remove-NonPSBoundParameters($userInfoKeyValues)
 
         #Adds parameters to UserInfo object.
-        $UserInfoKeyValues.Keys | ForEach-Object {
-                $UserInfo.Add($_, $UserInfoKeyValues.$_)
+        $userInfoKeyValues.Keys | ForEach-Object {
+                $UserInfo.Add($_, $userInfoKeyValues.$_)
         }
 
-        $RequestBody.add('user_info', $UserInfo)
-
+        $requestBody.add('user_info', $UserInfo)
+        
         if ($PScmdlet.ShouldProcess) {
             try {
-                $Response = Invoke-RestMethod -Uri $Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Post
+                $Response = Invoke-RestMethod -Uri $Uri -Headers $headers -Body ($requestBody | ConvertTo-Json) -Method Post
             } catch {
                 Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
             }
 
-            Write-Output $Response
+            if ($passthru) {
+                Write-Output $Email
+            } else {
+                Write-Output $Response
+            }
         }
     }
 }

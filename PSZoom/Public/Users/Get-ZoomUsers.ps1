@@ -20,11 +20,14 @@ The Api Secret.
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/users
 .EXAMPLE
+Return the first page of users.
 Get-ZoomUsers
 .EXAMPLE
+Return the first page of active users.
 Get-ZoomUsers -Status active -PageSize 50
 .EXAMPLE
-(Get-ZoomUsers -PageSize 100 -pagenumber 3 -status active).Users.Email
+Return active user emails.
+(Get-ZoomUsers -PageSize 300 -pagenumber 3 -status active).Users.Email
 
 #>
 
@@ -43,6 +46,10 @@ function Get-ZoomUsers {
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('page_number')]
         [int]$PageNumber = 1,
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('role_id')]
+        [int]$RoleId,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -63,11 +70,14 @@ function Get-ZoomUsers {
     }
 
     process {
+        #Zoom API reference indicates the parameters are Query parameters but in practice they work only in the Body of the request.
         $RequestBody = @{
             'status'      = $Status
             'page_size'   = $PageSize
             'page_number' = $PageNumber
+            'role_id'     = $RoleId
         }    
+
         try {
             $Response = Invoke-RestMethod -Uri $Uri -Headers $headers -Body $RequestBody -Method GET
         } catch {

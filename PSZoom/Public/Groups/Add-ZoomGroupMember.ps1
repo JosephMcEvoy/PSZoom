@@ -2,33 +2,44 @@
 
 .SYNOPSIS
 Add members to a under your account.
+
 .DESCRIPTION
 Add members to a under your account.
 Prerequisite: Pro, Business, or Education account
+
 .PARAMETER GroupId
 The group ID.
+
 .PARAMETER Email
 Emails to be added to the group.
+
 .PARAMETER Id
 IDs to be added to the group.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
 The Zoom response (an object). Example:
 ids                    added_at
 ---                    --------
 tKODqjp0S456QzjjcNQqVg 2019-08-28T22:39:51Z
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/groups/groupmemberscreate
+
 .EXAMPLE
 Add a single user to a single group.
 $GroupId = ((Get-ZoomGroups) | where-object {$_ -eq 'Light Side'}).id
 Add-ZoomGroupMembers -group $GroupID -Email okenobi@lightside.com, lskywalker@lightside.com
+
 .EXAMPLE
 Add users to a single group.
 Get-ZoomGroups | where-object {$_ -eq 'Dark Side'} | Add-ZoomGroupMembers -email 'dvader@sith.org','dsidious@sith.org'
+
 .EXAMPLE
 Add a single user to all groups matching 'Side'.
 Get-ZoomGroups | where-object {$_ -like '*Side*'} | Add-ZoomGroupMembers -email 'askywalker@theforce.com'

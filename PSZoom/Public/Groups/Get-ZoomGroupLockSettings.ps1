@@ -28,7 +28,7 @@ Get-ZoomGroupLockSettings -GroupId (((Get-ZoomGroups) | where-object {$_ -match 
 
 #>
 
-function Get-ZoomGroupSettings  {
+function Get-ZoomGroupLockSettings  {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -36,7 +36,7 @@ function Get-ZoomGroupSettings  {
             ValueFromPipelineByPropertyName = $True, 
             Position = 0
         )]
-        [Alias('group_id', 'group')]
+        [Alias('group_id', 'group', 'id')]
         [string]$GroupId,
 
         [string]$ApiKey,

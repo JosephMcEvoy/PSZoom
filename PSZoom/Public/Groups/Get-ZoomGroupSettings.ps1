@@ -36,7 +36,7 @@ function Get-ZoomGroupSettings  {
             ValueFromPipelineByPropertyName = $True, 
             Position = 0
         )]
-        [Alias('group_id', 'group')]
+        [Alias('group_id', 'group', 'id')]
         [string]$GroupId,
 
         [string]$ApiKey,

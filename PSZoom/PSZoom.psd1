@@ -12,7 +12,7 @@
     RootModule = 'PSZoom.psm1'
     
     # Version number of this module.
-    ModuleVersion = '1.0.5'
+    ModuleVersion = '1.0.9'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -69,7 +69,7 @@
     # NestedModules = @()
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Update-ZoomGroupSettings','Get-ZoomGroupLockSettings','Get-ZoomGroupSettings','Update-ZoomGroup','New-ZoomGroup','Remove-ZoomGroup','Remove-ZoomGroupMembers','Get-ZoomSpecificGroup', 'Get-ZoomGroups','Add-ZoomMeetingRegistrant','Add-ZoomGroupMembers','Get-ZoomEndedMeetingInstances','Get-ZoomMeeting','Get-ZoomMeetingInvitation','Get-ZoomMeetingPoll','Get-ZoomMeetingRegistrants','Get-ZoomMeetingsFromUser','Get-ZoomPastMeetingDetails','Get-ZoomPastMeetingParticipants','Get-ZoomPersonalMeetingRoomName','Get-ZoomRegistrationQuestions','Get-ZoomSpecificUser','Get-ZoomTelephoneReports','Get-ZoomUserAssistants','Get-ZoomUserEmailStatus','Get-ZoomUserPermissions','Get-ZoomUsers','Get-ZoomUserSchedulers','Get-ZoomUserSettings','Get-ZoomUserToken','New-ZoomMeeting','New-ZoomMeetingPoll','New-ZoomUser','Remove-ZoomMeeting','Remove-ZoomMeetingPoll','Remove-ZoomSpecificUserAssistant','Remove-ZoomSpecificUserScheduler','Remove-ZoomUser','Remove-ZoomUserAssistants','Remove-ZoomUserSchedulers','Revoke-ZoomUserSsoToken','Update-MeetingStatus','Update-ZoomMeeting','Update-ZoomMeetingLiveStream','Update-ZoomMeetingPoll','Update-ZoomMeetingRegistrantStatus','Update-ZoomProfilePicture','Update-ZoomUser','Update-ZoomUserEmail','Update-ZoomUserpassword','Update-ZoomUserSettings','Update-ZoomUserStatus')
+    FunctionsToExport = @('Add-ZoomGroupMember','Add-ZoomMeetingRegistrant','Get-ZoomEndedMeetingInstances','Get-ZoomGroupLockSettings','Get-ZoomGroups','Get-ZoomGroupSettings','Get-ZoomMeeting','Get-ZoomMeetingInvitation','Get-ZoomMeetingPoll','Get-ZoomMeetingRegistrants','Get-ZoomMeetingsFromUser','Get-ZoomPastMeetingDetails','Get-ZoomPastMeetingParticipants','Get-ZoomPersonalMeetingRoomName','Get-ZoomRegistrationQuestions','Get-ZoomSpecificGroup','Get-ZoomSpecificUser','Get-ZoomTelephoneReports','Get-ZoomUserAssistants','Get-ZoomUserEmailStatus','Get-ZoomUserPermissions','Get-ZoomUsers','Get-ZoomUserSchedulers','Get-ZoomUserSettings','Get-ZoomUserToken','New-ZoomGroup','New-ZoomMeeting','New-ZoomMeetingPoll','New-ZoomUser','Remove-ZoomGroup','Remove-ZoomGroupMembers','Remove-ZoomMeeting','Remove-ZoomMeetingPoll','Remove-ZoomSpecificUserAssistant','Remove-ZoomSpecificUserScheduler','Remove-ZoomUser','Remove-ZoomUserAssistants','Remove-ZoomUserSchedulers','Revoke-ZoomUserSsoToken','Update-MeetingStatus','Update-ZoomGroup','Update-ZoomGroupLockSettings','Update-ZoomGroupSettings','Update-ZoomMeeting','Update-ZoomMeetingLiveStream','Update-ZoomMeetingPoll','Update-ZoomMeetingRegistrantStatus','Update-ZoomProfilePicture','Update-ZoomUser','Update-ZoomUserEmail','Update-ZoomUserpassword','Update-ZoomUserSettings','Update-ZoomUserStatus')
     
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport = '*'

@@ -139,6 +139,33 @@ Describe "PSZoom User Tests" {
         }
     }
 }
+
+Describe "PSZoom Group Tests" {
+    Context 'Strict mode' {
+        Set-StrictMode -Version 'latest'
+
+        It 'Should load' {
+            $GroupCommands = @(
+                'Add-ZoomGroupMember',
+                'Get-ZoomGroupLockSettings',
+                'Get-ZoomGroups',
+                'Get-ZoomGroupSettings',
+                'Get-ZoomSpecificGroup',
+                'New-ZoomGroup',
+                'Remove-ZoomGroup',
+                'Remove-ZoomGroupMembers',
+                'Update-ZoomGroup',
+                'Update-ZoomGroupLockSettings',
+                'Update-ZoomGroupSettings'
+            )
+            
+            $GroupCommands | ForEach-Object {
+                $Commands -contains $_ | Should Be $True
+            }
+        }
+
+    }
+} 
 <#
 Mock Invoke-RestMethod {
     ShowMockInfo 'Invoke-RestMethod' -Params 'Uri', 'Headers', 'Body', 'Method'

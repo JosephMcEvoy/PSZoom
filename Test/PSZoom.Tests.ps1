@@ -42,13 +42,15 @@ function ShowMockInfo($functionName, [String[]] $params) {
         }
     }
 }
-<#
+
 InModuleScope $ModuleName {
     Describe "PSZoom General Tests" {
         It 'Should be the correct name' {
             $Module.Name | Should Be $ModuleName
         }
-
+    }
+}
+<#
         It 'Should generate a JWT correctly' {
             $token = (New-JWT -Algorithm 'HS256' -type 'JWT' -Issuer 123 -SecretKey 456 -ValidforSeconds 30)
             $parsedToken = (Parse-JWTtoken -Token $token)
@@ -144,8 +146,11 @@ Describe "PSZoom Group Tests" {
     Context 'Strict mode' {
         Set-StrictMode -Version 'latest'
 
-        It 'Should load' {
-            $GroupCommands = @(
+        Mock Invoke-RestMethod {
+            Write-Output $Body,$Uri,$Method
+        }
+
+        $GroupCommands = @(
                 'Add-ZoomGroupMember',
                 'Get-ZoomGroupLockSettings',
                 'Get-ZoomGroups',
@@ -157,15 +162,23 @@ Describe "PSZoom Group Tests" {
                 'Update-ZoomGroup',
                 'Update-ZoomGroupLockSettings',
                 'Update-ZoomGroupSettings'
-            )
-            
+        )
+
+        It 'Should load' {
             $GroupCommands | ForEach-Object {
                 $Commands -contains $_ | Should Be $True
             }
         }
+<#
+        It 'Follows the correct schema' {
+            $GroupCommands | ForEach-Object {
+               $_ | Should Be $GroupSchema.$_
+            }
+        }#>
 
     }
-} 
+}
+
 <#
 Mock Invoke-RestMethod {
     ShowMockInfo 'Invoke-RestMethod' -Params 'Uri', 'Headers', 'Body', 'Method'

@@ -16,9 +16,11 @@ The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
 .EXAMPLE
-Add-ZoomUserAssistants jmcevoy@lawfirm.com -Assistant @((New-ZoomUserAssistant -Id 'jmcevoy@lawfirm.com' -email 'jmcevoy@lawfirm.com'))
-Add-ZoomUserAssistants jmcevoy@lawfirm.com -Assistant (@{'id' = 'jsmith@lawfirm.com', 'email' = 'jsmith@lawfirm.com'})
-Add-ZoomUserAssistants jmcevoy@lawfirm.com -Assistants (@{'id' = 'jsmith@lawfirm.com', 'email' = 'jsmith@lawfirm.com'}, @{'id' = 'jrogers@lawfirm.com', 'email' = 'jrogers@lawfirm.com'})
+Add-ZoomUserAssistants dsidious@thesith.com -Assistant ((New-ZoomUserAssistant -email 'dvader@thesith.com'), (New-ZoomUserAssistant -email 'dmaul@thesith.com'))
+.EXAMPLE
+Add-ZoomUserAssistants yoda@thejedi.com -Assistant (@{email' = 'lskywalker@thejedi.com'})
+.EXAMPLE
+Add-ZoomUserAssistants okenobi@thejedi.com -Assistants (@{'id' = '123456789'}, @{'email' = 'lskywalker@thejedi.com'})
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userassistantcreate
 .OUTPUTS
@@ -39,7 +41,10 @@ function Add-ZoomUserAssistants {
         [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
         [string]$UserId,
 
-        [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
+        [Parameter(
+            Mandatory = $True, 
+            ValueFromPipelineByPropertyName = $True
+        )]
         [Alias('assistant')]
         [System.Array]$Assistants,
 
@@ -69,20 +74,17 @@ function Add-ZoomUserAssistants {
         }
         
         $RequestBody = $RequestBody | convertto-json
-
-        $RequestBody
         
         try {
             $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $RequestBody -Method POST
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
-        } finally {
-            if ($Passthru) {
-                Write-Output $UserId
-            }
         }
-        
-        Write-Output $Response
+        if ($Passthru) {
+            Write-Output $UserId
+        } else {
+            Write-Output $Response
+        }
     }      
 }
 
@@ -90,12 +92,14 @@ function New-ZoomUserAssistant {
     [CmdletBinding(DefaultParameterSetName = 'Email')]
     param (
         [Parameter(
+            ParameterSetName = 'Email',
             Mandatory = $True, 
             ValueFromPipelineByPropertyName = $True
         )]
         [string]$Email,
 
         [Parameter(
+            ParameterSetName = 'Id',
             Mandatory = $True, 
             ValueFromPipelineByPropertyName = $True
         )]

@@ -73,7 +73,7 @@ function New-ZoomGroup {
                 }
 
                 Write-Verbose "Creating group $n."
-                Write-Output $Response      
+                Write-Output $Response
             }
         }
     }

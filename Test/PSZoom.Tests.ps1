@@ -179,6 +179,10 @@ Describe "New-ZoomGroup" {
             Method = $Method
         }
     }
+
+    Mock Write-Error {
+        return $null
+    }
     
     $CreateGroupSchema = '{
         "type": "object",

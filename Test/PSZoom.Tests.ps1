@@ -177,11 +177,8 @@ Describe "New-ZoomGroup" {
             Body = $Body
             Uri = $Uri
             Method = $Method
+            Headers = $Headers
         }
-    }
-
-    Mock Write-Error {
-        return $null
     }
     
     $CreateGroupSchema = '{
@@ -194,8 +191,8 @@ Describe "New-ZoomGroup" {
         }
       }'
 
-    It "Should validate against the schema" {
-       Test-Json -Json (New-ZoomGroup -Name 'TestGroupName' -ApiKey 123 -ApiSecret 456).Body -Schema $CreateGroupSchema | Should Be $True
+    It "Should use the correct method" {
+       (New-ZoomGroup -Name 'TestGroupName' -ApiKey 123 -ApiSecret 456).Method | Should Be 'POST'
     }
 }
 

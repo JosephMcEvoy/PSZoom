@@ -46,9 +46,9 @@ function New-ZoomGroup {
 
     begin {
         #Get Zoom Api Credentials
-        $Credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
-        $ApiKey = $Credentials.ApiKey
-        $ApiSecret = $Credentials.ApiSecret
+        $credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
+        $ApiKey = $credentials.ApiKey
+        $ApiSecret = $credentials.ApiSecret
 
         #Generate JWT (JSON Web Token)
         $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret

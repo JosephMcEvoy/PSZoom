@@ -1,6 +1,6 @@
 $PSVersion = $PSVersionTable.PSVersion.Major
-$ModuleName = $ENV:BHProjectName
-$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
+$ModuleName = 'pSZoom'
+$ModulePath = Join-Path 'd:\dev\pszoom' $ModuleName
 $TestUri = 'TestUri'
 $TestToken = 'TestToken'
 $TestArchive = 'TestArchive'
@@ -100,7 +100,6 @@ Describe "PSZoom Meeting Tests" {
                 $Commands -contains $_ | Should Be $true
             }
         }
-
     }
 }
 
@@ -169,13 +168,33 @@ Describe "PSZoom Group Tests" {
                 $Commands -contains $_ | Should Be $True
             }
         }
-<#
-        It 'Follows the correct schema' {
-            $GroupCommands | ForEach-Object {
-               $_ | Should Be $GroupSchema.$_
-            }
-        }#>
+    }
+}
 
+
+Describe "New-ZoomGroup" {
+    Context "Idk" {
+        Mock Invoke-RestMethod {
+            Write-Output @{
+                Body = $Body
+                Uri = $Uri
+                Method = $Method
+            }
+        }
+        
+        $CreateGroupSchema = '{
+            "type": "object",
+            "properties": {
+            "name": {
+                "type": "string",
+                "description": "Group name."
+            }
+            }
+        }'
+
+        It "Should validate against the schema" {
+            Test-Json -Json (New-ZoomGroup -Name 'TestGroup' -ApiKey 123 -ApiSecret 456).Body -Schema $CreateGroupSchema | Should Be $True
+        }
     }
 }
 

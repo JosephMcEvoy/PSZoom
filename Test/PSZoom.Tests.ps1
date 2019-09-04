@@ -191,7 +191,7 @@ Describe "New-ZoomGroup" {
       }'
 
     It "Should validate against the schema" {
-       Test-JsonSchema -Json (New-ZoomGroup -Name 'TestGroup' -ApiKey 123 -ApiSecret 456).Body -Schema $CreateGroupSchema | Should Be $True
+       Test-Json -Json (New-ZoomGroup -Name 'TestGroupName' -ApiKey 123 -ApiSecret 456).Body -Schema $CreateGroupSchema | Should Be $True
     }
 }
 

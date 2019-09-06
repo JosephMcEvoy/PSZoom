@@ -10,10 +10,15 @@ Import-Module PSZoom
 ```
 
 ## Using Git ##
+Clone the repository.
 ```
 git clone "https://github.com/JosephMcEvoy/PSZoom.git"
 ```
-Place directory into a module directory (e.g. $env:USERPROFILE\Documents\WindowsPowerShell\Modules\).
+Place directory into a module directory (e.g. $env:USERPROFILE\Documents\WindowsPowerShell\Modules).
+```
+Move-Item -path ".\pszoom\pszoom" -Destination "$env:USERPROFILE\Documents\WindowsPowerShell\Modules"
+```
+Import the module.
 ```
 Import-Module PSZoom
 ```

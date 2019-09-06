@@ -173,26 +173,38 @@ Describe "PSZoom Group Tests" {
 
 Describe "New-ZoomGroup" {
     Mock Invoke-RestMethod {
-        Write-Output @{
+        $Response = @{
             Body = $Body
             Uri = $Uri
             Method = $Method
             Headers = $Headers
         }
+
+        Write-Output $Response
     }
     
     $CreateGroupSchema = '{
         "type": "object",
         "properties": {
-          "name": {
+            "name": {
             "type": "string",
             "description": "Group name."
           }
         }
       }'
 
-    It "Should use the correct method" {
-       (New-ZoomGroup -Name 'TestGroupName' -ApiKey 123 -ApiSecret 456).Method | Should Be 'POST'
+    $Request = New-ZoomGroup -Name 'TestGroupName' -ApiKey 123 -ApiSecret 456
+
+    It "Uses the correct method" {
+        $Request.Method | Should Be 'POST'
+    }
+
+    It "Uses the correct uri" {
+        $Request.Uri | Should Be 'https://api.zoom.us/v2/groups'
+    }
+
+    It "Validates against the JSON schema" {
+        Test-Json -Json $Request.Body -Schema $CreateGroupSchema | Should Be $True
     }
 }
 

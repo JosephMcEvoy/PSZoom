@@ -1,9 +1,9 @@
 <#
 
 .SYNOPSIS
-List users on a Zoom account.
+List specific user(s) on a Zoom account.
 .DESCRIPTION
-List users on a Zoom account.
+List specific user(s) on a Zoom account.
 .PARAMETER UserId
 The user ID or email address.
 .PARAMETER ApiKey
@@ -19,7 +19,7 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/users/user
 
 #>
 
-function Get-ZoomSpecificUser {
+function Get-ZoomUser {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -28,7 +28,7 @@ function Get-ZoomSpecificUser {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
+        [Alias('email', 'emailaddress', 'id', 'user_id', 'ids', 'userids', 'emails', 'emailaddresses')]
         [string]$UserId,
 
         [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
@@ -53,27 +53,30 @@ function Get-ZoomSpecificUser {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
+        foreach ($id in $UserId) {
+            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
 
-        if ($PSBoundParameters.ContainsKey('LoginType')) {
-            $LoginType = switch ($LoginType) {
-                'Facebook' { 0 }
-                'Google' { 1 }
-                'API' { 99 }
-                'Zoom' { 100 }
-                'SSO' { 101 }
-                Default { $LoginType }
+            if ($PSBoundParameters.ContainsKey('LoginType')) {
+                $LoginType = switch ($LoginType) {
+                    'Facebook' { 0 }
+                    'Google' { 1 }
+                    'API' { 99 }
+                    'Zoom' { 100 }
+                    'SSO' { 101 }
+                    Default { $LoginType }
+                }
+                $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+                $Query.Add('login_type', $LoginType)
+                $Request.Query = $Query.ToString()
             }
-            $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('login_type', $LoginType)
-            $Request.Query = $Query.ToString()
-        }
+        
 
-        try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Method GET
-        } catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
-        } finally {
+            try {
+                $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Method GET
+            } catch {
+                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            }
+            
             Write-Output $Response
         }
     }

@@ -13,7 +13,7 @@ The Api Secret.
 .OUTPUTS
 An object with the Zoom API response.
 .EXAMPLE
-Get-ZoomSpecificUser jsmith@lawfirm.com
+Get-ZoomUser jsmith@lawfirm.com
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/user
 

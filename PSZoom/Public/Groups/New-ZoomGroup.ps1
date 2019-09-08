@@ -50,7 +50,7 @@ function New-ZoomGroup {
         $ApiKey = $credentials.ApiKey
         $ApiSecret = $credentials.ApiSecret
 
-        #Generate JWT (JSON Web Token)
+        #Generate Headers and JWT (JSON Web Token)
         $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
 
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups"

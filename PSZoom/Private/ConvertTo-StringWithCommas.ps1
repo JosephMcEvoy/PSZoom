@@ -1,3 +1,9 @@
+<#
+.DESCRIPTION
+Turns @(1,2,3,4) to '1,2,3,4'. 
+Sometimes Zoom expects comma separated items in a string, as opposed to an array.
+#>
+
 function ConvertTo-StringWithCommas([array]$Array) {
     $Output = ''
     

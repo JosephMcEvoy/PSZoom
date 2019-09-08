@@ -36,7 +36,7 @@ Update-ZoomUser -UserId helpdesk@lawfirm.com -Type Pro -FirstName Joseph -LastNa
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userupdate
 
 #>
-. "$PSScriptRoot\Get-ZoomSpecificUser.ps1"
+. "$PSScriptRoot\Get-ZoomUser.ps1"
 
 function Update-ZoomUser {    
     [CmdletBinding(SupportsShouldProcess = $True)]

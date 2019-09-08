@@ -2,7 +2,88 @@ TOPIC
     about_PSZoom
 
 SHORT DESCRIPTION
-    PSZoom is a Powershell Api wrapper.
+    PSZoom is a Powershell API wrapper.
 
 DETAILED DESCRIPTION
-    PSZoom is a Powershell Api wrapper.
+    PSZoom allows users to work with the Zoom API through Powershell functions.
+    The module tries to wrap each API call that Zoom has with their API v2 documentation.
+    You can find their documentation at https://marketplace.zoom.us/docs/api-reference/zoom-api.
+
+    Cmdlets are named with approved Powershell verbs but keeping to as close to Zoom's API reference as possible.
+    For example Zoom has an API call that they named 'List User Assistants'. In PSZoom it is named 
+    Get-ZoomUserAssistants. In general each cmdlet has associated help which includes a link (found under .LINK) 
+    to the API call that it is wrapping.
+
+SEE ALSO
+    Add-ZoomGroupMember
+    Get-ZoomGroup
+    Get-ZoomGroupLockSettings
+    Get-ZoomGroups
+    Get-ZoomGroupSettings
+    New-ZoomGroup
+    Remove-ZoomGroup
+    Remove-ZoomGroupMembers
+    Update-ZoomGroup
+    Update-ZoomGroupLockSettings
+    Update-ZoomGroupSettings
+    
+    Add-ZoomMeetingRegistrant
+    Get-ZoomEndedMeetingInstances
+    Get-ZoomMeeting
+    Get-ZoomMeetingInvitation
+    Get-ZoomMeetingPoll
+    Get-ZoomMeetingRegistrants
+    Get-ZoomMeetingsFromUser
+    Get-ZoomPastMeetingDetails
+    Get-ZoomPastMeetingParticipants
+    Get-ZoomPersonalMeetingRoomName
+    Get-ZoomRegistrationQuestions
+    New-ZoomMeeting
+    New-ZoomMeetingPoll
+    Remove-ZoomMeeting
+    Remove-ZoomMeetingPoll
+    Update-MeetingStatus
+    Update-ZoomMeeting
+    Update-ZoomMeetingLiveStream
+    Update-ZoomMeetingPoll
+    Update-ZoomMeetingRegistrantStatus
+    
+    Get-ZoomSpecificUser
+    Get-ZoomUserAssistants
+    Get-ZoomUserEmailStatus
+    Get-ZoomUserPermissions
+    Get-ZoomUsers
+    Get-ZoomUserSchedulers
+    Get-ZoomUserSettings
+    Get-ZoomUserToken
+    New-ZoomUser
+    Remove-ZoomSpecificUserAssistant
+    Remove-ZoomSpecificUserScheduler
+    Remove-ZoomUser
+    Remove-ZoomUserAssistants
+    Remove-ZoomUserSchedulers
+    Revoke-ZoomUserSsoToken
+    Update-ZoomProfilePicture
+    Update-ZoomUser
+    Update-ZoomUserEmail
+    Update-ZoomUserpassword
+    Update-ZoomUserSettings
+    Update-ZoomUserStatus
+    
+    Get-ZoomTelephoneReports
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+

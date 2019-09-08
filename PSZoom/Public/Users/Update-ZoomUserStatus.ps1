@@ -22,7 +22,7 @@ Update-ZoomUserStatus -UserId helpdesk@lawfirm.com
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userstatus
 
 #>
-. "$PSScriptRoot\Get-ZoomSpecificUser.ps1"
+. "$PSScriptRoot\Get-ZoomUser.ps1"
 
 function Update-ZoomUserStatus {    
     [CmdletBinding(SupportsShouldProcess = $True)]

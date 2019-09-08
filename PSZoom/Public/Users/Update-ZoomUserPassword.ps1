@@ -21,7 +21,7 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userpassword
 
 
 #>
-. "$PSScriptRoot\Get-ZoomSpecificUser.ps1"
+. "$PSScriptRoot\Get-ZoomUser.ps1"
 
 function Update-ZoomUserpassword {    
     [CmdletBinding(SupportsShouldProcess = $True)]

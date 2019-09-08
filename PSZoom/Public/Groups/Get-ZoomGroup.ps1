@@ -14,11 +14,11 @@ Zoom response as an object.
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/groups/group
 .EXAMPLE
-Get-ZoomSpecificGroup 24e50639b5bb4fab9c3c
+Get-ZoomGroup 24e50639b5bb4fab9c3c
 
 #>
 
-function Get-ZoomSpecificGroup  {
+function Get-ZoomGroup  {
     param (
         [Parameter(
             Mandatory = $True, 
@@ -39,7 +39,7 @@ function Get-ZoomSpecificGroup  {
         $ApiKey = $Credentials.ApiKey
         $ApiSecret = $Credentials.ApiSecret
 
-        #Generate JWT (JSON Web Token)
+        #Generate Headers and JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 

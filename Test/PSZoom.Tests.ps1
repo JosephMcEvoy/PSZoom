@@ -146,7 +146,14 @@ Describe "PSZoom Group Tests" {
         Set-StrictMode -Version 'latest'
 
         Mock Invoke-RestMethod {
-            Write-Output $Body,$Uri,$Method
+            $Response = @{
+                Body = $Body
+                Uri = $Uri
+                Method = $Method
+                Headers = $Headers
+            }
+    
+            Write-Output $Response
         }
 
         $GroupCommands = @(
@@ -169,42 +176,53 @@ Describe "PSZoom Group Tests" {
             }
         }
     }
+
+    <#Context "New-ZoomGroup" {
+        
+        $CreateGroupSchema = '{
+            "type": "object",
+            "properties": {
+                "name": {
+                "type": "string",
+                "description": "Group name."
+              }
+            }
+          }'
+    
+        $Request = New-ZoomGroup -Name 'TestGroupName' -ApiKey 123 -ApiSecret 456
+    
+        It "Uses the correct method" {
+            $Request.Method | Should Be 'POST'
+        }
+    
+        It "Uses the correct uri" {
+            $Request.Uri | Should Be 'https://api.zoom.us/v2/groups'
+        }
+    
+        It "Validates against the JSON schema" {
+            Test-Json -Json $Request.Body -Schema $CreateGroupSchema | Should Be $True
+        }
+    }#>
 }
 
-Describe "New-ZoomGroup" {
-    Mock Invoke-RestMethod {
-        $Response = @{
-            Body = $Body
-            Uri = $Uri
-            Method = $Method
-            Headers = $Headers
+Describe "PSZoom Report Tests" {
+    Context 'Strict mode' {
+        Set-StrictMode -Version 'latest'
+
+        Mock Invoke-RestMethod {
+            Write-Output $Body,$Uri,$Method
         }
 
-        Write-Output $Response
-    }
-    
-    $CreateGroupSchema = '{
-        "type": "object",
-        "properties": {
-            "name": {
-            "type": "string",
-            "description": "Group name."
-          }
+        $ReportCommands = @(
+                'Get-ZoomActiveInactiveHostReports',
+                'Get-ZoomTelephoneReports'
+        )
+
+        It 'Should load' {
+            $ReportCommands | ForEach-Object {
+                $Commands -contains $_ | Should Be $True
+            }
         }
-      }'
-
-    $Request = New-ZoomGroup -Name 'TestGroupName' -ApiKey 123 -ApiSecret 456
-
-    It "Uses the correct method" {
-        $Request.Method | Should Be 'POST'
-    }
-
-    It "Uses the correct uri" {
-        $Request.Uri | Should Be 'https://api.zoom.us/v2/groups'
-    }
-
-    It "Validates against the JSON schema" {
-        Test-Json -Json $Request.Body -Schema $CreateGroupSchema | Should Be $True
     }
 }
 

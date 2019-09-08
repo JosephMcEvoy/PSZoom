@@ -51,7 +51,7 @@ function Get-ZoomPastMeetingParticipants {
         $ApiKey = $Credentials.ApiKey
         $ApiSecret = $Credentials.ApiSecret
 
-        #Generate JWT (JSON Web Token)
+        #Generate Headers and JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 

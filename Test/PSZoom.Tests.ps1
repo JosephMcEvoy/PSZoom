@@ -97,7 +97,7 @@ Describe "PSZoom Meeting Tests" {
             )
             
             $MeetingCommands | ForEach-Object {
-                $Commands -contains $_ | Should Be $true
+                $MeetingCommands -contains $_ | Should Be $true
             }
         }
     }
@@ -135,7 +135,7 @@ Describe "PSZoom User Tests" {
             )
             
             $UserCommands | ForEach-Object {
-                $Commands -contains $_ | Should Be $true
+                $UserCommands -contains $_ | Should Be $true
             }
         }
     }
@@ -172,7 +172,7 @@ Describe "PSZoom Group Tests" {
 
         It 'Should load' {
             $GroupCommands | ForEach-Object {
-                $Commands -contains $_ | Should Be $True
+                $GroupCommands -contains $_ | Should Be $True
             }
         }
     }

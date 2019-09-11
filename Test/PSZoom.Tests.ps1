@@ -1,18 +1,19 @@
-$PSVersion = $PSVersionTable.PSVersion.Major
-$ModuleName = $ENV:BHProjectName
-$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
-
 $TestUri = 'TestUri'
 $TestToken = 'TestToken'
 $TestArchive = 'TestArchive'
 $TestProxy = 'TestProxy'
 
 <#
+$PSVersion = $PSVersionTable.PSVersion.Major
+$ModuleName = $ENV:BHProjectName
+$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
+#>
+
 #Using these variables for local testing
 $PSVersion = $PSVersionTable.PSVersion.Major
 $ModuleName = 'PSZoom'
 $ModulePath = "d:\dev\$ModuleName\$ModuleName"
-#>
+
 
 # Verbose output for non-master builds on appveyor
 # Handy for troubleshooting.

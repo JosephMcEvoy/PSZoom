@@ -48,6 +48,12 @@ function Parse-JWTtoken {
 
     $tokenArray = ([System.Text.Encoding]::ASCII.GetString($tokenByteArray) | ConvertFrom-Json)
 
-    $output = $header + $tokenArray
+    #Converts $header and $tokenArray from PSCustomObject to Hashtable so they can be added together.
+    #I would like to use -AsHashTable in convertfrom-json. This works in pwsh 6 but for some reason Appveyor isnt running tests in pwsh 6.
+    $headerAsHash = @{}
+    $tokenArrayAsHash = @{}
+    $header.psobject.properties | ForEach-Object { $headerAsHash[$_.Name] = $_.Value }
+    $tokenArrayAsHash.psobject.properties | ForEach-Object { $tokenArrayAsHash[$_.Name] = $_.Value }
+    $output = $headerAsHash + $tokenArrayAsHash
     Write-Output $output
 }

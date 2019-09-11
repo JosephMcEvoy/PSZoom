@@ -49,7 +49,7 @@ function Update-ZoomUser {
         )]
         [ValidateLength(1, 128)]
         [Alias('Email', 'Emails', 'EmailAddress', 'EmailAddresses', 'Id', 'ids', 'user_id', 'user', 'users', 'userids')]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
@@ -188,7 +188,7 @@ function Update-ZoomUser {
                 }
             }
         }
-        
+
         if ($PassThru) {
             Write-Output $UserId
         }

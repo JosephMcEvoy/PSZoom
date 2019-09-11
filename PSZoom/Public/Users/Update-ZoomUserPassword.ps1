@@ -34,7 +34,7 @@ function Update-ZoomUserpassword {
         )]
         [ValidateLength(1, 128)]
         [Alias('Email', 'Emails', 'EmailAddress', 'EmailAddresses', 'Id', 'ids', 'user_id', 'user', 'users', 'userids')]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [Parameter(
             Mandatory = $True,

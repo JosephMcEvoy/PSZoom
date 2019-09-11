@@ -156,7 +156,7 @@ function Update-ZoomUserSettings {
         )]
         [ValidateLength(1, 128)]
         [Alias('Email', 'Emails', 'EmailAddress', 'EmailAddresses', 'Id', 'ids', 'user_id', 'user', 'users', 'userids')]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [Parameter(
             HelpMessage = 'Start meetings with host video on.', 

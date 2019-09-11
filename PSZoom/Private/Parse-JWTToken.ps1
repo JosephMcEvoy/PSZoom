@@ -53,7 +53,8 @@ function Parse-JWTtoken {
     $headerAsHash = @{}
     $tokenArrayAsHash = @{}
     $header.psobject.properties | ForEach-Object { $headerAsHash[$_.Name] = $_.Value }
-    $tokenArrayAsHash.psobject.properties | ForEach-Object { $tokenArrayAsHash[$_.Name] = $_.Value }
+    $tokenArray.psobject.properties | ForEach-Object { $tokenArrayAsHash[$_.Name] = $_.Value }
     $output = $headerAsHash + $tokenArrayAsHash
+
     Write-Output $output
 }

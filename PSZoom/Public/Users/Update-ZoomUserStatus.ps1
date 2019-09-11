@@ -34,7 +34,7 @@ function Update-ZoomUserStatus {
             Position = 0
         )]
         [ValidateLength(1, 128)]
-        [Alias('Email', 'EmailAddress', 'Id')]
+        [Alias('Email', 'Emails', 'EmailAddress', 'EmailAddresses', 'Id', 'ids', 'user_id', 'user', 'users', 'userids')]
         [string]$UserId,
 
         [Parameter(

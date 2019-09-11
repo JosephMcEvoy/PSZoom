@@ -155,7 +155,7 @@ function Update-ZoomUserSettings {
             Position = 0
         )]
         [ValidateLength(1, 128)]
-        [Alias('Email', 'EmailAddress', 'Id')]
+        [Alias('Email', 'Emails', 'EmailAddress', 'EmailAddresses', 'Id', 'ids', 'user_id', 'user', 'users', 'userids')]
         [string]$UserId,
 
         [Parameter(
@@ -602,7 +602,7 @@ function Update-ZoomUserSettings {
         [Alias('feature_show_international_numbers_link')]
         [bool]$FeatureShowInternationalNumbersLink,
 
-        [bool]$PassThru,
+        [switch]$PassThru,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiSecret,
@@ -622,146 +622,156 @@ function Update-ZoomUserSettings {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/settings"
+        foreach ($user in $UserId) {
+            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/settings"
 
-        $ScheduleMeeting = @{
-            'host_video'                      = 'HostVideo'
-            'participants_video'              = 'ParticipantsVideo'
-            'audio_type'                      = 'AudioType'
-            'join_before_host'                = 'JoinBeforeHost'
-            'force_pmi_jbh_password'          = 'ForcePmiJbhPassword'
-            'pstn_password_protected'         = 'PstnPasswordProtected'
-            'use_pmi_for_scheduledmeetings'   = 'UsePmiForScheduledMeetings'
-            'use_pmi_for_instantmeetings'     = 'UsePmiForInstantMeetings'
-        }
+            $ScheduleMeeting = @{
+                'host_video'                      = 'HostVideo'
+                'participants_video'              = 'ParticipantsVideo'
+                'audio_type'                      = 'AudioType'
+                'join_before_host'                = 'JoinBeforeHost'
+                'force_pmi_jbh_password'          = 'ForcePmiJbhPassword'
+                'pstn_password_protected'         = 'PstnPasswordProtected'
+                'use_pmi_for_scheduled_meetings'  = 'UsePmiForScheduledMeetings'
+                'use_pmi_for_instant_meetings'    = 'UsePmiForInstantMeetings'
+            }
 
-        $InMeeting = @{
-            'e2e_encryption'                  = 'E2eEncryption'
-            'chat'                            = 'Chat' 
-            'private_chat'                    = 'PrivateChat' 
-            'auto_saving_chat'                = 'AutoSavingChat' 
-            'entry_exit_chim'                 = 'EntryExitChim' 
-            'record_play_voice'               = 'RecordPlayVoice'
-            'file_transfer'                   = 'FileTransfer' 
-            'feedback'                        = 'Feedback' 
-            'co_host'                         = 'CoHost' 
-            'polling'                         = 'Polling' 
-            'attendee_on_hold'                = 'AttendeeOnHold' 
-            'annotation'                      = 'Annotation' 
-            'remote_control'                  = 'RemoteControl' 
-            'non_verbal_feedback'             = 'NonVerbalFeedback' 
-            'breakout_room'                   = 'BreakoutRoom' 
-            'remote_support'                  = 'RemoteSupport' 
-            'closed_caption'                  = 'ClosedCaption' 
-            'group_hd'                        = 'GroupHd' 
-            'virtual_background'              = 'VirtualBackground' 
-            'far_end_camera_control '         = 'FarEndCameraControl' 
-            'share_dual_camera'               = 'ShareDualCamera' 
-            'attention_tracking'              = 'AttentionTracking' 
-            'waiting_room'                    = 'WaitingRoom' 
-            'allow_live_streaming'            = 'AllowLiveStreaming'
-            'workplace_by_facebook'           = 'WorkplaceByFacebook'
-            'custom_live_streaming'           = 'CustomLiveStreaming'
-            'custom_service_instructions'     = 'CustomServiceInstructions'
-        }
-        
-        $EmailNotification = @{
-            'jbh_reminder'                    = 'bhReminder' 
-            'cancel_meeting_reminder'         = 'ancelMeetingReminder'
-            'alternative_host_reminder'       = 'lternativeHostReminder'
-            'schedule_for_reminder'           = 'cheduleForReminder'
-        }
-        
-        $Recording = @{
-            'local_recording'                 = 'LocalRecording'
-            'cloud_recording'                 = 'CloudRecording'
-            'record_speaker_view'             = 'RecordSpeakerView'
-            'record_gallery_view'             = 'RecordGalleryView'
-            'record_audio_file'               = 'RecordAudioFile'
-            'save_chat_text'                  = 'SaveChatText'
-            'show_timestamp'                  = 'ShowTimestamp'
-            'recording_audio_transcript'      = 'RecordingAudioTranscrip'
-            'auto_recording'                  = 'AutoRecording'
-            'host_pause_stop_recording '      = 'HostPauseStopRecording'
-            'auto_delete_cmr'                 = 'AutoDeleteCmr'
-            'auto_delete_cmr_days'            = 'AutoDeleteCmrDay'
-        }
-        
-        $Telephony = @{
-            'third_party_audio '              = 'ThirdPartyAudio'
-            'audio_conference_info'           = 'AudioConferenceInfo'
-            'show_international_numbers_link' = 'ShowInternationalNumbersLink'
-        }
-        
-        $Feature = @{
-            'meeting_capacity'                = 'MeetingCapacity'
-            'large_meeting'                   = 'LargeMeeting'
-            'large_meeting_capacity'          = 'LargeMeetingCapacity'
-            'webinar'                         = 'Webinar'
-            'webinar_capacity'                = 'WebinarCapacity'
-            'zoom_phone'                      = 'ZoomPhone'
-        }
-        
-        $Tsp = @{
-            'call_out'                        = 'CallOut'
-            'call_out_countries'              = 'CallOutCountries'
-            'show_international_numbers_link' = 'ShowInternationalNumbersLink'
-        }
+            $InMeeting = @{
+                'e2e_encryption'                  = 'E2eEncryption'
+                'chat'                            = 'Chat' 
+                'private_chat'                    = 'PrivateChat' 
+                'auto_saving_chat'                = 'AutoSavingChat' 
+                'entry_exit_chim'                 = 'EntryExitChim' 
+                'record_play_voice'               = 'RecordPlayVoice'
+                'file_transfer'                   = 'FileTransfer' 
+                'feedback'                        = 'Feedback' 
+                'co_host'                         = 'CoHost' 
+                'polling'                         = 'Polling' 
+                'attendee_on_hold'                = 'AttendeeOnHold' 
+                'annotation'                      = 'Annotation' 
+                'remote_control'                  = 'RemoteControl' 
+                'non_verbal_feedback'             = 'NonVerbalFeedback' 
+                'breakout_room'                   = 'BreakoutRoom' 
+                'remote_support'                  = 'RemoteSupport' 
+                'closed_caption'                  = 'ClosedCaption' 
+                'group_hd'                        = 'GroupHd' 
+                'virtual_background'              = 'VirtualBackground' 
+                'far_end_camera_control '         = 'FarEndCameraControl' 
+                'share_dual_camera'               = 'ShareDualCamera' 
+                'attention_tracking'              = 'AttentionTracking' 
+                'waiting_room'                    = 'WaitingRoom' 
+                'allow_live_streaming'            = 'AllowLiveStreaming'
+                'workplace_by_facebook'           = 'WorkplaceByFacebook'
+                'custom_live_streaming'           = 'CustomLiveStreaming'
+                'custom_service_instructions'     = 'CustomServiceInstructions'
+            }
+            
+            $EmailNotification = @{
+                'jbh_reminder'                    = 'bhReminder' 
+                'cancel_meeting_reminder'         = 'ancelMeetingReminder'
+                'alternative_host_reminder'       = 'lternativeHostReminder'
+                'schedule_for_reminder'           = 'cheduleForReminder'
+            }
+            
+            $Recording = @{
+                'local_recording'                 = 'LocalRecording'
+                'cloud_recording'                 = 'CloudRecording'
+                'record_speaker_view'             = 'RecordSpeakerView'
+                'record_gallery_view'             = 'RecordGalleryView'
+                'record_audio_file'               = 'RecordAudioFile'
+                'save_chat_text'                  = 'SaveChatText'
+                'show_timestamp'                  = 'ShowTimestamp'
+                'recording_audio_transcript'      = 'RecordingAudioTranscrip'
+                'auto_recording'                  = 'AutoRecording'
+                'host_pause_stop_recording '      = 'HostPauseStopRecording'
+                'auto_delete_cmr'                 = 'AutoDeleteCmr'
+                'auto_delete_cmr_days'            = 'AutoDeleteCmrDay'
+            }
+            
+            $Telephony = @{
+                'third_party_audio '              = 'ThirdPartyAudio'
+                'audio_conference_info'           = 'AudioConferenceInfo'
+                'show_international_numbers_link' = 'ShowInternationalNumbersLink'
+            }
+            
+            $Feature = @{
+                'meeting_capacity'                = 'MeetingCapacity'
+                'large_meeting'                   = 'LargeMeeting'
+                'large_meeting_capacity'          = 'LargeMeetingCapacity'
+                'webinar'                         = 'Webinar'
+                'webinar_capacity'                = 'WebinarCapacity'
+                'zoom_phone'                      = 'ZoomPhone'
+            }
+            
+            $Tsp = @{
+                'call_out'                        = 'CallOut'
+                'call_out_countries'              = 'CallOutCountries'
+                'show_international_numbers_link' = 'ShowInternationalNumbersLink'
+            }
 
-        function Remove-NonPSBoundParameters {
-            param (
-                $Obj,
-                $Parameters = $PSBoundParameters
-            )
+            function Remove-NonPSBoundParameters {
+                param (
+                    $Obj,
+                    $Parameters = $PSBoundParameters
+                )
 
-            process {
-                $NewObj = @{}
-        
-                foreach ($Key in $Obj.Keys) {
-                    if ($Parameters.ContainsKey($Obj.$Key)){
-                        $Newobj.Add($Key, (get-variable $Obj.$Key).value)
+                process {
+                    $NewObj = @{}
+            
+                    foreach ($Key in $Obj.Keys) {
+                        if ($Parameters.ContainsKey($Obj.$Key)){
+                            $Newobj.Add($Key, (get-variable $Obj.$Key).value)
+                        }
                     }
-                }
-        
-                return $NewObj
-            }
-        }
-        
-        $ScheduleMeeting = Remove-NonPSBoundParameters($ScheduleMeeting)
-        $InMeeting = Remove-NonPSBoundParameters($InMeeting)
-        $EmailNotification = Remove-NonPSBoundParameters($EmailNotification)
-        $Recording = Remove-NonPSBoundParameters($Recording)
-        $Telephony = Remove-NonPSBoundParameters($Telephony)
-        $Feature = Remove-NonPSBoundParameters($Feature)
-        $Tsp = Remove-NonPSBoundParameters($Tsp)
-
-        $AllObjects = @{
-            'schedule_meeting'     = $ScheduleMeeting
-            'in_meeting'           = $InMeeting
-            'email_notification'   = $EmailNotification
-            'recording'            = $Recording
-            'telephony'            = $Telephony
-            'feature'              = $Feature
-            'tsp'                  = $Tsp
-        }
-
-        #Add objects to RequestBody if not empty.
-        foreach ($Key in $AllObjects.Keys) {
-            if ($AllObjects.$Key -gt 0) {
-                $RequestBody.Add($Key, $AllObjects.$Key)
-            }
-        }
-
-       if ($pscmdlet.ShouldProcess) {
-            try {
-                Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Patch
-            } catch {
-                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
-            } finally {
-                if ($PassThru) {
-                    Write-Output $UserId
+            
+                    return $NewObj
                 }
             }
-        }      
+            
+            $ScheduleMeeting = Remove-NonPSBoundParameters($ScheduleMeeting)
+            $InMeeting = Remove-NonPSBoundParameters($InMeeting)
+            $EmailNotification = Remove-NonPSBoundParameters($EmailNotification)
+            $Recording = Remove-NonPSBoundParameters($Recording)
+            $Telephony = Remove-NonPSBoundParameters($Telephony)
+            $Feature = Remove-NonPSBoundParameters($Feature)
+            $Tsp = Remove-NonPSBoundParameters($Tsp)
+
+            $AllObjects = @{
+                'schedule_meeting'     = $ScheduleMeeting
+                'in_meeting'           = $InMeeting
+                'email_notification'   = $EmailNotification
+                'recording'            = $Recording
+                'telephony'            = $Telephony
+                'feature'              = $Feature
+                'tsp'                  = $Tsp
+            }
+
+            $requestBody = @{}
+            #Add objects to requestBody if not empty.
+            foreach ($Key in $AllObjects.Keys) {
+                if ($AllObjects.$Key.Count -gt 0) {
+                    $requestBody.Add($Key, $AllObjects.$Key)
+                }
+            }
+
+            $requestBody = $requestBody | ConvertTo-Json
+
+            if ($pscmdlet.ShouldProcess) {
+                try {
+                    Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body $requestBody -Method Patch
+                } catch {
+                    Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                }
+
+                if (-not $PassThru) {
+                    Write-Output $Response
+                }
+            }
+        }
+
+        if ($PassThru) {
+            Write-Output $UserId
+        }
+
     }
 }

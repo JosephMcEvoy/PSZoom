@@ -48,7 +48,7 @@ function Update-ZoomUser {
             Position = 0
         )]
         [ValidateLength(1, 128)]
-        [Alias('Email', 'EmailAddress', 'Id', 'user_id', 'identity')]
+        [Alias('Email', 'Emails', 'EmailAddress', 'EmailAddresses', 'Id', 'ids', 'user_id', 'user', 'users', 'userids')]
         [string]$UserId,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
@@ -123,67 +123,74 @@ function Update-ZoomUser {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
-        $RequestBody = @{ }   
+        foreach ($user in $UserId) {
+            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user"
+            $RequestBody = @{ }   
 
-        if ($PSBoundParameters.ContainsKey('LoginType')) {
-            $LoginType = switch ($LoginType) {
-                'Facebook' { 0 }
-                'Google' { 1 }
-                'API' { 99 }
-                'Zoom' { 100 }
-                'SSO' { 101 }
-                Default { $LoginType }
-            }
-            $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('login_type', $LoginType)
-            $Request.Query = $Query.ToString()
-        }
-
-        if ($Type) {
-            $Type = switch ($Type) {
-                'Basic' { 1 }
-                'Pro' { 2 }
-                'Corp' { 3 }
-                Default { $Type }
+            if ($PSBoundParameters.ContainsKey('LoginType')) {
+                $LoginType = switch ($LoginType) {
+                    'Facebook' { 0 }
+                    'Google' { 1 }
+                    'API' { 99 }
+                    'Zoom' { 100 }
+                    'SSO' { 101 }
+                    Default { $LoginType }
+                }
+                $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+                $Query.Add('login_type', $LoginType)
+                $Request.Query = $Query.ToString()
             }
 
-            $RequestBody.Add('type', $Type)
-        }
+            if ($Type) {
+                $Type = switch ($Type) {
+                    'Basic' { 1 }
+                    'Pro' { 2 }
+                    'Corp' { 3 }
+                    Default { $Type }
+                }
 
-        if ($Pmi -ne 0) {
-            $RequestBody.Add('pmi', $Pmi)
-        }
-
-        $KeyValuePairs = @{
-            'last_name'   = $LastName
-            'timezone'    = $Timezone
-            'language'    = $Language
-            'use_pmi'     = $UsePmi
-            'dept'        = $Dept
-            'vanity_name' = $VanityName
-            'host_key'    = $HostKey
-            'cms_user_id' = $CmsUserId
-        }
-
-        $KeyValuePairs.Keys | ForEach-Object {
-            if (-not ([string]::IsNullOrEmpty($KeyValuePairs.$_))) {
-                $RequestBody.Add($_, $KeyValuePairs.$_)
+                $RequestBody.Add('type', $Type)
             }
-        }
 
-        if ($pscmdlet.ShouldProcess) {
-            try {
-                Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method PATCH
+            if ($Pmi -ne 0) {
+                $RequestBody.Add('pmi', $Pmi)
             }
-            catch {
-                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+
+            $KeyValuePairs = @{
+                'last_name'   = $LastName
+                'timezone'    = $Timezone
+                'language'    = $Language
+                'use_pmi'     = $UsePmi
+                'dept'        = $Dept
+                'vanity_name' = $VanityName
+                'host_key'    = $HostKey
+                'cms_user_id' = $CmsUserId
             }
-            finally {
-                if ($PassThru) {
-                    Write-Output $UserId
+
+            $KeyValuePairs.Keys | ForEach-Object {
+                if (-not ([string]::IsNullOrEmpty($KeyValuePairs.$_))) {
+                    $RequestBody.Add($_, $KeyValuePairs.$_)
                 }
             }
+
+            $RequestBody = $RequestBody | ConvertTo-Json
+
+            if ($pscmdlet.ShouldProcess) {
+                try {
+                    Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body $RequestBody -Method PATCH
+                }
+                catch {
+                    Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                }
+        
+                if (-not $PassThru) {
+                    Write-Output $Response
+                }
+            }
+        }
+        
+        if ($PassThru) {
+            Write-Output $UserId
         }
     }
 }

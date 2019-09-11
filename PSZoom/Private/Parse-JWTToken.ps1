@@ -46,7 +46,7 @@ function Parse-JWTtoken {
     $tokenByteArray = [System.Convert]::FromBase64String($tokenPayload)
 
 
-    $tokenArray = ([System.Text.Encoding]::ASCII.GetString($tokenByteArray) | ConvertFrom-Json -AsHashtable)
+    $tokenArray = ([System.Text.Encoding]::ASCII.GetString($tokenByteArray) | ConvertFrom-Json)
 
     $output = $header + $tokenArray
     Write-Output $output

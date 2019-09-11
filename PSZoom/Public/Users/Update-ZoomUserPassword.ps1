@@ -64,21 +64,28 @@ function Update-ZoomUserpassword {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/password"
+        foreach ($user in $UserId){
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/password"
         $RequestBody = @{
             'password' = $Password
         }
 
-        if ($PSCmdlet.ShouldProcess) {
-            try {
-                Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method PUT
-            } catch {
-                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
-            } finally {
-                if ($PassThru) {
-                    Write-Output $UserId
+            if ($PSCmdlet.ShouldProcess) {
+                try {
+                    Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method PUT
+                } catch {
+                    Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                }
+                if (-not $PassThru) {
+                    Write-Output $Response
                 }
             }
+        }
+    }
+
+    end {
+        if ($PassThru) {
+            Write-Output $UserId
         }
     }
 }

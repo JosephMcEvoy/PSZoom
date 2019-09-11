@@ -531,10 +531,7 @@ function Update-ZoomUserSettings {
             ValueFromPipelineByPropertyName = $True
         )]
         [ValidateLength(0, 2048)]
-        [Alias(
-            'audio_conference_info ', 
-            ValueFromPipelineByPropertyName = $True
-        )]
+        [Alias('audio_conference_info ')]
         [string]$AudioConferenceInfo, 
 
         [Parameter(

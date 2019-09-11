@@ -57,7 +57,6 @@ Describe "PSZoom General Tests" {
         $Module.Name | Should Be $ModuleName
     }
 
-
     It 'Should generate a JWT correctly' {
         $token = (New-JWT -Algorithm 'HS256' -type 'JWT' -Issuer 123 -SecretKey 456 -ValidforSeconds 30)
         $parsedToken = (Parse-JWTtoken -Token $token)

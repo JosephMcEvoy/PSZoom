@@ -562,9 +562,9 @@ function Update-ZoomGroupSettings  {
 
         $requestBody = @{}
         
-        foreach ($Key in $allObjects.Keys) {
-            if ($allObjects.$Key.Count -gt 0) {
-                $requestBody.Add($Key, $allObjects.$Key)
+        foreach ($key in $allObjects.Keys) {
+            if ($allObjects.$key.Count -gt 0) {
+                $requestBody.Add($key, $allObjects.$Key)
             }
         }
 

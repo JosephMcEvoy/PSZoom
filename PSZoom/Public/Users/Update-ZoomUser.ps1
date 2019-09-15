@@ -42,7 +42,7 @@ function Update-ZoomUser {
     [CmdletBinding(SupportsShouldProcess = $True)]
     Param(
         [Parameter(
-            Mandatory = $True,
+            Mandatory = $True,       
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True,
             Position = 0
@@ -88,6 +88,7 @@ function Update-ZoomUser {
         [string]$Language,
         
         [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('department')]
         [string]$Dept,
         
         [Parameter(ValueFromPipelineByPropertyName = $True)]

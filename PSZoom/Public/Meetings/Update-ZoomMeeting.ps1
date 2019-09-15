@@ -486,16 +486,16 @@ function Update-ZoomMeeting {
         $TrackingFields.Add('value', $Value)
     }
         
-    $AllObjects = @{
+    $allObjects = @{
         'recurrence' = $Recurrence
         'settings'   = $Settings
         'tracking_fields' = $TrackingFields
     }
 
     #Add objects to RequestBody if not empty.
-    foreach ($Key in $AllObjects.Keys) {
-        if ($AllObjects.$Key -gt 0) {
-            $RequestBody.Add($Key, $AllObjects.$Key)
+    foreach ($Key in $allObjects.Keys) {
+        if ($allObjects.$Key -gt 0) {
+            $RequestBody.Add($Key, $allObjects.$Key)
         }
     }
 

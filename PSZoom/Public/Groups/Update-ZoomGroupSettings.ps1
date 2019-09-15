@@ -413,7 +413,7 @@ function Update-ZoomGroupSettings  {
         [bool]$RecordingAudioTranscript,
 
         [Alias('auto_recording')]
-        [bool]$AutoRecording,
+        [string]$AutoRecording,
 
         [Alias('cloud_recording_download')]
         [bool]$CloudRecordingDownload,
@@ -552,7 +552,7 @@ function Update-ZoomGroupSettings  {
             }
         }
 
-        $allParams = @{ 
+        $allObjects = @{ 
             'schedule_meeting'   = Remove-NonPsBoundParameters($scheduleMeetingParams)
             'in_meeting'         = Remove-NonPsBoundParameters($inMeetingParams)
             'email_notification' = Remove-NonPsBoundParameters($emailNotificationParams)
@@ -560,13 +560,15 @@ function Update-ZoomGroupSettings  {
             'telephony'          = Remove-NonPsBoundParameters($telephonyParams)
         }
 
-        $responseBody = @{}
+        $requestBody = @{}
         
-        $allParams | ForEach-Object {
-            if ($_.Keys -gt 0) {
-                $responseBody.Add($_, $_.Value)
+        foreach ($Key in $allObjects.Keys) {
+            if ($allObjects.$Key.Count -gt 0) {
+                $requestBody.Add($Key, $allObjects.$Key)
             }
         }
+
+        $requestBody = $requestBody | ConvertTo-Json
 
         foreach ($id in $GroupId) {
             <#
@@ -579,7 +581,7 @@ function Update-ZoomGroupSettings  {
             $request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/settings"
 
             try {
-                $Response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $resposneBody -Method PATCH
+                $Response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PATCH
             } catch {
                 Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
             }

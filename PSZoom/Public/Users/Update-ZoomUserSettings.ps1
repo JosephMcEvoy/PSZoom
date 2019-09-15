@@ -736,7 +736,7 @@ function Update-ZoomUserSettings {
             $Feature = Remove-NonPSBoundParameters($Feature)
             $Tsp = Remove-NonPSBoundParameters($Tsp)
 
-            $AllObjects = @{
+            $allObjects = @{
                 'schedule_meeting'     = $ScheduleMeeting
                 'in_meeting'           = $InMeeting
                 'email_notification'   = $EmailNotification
@@ -747,10 +747,10 @@ function Update-ZoomUserSettings {
             }
 
             $requestBody = @{}
-            #Add objects to requestBody if not empty.
-            foreach ($Key in $AllObjects.Keys) {
-                if ($AllObjects.$Key.Count -gt 0) {
-                    $requestBody.Add($Key, $AllObjects.$Key)
+        
+            foreach ($Key in $allObjects.Keys) {
+                if ($allObjects.$Key.Count -gt 0) {
+                    $requestBody.Add($Key, $allObjects.$Key)
                 }
             }
 

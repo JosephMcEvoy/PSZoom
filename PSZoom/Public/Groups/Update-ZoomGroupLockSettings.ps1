@@ -251,7 +251,7 @@ function Update-ZoomGroupLockSettings  {
         [bool]$ParticipantVideo,
 
         [Alias('audio_type')]
-        [string]$AudioType,
+        [bool]$AudioType,
 
         [Alias('join_before_host')]
         [bool]$JoinBeforeHost,
@@ -414,7 +414,7 @@ function Update-ZoomGroupLockSettings  {
         [bool]$RecordingAudioTranscript,
 
         [Alias('auto_recording')]
-        [bool]$AutoRecording,
+        [string]$AutoRecording,
 
         [Alias('cloud_recording_download')]
         [bool]$CloudRecordingDownload,
@@ -553,7 +553,7 @@ function Update-ZoomGroupLockSettings  {
             }
         }
 
-        $allParams = @{ 
+        $allObjects = @{ 
             'schedule_meeting'   = Remove-NonPsBoundParameters($scheduleMeetingParams)
             'in_meeting'         = Remove-NonPsBoundParameters($inMeetingParams)
             'email_notification' = Remove-NonPsBoundParameters($emailNotificationParams)
@@ -561,26 +561,30 @@ function Update-ZoomGroupLockSettings  {
             'telephony'          = Remove-NonPsBoundParameters($telephonyParams)
         }
 
-        $responseBody = @{}
+        $requestBody = @{}
         
-        $allParams | ForEach-Object {
-            if ($_.Keys -gt 0) {
-                $responseBody.Add($_, $_.Value)
+        foreach ($Key in $allObjects.Keys) {
+            if ($allObjects.$Key.Count -gt 0) {
+                $requestBody.Add($Key, $allObjects.$Key)
             }
         }
+        
+        $requestBody = $requestBody | ConvertTo-Json
 
         foreach ($id in $GroupId) {
+            
             <#
             Generate Headers and JWT (JSON Web Token). This is typically in the begin block.
             It has been moved within the for loop as the JWT is set to expire after 30 seconds by default. 
             This way a new JWT is generated for each request and the JWT will not expire too soon.
             #>
+
             $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
 
             $request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/lock_settings"
 
             try {
-                $Response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $resposneBody -Method PATCH
+                $Response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PATCH
             } catch {
                 Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
             }
@@ -593,5 +597,6 @@ function Update-ZoomGroupLockSettings  {
         if ($Passthru) {
             Write-Output $GroupId
         }
+        
     }
 }

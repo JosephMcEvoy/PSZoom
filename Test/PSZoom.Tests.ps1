@@ -85,7 +85,6 @@ Describe "PSZoom General Tests" {
     }
 }
 
-
 Describe "PSZoom Meeting Tests" {
     Context 'Strict mode' {
         Set-StrictMode -Version 'latest'

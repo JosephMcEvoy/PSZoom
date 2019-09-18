@@ -72,6 +72,7 @@ function Remove-ZoomGroupMembers {
                     } catch {
                         Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
                     } finally {
+                        Write-Verbose "Removed $MemberId from $GroupId."
                         Write-Output $Response
                     }
                 }

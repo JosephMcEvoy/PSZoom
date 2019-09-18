@@ -66,13 +66,15 @@ function Update-ZoomUserStatus {
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/status"
-        $RequestBody = @{
+        $requestBody = @{
             'action' = $Action
         }
 
+        $requestBody = $requestBody | ConvertTo-Json
+
         if ($pscmdlet.ShouldProcess) {
             try {
-                Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method PUT
+                Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body $requestBody -Method PUT
             } catch {
                 Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
             } finally {

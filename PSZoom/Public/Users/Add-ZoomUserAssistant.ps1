@@ -73,7 +73,7 @@ function Add-ZoomUserAssistants {
             'assistants' = $Assistants
         }
         
-        $RequestBody = $RequestBody | convertto-json
+        $RequestBody = $RequestBody | ConvertTo-Json
         
         try {
             $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $RequestBody -Method POST

@@ -24,7 +24,7 @@
     #>
     [cmdletbinding()]
     param(
-        [string]$Path = $( Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'WindowsPowerShell\Modules')
+        [string]$Path = $( Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'PowerShell\Modules')
     )
     
     $ExistingProgressPreference = "$ProgressPreference"
@@ -55,3 +55,4 @@
     finally {
         $ProgressPreference = $ExistingProgressPreference
     }
+

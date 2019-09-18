@@ -1,5 +1,4 @@
-﻿$env:PSModulePath = $env:PSModulePath + $( Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'WindowsPowerShell\Modules')
-Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
+﻿Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
 
 if(-not (Get-Module -ListAvailable PSDepend)) {
     & (Resolve-Path "$PSScriptRoot\helpers\Install-PSDepend.ps1")

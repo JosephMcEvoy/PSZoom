@@ -13,6 +13,8 @@ Pending - Users with a pending status.
 The number of records returned within a single API call. Default value is 30. Maximum value is 300.
 .PARAMETER PageNumber
 The current page number of returned records. Default value is 1.
+.PARAMETER FullApiResponse
+The switch FullApiResponse will return the default Zoom API response.
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret
@@ -51,6 +53,8 @@ function Get-ZoomUsers {
         [Alias('role_id')]
         [int]$RoleId,
 
+        [switch]$FullApiResponse,
+
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
@@ -78,12 +82,18 @@ function Get-ZoomUsers {
             'role_id'     = $RoleId
         }    
 
+        $RequestBody = $RequestBody | ConvertTo-Json
+
         try {
             $Response = Invoke-RestMethod -Uri $Uri -Headers $headers -Body $RequestBody -Method GET
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         }
 
-        Write-Output $Response
+        if ($FullApiResponse) {
+            Write-Output $Response
+        } else {
+            Write-Output $Response.Users
+        }
     }
 }

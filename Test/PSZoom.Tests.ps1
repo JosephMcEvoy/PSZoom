@@ -64,7 +64,7 @@ $UserEmail = 'TestEmail@Test.com'
 $UserId = 'aBc'
 $GroupId = 'dEf'
 
-Describe "PSZoom General Tests" {
+Describe 'PSZoom General Tests' {
     It 'Should be the correct name' {
         $Module.Name | Should Be $ModuleName
     }
@@ -85,7 +85,7 @@ Describe "PSZoom General Tests" {
     }
 }
 
-Describe "PSZoom Meeting Tests" {
+Describe 'PSZoom Meeting Tests' {
     Context 'Strict mode' {
         Set-StrictMode -Version 'latest'
 
@@ -119,7 +119,7 @@ Describe "PSZoom Meeting Tests" {
     }
 }
 
-Describe "PSZoom User Tests" {
+Describe 'PSZoom User Tests' {
     Context 'Strict mode' {
         Set-StrictMode -Version 'latest'
 
@@ -157,7 +157,7 @@ Describe "PSZoom User Tests" {
     }
 }
 
-Describe "PSZoom Group Tests" {
+Describe 'PSZoom Group Tests' {
     Context 'Strict mode' {
         Set-StrictMode -Version 'latest'
         $GroupCommands = @(

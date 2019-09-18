@@ -23,7 +23,8 @@ The number of records returned within a single API call. Default is 30.
 The current page number of returned records. Default is 1.
 
 .PARAMETER All
-Use this switch to retrieve the last 6 months of reports. Zoom limits the reports to the last 6 months.
+Use this switch to retrieve the last 6 months of reports. This returns the active users only
+Zoom limits the reports to the last 6 months.
 
 .PARAMETER ApiKey
 The Api Key.
@@ -74,6 +75,7 @@ function Get-ZoomActiveInactiveHostReports {
         [Alias('page', 'page_number')]
         [int]$PageNumber = 1,
 
+        [Parameter(ParameterSetName = 'Default')]
         [ValidateSet('active', 'inactive')]
         [string]$Type = 'inactive', #Zoom defaults to inactive if this isn't sent in the query.
 
@@ -102,14 +104,14 @@ function Get-ZoomActiveInactiveHostReports {
             $allReports = New-Object System.Collections.Generic.List[System.Object]
 
             foreach ($key in $monthRanges.keys) {
-                $TotalPages = (Get-ZoomActiveInactiveHostReports -from "$($monthRanges.$key.begin)" -to "$($monthRanges.$key.end)" -pagesize 300 -pagenumber 1 -type $Type).page_count
+                $TotalPages = (Get-ZoomActiveInactiveHostReports -from "$($monthRanges.$key.begin)" -to "$($monthRanges.$key.end)" -pagesize 300 -pagenumber 1 -type active).page_count
                 
                 for ($i = 1; $i -le $TotalPages; $i++) {
                     if (($requests % 10) -eq 0) { #Zoom limits the number of requests to 10 per second
                         Start-Sleep -seconds 2
                     }
         
-                    $currentPage = (Get-ZoomActiveInactiveHostReports -from "$($monthRanges.$key.begin)" -to "$($monthRanges.$key.end)" -pagesize 300 -pagenumber $i -type $Type).users
+                    $currentPage = (Get-ZoomActiveInactiveHostReports -from "$($monthRanges.$key.begin)" -to "$($monthRanges.$key.end)" -pagesize 300 -pagenumber $i -type active).users
                     
                     foreach ($entry in $currentPage) {
                         $allReports.Add($entry)

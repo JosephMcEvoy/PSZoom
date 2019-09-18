@@ -24,26 +24,40 @@
     #>
     [cmdletbinding()]
     param(
-        [string]$Path = $( Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'WindowsPowerShell\Modules')
+        [string]$Path
     )
+
+    if (-not $Path) {
+        $Path = $env:PSModulePath
+        $Path = $Path.split(';')
+        $Path = $Path[0]
+    }
+    
     $ExistingProgressPreference = "$ProgressPreference"
     $ProgressPreference = 'SilentlyContinue'
+
     try {
         # Bootstrap nuget if we don't have it
         if(-not ($NugetPath = (Get-Command 'nuget.exe' -ErrorAction SilentlyContinue).Path)) {
             $NugetPath = Join-Path $ENV:USERPROFILE nuget.exe
+
             if(-not (Test-Path $NugetPath)) {
                 Invoke-WebRequest -uri 'https://dist.nuget.org/win-x86-commandline/latest/nuget.exe' -OutFile $NugetPath
             }
         }
 
         # Bootstrap PSDepend, re-use nuget.exe for the module
-        if($path) { $null = mkdir $path -Force }
+        if( $path) {
+            $null = mkdir $path -Force
+        } 
+        
         $NugetParams = 'install', 'PSDepend', '-Source', 'https://www.powershellgallery.com/api/v2/',
                     '-ExcludeVersion', '-NonInteractive', '-OutputDirectory', $Path
         & $NugetPath @NugetParams
+
         Move-Item -Path $NugetPath -Destination "$(Join-Path $Path PSDepend)\nuget.exe" -Force
     }
+
     finally {
         $ProgressPreference = $ExistingProgressPreference
     }

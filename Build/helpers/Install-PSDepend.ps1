@@ -38,7 +38,7 @@
 
     try {
         # Bootstrap nuget if we don't have it
-        if(-not ($NugetPath = (Get-Command 'nuget.exe' -ErrorAction SilentlyContinue).Path)) {
+        if(-not ($NugetPath = (Get-Command 'nuget.exe' -ErrorAction SilentlyContinue).P)) {
             $NugetPath = Join-Path $ENV:USERPROFILE nuget.exe
 
             if(-not (Test-Path $NugetPath)) {
@@ -47,7 +47,7 @@
         }
 
         # Bootstrap PSDepend, re-use nuget.exe for the module
-        if( $path) {
+        if($path) {
             $null = mkdir $path -Force
         } 
         

@@ -1,7 +1,7 @@
 ﻿Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
 
 if(-not (Get-Module -ListAvailable PSDepend)) {
-    & (Resolve-Path "$PSScriptRoot\helpers\Install-PSDepend.ps1")
+    install-module psdepend
 }
 
 Import-Module PSDepend

@@ -26,7 +26,7 @@ function Get-ZoomUserAssistants {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
+        [Alias('Email', 'EmailAddress', 'Id', 'user_id', 'userids', 'ids', 'emailaddresses','emails')]
         [string]$UserId,
 
         [ValidateNotNullOrEmpty()]
@@ -47,14 +47,16 @@ function Get-ZoomUserAssistants {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/assistants"
+        foreach ($id in $UserId) {
+            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$Id/assistants"
 
-        try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET
-        } catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            try {
+                $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET
+            } catch {
+                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            }
+    
+            Write-Output $Response
         }
-
-        Write-Output $Response
     }
 }

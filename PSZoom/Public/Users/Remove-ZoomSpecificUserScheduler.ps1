@@ -2,18 +2,28 @@
 
 .SYNOPSIS
 Delete a specific scheduler.
+
 .DESCRIPTION
-Delete a specific scheduler. schedulers are the users to whom the current user has assigned  on the user’s behalf.
+Delete a specific scheduler. Schedulers are the users to whom the current user has assigned  on the user’s behalf.
+
 .PARAMETER UserId
 The user ID or email address.
+
+.PARAMETER SchedulerId
+The scheduler ID or email address.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
+
 .EXAMPLE
 Remove-ZoomSpecificUsersSheduler jmcevoy@lawfirm.com
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userschedulerdelete
 
@@ -29,7 +39,7 @@ function Remove-ZoomSpecificUserScheduler {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [Parameter(
             Mandatory = $True, 
@@ -37,7 +47,7 @@ function Remove-ZoomSpecificUserScheduler {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('scheduler_id')]
-        [string]$schedulerId,
+        [string[]]$SchedulerId,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -59,15 +69,19 @@ function Remove-ZoomSpecificUserScheduler {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/schedulers/$schedulerId"
+        foreach ($uid in $UserId) {
+            foreach ($sid in $schedulerId) {
+                $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$uid/schedulers/$sid"
 
-        try {
-            Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
-        } catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
-        } finally {
-            if ($Passthru) {
-                Write-Output $UserId
+                try {
+                    Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
+                } catch {
+                    Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                } finally {
+                    if ($Passthru) {
+                        Write-Output $UserId
+                    }
+                }
             }
         }
     }

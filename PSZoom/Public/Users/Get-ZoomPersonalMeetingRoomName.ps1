@@ -28,8 +28,8 @@ function Get-ZoomPersonalMeetingRoomName {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('vanity_name')]
-        [string]$VanityName,
+        [Alias('vanity_name', 'vanitynames')]
+        [string[]]$VanityName,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -49,19 +49,21 @@ function Get-ZoomPersonalMeetingRoomName {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/vanity_name"
-
-        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-        $Query.Add('vanity_name', $VanityName)
-        $Request.Query = $Query.ToString()
+        foreach ($name in $VanityName) {
+            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/vanity_name"
     
-
-        try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Method GET
-        } catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+            $Query.Add('vanity_name', $VanityName)
+            $Request.Query = $Query.ToString()
+        
+    
+            try {
+                $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Method GET
+            } catch {
+                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            }
+    
+            Write-Output $Response
         }
-
-        Write-Output $Response
     }
 }

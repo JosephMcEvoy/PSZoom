@@ -83,33 +83,53 @@ function Remove-ZoomUser {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
-        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-
-        $UserInfoKeyValues = @{
-            'action'             = 'Action'
-            'transfer_email'     = 'TransferEmail'
-            'transfer_meeting'   = 'TransferMeeting'
-            'transfer_webinar'   = 'TransferWebinar'
-            'transfer_recording' = 'TransferRecording'
-        }
-
-        #Adds parameters to UserInfo object if not Null
-        $UserInfoKeyValues.Keys | ForEach-Object {
-            if ($PSBoundParameters.ContainsKey("$($UserInfoKeyValues.$_)")) {
-                $Query.Add($_, (get-variable $UserInfoKeyValues.$_))
+        foreach ($id in $userId) {
+            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
+            $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+    
+            $UserInfoKeyValues = @{
+                'action'             = 'Action'
+                'transfer_email'     = 'TransferEmail'
+                'transfer_meeting'   = 'TransferMeeting'
+                'transfer_webinar'   = 'TransferWebinar'
+                'transfer_recording' = 'TransferRecording'
             }
-        }
-        
-        $Request.Query = $Query.ToString()
+            function Remove-NonPSBoundParameters {
+                param (
+                    $Obj,
+                    $Parameters = $PSBoundParameters
+                )
 
-        try {
-            Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
-        } catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
-        } finally {
-            if ($Passthru) {
-                Write-Output $UserId
+                process {
+                    $NewObj = @{}
+            
+                    foreach ($Key in $Obj.Keys) {
+                        if ($Parameters.ContainsKey($Obj.$Key)){
+                            $Newobj.Add($Key, (get-variable $Obj.$Key).value)
+                        }
+                    }
+            
+                    return $NewObj
+                }
+            }
+
+            $UserInfoKeyValues = Remove-NonPSBoundParameters($UserInfoKeyValues)
+            
+            #Adds parameters to UserInfo object if not Null
+            $UserInfoKeyValues.Keys | ForEach-Object {
+                    $Query.Add($_, $UserInfoKeyValues.$_)
+            }
+            
+            $Request.Query = $Query.ToString()
+    
+            try {
+                Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
+            } catch {
+                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            } finally {
+                if ($Passthru) {
+                    Write-Output $UserId
+                }
             }
         }
     }

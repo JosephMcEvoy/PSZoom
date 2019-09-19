@@ -1,26 +1,17 @@
-$TestUri = 'TestUri'
-$TestToken = 'TestToken'
-$TestArchive = 'TestArchive'
-$TestProxy = 'TestProxy'
-
-
-$PSVersion = $PSVersionTable.PSVersion.Major
-$ModuleName = $ENV:BHProjectName
-$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
+#$PSVersion = $PSVersionTable.PSVersion.Major
+#$ModuleName = $ENV:BHProjectName
+#$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
 
 
 #Using these variables for local testing
-#$PSVersion = $PSVersionTable.PSVersion.Major
-#$ModuleName = 'PSZoom'
-#$ModulePath = "d:\dev\$ModuleName\$ModuleName"
+$PSVersion = $PSVersionTable.PSVersion.Major
+$ModuleName = 'PSZoom'
+$ModulePath = "d:\dev\$ModuleName\$ModuleName"
 
 
-# Verbose output for non-master builds on appveyor
-# Handy for troubleshooting.
-# Splat @Verbose against commands as needed (here or in pester tests)
-
-$Verbose = @{}
-if($ENV:BHBranchName -notlike "master" -or $env:BHCommitMessage -match "!verbose") {
+# Verbose output for non-master builds on appveyor. Handy for troubleshooting. Splat @Verbose against commands as needed (here or in pester tests).
+$Verbose = @{ }
+if ($ENV:BHBranchName -notlike "master" -or $env:BHCommitMessage -match "!verbose") {
     $Verbose.add("Verbose", $True)
 }
 
@@ -32,7 +23,8 @@ $Private = @(Get-ChildItem -Path "$ModulePath\Private\" -include '*.ps1' -recurs
 foreach ($file in $Private) {
     try {
         . $file.fullname
-    } catch {
+    }
+    catch {
         Write-Error -Message "Failed to import function $($ps1.fullname): $_"
     }
 }
@@ -41,7 +33,7 @@ $Module = Get-Module $ModuleName
 $Commands = $Module.ExportedCommands.Keys
 
 function ShowMockInfo($functionName, [String[]] $params) {
-    if ($ShowMockData){
+    if ($ShowMockData) {
         Write-Host " Mocked $functionName" -ForegroundColor Cyan
         foreach ($p in $params) {
             Write-Host " [$p] $(Get-Variable -Name $p -ValueOnly)" -ForegroundColor Cyan
@@ -51,18 +43,27 @@ function ShowMockInfo($functionName, [String[]] $params) {
 
 Mock -ModuleName $ModuleName Invoke-RestMethod {
     $Response = @{
-        Body = $Body
-        Uri = $Uri
-        Method = $Method
+        Body    = $Body
+        Uri     = $Uri
+        Method  = $Method
         Headers = $Headers
     }
 
     Write-Output $Response
 }
+
 #Additional variables to use when testing
-$UserEmail = 'TestEmail@Test.com'
-$UserId = 'aBc'
-$GroupId = 'dEf'
+$AssistantId = 'TestAssistantId'
+$AssistantId2 = 'TestAssistantId2'
+$UserEmail = 'TestEmail@test.com'
+$UserId = 'TestUserId'
+$UserId2 = 'TestUserId2'
+$GroupId = 'TestGroupId'
+$GroupId2 = 'TestGroupId2'
+$ApiKeySecret = @{
+    ApiKey    = 'TestApiKey'
+    ApiSecret = 'TestApiSecret'
+}
 
 Describe 'PSZoom General Tests' {
     It 'Should be the correct name' {
@@ -81,7 +82,7 @@ Describe 'PSZoom General Tests' {
     It 'Should create the correct headers' {
         $headers = New-ZoomHeaders -ApiKey 123 -ApiSecret 456
         $headers.'content-type' | Should -Be 'application/json'
-        $headers.'authorization'  | Should -BeLike '*bearer*'
+        $headers.'authorization' | Should -BeLike '*bearer*'
     }
 }
 
@@ -155,23 +156,299 @@ Describe 'PSZoom User Tests' {
             }
         }
     }
+
+    Context 'Add-ZoomUserAssistant' {
+        $schema = '{
+        "type": "object",
+        "title": "User assistants List",
+        "description": "List of users assistants.",
+        "properties": {
+          "assistants": {
+            "type": "array",
+            "description": "List of Users assistants.",
+            "maximum": 30,
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Assistants user ID."
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Assistants email address."
+                }
+              }
+            }
+          }
+        }
+      }'
+
+        $params = @{
+            UserId         = $UserEmail
+            AssistantEmail = 'testemail1', 'testemail2'
+            AssistantId    = 'testid1', 'testid2'
+        }
+
+        $request = Add-ZoomUserAssistants @params @ApiKeySecret
+
+        It 'Uses the correct method' {
+            $request.Method | Should Be 'POST'
+        }
+
+        It 'Uses the correct uri' {
+            $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserEmail/assistants"
+        }
+
+        It 'Validates against the JSON schema' {
+            Test-Json -Json $request.Body -Schema $schema | Should Be $True
+        }
+    }
+
+    Context 'Get-ZoomPersonalMeetingRoomName' {
+        $VanityName = 'Test'
+        $request = Get-ZoomPersonalMeetingRoomName -VanityName $VanityName @ApiKeySecret
+
+        It 'Uses the correct method' {
+            $request.Method | Should Be 'GET'
+        }
+
+        It 'Uses the correct uri and query parameter' {
+            $request.Uri | Should Be "https://api.zoom.us/v2/users/vanity_name?vanity_name=$VanityName"
+        }
+    }
+
+    Context 'Get-ZoomUser' {
+        $request = Get-ZoomUser -UserId $UserId @ApiKeySecret
+
+        It 'Uses the correct method' {
+            $request.Method | Should Be 'GET'
+        }
+
+        It 'Uses the correct uri' {
+            $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId"
+        }
+    }
+
+    Context 'Get-ZoomUserAssistants' {
+        $request = Get-ZoomUserAssistants -UserId $UserId @ApiKeySecret
+
+        It 'Uses the correct method' {
+            $request.Method | Should Be 'GET'
+        }
+
+        It 'Uses the correct uri' {
+            $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/assistants"
+        }
+    }
+
+    Context 'Get-ZoomUserEmailStatus' {
+        $request = Get-ZoomUserEmailStatus -UserId $UserId @ApiKeySecret
+
+        It 'Uses the correct method' {
+            $request.Method | Should Be 'GET'
+        }
+
+        It 'Uses the correct uri and query parameter' {
+            $request.Uri | Should Be "https://api.zoom.us/v2/users/email?email=$UserId"
+        }
+    }
+
+    Context 'Get-ZoomUserPermissions' {
+        $request = Get-ZoomUserPermissions -UserId $UserId @ApiKeySecret
+
+        It 'Uses the correct method' {
+            $request.Method | Should Be 'GET'
+        }
+
+        It 'Uses the correct uri' {
+            $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/permissions"
+        }
+    }
+
+    Context 'New-ZoomUser' {
+        $schema = '{
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "description": "Specify how to create the new user: <br>`create` - User will get an email sent from Zoom. There is a confirmation link in this email. The user will then need to use the link to activate their Zoom account. The user can then set or change their password.<br>`autoCreate` - This action is provided for the enterprise customer who has a managed domain. This feature is disabled by default because of the security risk involved in creating a user who does not belong to your domain.<br>`custCreate` - This action is provided for API partners only. A user created in this way has no password and is not able to log into the Zoom web site or client.<br>`ssoCreate` - This action is provided for the enabled “Pre-provisioning SSO User” option. A user created in this way has no password. If not a basic user, a personal vanity URL using the user name (no domain) of the provisioning email will be generated. If the user name or PMI is invalid or occupied, it will use a random number or random personal vanity URL.",
+            "enum": [
+              "create",
+              "autoCreate",
+              "custCreate",
+              "ssoCreate"
+            ],
+            "x-enum-descriptions": [
+              "User will get an email sent from Zoom. There is a confirmation link in this email. User will then need to click this link to activate their account to the Zoom service. The user can set or change their password in Zoom. <br/>.",
+              "This action is provided for enterprise customer who has a managed domain. This feature is disabled by default because of the security risk involved in creating a user who does not belong to your domain without notifying the user. <br/>",
+              "This action is provided for API partner only. User created in this way has no password and is not able to log into the Zoom web site or client. <br/>",
+              "This action is provided for enabled \"Pre-provisioning SSO User\" option. User created in this way has no password. If it is not a basic user, will generate a Personal Vanity URL using user name (no domain) of the provisioning email. If user name or pmi is invalid or occupied, will use random number/random personal vanity URL. <br/>"
+            ]
+          },
+          "user_info": {
+            "type": "object",
+            "required": [
+              "email",
+              "type"
+            ],
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "User email address.",
+                "maxLength": 128
+              },
+              "type": {
+                "type": "integer",
+                "enum": [
+                  1,
+                  2,
+                  3
+                ],
+                "x-enum-descriptions": [
+                  "basic",
+                  "pro",
+                  "corp"
+                ],
+                "description": "User type:<br>`1` - Basic.<br>`2` - Pro.<br>`3` - Corp."
+              },
+              "first_name": {
+                "type": "string",
+                "description": "Users first name: cannot contain more than 5 Chinese words.",
+                "maxLength": 64
+              },
+              "last_name": {
+                "type": "string",
+                "description": "Users last name: cannot contain more than 5 Chinese words.",
+                "maxLength": 64
+              },
+              "password": {
+                "type": "string",
+                "description": "User password. Only used for the \"autoCreate\" function. The password has to have a minimum of 8 characters and maximum of 32 characters. It must have at least one letter (a, b, c..), at least one number (1, 2, 3...) and include both uppercase and lowercase letters. It should not contain only one identical character repeatedly (11111111 or aaaaaaaa) and it cannot contain consecutive characters (12345678 or abcdefgh).",
+                "format": "password",
+                "minLength": 8,
+                "maxLength": 32
+              }
+            }
+          }
+        },
+        "required": [
+          "action"
+        ]
+      }'
+
+        $params = @{
+            Email     = 'testemail@test.com'
+            Action    = 'ssoCreate'
+            Type      = 'pro'
+            FirstName = 'testfirstname'
+            LastName  = 'testlastname'
+            Password  = 'testpassword'
+        }
+
+        $request = New-ZoomUser @params @ApiKeySecret
+
+        It 'Uses the correct method' {
+            $request.Method | Should Be 'POST'
+        }
+
+        It 'Uses the correct uri' {
+            $request.Uri | Should Be "https://api.zoom.us/v2/users"
+        }
+
+        It 'Validates against the JSON schema' {
+            Test-Json -Json $request.Body -Schema $schema | Should Be $True
+        }
+    }
+
+    Context 'Remove-ZoomSpecificUserAssistant' {
+        $request = Remove-ZoomSpecificUserAssistant -UserId $UserId -AssistantId $AssistantId @ApiKeySecret
+
+        It 'Uses the correct method' {
+            $request.Method | Should Be 'DELETE'
+        }
+
+        It 'Uses the correct uri' {
+            $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/assistants/$AssistantId"
+        }
+
+        It 'Invokes rest method for multiple user IDs' {
+            Remove-ZoomSpecificUserAssistant -UserId $UserId,$UserId2 -AssistantId $AssistantId @ApiKeySecret
+            Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+        }
+
+        It 'Invokes rest method for multiple user schedulers' {
+            Remove-ZoomSpecificUserAssistant -UserId $UserId-AssistantId $AssistantId,$AssistantId2 @ApiKeySecret
+            Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+        }
+        
+        It 'Invokes rest method for multiple user IDs and schedulers at the same time' {
+            Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId, $AssistantId2 @ApiKeySecret
+            Assert-MockCalled -CommandName Invoke-RestMethod -Times 4 -Scope It -ModuleName $ModuleName
+        }
+    }
+
+    Context 'Remove-ZoomSpecificUserScheduler' {
+        $request = Remove-ZoomSpecificUserScheduler -UserId $UserId -SchedulerId $AssistantId @ApiKeySecret
+
+        It 'Uses the correct method' {
+            $request.Method | Should Be 'DELETE'
+        }
+
+        It 'Uses the correct uri' {
+            $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/schedulers/$AssistantId"
+        }
+
+        It 'Invokes rest method for multiple user IDs' {
+            Remove-ZoomSpecificUserAssistant -UserId $UserId,$UserId2 -AssistantId $AssistantId @ApiKeySecret
+            Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+        }
+
+        It 'Invokes rest method for multiple user schedulers' {
+            Remove-ZoomSpecificUserAssistant -UserId $UserId-AssistantId $AssistantId,$AssistantId2 @ApiKeySecret
+            Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+        }
+        
+        It 'Invokes rest method for multiple user IDs and schedulers at the same time' {
+            Remove-ZoomSpecificUserScheduler -UserId $UserId, $UserId2 -SchedulerId $AssistantId, $AssistantId2 @ApiKeySecret
+            Assert-MockCalled -CommandName Invoke-RestMethod -Times 4 -Scope It -ModuleName $ModuleName
+        }
+    }
+    <#
+    Context 'Remove-ZoomUser' {
+        $request = Remove-ZoomUser -UserId "$UserId" -Action Delete -TransferEmail $UserId2 -TransferMeeting -TransferRecording  @ApiKeySecret
+
+        It 'Uses the correct method' {
+            $request.Method | Should Be 'DELETE'
+        }
+
+        It 'Uses the correct uri and query parameters' {
+            $request.Uri | Should Be "https://api.zoom.us/v2/users/$($UserId)?action=Delete&transfer_email=$($UserId2)&transfer_meeting=True&transfer_recording=True"
+        }
+        
+        It 'Works for multiple users' {
+            Remove-ZoomUser -UserId $UserId, $UserId2 @ApiKeySecret
+            Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+        }
+    }
+    #>
 }
 
 Describe 'PSZoom Group Tests' {
     Context 'Strict mode' {
         Set-StrictMode -Version 'latest'
         $GroupCommands = @(
-                'Add-ZoomGroupMember',
-                'Get-ZoomGroupLockSettings',
-                'Get-ZoomGroups',
-                'Get-ZoomGroupSettings',
-                'Get-ZoomSpecificGroup',
-                'New-ZoomGroup',
-                'Remove-ZoomGroup',
-                'Remove-ZoomGroupMembers',
-                'Update-ZoomGroup',
-                'Update-ZoomGroupLockSettings',
-                'Update-ZoomGroupSettings'
+            'Add-ZoomGroupMember',
+            'Get-ZoomGroupLockSettings',
+            'Get-ZoomGroups',
+            'Get-ZoomGroupSettings',
+            'Get-ZoomSpecificGroup',
+            'New-ZoomGroup',
+            'Remove-ZoomGroup',
+            'Remove-ZoomGroupMembers',
+            'Update-ZoomGroup',
+            'Update-ZoomGroupLockSettings',
+            'Update-ZoomGroupSettings'
         )
 
         It 'Should load' {
@@ -206,7 +483,7 @@ Describe 'PSZoom Group Tests' {
             }
           }'
         
-        $request = Add-ZoomGroupMember -GroupId $GroupId -MemberEmail $UserEmail -ApiKey 123 -ApiSecret 456
+        $request = Add-ZoomGroupMember -GroupId $GroupId -MemberEmail $UserEmail @ApiKeySecret
         
         It "Uses the correct method" {
             $request.Method | Should Be 'POST'
@@ -234,7 +511,7 @@ Describe 'PSZoom Group Tests' {
     }
 
     Context "Get-ZoomGroupLockSettings" {
-        $request = Get-ZoomGroupLockSettings -GroupId $GroupId -ApiKey 123 -ApiSecret 456
+        $request = Get-ZoomGroupLockSettings -GroupId $GroupId @ApiKeySecret
 
         It "Uses the correct method" {
             $request.Method | Should Be 'GET'
@@ -246,7 +523,7 @@ Describe 'PSZoom Group Tests' {
     }
 
     Context "Get-ZoomGroups" {
-        $request = Get-ZoomGroups -FullApiResponse -ApiKey 123 -ApiSecret 456 
+        $request = Get-ZoomGroups -FullApiResponse @ApiKeySecret
 
         It "Uses the correct method" {
             $request.Method | Should Be 'GET'
@@ -258,7 +535,7 @@ Describe 'PSZoom Group Tests' {
     }
 
     Context "Get-ZoomGroupSettings" {
-        $request = Get-ZoomGroupSettings -GroupId $GroupId -ApiKey 123 -ApiSecret 456
+        $request = Get-ZoomGroupSettings -GroupId $GroupId @ApiKeySecret
 
         It "Uses the correct method" {
             $request.Method | Should Be 'GET'
@@ -280,7 +557,7 @@ Describe 'PSZoom Group Tests' {
             }
         }'
         
-        $request = New-ZoomGroup -Name 'TestGroupName' -ApiKey 123 -ApiSecret 456
+        $request = New-ZoomGroup -Name 'TestGroupName' @ApiKeySecret
     
         It "Uses the correct method" {
             $request.Method | Should Be 'POST'
@@ -296,7 +573,7 @@ Describe 'PSZoom Group Tests' {
     }
 
     Context 'Remove-ZoomGroup' {
-        $request = Remove-ZoomGroup -GroupId $GroupId -ApiKey 123 -ApiSecret 456
+        $request = Remove-ZoomGroup -GroupId $GroupId @ApiKeySecret
     
         It "Uses the correct method" {
             $request.Method | Should Be 'DELETE'
@@ -318,7 +595,7 @@ Describe 'PSZoom Group Tests' {
             }
           }'
         
-        $request = Update-ZoomGroup -GroupId $GroupId -Name 'NewName' -ApiKey 123 -ApiSecret 456
+        $request = Update-ZoomGroup -GroupId $GroupId -Name 'NewName' @ApiKeySecret
     
         It 'Uses the correct method' {
             $request.Method | Should Be 'PATCH'
@@ -400,6 +677,7 @@ Describe 'PSZoom Group Tests' {
         WaitingRoom                     = $true
         Whiteboard                      = $true
     }
+
     Context 'Update-ZoomGroupLockSettings' -Verbose {
         $schema = '{
             "type": "object",
@@ -648,8 +926,8 @@ Describe 'PSZoom Group Tests' {
             }
           }'
         
-        $request = Update-ZoomGroupLockSettings -GroupId $GroupId @updateGroupParams -ApiKey 123 -ApiSecret 456
-        write-verbose $request.body
+        $request = Update-ZoomGroupLockSettings -GroupId $GroupId @updateGroupParams @ApiKeySecret
+        Write-Verbose $request.body
         It 'Uses the correct method' {
             $request.Method | Should Be 'PATCH'
         }
@@ -674,7 +952,7 @@ Describe 'PSZoom Group Tests' {
             }
           }'
         
-        $request = Update-ZoomGroupSettings -GroupId $GroupId @updateGroupParams -ApiKey 123 -ApiSecret 456
+        $request = Update-ZoomGroupSettings -GroupId $GroupId @updateGroupParams @ApiKeySecret
     
         It 'Uses the correct method' {
             $request.Method | Should Be 'PATCH'
@@ -695,12 +973,12 @@ Describe "PSZoom Report Tests" {
         Set-StrictMode -Version 'latest'
 
         Mock Invoke-RestMethod {
-            Write-Output $Body,$Uri,$Method
+            Write-Output $Body, $Uri, $Method
         }
 
         $ReportCommands = @(
-                'Get-ZoomActiveInactiveHostReports',
-                'Get-ZoomTelephoneReports'
+            'Get-ZoomActiveInactiveHostReports',
+            'Get-ZoomTelephoneReports'
         )
 
         It 'Should load' {

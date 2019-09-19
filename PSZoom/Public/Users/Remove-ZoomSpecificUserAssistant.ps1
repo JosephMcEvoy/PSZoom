@@ -29,7 +29,7 @@ function Remove-ZoomSpecificUserAssistant {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [Parameter(
             Mandatory = $True, 
@@ -37,7 +37,7 @@ function Remove-ZoomSpecificUserAssistant {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('assistant_id')]
-        [string]$AssistantId,
+        [string[]]$AssistantId,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -57,14 +57,18 @@ function Remove-ZoomSpecificUserAssistant {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/assistants/$AssistantId"
-
-        try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
-        } catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+        foreach ($id in $UserId) {
+            foreach ($aid in $AssistantId) {
+                $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id/assistants/$aid"
+        
+                try {
+                    $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
+                } catch {
+                    Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                }
+        
+                Write-Output $Response
+            }
         }
-
-        Write-Output $Response
     }
 }

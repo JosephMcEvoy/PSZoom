@@ -143,7 +143,6 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/users/usersettingsupdate
 .EXAMPLE
 Update-ZoomUserSettings -UserId 'jsmith@lawfirm.com' -JoinBeforeHost $True
 #>
-. "$PSScriptRoot\Get-ZoomUser.ps1"
 
 function Update-ZoomUserSettings {    
     [CmdletBinding(SupportsShouldProcess = $True)]

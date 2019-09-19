@@ -29,7 +29,7 @@ function Get-ZoomUser {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('email', 'emailaddress', 'id', 'user_id', 'ids', 'userids', 'emails', 'emailaddresses')]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
         [Alias('login_type')]

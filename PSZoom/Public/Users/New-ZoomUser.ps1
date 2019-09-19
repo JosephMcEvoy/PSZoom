@@ -63,7 +63,7 @@ function New-ZoomUser {
             ValueFromPipelineByPropertyName = $True
         )]
         [ValidateSet('Basic', 'Pro', 'Corp', 1, 2, 3)]
-        [string]$Type,
+        $Type,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateLength(1, 64)]
@@ -104,13 +104,11 @@ function New-ZoomUser {
             'action' = $Action
         }
 
-        if ($PSBoundParameters.ContainsKey('Type')) {
-            $Type = switch ($Type) {
-                'Basic' { 1 }
-                'Pro' { 2 }
-                'Corp' { 3 }
-                Default { $Type }
-            }
+        $Type = switch ($Type) {
+            'Basic' { 1 }
+            'Pro' { 2 }
+            'Corp' { 3 }
+            Default { $Type }
         }
 
         #These parameters are mandatory and are added automatically.

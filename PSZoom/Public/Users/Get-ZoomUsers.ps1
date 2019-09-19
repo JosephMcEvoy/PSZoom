@@ -74,18 +74,20 @@ function Get-ZoomUsers {
     }
 
     process {
-        #Zoom API reference indicates the parameters are Query parameters but in practice they work only in the Body of the request.
-        $RequestBody = @{
-            'status'      = $Status
-            'page_size'   = $PageSize
-            'page_number' = $PageNumber
-            'role_id'     = $RoleId
-        }    
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId"
+        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+        $Query.Add('status', $Status)
+        $Query.Add('page_size', $PageSize)
+        $Query.Add('page_number', $PageNumber)
 
-        $RequestBody = $RequestBody | ConvertTo-Json
+        if ($PSBoundParameters.ContainsKey('RoleId')) {
+            $Query.Add('role_id', $RoleId)
+        }
+        
+        $Request.Query = $Query.ToString()
 
         try {
-            $Response = Invoke-RestMethod -Uri $Uri -Headers $headers -Body $RequestBody -Method GET
+            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET
         } catch {
             Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
         }

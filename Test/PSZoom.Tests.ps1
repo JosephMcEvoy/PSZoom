@@ -425,7 +425,7 @@ Describe 'PSZoom User Tests' {
           $Request.Uri.Authority | Should Be "api.zoom.us"
           $Request.Uri.AbsolutePath | Should Be "/v2/users/$UserId"
 
-          $queries = @('action=Delete',"transfer_email=$UserId",'transfer_meeting=True','transfer_recording=True')
+          $queries = @('action=Delete',"transfer_email=$UserId2",'transfer_meeting=True','transfer_recording=True')
           $queries | ForEach-Object {
             $Request.Uri.Query | Should BeLike "*$_*"
           }

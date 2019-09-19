@@ -84,11 +84,11 @@ function Remove-ZoomUser {
 
     process {
         foreach ($id in $UserId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$Id"
+            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id"
             $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-    
+            $Query.Add('action', $Action)
+
             $UserInfoKeyValues = @{
-                'action'             = 'Action'
                 'transfer_email'     = 'TransferEmail'
                 'transfer_meeting'   = 'TransferMeeting'
                 'transfer_webinar'   = 'TransferWebinar'

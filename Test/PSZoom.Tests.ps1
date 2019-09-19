@@ -422,7 +422,7 @@ Describe 'PSZoom User Tests' {
         }
 
         It 'Uses the correct uri and query parameters' {
-            $request.Uri | Should Be "https://api.zoom.us/v2/users/$($UserId)?action=Delete&transfer_email=$($UserId2)&transfer_meeting=True&transfer_recording=True"
+            $request.Uri | Should Be "https://api.zoom.us/v2/users/$($UserId)?transfer_email=$($UserId2)&transfer_recording=True&action=Delete&transfer_meeting=True"
         }
         
         It 'Works for multiple users' {

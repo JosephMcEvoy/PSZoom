@@ -1,6 +1,6 @@
-$PSVersion = $PSVersionTable.PSVersion.Major
-$ModuleName = $ENV:BHProjectName
-$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
+PSVersion = $PSVersionTable.PSVersion.Major
+ModuleName = $ENV:BHProjectName
+ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
 
 #Using these variables for local testing
 #$PSVersion = $PSVersionTable.PSVersion.Major
@@ -424,7 +424,11 @@ Describe 'PSZoom User Tests' {
           $Request.Uri.Scheme | Should Be "https"
           $Request.Uri.Authority | Should Be "api.zoom.us"
           $Request.Uri.AbsolutePath | Should Be "/v2/users/$UserId"
-          #$Request.Uri.Query | Should Be "?action=Delete&transfer_email=$UserId2&transfer_meeting=True&transfer_recording=True"
+
+          $queries = @('action=Delete',"transfer_email=$UserId",'transfer_meeting=True','transfer_recording=True')
+          $queries | ForEach-Object {
+            $Request.Uri.Query | Should BeLike "*$_*"
+          }
         }
         
         It 'Works for multiple users' {

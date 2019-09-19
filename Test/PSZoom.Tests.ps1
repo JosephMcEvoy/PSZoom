@@ -1,12 +1,12 @@
-#$PSVersion = $PSVersionTable.PSVersion.Major
-#$ModuleName = $ENV:BHProjectName
-#$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
+$PSVersion = $PSVersionTable.PSVersion.Major
+$ModuleName = $ENV:BHProjectName
+$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
 
 
 #Using these variables for local testing
-$PSVersion = $PSVersionTable.PSVersion.Major
-$ModuleName = 'PSZoom'
-$ModulePath = "d:\dev\$ModuleName\$ModuleName"
+#$PSVersion = $PSVersionTable.PSVersion.Major
+#$ModuleName = 'PSZoom'
+#$ModulePath = "d:\dev\$ModuleName\$ModuleName"
 
 # Verbose output for non-master builds on appveyor. Handy for troubleshooting. Splat @Verbose against commands as needed (here or in pester tests).
 $Verbose = @{ }

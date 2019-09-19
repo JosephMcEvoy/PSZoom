@@ -414,7 +414,7 @@ Describe 'PSZoom User Tests' {
     }
     
     Context 'Remove-ZoomUser' {
-        $request = Remove-ZoomUser -UserId $UserId -Action Delete -TransferEmail $UserId2 -TransferMeeting -TransferRecording  @ApiKeySecret
+        $request = Remove-ZoomUser -UserId $UserId -Action Delete -TransferEmail $UserId2 -TransferMeeting -TransferRecording  @ApiKeySecret -confirm
 
         It 'Uses the correct method' {
             $request.Method | Should Be 'DELETE'

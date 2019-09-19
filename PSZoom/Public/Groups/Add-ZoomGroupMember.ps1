@@ -79,9 +79,6 @@ function Add-ZoomGroupMember  {
     )
 
     begin {
-       #Get Zoom Api Credentials
-
-
         #Generate Headers and JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
@@ -119,13 +116,13 @@ function Add-ZoomGroupMember  {
             $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$Id/members"
             if ($PScmdlet.ShouldProcess($members, 'Add')) {
                 try {
-                    $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $RequestBody -Method POST
+                    $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method POST
                 } catch {
-                    Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                    Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
                 }
 
                 if (-not $passthru) {
-                    Write-Output $Response
+                    Write-Output $response
                 }
             }
         }

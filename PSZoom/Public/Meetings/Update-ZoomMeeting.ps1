@@ -334,9 +334,9 @@ function Update-ZoomMeeting {
   
   process {
     if ($PSBoundParameters.ContainsKey('OcurrenceIds')) {
-        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-        $Query.Add('occurence_id', $OcurrenceIds)
-        $Request.Query = $Query.ToString()
+        $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+        $query.Add('occurence_id', $OcurrenceIds)
+        $Request.Query = $query.ToString()
     }
 
     if ($PSBoundParameters.ContainsKey('Type')) {
@@ -500,12 +500,12 @@ function Update-ZoomMeeting {
     }
 
     try {
-        $Response = Invoke-RestMethod -Uri $Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Patch
+        $response = Invoke-RestMethod -Uri $Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Patch
     } catch {
-        Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+        Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
     }
 
-    Write-Output $Response
+    Write-Output $response
   }
 }
 

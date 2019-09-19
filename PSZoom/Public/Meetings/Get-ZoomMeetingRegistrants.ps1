@@ -58,29 +58,26 @@ function Get-ZoomMeetingRegistrants {
     )
 
     begin {
-       #Get Zoom Api Credentials
-
-
         #Generate Headers and JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/registrants"
-        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-        $Query = @{
+        $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+        $query = @{
             'status'      = $Status
             'page_size'   = $PageSize
             'page_number' = $PageNumber
         }
-        $Request.Query = $Query.ToString()
+        $Request.Query = $query.ToString()
         
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
         } catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
         
-        Write-Output $Response
+        Write-Output $response
     }
 }

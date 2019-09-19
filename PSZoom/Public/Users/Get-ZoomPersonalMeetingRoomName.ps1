@@ -47,18 +47,18 @@ function Get-ZoomPersonalMeetingRoomName {
         foreach ($name in $VanityName) {
             $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/vanity_name"
     
-            $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('vanity_name', $VanityName)
-            $Request.Query = $Query.ToString()
+            $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+            $query.Add('vanity_name', $VanityName)
+            $Request.Query = $query.ToString()
         
     
             try {
-                $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Method GET
+                $response = Invoke-RestMethod -Uri $request.Uri -Headers $Headers -Method GET
             } catch {
-                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
             }
     
-            Write-Output $Response
+            Write-Output $response
         }
     }
 }

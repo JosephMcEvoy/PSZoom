@@ -51,9 +51,6 @@ function Remove-ZoomGroupMembers {
     )
 
     begin {
-       #Get Zoom Api Credentials
-
-
         #Generate Headers and JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
@@ -66,12 +63,12 @@ function Remove-ZoomGroupMembers {
                 
                 if ($PScmdlet.ShouldProcess) {
                     try {
-                        $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
+                        $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method DELETE
                     } catch {
-                        Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                        Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
                     } finally {
                         Write-Verbose "Removed $MemberId from $GroupId."
-                        Write-Output $Response
+                        Write-Output $response
                     }
                 }
             }

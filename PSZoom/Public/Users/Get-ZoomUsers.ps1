@@ -63,37 +63,33 @@ function Get-ZoomUsers {
     )
 
     begin {
-        $Uri = "https://api.zoom.us/v2/users/"
-
-       #Get Zoom Api Credentials
-
-
+        #Generate Header with JWT (JSON Web Token) using the Api key/secret
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/"
-        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-        $Query.Add('status', $Status)
-        $Query.Add('page_size', $PageSize)
-        $Query.Add('page_number', $PageNumber)
+        $Request = [System.UriBuilder]'https://api.zoom.us/v2/users/'
+        $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+        $query.Add('status', $Status)
+        $query.Add('page_size', $PageSize)
+        $query.Add('page_number', $PageNumber)
 
         if ($PSBoundParameters.ContainsKey('RoleId')) {
-            $Query.Add('role_id', $RoleId)
+            $query.Add('role_id', $RoleId)
         }
         
-        $Request.Query = $Query.ToString()
+        $Request.Query = $query.ToString()
 
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
         } catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
 
         if ($FullApiResponse) {
-            Write-Output $Response
+            Write-Output $response
         } else {
-            Write-Output $Response.Users
+            Write-Output $response.Users
         }
     }
 }

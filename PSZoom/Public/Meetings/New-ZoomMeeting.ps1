@@ -703,13 +703,13 @@ function New-ZoomMeeting {
         #### Misc Settings End #####
         
         try {
-            $Response = Invoke-RestMethod -Uri $Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Post
+            $response = Invoke-RestMethod -Uri $Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Post
         }
         catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
         finally {
-            Write-Output $Response
+            Write-Output $response
         }
         
         #Write-Output $RequestBody | ConvertTo-Json | Set-Clipboard

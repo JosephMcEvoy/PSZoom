@@ -69,9 +69,9 @@ function Update-ZoomUserStatus {
 
         if ($pscmdlet.ShouldProcess) {
             try {
-                Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body $requestBody -Method PUT
+                Invoke-RestMethod -Uri $request.Uri -Headers $Headers -Body $requestBody -Method PUT
             } catch {
-                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
             } finally {
                 if ($PassThru) {
                     Write-Output $UserId

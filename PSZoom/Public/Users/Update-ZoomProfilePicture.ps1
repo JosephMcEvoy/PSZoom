@@ -72,11 +72,11 @@ function Update-ZoomProfilePicture {
 
         
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -ContentType "multipart/form-data; boundary=`"$Boundary`"" -Headers $headers -Body $RequestBody -Method POST
+            $response = Invoke-RestMethod -Uri $request.Uri -ContentType "multipart/form-data; boundary=`"$Boundary`"" -Headers $headers -Body $RequestBody -Method POST
         } catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
 
-        Write-Output $Response
+        Write-Output $response
     }
 }

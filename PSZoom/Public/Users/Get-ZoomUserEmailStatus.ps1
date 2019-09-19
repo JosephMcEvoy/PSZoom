@@ -44,16 +44,16 @@ function Get-ZoomUserEmailStatus {
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/email"
-        $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-        $Query.Add('email', $Email)
-        $Request.Query = $Query.ToString()
+        $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+        $query.Add('email', $Email)
+        $Request.Query = $query.ToString()
 
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
         } catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
 
-        Write-Output $Response
+        Write-Output $response
     }
 }

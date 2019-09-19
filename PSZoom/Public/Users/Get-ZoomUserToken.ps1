@@ -55,17 +55,17 @@ function Get-ZoomUserToken {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/token"
 
         if ($PSBoundParameters.ContainsKey('Type')) {
-            $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('login_type', $Type)
-            $Request.Query = $Query.ToString()
+            $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+            $query.Add('login_type', $Type)
+            $Request.Query = $query.ToString()
         }
 
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
         } catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
 
-        Write-Output $Response
+        Write-Output $response
     }
 }

@@ -46,9 +46,6 @@ function Remove-ZoomMeeting {
     )
 
     begin {
-       #Get Zoom Api Credentials
-
-
         #Generate Headers and JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
@@ -57,15 +54,15 @@ function Remove-ZoomMeeting {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId"
 
         if ($PSBoundParameters.ContainsKey('OcurrenceId')) {
-            $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $Query.Add('occurence_id', $OcurrenceId)
-            $Request.Query = $Query.ToString()
+            $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+            $query.Add('occurence_id', $OcurrenceId)
+            $Request.Query = $query.ToString()
         }
 
         try {
-            $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method DELETE
         } catch {
-            Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
 
         Write-Verbose "Meeting $MeetingId Removed."

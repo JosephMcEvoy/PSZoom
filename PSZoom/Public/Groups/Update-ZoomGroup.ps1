@@ -55,9 +55,6 @@ function Update-ZoomGroup  {
     )
 
     begin {
-       #Get Zoom Api Credentials
-
-
         #Generate Headers and JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
@@ -73,13 +70,13 @@ function Update-ZoomGroup  {
 
         if ($PScmdlet.ShouldProcess($GroupId, 'Update')) {
             try {
-                $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $requestBody -Method PATCH
+                $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PATCH
             } catch {
-                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
             }
 
             Write-Verbose "Changed group name to $Name."
-            Write-Output $Response
+            Write-Output $response
         }
     }
 }

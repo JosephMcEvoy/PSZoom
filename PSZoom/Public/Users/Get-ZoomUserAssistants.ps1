@@ -46,12 +46,12 @@ function Get-ZoomUserAssistants {
             $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$Id/assistants"
 
             try {
-                $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET
+                $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
             } catch {
-                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
             }
     
-            Write-Output $Response
+            Write-Output $response
         }
     }
 }

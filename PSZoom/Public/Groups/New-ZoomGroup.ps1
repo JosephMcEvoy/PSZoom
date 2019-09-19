@@ -45,9 +45,6 @@ function New-ZoomGroup {
     )
 
     begin {
-        #Get Zoom Api Credentials
-
-
         #Generate Headers and JWT (JSON Web Token)
         $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
 
@@ -64,14 +61,14 @@ function New-ZoomGroup {
                 $requestBody = $requestBody | ConvertTo-Json
 
                 try {
-                    $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $requestBody -Method POST
+                    $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method POST
                 }
                 catch {
-                    Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                    Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
                 }
 
                 Write-Verbose "Creating group $n."
-                Write-Output $Response
+                Write-Output $response
             }
         }
     }

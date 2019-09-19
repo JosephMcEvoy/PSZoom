@@ -582,13 +582,13 @@ function Update-ZoomGroupLockSettings  {
             $request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/lock_settings"
 
             try {
-                $Response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PATCH
+                $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PATCH
             } catch {
-                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
             }
 
             if (-not $Passthru) {
-                Write-Output $Response
+                Write-Output $response
             }
         }
     

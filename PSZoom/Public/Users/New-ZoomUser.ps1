@@ -89,9 +89,6 @@ function New-ZoomUser {
 
     begin {
         $request = [System.UriBuilder]'https://api.zoom.us/v2/users'
-       #Get Zoom Api Credentials
-
-
         #Generate Headers with JWT (JSON Web Token)
         $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
@@ -155,15 +152,15 @@ function New-ZoomUser {
 
         if ($PScmdlet.ShouldProcess) {
             try {
-                $Response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method Post
+                $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method Post
             } catch {
-                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
             }
 
             if ($passthru) {
                 Write-Output $Email
             } else {
-                Write-Output $Response
+                Write-Output $response
             }
         }
     }

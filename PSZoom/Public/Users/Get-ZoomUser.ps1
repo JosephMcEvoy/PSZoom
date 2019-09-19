@@ -60,19 +60,19 @@ function Get-ZoomUser {
                     'SSO' { 101 }
                     Default { $LoginType }
                 }
-                $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-                $Query.Add('login_type', $LoginType)
-                $Request.Query = $Query.ToString()
+                $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+                $query.Add('login_type', $LoginType)
+                $Request.Query = $query.ToString()
             }
         
 
             try {
-                $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Method GET
+                $response = Invoke-RestMethod -Uri $request.Uri -Headers $Headers -Method GET
             } catch {
-                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
             }
             
-            Write-Output $Response
+            Write-Output $response
         }
     }
 }

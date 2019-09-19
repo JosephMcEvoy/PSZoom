@@ -433,9 +433,9 @@ function Update-ZoomGroupSettings  {
         [Alias('audio_conference_info')]
         [string]$AudioConferenceInfo,
 
-        [bool]$ApiKey,
+        [string]$ApiKey,
         
-        [bool]$ApiSecret,
+        [string]$ApiSecret,
 
         [switch]$Passthru
     )

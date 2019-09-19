@@ -32,7 +32,7 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userdelete
 #>
 
 function Remove-ZoomUser {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact='High')]
     param (
         [Parameter(
             Mandatory = $True, 
@@ -121,14 +121,15 @@ function Remove-ZoomUser {
             }
             
             $Request.Query = $Query.ToString()
-    
-            try {
-                Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
-            } catch {
-                Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
-            } finally {
-                if ($Passthru) {
-                    Write-Output $UserId
+            if ($PScmdlet.ShouldProcess) {
+                try {
+                    Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
+                } catch {
+                    Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
+                } finally {
+                    if ($Passthru) {
+                        Write-Output $UserId
+                    }
                 }
             }
         }

@@ -43,13 +43,6 @@ function Revoke-ZoomUserSsoToken {
     )
 
     begin {
-        #Revoke Zoom Api Credentials
-        if (-not $ApiKey -or -not $ApiSecret) {
-            $ApiCredentials = Revoke-ZoomApiCredentials
-            $ApiKey = $ApiCredentials.ApiKey
-            $ApiSecret = $ApiCredentials.ApiSecret
-        }
-
         #Generate Header with JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }

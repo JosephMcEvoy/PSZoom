@@ -442,9 +442,7 @@ function Update-ZoomGroupSettings  {
 
     begin {
         #Get Zoom Api Credentials
-        $Credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
-        $ApiKey = $Credentials.ApiKey
-        $ApiSecret = $Credentials.ApiSecret
+
     }
 
     process {

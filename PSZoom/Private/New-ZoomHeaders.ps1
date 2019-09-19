@@ -14,7 +14,8 @@ function New-ZoomHeaders {
         [string]$ApiKey,
         [string]$ApiSecret
     )
-    $Token = New-Jwt -Algorithm 'HS256' -type 'JWT' -Issuer $ApiKey -SecretKey $ApiSecret -ValidforSeconds 30
+    $Credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
+    $Token = New-Jwt -Algorithm 'HS256' -type 'JWT' -Issuer $Credentials.ApiKey -SecretKey $Credentials.ApiSecret -ValidforSeconds 30
 
     Write-Verbose 'Generating Headers'
     $Headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"

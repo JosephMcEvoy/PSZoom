@@ -54,12 +54,7 @@ function Update-ZoomUserpassword {
     )
     
     begin {
-       #Get Zoom Api Credentials
-        $Credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
-        $ApiKey = $Credentials.ApiKey
-        $ApiSecret = $Credentials.ApiSecret
-
-        #Generate Header with JWT (JSON Web Token)
+        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 

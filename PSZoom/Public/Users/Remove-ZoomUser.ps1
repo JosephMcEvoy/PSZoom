@@ -74,9 +74,7 @@ function Remove-ZoomUser {
 
     begin {
        #Get Zoom Api Credentials
-        $Credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
-        $ApiKey = $Credentials.ApiKey
-        $ApiSecret = $Credentials.ApiSecret
+
         
         #Generate Headers with JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
@@ -88,52 +86,41 @@ function Remove-ZoomUser {
             $Query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
             $Query.Add('action', $Action)
 
-            $UserInfoKeyValues = @{
-                'transfer_email'     = 'TransferEmail'
-                'transfer_meeting'   = 'TransferMeeting'
-                'transfer_webinar'   = 'TransferWebinar'
-                'transfer_recording' = 'TransferRecording'
+            if ($PSBoundParameters.ContainsKey('TransferEmail')) {
+                $Query.Add('transfer_email', $TransferEmail)
             }
 
-            function Remove-NonPSBoundParameters {
-                param (
-                    $Obj,
-                    $Parameters = $PSBoundParameters
-                )
-
-                process {
-                    $NewObj = @{}
-            
-                    foreach ($Key in $Obj.Keys) {
-                        if ($Parameters.ContainsKey($Obj.$Key)){
-                            $Newobj.Add($Key, (get-variable $Obj.$Key).value)
-                        }
-                    }
-            
-                    return $NewObj
-                }
+            if ($PSBoundParameters.ContainsKey('TransferMeeting')) {
+                $Query.Add('transfer_meeting', $TransferMeeting)
             }
 
-            $UserInfoKeyValues = Remove-NonPSBoundParameters($UserInfoKeyValues)
-            
-            #Adds parameters to UserInfo object if not Null
-            $UserInfoKeyValues.Keys | ForEach-Object {
-                    $Query.Add($_, $UserInfoKeyValues.$_)
+            if ($PSBoundParameters.ContainsKey('TransferWebinar')) {
+                $Query.Add('transfer_webinar', $TransferWebinar)
+            }
+
+            if ($PSBoundParameters.ContainsKey('TransferRecording')) {
+                $Query.Add('transfer_recording', $TransferRecording)
             }
             
             $Request.Query = $Query.ToString()
-
-            if ($PScmdlet.ShouldProcess) {
+            
+            if ($PScmdlet.ShouldProcess($id, 'Remove')) {
                 try {
-                    Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
+                    $Response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE
                 } catch {
                     Write-Error -Message "$($_.exception.message)" -ErrorId $_.exception.code -Category InvalidOperation
-                } finally {
-                    if ($Passthru) {
-                        Write-Output $UserId
-                    }
                 }
+
+                if ($Passthru) {
+                    Write-Output $UserId
+                } else {
+                    Write-Output $Response
+                }
+                
             }
+            
+
+            Write-Output $Request.Query
         }
     }
 }

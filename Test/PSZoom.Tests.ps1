@@ -424,7 +424,7 @@ Describe 'PSZoom User Tests' {
           $Request.Uri.Scheme | Should Be "https"
           $Request.Uri.Authority | Should Be "api.zoom.us"
           $Request.Uri.AbsolutePath | Should Be "/v2/users/$UserId"
-          $Request.Uri.Query | Should Be "?action=Delete&transfer_email=$UserId2&transfer_meeting=True&transfer_recording=True"
+          #$Request.Uri.Query | Should Be "?action=Delete&transfer_email=$UserId2&transfer_meeting=True&transfer_recording=True"
         }
         
         It 'Works for multiple users' {

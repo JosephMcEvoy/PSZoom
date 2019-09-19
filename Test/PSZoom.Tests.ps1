@@ -1,12 +1,12 @@
-$PSVersion = $PSVersionTable.PSVersion.Major
-$ModuleName = $ENV:BHProjectName
-$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
+#$PSVersion = $PSVersionTable.PSVersion.Major
+#$ModuleName = $ENV:BHProjectName
+#$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
 
 
 #Using these variables for local testing
-#PSVersion = $PSVersionTable.PSVersion.Major
-#ModuleName = 'PSZoom'
-#ModulePath = "d:\dev\$ModuleName\$ModuleName"
+$PSVersion = $PSVersionTable.PSVersion.Major
+$ModuleName = 'PSZoom'
+$ModulePath = "d:\dev\$ModuleName\$ModuleName"
 
 # Verbose output for non-master builds on appveyor. Handy for troubleshooting. Splat @Verbose against commands as needed (here or in pester tests).
 $Verbose = @{ }
@@ -422,7 +422,10 @@ Describe 'PSZoom User Tests' {
         }
 
         It 'Uses the correct uri and query parameters' {
-            $request.Uri | Should Be "https://api.zoom.us/v2/users/$($UserId)?transfer_email=$($UserId2)&transfer_recording=True&action=Delete&transfer_meeting=True"
+          $Request.Uri.Scheme | Should Be "https"
+          $Request.Uri.Authority | Should Be "api.zoom.us"
+          $Request.Uri.AbsolutePath | Should Be "/v2/users/$UserId"
+          $Request.Uri.Query | Should Be "?action=Delete&transfer_email=$UserId2&transfer_meeting=True&transfer_recording=True"
         }
         
         It 'Works for multiple users' {

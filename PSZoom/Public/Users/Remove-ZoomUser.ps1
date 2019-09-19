@@ -122,7 +122,7 @@ function Remove-ZoomUser {
             }
             
             $Request.Query = $Query.ToString()
-            
+
             if ($PScmdlet.ShouldProcess) {
                 try {
                     Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method DELETE

@@ -1,6 +1,6 @@
-#PSVersion = $PSVersionTable.PSVersion.Major
-#ModuleName = $ENV:BHProjectName
-#ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
+$PSVersion = $PSVersionTable.PSVersion.Major
+$ModuleName = $ENV:BHProjectName
+$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
 
 #Using these variables for local testing
 #$PSVersion = $PSVersionTable.PSVersion.Major

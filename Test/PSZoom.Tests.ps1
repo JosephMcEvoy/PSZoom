@@ -4,10 +4,9 @@ $ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
 
 
 #Using these variables for local testing
-#$PSVersion = $PSVersionTable.PSVersion.Major
-#$ModuleName = 'PSZoom'
-#$ModulePath = "d:\dev\$ModuleName\$ModuleName"
-
+#PSVersion = $PSVersionTable.PSVersion.Major
+#ModuleName = 'PSZoom'
+#ModulePath = "d:\dev\$ModuleName\$ModuleName"
 
 # Verbose output for non-master builds on appveyor. Handy for troubleshooting. Splat @Verbose against commands as needed (here or in pester tests).
 $Verbose = @{ }
@@ -410,13 +409,13 @@ Describe 'PSZoom User Tests' {
         }
         
         It 'Invokes rest method for multiple user IDs and schedulers at the same time' {
-            Remove-ZoomSpecificUserScheduler -UserId $UserId, $UserId2 -SchedulerId $AssistantId, $AssistantId2 @ApiKeySecret
+            Remove-ZoomSpecificUserScheduler -UserId $UserId,$UserId2 -SchedulerId $AssistantId,$AssistantId2 @ApiKeySecret
             Assert-MockCalled -CommandName Invoke-RestMethod -Times 4 -Scope It -ModuleName $ModuleName
         }
     }
-    <#
+    
     Context 'Remove-ZoomUser' {
-        $request = Remove-ZoomUser -UserId "$UserId" -Action Delete -TransferEmail $UserId2 -TransferMeeting -TransferRecording  @ApiKeySecret
+        $request = Remove-ZoomUser -UserId $UserId -Action Delete -TransferEmail $UserId2 -TransferMeeting -TransferRecording  @ApiKeySecret
 
         It 'Uses the correct method' {
             $request.Method | Should Be 'DELETE'
@@ -431,7 +430,7 @@ Describe 'PSZoom User Tests' {
             Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
         }
     }
-    #>
+    
 }
 
 Describe 'PSZoom Group Tests' {

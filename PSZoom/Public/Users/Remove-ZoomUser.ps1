@@ -41,7 +41,7 @@ function Remove-ZoomUser {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('Email', 'id')]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('disassociate', 'delete')]

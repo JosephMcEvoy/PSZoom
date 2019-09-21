@@ -4,21 +4,12 @@ $ModuleName = $ENV:BHProjectName
 $ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
 
 #Using these variables for local testing
-if (-not $PSVersion) {
-    $PSVersion = $PSVersionTable.PSVersion.Major
-}
-
-if (-not $ModuleName) {
-    $ModuleName = 'PSZoom'
-}
-
-if (-not $ModulePath) {
-    $ModulePath = "d:\dev\$ModuleName\$ModuleName"
-}
+#$PSVersion = $PSVersionTable.PSVersion.Major
+#$ModuleName = 'PSZoom'
+#$ModulePath = "d:\dev\$ModuleName\$ModuleName"
 
 # Verbose output for non-master builds on appveyor. Handy for troubleshooting. Splat @Verbose against commands as needed (here or in pester tests).
 $Verbose = @{ }
-
 if ($ENV:BHBranchName -notlike "master" -or $env:BHCommitMessage -match "!verbose") {
     $Verbose.add("Verbose", $True)
 }

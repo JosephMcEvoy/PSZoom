@@ -2,20 +2,28 @@
 
 .SYNOPSIS
 List specific user(s) on a Zoom account.
+
 .DESCRIPTION
 List specific user(s) on a Zoom account.
+
 .PARAMETER UserId
 The user ID or email address.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
 An object with the Zoom API response.
+
 .EXAMPLE
 Get-ZoomUser jsmith@lawfirm.com
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/user
+
 
 #>
 

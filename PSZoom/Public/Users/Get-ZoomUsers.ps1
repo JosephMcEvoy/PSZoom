@@ -2,31 +2,42 @@
 
 .SYNOPSIS
 List users on a Zoom account.
+
 .DESCRIPTION
 List users on a Zoom account.
+
 .PARAMETER Status
 User statuses:
 Active - Users with an active status. This is the default status.
 Inactive - Users with an inactive status.
 Pending - Users with a pending status.
+
 .PARAMETER PageSize
 The number of records returned within a single API call. Default value is 30. Maximum value is 300.
+
 .PARAMETER PageNumber
 The current page number of returned records. Default value is 1.
+
 .PARAMETER FullApiResponse
 The switch FullApiResponse will return the default Zoom API response.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/users
+
 .EXAMPLE
 Return the first page of users.
 Get-ZoomUsers
+
 .EXAMPLE
 Return the first page of active users.
 Get-ZoomUsers -Status active -PageSize 50
+
 .EXAMPLE
 Return active user emails.
 (Get-ZoomUsers -PageSize 300 -pagenumber 3 -status active).Users.Email

@@ -30,7 +30,7 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userschedulerdelet
 #>
 
 function Remove-ZoomSpecificUserScheduler {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact='Low')]
     param (
         [Parameter(
             Mandatory = $True, 
@@ -64,17 +64,19 @@ function Remove-ZoomSpecificUserScheduler {
     }
 
     process {
-        foreach ($uid in $UserId) {
-            foreach ($sid in $schedulerId) {
-                $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$uid/schedulers/$sid"
+        foreach ($user in $UserId) {
+            foreach ($scheduler in $schedulerId) {
+                if ($PScmdlet.ShouldProcess($user, "Remove $scheduler")) {
+                    $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/schedulers/$scheduler"
 
-                try {
-                    Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method DELETE
-                } catch {
-                    Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-                } finally {
-                    if ($Passthru) {
-                        Write-Output $UserId
+                    try {
+                        Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method DELETE
+                    } catch {
+                        Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
+                    } finally {
+                        if ($Passthru) {
+                            Write-Output $UserId
+                        }
                     }
                 }
             }

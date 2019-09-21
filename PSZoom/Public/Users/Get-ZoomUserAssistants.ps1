@@ -2,18 +2,25 @@
 
 .SYNOPSIS
 List user assistants.
+
 .DESCRIPTION
 List user assistants.
+
 .PARAMETER UserId
 The user ID or email address.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .EXAMPLE
 Get-ZoomUserAssistants jmcevoy@lawfirm.com
+
 .OUTPUTS
 A hastable with the Zoom API response.
+
 
 #>
 

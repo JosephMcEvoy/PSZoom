@@ -41,7 +41,6 @@ A hastable with the Zoom API response.
 
 #>
 
-
 function Add-ZoomUserAssistants {
     [CmdletBinding()]
     param (

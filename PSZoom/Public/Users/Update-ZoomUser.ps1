@@ -2,41 +2,56 @@
 
 .SYNOPSIS
 Update a user on your account.
+
 .PARAMETER Type
 Basic (1)
 Pro (2)
 Corp (3)
+
 .PARAMETER FirstName
 User's first namee: cannot contain more than 5 Chinese words.
+
 .PARAMETER LastName
 User's last name: cannot contain more than 5 Chinese words.
+
 .PARAMETER Pmi
 Personal Meeting ID, long, length must be 10.
+
 .PARAMETER UsePmi
 Use Personal Meeting ID for instant meetings.
+
 .PARAMETER Language
 Language.
+
 .PARAMETER Dept
 Department for user profile: use for report.
+
 .PARAMETER VanityName
 Personal meeting room name.
+
 .PARAMETER HostKey
 Host key. It should be a 6-10 digit number.
+
 .PARAMETER CMSUserId
 Kaltura user ID.
+
 .PARAMETER ApiKey
 The API key.
+
 .PARAMETER ApiSecret
 THe API secret.
+
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
+
 .EXAMPLE`
-Update-ZoomUser -UserId helpdesk@lawfirm.com -Type Pro -FirstName Joseph -LastName McEvoy -ApiKey $ApiKey -ApiSecret $ApiSecret
+Update-ZoomUser -UserId askywakler@thejedi.com -Type Pro -FirstName Anakin -LastName Skywalker -ApiKey $ApiKey -ApiSecret $ApiSecret
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userupdate
 
+
 #>
-. "$PSScriptRoot\Get-ZoomUser.ps1"
 
 function Update-ZoomUser {    
     [CmdletBinding(SupportsShouldProcess = $True)]
@@ -58,7 +73,7 @@ function Update-ZoomUser {
         
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('Basic', 'Pro', 'Corp', 1, 2, 3)]
-        [string]$Type,
+        $Type,
         
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateLength(1, 64)]

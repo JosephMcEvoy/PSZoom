@@ -88,8 +88,8 @@ function Remove-ZoomUser {
     }
 
     process {
-        foreach ($id in $UserId) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id"
+        foreach ($user in $UserId) {
+            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user"
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
             $query.Add('action', $Action)
 
@@ -109,9 +109,9 @@ function Remove-ZoomUser {
                 $query.Add('transfer_recording', $TransferRecording)
             }
             
-            $request.Query = $query.ToString()
+            $request.Query = $query.ToString().ToLower()
             
-            if ($PScmdlet.ShouldProcess($id, 'Remove')) {
+            if ($PScmdlet.ShouldProcess($user, 'Remove')) {
                 try {
                     $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method DELETE
                 } catch {
@@ -125,9 +125,6 @@ function Remove-ZoomUser {
                 }
                 
             }
-            
-
-            Write-Output $Request
         }
     }
 }

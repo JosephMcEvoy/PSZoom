@@ -1,6 +1,7 @@
 <#
 .SYNOPSIS
 Create a user using your account.
+
 .PARAMETER Action
 Specify how to create the new user:
 create - User will get an email sent from Zoom. There is a confirmation link in this email. The user will then need to use the link to activate their Zoom account. 
@@ -15,28 +16,38 @@ the provisioning email will be generated. If the user name or PMI is invalid or 
 number or random personal vanity URL.
 .PARAMETER Email
 User email address.
+
 .PARAMETER Type
 Basic (1)
 Pro (2)
 Corp (3)
+
 .PARAMETER FirstName
 User's first namee: cannot contain more than 5 Chinese words.
+
 .PARAMETER LastName
 User's last name: cannot contain more than 5 Chinese words.
+
 .PARAMETER PASSWORD
 User password. Only used for the "autoCreate" function. The password has to have a minimum of 8 characters and maximum of 32 characters. 
 It must have at least one letter (a, b, c..), at least one number (1, 2, 3...) and include both uppercase and lowercase letters. 
 It should not contain only one identical character repeatedly ('11111111' or 'aaaaaaaa') and it cannot contain consecutive characters ('12345678' or 'abcdefgh').
+
 .PARAMETER ApiKey
 The API key.
+
 .PARAMETER ApiSecret
 THe API secret.
+
 .OUTPUTS
 An object with the Zoom API response. 
+
 .EXAMPLE
 New-ZoomUser -Action ssoCreate -Email jsmith@lawfirm.com -Type Pro -FirstName Joseph -LastName Smith -ApiKey $ApiKey -ApiSecret $ApiSecret
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/usercreate
+
 #>
 
 function New-ZoomUser {    
@@ -88,12 +99,13 @@ function New-ZoomUser {
     )
 
     begin {
-        $request = [System.UriBuilder]'https://api.zoom.us/v2/users'
         #Generate Headers with JWT (JSON Web Token)
         $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
-
+    
     process {
+        $request = [System.UriBuilder]'https://api.zoom.us/v2/users'
+
         #Request Body
         $requestBody = @{
             'action' = $Action

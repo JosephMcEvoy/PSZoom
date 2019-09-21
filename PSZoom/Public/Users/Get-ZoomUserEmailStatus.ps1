@@ -1,21 +1,29 @@
 <#
 
 .SYNOPSIS
-Verify if a user’s email is registered with Zoom..
+Verify if a user’s email is registered with Zoom.
+
 .DESCRIPTION
-Verify if a user’s email is registered with Zoom..
+Verify if a user’s email is registered with Zoom.
+
 .PARAMETER Email
 The email address to be verified.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .EXAMPLE
 Get-ZoomUserEmailStatus jsmith@lawfirm.com
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/useremail
+
 .OUTPUTS
 A hastable with the Zoom API response.
+
 
 #>
 

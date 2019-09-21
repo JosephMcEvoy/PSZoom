@@ -2,20 +2,28 @@
 
 .SYNOPSIS
 Update a user's email.
+
 .DESCRIPTION
 Update a user's email.
+
 .PARAMETER UserId
 The user ID or email address.
+
 .PARAMETER Email
 User's email. The length should be less than 128 characters.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
+
 .EXAMPLE
-Update-ZoomUserEmail jsmith@lawfirm.com
+Update-ZoomUserEmail lskywalker@thejedi.com
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/useremailupdate
 
@@ -57,12 +65,14 @@ function Update-ZoomUserEmail {
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/email"
-        $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-        $query.Add('email', $Email)
-        $Request.Query = $query.ToString()
+
+        $requestBody = @{
+            'email' = $Email
+        } 
+        $requestBody = $requestBody | ConvertTo-Json
 
         try {
-            Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method PUT
+            Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PUT
         } catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         } finally {

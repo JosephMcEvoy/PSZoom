@@ -32,7 +32,7 @@ function Update-ZoomProfilePicture {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('Email', 'EmailAddress', "Id")]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [Parameter(
             Mandatory = $True,
@@ -55,28 +55,30 @@ function Update-ZoomProfilePicture {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/picture"
-        $LF = "`r`n";
-        $FileBytes = Get-Content -Path $FileName -Encoding Byte
-        $FileContent = [System.Text.Encoding]::GetEncoding('iso-8859-1').GetString($FileBytes);
-        $Boundary = [System.Guid]::NewGuid().ToString()
-
-
-        $RequestBody = ( 
-            "--$Boundary",
-            "Content-Disposition: form-data; name=`"pic_file`"; filename=`"$FileName`"",
-            "Content-Type: image/jpeg$LF",
-            "$FileContent",
-            "--$Boundary--"
-        ) -join $LF
-
-        
-        try {
-            $response = Invoke-RestMethod -Uri $request.Uri -ContentType "multipart/form-data; boundary=`"$Boundary`"" -Headers $headers -Body $RequestBody -Method POST
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
+        foreach ($user in $UserId) {
+            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/picture"
+            $LF = "`r`n";
+            $FileBytes = Get-Content -Path $FileName -Encoding Byte
+            $FileContent = [System.Text.Encoding]::GetEncoding('iso-8859-1').GetString($FileBytes);
+            $Boundary = [System.Guid]::NewGuid().ToString()
+    
+    
+            $RequestBody = ( 
+                "--$Boundary",
+                "Content-Disposition: form-data; name=`"pic_file`"; filename=`"$FileName`"",
+                "Content-Type: image/jpeg$LF",
+                "$FileContent",
+                "--$Boundary--"
+            ) -join $LF
+    
+            
+            try {
+                $response = Invoke-RestMethod -Uri $request.Uri -ContentType "multipart/form-data; boundary=`"$Boundary`"" -Headers $headers -Body $RequestBody -Method POST
+            } catch {
+                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
+            }
+    
+            Write-Output $response
         }
-
-        Write-Output $response
     }
 }

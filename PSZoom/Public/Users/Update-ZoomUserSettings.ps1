@@ -2,146 +2,215 @@
 
 .SYNOPSIS
 Update a user on your account.
+
 .PARAMETER UserId
 The user ID or email address.
+
 .PARAMETER HostVideo 
 Start meetings with host video on.
-.EXAMPLE
-Update-ZoomUserSettings -UserId 'jsmith@lawfirm.com'-hostvideo $True
+
 .PARAMETER ParticipantsVideo
 Start meetings with participants video on.
+
 .PARAMETER AudioType
 Determine how participants can join the audio portion of the meeting.
 both - Telephony and VoIP.
 telephony - Audio PSTN telephony only.
 voip - VoIP only.
 thirdParty - Third party audio conference.
+
 .PARAMETER JoinBeforeHost 
 Join the meeting before host arrives.
+
 .PARAMETER ForcePmiJbhPassword 
 Require a password for personal meetings if attendees can join before host.
+
 .PARAMETER PstnPasswordProtected 
 Generate and require password for participants joining by phone.
+
 .PARAMETER UsePmiForScheduledMeetings 
 Use Personal Meeting ID (PMI) when scheduling a meeting.
+
 .PARAMETER UsePmiForInstantMeetings 
 Use Personal Meeting ID (PMI) when starting an instant meeting.
+
 .PARAMETER E2eEncryption 
 End-to-end encryption required for all meetings.
+
 .PARAMETER Chat            
 Enable chat during meeting for all participants.
+
 .PARAMETER PrivateChat            
 Enable 11 private chat between participants during meetings.
+
 .PARAMETER AutoSavingChat        
 Auto save all in-meeting chats.
+
 .PARAMETER EntryExitChim
-Play sound when participants join or leave<br>`host` - When host joins or leaves.<br>`all` - When any participant joins or leaves.<br>`none` - No join or leave sound.
+Play sound when participants join or leave
+host - When host joins or leaves.
+all - When any participant joins or leaves.
+none - No join or leave sound.
+
 .PARAMETER RecordPlayVoice 
 Record and play their own voice.
+
 .PARAMETER FileTransfer  
 Enable file transfer through in-meeting chat.
+
 .PARAMETER Feedback  
 Enable option to send feedback to Zoom at the end of the meeting.
+
 .PARAMETER CoHost  
 Allow the host to add co-hosts.
+
 .PARAMETER Polling  
 Add polls to the meeting controls.
+
 .PARAMETER AttendeeOnHold  
 Allow host to put attendee on hold.
+
 .PARAMETER Annotation  
 Allow participants to use annotation tools.
+
 .PARAMETER RemoteControl  
 Enable remote control during screensharing.
+
 .PARAMETER NonVerbalFeedback  
 Enable non-verbal feedback through screens.
+
 .PARAMETER BreakoutRoom  
 Allow host to split meeting participants into separate breakout rooms.
+
 .PARAMETER RemoteSupport  
 Allow host to provide 11 remote support to a participant.
+
 .PARAMETER ClosedCaption  
 Enable closed captions.
+
 .PARAMETER GroupHd  
 Enable group HD video.
+
 .PARAMETER VirtualBackground  
 Enable virtual background.
+
 .PARAMETER FarEndCameraControl  
 Allow another user to take control of the camera.
+
 .PARAMETER ShareDualCamera  
 Share dual camera (deprecated).
 .PARAMETER AttentionTracking  
 Allow host to see if a participant does not have Zoom in focus during screen sharing.
+
 .PARAMETER WaitingRoom  
 Enable Waiting room - if enabled, attendees can only join after host approves.
+
 .PARAMETER AllowLiveStreaming 
 Allow live streaming.
+
 .PARAMETER WorkplaceByFacebook 
 Allow livestreaming by host through Workplace by Facebook.
+
 .PARAMETER CustomLiveStreaming 
 Allow custom live streaming.
+
 .PARAMETER CustomServiceInstructions 
+
 Custom service instructions.
 .PARAMETER JbhReminder  
 When attendees join meeting before host.
+
 .PARAMETER CancelMeetingReminder  
 When a meeting is cancelled.
+
 .PARAMETER AlternativeHostReminder  
+
 When an alternative host is set or removed from a meeting.
+
 .PARAMETER ScheduleForReminder  
 Notify the host there is a meeting is scheduled, rescheduled, or cancelled.
+
 .PARAMETER LocalRecording 
 Local recording.
+
 .PARAMETER CloudRecording  
 Cloud recording.
+
 .PARAMETER RecordSpeakerView  
 Record the active speaker view.
+
 .PARAMETER RecordGalleryView  
 Record the gallery view.
 .PARAMETER RecordAudioFile  
+
 Record an audio only file.
 .PARAMETER SaveChatText  
 Save chat text from the meeting.
+
 .PARAMETER ShowTimestamp  
 Show timestamp on video.
 .PARAMETER RecordingAudioTranscript 
+
 Audio transcript.
 .PARAMETER AutoRecording
 Automatic recording<br>`local` - Record on local.<br>`cloud` - Record on cloud.<br>`none` - Disabled.
+
 .PARAMETER HostPauseStopRecording  
 Host can pause/stop the auto recording in the cloud.
+
 .PARAMETER AutoDeleteCmr  
 Auto delete cloud recordings.
+
 .PARAMETER AutoDeleteCmrDays 
 A specified number of days of auto delete cloud recordings.
+
 .PARAMETER ThirdPartyAudio 
 Third party audio conference.
+
 .PARAMETER AudioConferenceInfo
 Third party audio conference info.
+
 .PARAMETER ShowInternationalNumbersLink 
 Show the international numbers link on the invitation email.
+
 .PARAMETER MeetingCapacity 
 User's meeting capacity.
+
 .PARAMETER LargeMeeting 
 Large meeting feature.
+
 .PARAMETER LargeMeetingCapacity 
 Large meeting capacity can be 500 or 1000, depending on the user has a large meeting capacity plan subscription or not.
+
 .PARAMETER Webinar 
 Webinar feature.
+
 .PARAMETER WebinarCapacity 
 Webinar capacity can be 100, 500, 1000, 3000, 5000 or 10000, depending on if the user has a webinar capacity plan subscription or not.
+
 .PARAMETER ZoomPhone 
 Zoom phone feature.
+
 .PARAMETER CallOut 
 Call Out.
+
 .PARAMETER CallOutCountries 
 Call Out Countries/Regions. 
-.PARAMETER ShowInternationalNumbersLink
-Show international numbers link on the invitation email.
+
+.PARAMETER ShowInternationalNumbersLinkTsp
+Show international numbers link on the invitation email in Tsp.
+
 .OUTPUTS
 No output. Can use Passthru switch to pass the UserId as an output.
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/usersettingsupdate
+
 .EXAMPLE
-Update-ZoomUserSettings -UserId 'jsmith@lawfirm.com' -JoinBeforeHost $True
+Update-ZoomUserSettings -UserId 'dvader@thesith.com' -JoinBeforeHost $True
+
+.EXAMPLE
+'r2d2@rebels.com','c3po@rebels.com' | Update-ZoomUserSettings -hostvideo $True
 #>
 
 function Update-ZoomUserSettings {    
@@ -533,13 +602,6 @@ function Update-ZoomUserSettings {
         [Alias('audio_conference_info ')]
         [string]$AudioConferenceInfo, 
 
-        [Parameter(
-            HelpMessage = 'Show the international numbers link on the invitation email.', 
-            ValueFromPipelineByPropertyName = $True
-        )]
-        [Alias('show_international_numbers_link')]
-        [bool]$ShowInternationalNumbersLink, 
-
         #feature
         [Parameter(
             HelpMessage = "User's meeting capacity.", 
@@ -599,7 +661,14 @@ function Update-ZoomUserSettings {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('feature_show_international_numbers_link')]
-        [bool]$FeatureShowInternationalNumbersLink,
+        [bool]$ShowInternationalNumbersLink,
+
+        [Parameter(
+            HelpMessage = 'Show international numbers link on the invitation email for TSP', 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('feature_show_international_numbers_link_tsp')]
+        [bool]$ShowInternationalNumbersLinkTsp,
 
         [switch]$PassThru,
 
@@ -607,7 +676,7 @@ function Update-ZoomUserSettings {
         [string]$ApiSecret,
 
         [ValidateNotNullOrEmpty()]
-[string]$ApiKey
+        [string]$ApiKey
     )
     
     begin {
@@ -620,87 +689,87 @@ function Update-ZoomUserSettings {
             $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/settings"
 
             $ScheduleMeeting = @{
-                'host_video'                      = 'HostVideo'
-                'participants_video'              = 'ParticipantsVideo'
-                'audio_type'                      = 'AudioType'
-                'join_before_host'                = 'JoinBeforeHost'
-                'force_pmi_jbh_password'          = 'ForcePmiJbhPassword'
-                'pstn_password_protected'         = 'PstnPasswordProtected'
-                'use_pmi_for_scheduled_meetings'  = 'UsePmiForScheduledMeetings'
-                'use_pmi_for_instant_meetings'    = 'UsePmiForInstantMeetings'
+                'host_video'                          = 'HostVideo'
+                'participants_video'                  = 'ParticipantsVideo'
+                'audio_type'                          = 'AudioType'
+                'join_before_host'                    = 'JoinBeforeHost'
+                'force_pmi_jbh_password'              = 'ForcePmiJbhPassword'
+                'pstn_password_protected'             = 'PstnPasswordProtected'
+                'use_pmi_for_scheduled_meetings'      = 'UsePmiForScheduledMeetings'
+                'use_pmi_for_instant_meetings'        = 'UsePmiForInstantMeetings'
             }
 
-            $InMeeting = @{
-                'e2e_encryption'                  = 'E2eEncryption'
-                'chat'                            = 'Chat' 
-                'private_chat'                    = 'PrivateChat' 
-                'auto_saving_chat'                = 'AutoSavingChat' 
-                'entry_exit_chim'                 = 'EntryExitChim' 
-                'record_play_voice'               = 'RecordPlayVoice'
-                'file_transfer'                   = 'FileTransfer' 
-                'feedback'                        = 'Feedback' 
-                'co_host'                         = 'CoHost' 
-                'polling'                         = 'Polling' 
-                'attendee_on_hold'                = 'AttendeeOnHold' 
-                'annotation'                      = 'Annotation' 
-                'remote_control'                  = 'RemoteControl' 
-                'non_verbal_feedback'             = 'NonVerbalFeedback' 
-                'breakout_room'                   = 'BreakoutRoom' 
-                'remote_support'                  = 'RemoteSupport' 
-                'closed_caption'                  = 'ClosedCaption' 
-                'group_hd'                        = 'GroupHd' 
-                'virtual_background'              = 'VirtualBackground' 
-                'far_end_camera_control '         = 'FarEndCameraControl' 
-                'share_dual_camera'               = 'ShareDualCamera' 
-                'attention_tracking'              = 'AttentionTracking' 
-                'waiting_room'                    = 'WaitingRoom' 
-                'allow_live_streaming'            = 'AllowLiveStreaming'
-                'workplace_by_facebook'           = 'WorkplaceByFacebook'
-                'custom_live_streaming'           = 'CustomLiveStreaming'
-                'custom_service_instructions'     = 'CustomServiceInstructions'
+            $InMeeting = @{    
+                'e2e_encryption'                      = 'E2eEncryption'
+                'chat'                                = 'Chat' 
+                'private_chat'                        = 'PrivateChat' 
+                'auto_saving_chat'                    = 'AutoSavingChat' 
+                'entry_exit_chim'                     = 'EntryExitChim' 
+                'record_play_voice'                   = 'RecordPlayVoice'
+                'file_transfer'                       = 'FileTransfer' 
+                'feedback'                            = 'Feedback' 
+                'co_host'                             = 'CoHost' 
+                'polling'                             = 'Polling' 
+                'attendee_on_hold'                    = 'AttendeeOnHold' 
+                'annotation'                          = 'Annotation' 
+                'remote_control'                      = 'RemoteControl' 
+                'non_verbal_feedback'                 = 'NonVerbalFeedback' 
+                'breakout_room'                       = 'BreakoutRoom' 
+                'remote_support'                      = 'RemoteSupport' 
+                'closed_caption'                      = 'ClosedCaption' 
+                'group_hd'                            = 'GroupHd' 
+                'virtual_background'                  = 'VirtualBackground' 
+                'far_end_camera_control '             = 'FarEndCameraControl' 
+                'share_dual_camera'                   = 'ShareDualCamera' 
+                'attention_tracking'                  = 'AttentionTracking' 
+                'waiting_room'                        = 'WaitingRoom' 
+                'allow_live_streaming'                = 'AllowLiveStreaming'
+                'workplace_by_facebook'               = 'WorkplaceByFacebook'
+                'custom_live_streaming'               = 'CustomLiveStreaming'
+                'custom_service_instructions'         = 'CustomServiceInstructions'
             }
-            
-            $EmailNotification = @{
-                'jbh_reminder'                    = 'bhReminder' 
-                'cancel_meeting_reminder'         = 'ancelMeetingReminder'
-                'alternative_host_reminder'       = 'lternativeHostReminder'
-                'schedule_for_reminder'           = 'cheduleForReminder'
+
+            $EmailNotification = @{    
+                'jbh_reminder'                        = 'bhReminder' 
+                'cancel_meeting_reminder'             = 'ancelMeetingReminder'
+                'alternative_host_reminder'           = 'lternativeHostReminder'
+                'schedule_for_reminder'               = 'cheduleForReminder'
             }
-            
-            $Recording = @{
-                'local_recording'                 = 'LocalRecording'
-                'cloud_recording'                 = 'CloudRecording'
-                'record_speaker_view'             = 'RecordSpeakerView'
-                'record_gallery_view'             = 'RecordGalleryView'
-                'record_audio_file'               = 'RecordAudioFile'
-                'save_chat_text'                  = 'SaveChatText'
-                'show_timestamp'                  = 'ShowTimestamp'
-                'recording_audio_transcript'      = 'RecordingAudioTranscrip'
-                'auto_recording'                  = 'AutoRecording'
-                'host_pause_stop_recording '      = 'HostPauseStopRecording'
-                'auto_delete_cmr'                 = 'AutoDeleteCmr'
-                'auto_delete_cmr_days'            = 'AutoDeleteCmrDay'
+                
+            $Recording = @{    
+                'local_recording'                     = 'LocalRecording'
+                'cloud_recording'                     = 'CloudRecording'
+                'record_speaker_view'                 = 'RecordSpeakerView'
+                'record_gallery_view'                 = 'RecordGalleryView'
+                'record_audio_file'                   = 'RecordAudioFile'
+                'save_chat_text'                      = 'SaveChatText'
+                'show_timestamp'                      = 'ShowTimestamp'
+                'recording_audio_transcript'          = 'RecordingAudioTranscrip'
+                'auto_recording'                      = 'AutoRecording'
+                'host_pause_stop_recording '          = 'HostPauseStopRecording'
+                'auto_delete_cmr'                     = 'AutoDeleteCmr'
+                'auto_delete_cmr_days'                = 'AutoDeleteCmrDay'
             }
-            
-            $Telephony = @{
-                'third_party_audio '              = 'ThirdPartyAudio'
-                'audio_conference_info'           = 'AudioConferenceInfo'
-                'show_international_numbers_link' = 'ShowInternationalNumbersLink'
+
+            $Telephony = @{    
+                'third_party_audio '                  = 'ThirdPartyAudio'
+                'audio_conference_info'               = 'AudioConferenceInfo'
+                'show_international_numbers_link'     = 'ShowInternationalNumbersLink'
             }
-            
-            $Feature = @{
-                'meeting_capacity'                = 'MeetingCapacity'
-                'large_meeting'                   = 'LargeMeeting'
-                'large_meeting_capacity'          = 'LargeMeetingCapacity'
-                'webinar'                         = 'Webinar'
-                'webinar_capacity'                = 'WebinarCapacity'
-                'zoom_phone'                      = 'ZoomPhone'
+
+            $Feature = @{    
+                'meeting_capacity'                    = 'MeetingCapacity'
+                'large_meeting'                       = 'LargeMeeting'
+                'large_meeting_capacity'              = 'LargeMeetingCapacity'
+                'webinar'                             = 'Webinar'
+                'webinar_capacity'                    = 'WebinarCapacity'
+                'zoom_phone'                          = 'ZoomPhone'
             }
-            
+
             $Tsp = @{
-                'call_out'                        = 'CallOut'
-                'call_out_countries'              = 'CallOutCountries'
-                'show_international_numbers_link' = 'ShowInternationalNumbersLink'
+                'call_out'                            = 'CallOut'
+                'call_out_countries'                  = 'CallOutCountries'
+                'show_international_numbers_link_tsp' = 'ShowInternationalNumbersLinkTsp'
             }
 
             function Remove-NonPSBoundParameters {
@@ -752,7 +821,7 @@ function Update-ZoomUserSettings {
 
             if ($pscmdlet.ShouldProcess) {
                 try {
-                    Invoke-RestMethod -Uri $request.Uri -Headers $Headers -Body $requestBody -Method Patch
+                    $response = Invoke-RestMethod -Uri $request.Uri -Headers $Headers -Body $requestBody -Method Patch
                 } catch {
                     Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
                 }

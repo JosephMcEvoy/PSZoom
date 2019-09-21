@@ -2,22 +2,30 @@
 
 .SYNOPSIS
 Retrieve a user's token.
+
 .DESCRIPTION
 Retrieve a user's token.
+
 .PARAMETER UserId
 The user ID or email address.
+
 .PARAMETER Type
 Token - Used for starting meeting with client SDK.
 ZPK - Used for generating the start meeting url. (Deprecated)
 ZAP - Used for generating the start meeting url. The expiration time is two hours. For API users, the expiration time is 90 days.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
 A hastable with the Zoom API response.
+
 .EXAMPLE
 Get-ZoomUserToken jsmith@lawfirm.com
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/usertoken
 

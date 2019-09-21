@@ -2,20 +2,28 @@
 
 .SYNOPSIS
 Check if the user’s personal meeting room name exists.
+
 .DESCRIPTION
 Check if the user’s personal meeting room name exists.
+
 .PARAMETER VanityName
 Personal meeting room name.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
 An object with the Zoom API response.
+
 .EXAMPLE
 Get-ZoomPersonalMeetingRoomName 'Joes Room'
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/uservanityname
+
 
 #>
 

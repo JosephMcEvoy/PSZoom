@@ -2,26 +2,32 @@
 
 .SYNOPSIS
 Update a user's password.
+
 .DESCRIPTION
 Update a user's password.
+
 .PARAMETER UserId
 The user ID or email address.
+
 .PARAMETER Password
 User password. Minimum of 8 characters. Maximum of 31 characters.
+
 .PARAMETER ApiKey
 The API key.
+
 .PARAMETER ApiSecret
 THe API secret.
+
 .OUTPUTS
 No output. Can use Passthru switch to pass the UserId as an output.
+
 .EXAMPLE
 Update-ZoomUserPassword -UserId helpdesk@lawfirm.com -Password 'Zoompassword'
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userpassword
 
-
 #>
-. "$PSScriptRoot\Get-ZoomUser.ps1"
 
 function Update-ZoomUserpassword {    
     [CmdletBinding(SupportsShouldProcess = $True)]
@@ -61,11 +67,11 @@ function Update-ZoomUserpassword {
     process {
         foreach ($user in $UserId){
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/password"
-        $requestBody = @{
-            'password' = $Password
-        }
+            $requestBody = @{
+                'password' = $Password
+            }
 
-        $requestBody = $requestBody | ConvertTo-Json
+            $requestBody = $requestBody | ConvertTo-Json
 
             if ($PSCmdlet.ShouldProcess) {
                 try {

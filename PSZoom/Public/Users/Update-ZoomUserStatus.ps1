@@ -22,10 +22,9 @@ Update-ZoomUserStatus -UserId helpdesk@lawfirm.com
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userstatus
 
 #>
-. "$PSScriptRoot\Get-ZoomUser.ps1"
 
 function Update-ZoomUserStatus {    
-    [CmdletBinding(SupportsShouldProcess = $True)]
+    [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = 'Medium')]
     Param(
         [Parameter(
             Mandatory = $True,
@@ -60,22 +59,27 @@ function Update-ZoomUserStatus {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/status"
-        $requestBody = @{
-            'action' = $Action
-        }
+        foreach ($user in $UserId) {
+            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/status"
+            $requestBody = @{
+                'action' = $Action.ToLower()
+            }
+    
+            $requestBody = $requestBody | ConvertTo-Json
+    
+            if ($PScmdlet.ShouldProcess($user, $Action)) {
+                try {
+                    $response = Invoke-RestMethod -Uri $request.Uri -Headers $Headers -Body $requestBody -Method PUT
+                } catch {
+                    Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
+                }
 
-        $requestBody = $requestBody | ConvertTo-Json
-
-        if ($pscmdlet.ShouldProcess) {
-            try {
-                Invoke-RestMethod -Uri $request.Uri -Headers $Headers -Body $requestBody -Method PUT
-            } catch {
-                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-            } finally {
                 if ($PassThru) {
                     Write-Output $UserId
+                } else {
+                    Write-Output $response
                 }
+                
             }
         }
     }

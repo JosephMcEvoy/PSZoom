@@ -2,20 +2,28 @@
 
 .SYNOPSIS
 Delete all user schedulers.
+
 .DESCRIPTION
-Delete all user schedulers. schedulers are the users to whom the current user has assigned  on the user’s behalf.
+Delete all user schedulers. Schedulers are the users to whom the current user has assigned on the user’s behalf.
+
 .PARAMETER UserId
 The user ID or email address.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
+
 .EXAMPLE
 Remove-ZoomUserSchedulers jmcevoy@lawfirm.com
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userschedulersdelete
+
 
 #>
 
@@ -29,7 +37,7 @@ function Remove-ZoomUserSchedulers {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -46,15 +54,17 @@ function Remove-ZoomUserSchedulers {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/schedulers"
-
-        try {
-            Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method DELETE
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        } finally {
-            if ($Passthru) {
-                Write-Output $UserId
+        foreach ($user in $UserId) {
+            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/schedulers"
+    
+            try {
+                Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method DELETE
+            } catch {
+                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
+            } finally {
+                if ($Passthru) {
+                    Write-Output $UserId
+                }
             }
         }
     }

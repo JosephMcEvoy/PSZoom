@@ -1,12 +1,12 @@
 $ConfirmPreference = 'High'
-$PSVersion = $PSVersionTable.PSVersion.Major
-$ModuleName = $ENV:BHProjectName
-$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
+#$PSVersion = $PSVersionTable.PSVersion.Major
+#$ModuleName = $ENV:BHProjectName
+#$ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
 
 #Using these variables for local testing
-#$PSVersion = $PSVersionTable.PSVersion.Major
-#$ModuleName = 'PSZoom'
-#$ModulePath = "d:\dev\$ModuleName\$ModuleName"
+$PSVersion = $PSVersionTable.PSVersion.Major
+$ModuleName = 'PSZoom'
+$ModulePath = "d:\dev\$ModuleName\$ModuleName"
 
 # Verbose output for non-master builds on appveyor. Handy for troubleshooting. Splat @Verbose against commands as needed (here or in pester tests).
 $Verbose = @{ }
@@ -31,7 +31,7 @@ foreach ($file in $Private) {
 $Module = Get-Module $ModuleName
 $Commands = $Module.ExportedCommands.Keys
 
-Mock -ModuleName $ModuleName Invoke-RestMethod {
+Mock Invoke-RestMethod -ModuleName $ModuleName {
     $Response = @{
         Body    = $Body
         Uri     = $Uri
@@ -502,9 +502,15 @@ Describe 'Revoke-ZoomUserSsoToken' {
 }
 
 Describe 'Update-ZoomProfilePicture' {
-    new-item -Path $PSScriptRoot -ItemType 'File' -Value 'testimg.jpg'
+    Mock Test-Path -ModuleName $ModuleName {
+        return $True
+    }
+
+    Mock Get-Content -ModuleName $ModuleName {
+        return $True
+    }
+
     $request = Update-ZoomProfilePicture -UserId $UserId -Filename 'testimg.jpg' @ApiKeySecret
-    remove-item -Path '$PSScriptRoot\testimg.jpg'
 
     It 'Uses the correct method' {
         $request.Method | Should Be 'POST'
@@ -513,6 +519,8 @@ Describe 'Update-ZoomProfilePicture' {
     It 'Uses the correct uri' {
         $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/picture"
     }
+
+    #Still need a test for request body
 }
 
 Describe 'Update-ZoomUser' {
@@ -588,8 +596,8 @@ Describe 'Update-ZoomUser' {
         UserId     = $UserId
         LoginType  = 'sso'
         Type       = 'pro'
-        FirstName  =  'test first name'
-        LastName   =  'test last name'
+        FirstName  = 'test first name'
+        LastName   = 'test last name'
         Pmi        = '1234567890'
         UsePmi     = $True
         Timezone   = 'Pacific/Honolulu'
@@ -622,7 +630,7 @@ Describe 'Update-ZoomUser' {
 }
 
 Describe 'Update-ZoomUserEmail' {
-    $schema ='{
+    $schema = '{
         "type": "object",
         "properties": {
           "email": {
@@ -652,7 +660,7 @@ Describe 'Update-ZoomUserEmail' {
 }
 
 Describe 'Update-ZoomUserPassword' {
-    $schema ='{
+    $schema = '{
         "type": "object",
         "properties": {
           "password": {
@@ -682,7 +690,7 @@ Describe 'Update-ZoomUserPassword' {
 }
 
 Describe 'Update-ZoomUserSettings' {
-    $schema ='{
+    $schema = '{
         "title": "User settings",
         "type": "object",
         "properties": {
@@ -1065,70 +1073,70 @@ Describe 'Update-ZoomUserSettings' {
         }
       }'
 
-      $params = @{
-        AllowLiveStreaming                  = $true
-        AlternativeHostReminder             = $true
-        Annotation                          = $true
-        AttendeeOnHold                      = $true
-        AttentionTracking                   = $true
-        AudioConferenceInfo                 = $true
-        AudioType                           = 'both'
-        AutoDeleteCmr                       = $true
-        AutoDeleteCmrDay                    = $true
-        AutoRecording                       = 'local'
-        AutoSavingChat                      = $true
-        BreakoutRoom                        = $true
-        CallOut                             = $true
-        CallOutCountries                    = $true
-        CancelMeetingReminder               = $true
-        Chat                                = $true
-        ClosedCaption                       = $true
-        CloudRecording                      = $true
-        CoHost                              = $true
-        CustomLiveStreaming                 = $true
-        CustomServiceInstructions           = $true
-        E2eEncryption                       = $true
-        EntryExitChim                       = 'all'
-        FarEndCameraControl                 = $true
-        Feedback                            = $true
-        FileTransfer                        = $true
-        ForcePmiJbhPassword                 = $true
-        GroupHd                             = $true
-        HostPauseStopRecording              = $true
-        HostVideo                           = $true
-        JoinBeforeHost                      = $true
-        LargeMeeting                        = $true
-        LargeMeetingCapacity                = $true
-        LocalRecording                      = $true
-        MeetingCapacity                     = $true
-        NonVerbalFeedback                   = $true
-        ParticipantsVideo                   = $true
-        Polling                             = $true
-        PrivateChat                         = $true
-        PstnPasswordProtected               = $true
-        RecordAudioFile                     = $true
-        RecordGalleryView                   = $true
-        RecordingAudioTranscrip             = $true
-        RecordPlayVoic                      = $true
-        RecordSpeakerView                   = $true
-        RemoteControl                       = $true
-        RemoteSupport                       = $true
-        SaveChatText                        = $true
-        ScheduleForReminder                 = $true
-        ShareDualCamera                     = $true
-        ShowInternationalNumbersLink        = $true
-        ShowInternationalNumbersLinkTsp     = $true
-        ShowTimestamp                       = $true
-        ThirdPartyAudio                     = $true
-        UsePmiForInstantMeetings            = $true
-        UsePmiForScheduledMeetings          = $true
-        UserId                              = $UserId
-        VirtualBackground                   = $true
-        WaitingRoom                         = $true
-        Webinar                             = $true
-        WebinarCapacity                     = $true
-        WorkplaceByFacebook                 = $true
-        ZoomPhone                           = $true
+    $params = @{
+        AllowLiveStreaming              = $true
+        AlternativeHostReminder         = $true
+        Annotation                      = $true
+        AttendeeOnHold                  = $true
+        AttentionTracking               = $true
+        AudioConferenceInfo             = $true
+        AudioType                       = 'both'
+        AutoDeleteCmr                   = $true
+        AutoDeleteCmrDay                = $true
+        AutoRecording                   = 'local'
+        AutoSavingChat                  = $true
+        BreakoutRoom                    = $true
+        CallOut                         = $true
+        CallOutCountries                = $true
+        CancelMeetingReminder           = $true
+        Chat                            = $true
+        ClosedCaption                   = $true
+        CloudRecording                  = $true
+        CoHost                          = $true
+        CustomLiveStreaming             = $true
+        CustomServiceInstructions       = $true
+        E2eEncryption                   = $true
+        EntryExitChim                   = 'all'
+        FarEndCameraControl             = $true
+        Feedback                        = $true
+        FileTransfer                    = $true
+        ForcePmiJbhPassword             = $true
+        GroupHd                         = $true
+        HostPauseStopRecording          = $true
+        HostVideo                       = $true
+        JoinBeforeHost                  = $true
+        LargeMeeting                    = $true
+        LargeMeetingCapacity            = $true
+        LocalRecording                  = $true
+        MeetingCapacity                 = $true
+        NonVerbalFeedback               = $true
+        ParticipantsVideo               = $true
+        Polling                         = $true
+        PrivateChat                     = $true
+        PstnPasswordProtected           = $true
+        RecordAudioFile                 = $true
+        RecordGalleryView               = $true
+        RecordingAudioTranscrip         = $true
+        RecordPlayVoic                  = $true
+        RecordSpeakerView               = $true
+        RemoteControl                   = $true
+        RemoteSupport                   = $true
+        SaveChatText                    = $true
+        ScheduleForReminder             = $true
+        ShareDualCamera                 = $true
+        ShowInternationalNumbersLink    = $true
+        ShowInternationalNumbersLinkTsp = $true
+        ShowTimestamp                   = $true
+        ThirdPartyAudio                 = $true
+        UsePmiForInstantMeetings        = $true
+        UsePmiForScheduledMeetings      = $true
+        UserId                          = $UserId
+        VirtualBackground               = $true
+        WaitingRoom                     = $true
+        Webinar                         = $true
+        WebinarCapacity                 = $true
+        WorkplaceByFacebook             = $true
+        ZoomPhone                       = $true
     }
 
     $request = Update-ZoomUserSettings @params @ApiKeySecret

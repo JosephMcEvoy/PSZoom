@@ -19,7 +19,6 @@ Update-ZoomProfilePicture -UserId 'jmcevoy@lawfirm.com' -FileName "C:\Developmen
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userpicture
 
-
 #>
 
 function Update-ZoomProfilePicture {
@@ -39,7 +38,7 @@ function Update-ZoomProfilePicture {
             ValueFromPipelineByPropertyName = $True,
             Position = 1
         )]
-        [ValidateScript({Test-Path $_})]
+        [ValidateScript({Test-Path -Path $_})]
         [string]$FileName,
 
         [ValidateNotNullOrEmpty()]
@@ -58,7 +57,13 @@ function Update-ZoomProfilePicture {
         foreach ($user in $UserId) {
             $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/picture"
             $LF = "`r`n";
-            $FileBytes = Get-Content -Path $FileName -Encoding Byte
+
+            if ($PSVersionTable.PSVersion.Major -lt 6) {
+                $FileBytes = Get-Content -Path $FileName -Encoding Byte
+            } else {
+                $FileBytes = Get-Content -Path $FileName -AsByteStream
+            }
+            
             $FileContent = [System.Text.Encoding]::GetEncoding('iso-8859-1').GetString($FileBytes);
             $Boundary = [System.Guid]::NewGuid().ToString()
     

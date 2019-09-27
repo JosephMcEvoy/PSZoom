@@ -2,6 +2,8 @@ $ConfirmPreference = 'High'
 $PSVersion = $PSVersionTable.PSVersion.Major
 $ModuleName = $ENV:BHProjectName
 $ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
+$Module = Get-Module $ModuleName
+$Commands = $Module.ExportedCommands.Keys
 
 #Using these variables for local testing
 #PSVersion = $PSVersionTable.PSVersion.Major
@@ -28,8 +30,7 @@ foreach ($file in $Private) {
     }
 }
 
-$Module = Get-Module $ModuleName
-$Commands = $Module.ExportedCommands.Keys
+
 
 Mock Invoke-RestMethod -ModuleName $ModuleName {
     $Response = @{
@@ -61,7 +62,6 @@ $UserEmail    = 'TestEmail@test.com'
 $UserId       = 'TestUserId@test.com'
 $UserId2      = 'TestUserId2@test.com'
 $GroupId      = 'TestGroupId'
-$GroupId2     = 'TestGroupId2'
 $MeetingId    = 1234567890
 $MeetingUuid = '123456789'
 $OccurenceId  = 987654321
@@ -1880,6 +1880,8 @@ Describe 'Get-ZoomMeetingRegistrants' {
     $params = @{
         MeetingId  = $MeetingId
         Status     = 'pending'
+        PageSize   = $PageSize
+        PageNumber = $PageNumber
     }
 
     $request = Get-ZoomMeetingRegistrants @params @ApiKeySecret

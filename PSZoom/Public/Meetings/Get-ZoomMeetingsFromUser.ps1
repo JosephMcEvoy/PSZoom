@@ -61,18 +61,15 @@ function Get-ZoomMeetingsFromUser {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/meetings"
-        $RequestBody = @{ }
+        $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/meetings"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-        $query = @{
-            'type'        = $Type
-            'page_size'   = $PageSize
-            'page_number' = $PageNumber
-        }
-        $Request.Query = $query.ToString()
+        $query.add('type', $Type)
+        $query.add('page_size', $PageSize)
+        $query.add('page_number', $PageNumber)
+        $request.Query = $query.ToString()
         
         try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method GET
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
         } catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }

@@ -7,7 +7,7 @@ Retrieve the details of a meeting.
 .PARAMETER MeetingId
 The meeting ID.
 .PARAMETER OcurrenceId
-The occurence IDs.
+The Occurrence IDs.
 .PARAMETER email
 A valid email address of registrant.
 .PARAMETER FirstName
@@ -86,7 +86,7 @@ function Add-ZoomMeetingRegistrant {
             Position=1
         )]
         [Alias('')]
-        [string]$OcurrenceIdS,
+        [string]$OcurrenceId,
 
         [Parameter(
             Mandatory = $True,
@@ -215,14 +215,15 @@ function Add-ZoomMeetingRegistrant {
         }
 
         $RequestParameters = Remove-NonPSBoundParameters($RequestParameters)
-        $RequestBody = @{ }
+        $requestBody = @{ }
 
         $RequestParameters.Keys | ForEach-Object {
-            $RequestBody.Add($_, $RequestParameters.$_)
+            $requestBody.Add($_, $RequestParameters.$_)
         }
 
+        $requestBody = $requestBody | ConvertTo-Json
         try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method POST
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method POST
         } catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         } finally {

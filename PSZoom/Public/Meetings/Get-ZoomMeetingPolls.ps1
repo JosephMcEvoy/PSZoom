@@ -20,7 +20,7 @@ Get-ZoomMeetingsPolls 123456789
 
 #>
 
-function Get-ZoomMeetingsPolls {
+function Get-ZoomMeetingPolls {
     [CmdletBinding()]
     param (
         [Parameter(

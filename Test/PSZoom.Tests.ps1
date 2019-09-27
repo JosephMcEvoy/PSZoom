@@ -4,9 +4,9 @@ $ModuleName = $ENV:BHProjectName
 $ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
 
 #Using these variables for local testing
-#$PSVersion = $PSVersionTable.PSVersion.Major
-#$ModuleName = 'PSZoom'
-#$ModulePath = "d:\dev\$ModuleName\$ModuleName"
+#PSVersion = $PSVersionTable.PSVersion.Major
+#ModuleName = 'PSZoom'
+#ModulePath = "d:\dev\$ModuleName\$ModuleName"
 
 # Verbose output for non-master builds on appveyor. Handy for troubleshooting. Splat @Verbose against commands as needed (here or in pester tests).
 $Verbose = @{ }
@@ -55,13 +55,19 @@ Mock -ModuleName $ModuleName Invoke-RestMethod {
 
 
 #Additional variables to use when testing
-$AssistantId = 'TestAssistantId'
+$AssistantId  = 'TestAssistantId'
 $AssistantId2 = 'TestAssistantId2'
-$UserEmail = 'TestEmail@test.com'
-$UserId = 'TestUserId@test.com'
-$UserId2 = 'TestUserId2@test.com'
-$GroupId = 'TestGroupId'
-$GroupId2 = 'TestGroupId2'
+$UserEmail    = 'TestEmail@test.com'
+$UserId       = 'TestUserId@test.com'
+$UserId2      = 'TestUserId2@test.com'
+$GroupId      = 'TestGroupId'
+$GroupId2     = 'TestGroupId2'
+$MeetingId    = 1234567890
+$MeetingUuid = '123456789'
+$OccurenceId  = 987654321
+$PageNumber   = 1
+$PageSize     = 300
+$PollId       = '987654321'
 $ApiKeySecret = @{
     ApiKey    = 'TestApiKey'
     ApiSecret = 'TestApiSecret'
@@ -199,7 +205,7 @@ Describe 'Add-ZoomUserAssistant' {
         $request.Method | Should Be 'POST'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserEmail/assistants"
     }
 
@@ -220,7 +226,7 @@ Describe 'Get-ZoomPersonalMeetingRoomName' {
         $request.Uri.Query | Should Be "?vanity_name=$VanityName"
     }
 
-    It 'Uses the correct URI' {
+    It 'Uses the correct URI and path parameter' {
         $Request.Uri.Scheme | Should Be 'https'
         $Request.Uri.Authority | Should Be 'api.zoom.us'
         $Request.Uri.AbsolutePath | Should Be '/v2/users/vanity_name'
@@ -234,7 +240,7 @@ Describe 'Get-ZoomUser' {
         $request.Method | Should Be 'GET'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId"
     }
 }
@@ -246,7 +252,7 @@ Describe 'Get-ZoomUserAssistants' {
         $request.Method | Should Be 'GET'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/assistants"
     }
 }
@@ -270,7 +276,7 @@ Describe 'Get-ZoomUserPermissions' {
         $request.Method | Should Be 'GET'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/permissions"
     }
 }
@@ -361,7 +367,7 @@ Describe 'New-ZoomUser' {
         $request.Method | Should Be 'POST'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/users"
     }
 
@@ -377,7 +383,7 @@ Describe 'Remove-ZoomSpecificUserAssistant' {
         $request.Method | Should Be 'DELETE'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/assistants/$AssistantId"
     }
 
@@ -404,7 +410,7 @@ Describe 'Remove-ZoomSpecificUserScheduler' {
         $request.Method | Should Be 'DELETE'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/schedulers/$AssistantId"
     }
 
@@ -431,7 +437,7 @@ Describe 'Remove-ZoomUser' {
         $request.Method | Should Be 'DELETE'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $Request.Uri.Scheme | Should Be 'https'
         $Request.Uri.Authority | Should Be 'api.zoom.us'
         $Request.Uri.AbsolutePath | Should Be "/v2/users/$UserId"
@@ -457,7 +463,7 @@ Describe 'Remove-ZoomUserAssistants' {
         $request.Method | Should Be 'DELETE'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/assistants"
     }
     
@@ -474,7 +480,7 @@ Describe 'Remove-ZoomUserSchedulers' {
         $request.Method | Should Be 'DELETE'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/schedulers"
     }
     
@@ -491,7 +497,7 @@ Describe 'Revoke-ZoomUserSsoToken' {
         $request.Method | Should Be 'DELETE'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/token"
     }
     
@@ -516,7 +522,7 @@ Describe 'Update-ZoomProfilePicture' {
         $request.Method | Should Be 'POST'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/picture"
     }
 
@@ -614,7 +620,7 @@ Describe 'Update-ZoomUser' {
         $request.Method | Should Be 'PATCH'
     }
 
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $Request.Uri.Scheme | Should Be 'https'
         $Request.Uri.Authority | Should Be 'api.zoom.us'
         $Request.Uri.AbsolutePath | Should Be "/v2/users/$UserId"
@@ -624,7 +630,7 @@ Describe 'Update-ZoomUser' {
         $Request.Uri.Query | Should Be '?login_type=101'
     }
 
-    It "Validates against the JSON schema" {
+    It 'Validates against the JSON schema' {
         Test-Json -Json $request.Body -Schema $schema | Should Be $True
     }
 }
@@ -650,11 +656,11 @@ Describe 'Update-ZoomUserEmail' {
         $request.Method | Should Be 'PUT'
     }
 
-    It 'Uses the correct URI' {
+    It 'Uses the correct URI and path parameter' {
         $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/email"
     }
 
-    It "Validates against the JSON schema" {
+    It 'Validates against the JSON schema' {
         Test-Json -Json $request.Body -Schema $schema | Should Be $True
     }
 }
@@ -680,11 +686,11 @@ Describe 'Update-ZoomUserPassword' {
         $request.Method | Should Be 'PUT'
     }
 
-    It 'Uses the correct URI' {
+    It 'Uses the correct URI and path parameter' {
         $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/password"
     }
 
-    It "Validates against the JSON schema" {
+    It 'Validates against the JSON schema' {
         Test-Json -Json $request.Body -Schema $schema | Should Be $True
     }
 }
@@ -1145,16 +1151,16 @@ Describe 'Update-ZoomUserSettings' {
         $request.Method | Should Be 'PATCH'
     }
 
-    It 'Uses the correct URI' {
+    It 'Uses the correct URI and path parameter' {
         $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/settings"
     }
 
-    It "Validates against the JSON schema" {
+    It 'Validates against the JSON schema' {
         Test-Json -Json $request.Body -Schema $schema | Should Be $True
     }
 }
 
-Describe "Update-ZoomUserStatus" {
+Describe 'Update-ZoomUserStatus' {
     $schema = '{
         "description": "The action.",
         "type": "object",
@@ -1183,11 +1189,11 @@ Describe "Update-ZoomUserStatus" {
         $request.Method | Should Be 'PUT'
     }
 
-    It 'Uses the correct URI' {
+    It 'Uses the correct URI and path parameter' {
         $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/status"
     }
 
-    It "Validates against the JSON schema" {
+    It 'Validates against the JSON schema' {
         Test-Json -Json $request.Body -Schema $schema | Should Be $True
     }
 }
@@ -1218,7 +1224,7 @@ Describe 'PSZoom Group Tests' {
     }
 }
     
-Describe "Add-ZoomGroupMember" {
+Describe 'Add-ZoomGroupMember' {
     $schema = '{
             "type": "object",
             "properties": {
@@ -1245,68 +1251,68 @@ Describe "Add-ZoomGroupMember" {
         
     $request = Add-ZoomGroupMember -GroupId $GroupId -MemberEmail $UserEmail @ApiKeySecret
         
-    It "Uses the correct method" {
+    It 'Uses the correct method' {
         $request.Method | Should Be 'POST'
     }
         
-    It "Uses the correct uri" {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/members"
     }
         
-    It "Validates against the JSON schema" {
+    It 'Validates against the JSON schema' {
         Test-Json -Json $request.Body -Schema $schema | Should Be $True
     }
 }
 
-Describe "Get-ZoomGroup" {
+Describe 'Get-ZoomGroup' {
     $request = Get-ZoomGroup -GroupId $GroupId -ApiKey 123 -ApiSecret 456
 
-    It "Uses the correct method" {
+    It 'Uses the correct method' {
         $request.Method | Should Be 'GET'
     }
     
-    It "Uses the correct uri" {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId"
     }
 }
 
-Describe "Get-ZoomGroupLockSettings" {
+Describe 'Get-ZoomGroupLockSettings' {
     $request = Get-ZoomGroupLockSettings -GroupId $GroupId @ApiKeySecret
 
-    It "Uses the correct method" {
+    It 'Uses the correct method' {
         $request.Method | Should Be 'GET'
     }
     
-    It "Uses the correct uri" {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/lock_settings"
     }
 }
 
-Describe "Get-ZoomGroups" {
+Describe 'Get-ZoomGroups' {
     $request = Get-ZoomGroups -FullApiResponse @ApiKeySecret
 
-    It "Uses the correct method" {
+    It 'Uses the correct method' {
         $request.Method | Should Be 'GET'
     }
     
-    It "Uses the correct uri" {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/groups"
     }
 }
 
-Describe "Get-ZoomGroupSettings" {
+Describe 'Get-ZoomGroupSettings' {
     $request = Get-ZoomGroupSettings -GroupId $GroupId @ApiKeySecret
 
-    It "Uses the correct method" {
+    It 'Uses the correct method' {
         $request.Method | Should Be 'GET'
     }
     
-    It "Uses the correct uri" {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/settings"
     }
 }
 
-Describe "New-ZoomGroup" {
+Describe 'New-ZoomGroup' {
     $schema = '{
             "type": "object",
             "properties": {
@@ -1319,15 +1325,15 @@ Describe "New-ZoomGroup" {
         
     $request = New-ZoomGroup -Name 'TestGroupName' @ApiKeySecret
     
-    It "Uses the correct method" {
+    It 'Uses the correct method' {
         $request.Method | Should Be 'POST'
     }
     
-    It "Uses the correct uri" {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be 'https://api.zoom.us/v2/groups'
     }
     
-    It "Validates against the JSON schema" {
+    It 'Validates against the JSON schema' {
         Test-Json -Json $request.Body -Schema $schema | Should Be $True
     }
 }
@@ -1335,11 +1341,11 @@ Describe "New-ZoomGroup" {
 Describe 'Remove-ZoomGroup' {
     $request = Remove-ZoomGroup -GroupId $GroupId @ApiKeySecret
     
-    It "Uses the correct method" {
+    It 'Uses the correct method' {
         $request.Method | Should Be 'DELETE'
     }
     
-    It "Uses the correct uri" {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId"
     }
 }
@@ -1361,7 +1367,7 @@ Describe 'Update-ZoomGroup' {
         $request.Method | Should Be 'PATCH'
     }
     
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId"
     }
     
@@ -1692,7 +1698,7 @@ Describe 'Update-ZoomGroupLockSettings' -Verbose {
         $request.Method | Should Be 'PATCH'
     }
     
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/lock_settings"
     }
     
@@ -1718,7 +1724,7 @@ Describe 'Update-ZoomGroupSettings' {
         $request.Method | Should Be 'PATCH'
     }
     
-    It 'Uses the correct uri' {
+    It 'Uses the correct URI and path parameter' {
         $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/settings"
     }
     
@@ -1727,7 +1733,7 @@ Describe 'Update-ZoomGroupSettings' {
     }
 }
 
-Describe "PSZoom Report Tests" {
+Describe 'PSZoom Report Tests' {
     Context 'Strict mode' {
         Set-StrictMode -Version 'latest'
 
@@ -1745,5 +1751,485 @@ Describe "PSZoom Report Tests" {
                 $ReportCommands -contains $_ | Should Be $True
             }
         }
+    }
+}
+
+Describe 'Add-ZoomMeetingRegistrant' {
+    $schema = '{
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",  
+            "description": "Meeting ID"
+          },
+          "join_url": {
+            "type": "string",
+            "description": "URL to join the meeting."
+          },
+          "registrant_id": {
+            "type": "string",
+            "description": "Unique identifier of the registrant."
+          },
+          "start_time": {
+            "type": "string",
+            "description": "The start time for the meeting."
+          },
+          "topic": {
+            "type": "string",
+            "description": "Topic of the meeting."
+          }
+        }
+      }'
+
+    $params = @{
+        Address               = 'Address'
+        City                  = 'City'
+        Comments              = 'Comments'
+        Country               = 'Country'
+        Email                 = $UserId2
+        FirstName             = 'FirstName'
+        Industry              = 'Industry'
+        JobTitle              = 'JobTitle'
+        LastName              = 'LastName'
+        MeetingId             = $MeetingId
+        NoOfEmployees         = '1-20'
+        Org                   = 'Org'
+        Phone                 = 'Phone'
+        PurchasingTimeFrame   = 'Within a month'
+        RoleInPurchaseProcess = 'Decision Maker'
+        State                 = 'State'
+        Zip                   = 'Zip'
+    }
+
+    $request = Add-ZoomMeetingRegistrant @params @ApiKeySecret
+
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'POST'
+    }
+
+    It 'Uses the correct URI and path parameter' {
+        $request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants"
+    }
+
+    It 'Validates against the JSON schema' {
+        Test-Json -Json $request.Body -Schema $schema | Should Be $True
+    }
+}
+
+Describe 'Get-ZoomEndedMeetingInstances' {
+  $request = Get-ZoomEndedMeetingInstances -MeetingId $MeetingId @ApiKeySecret
+
+  It 'Uses the correct method' {
+      $request.Method | Should Be 'GET'
+  }
+
+  It 'Uses the correct URI and path parameter' {
+      $request.Uri | Should be "https://api.zoom.us/v2/past_meetings/$MeetingId/instances"
+  }
+}
+
+Describe 'Get-ZoomMeeting' {
+  $request = Get-ZoomMeeting -MeetingId $MeetingId -OcurrenceId $OccurenceId @ApiKeySecret
+
+  It 'Uses the correct method' {
+      $request.Method | Should Be 'GET'
+  }
+
+  It 'Uses the correct uri and query parameter' {
+      $request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)?occurrence_id=$($OccurenceId)"
+  }
+}   
+
+Describe 'Get-ZoomMeetingInvitation' {
+    $request = Get-ZoomMeetingInvitation -MeetingId $MeetingId @ApiKeySecret
+  
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'GET'
+    }
+  
+    It 'Uses the correct uri and query parameter' {
+        $request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)/invitation"
+    }
+  }
+
+Describe 'Get-ZoomMeetingPoll' {
+    $request = Get-ZoomMeetingPoll -MeetingId $MeetingId -PollId $PollId @ApiKeySecret
+
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'GET'
+    }
+
+    It 'Uses the correct uri and query parameter' {
+        $request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)/polls/$($PollId)"
+    }
+}
+
+Describe 'Get-ZoomMeetingPolls' {
+    $request = Get-ZoomMeetingPolls -MeetingId $MeetingId @ApiKeySecret
+  
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'GET'
+    }
+  
+    It 'Uses the correct uri and query parameter' {
+        $request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)/polls"
+    }
+}
+
+Describe 'Get-ZoomMeetingRegistrants' {
+    $params = @{
+        MeetingId  = $MeetingId
+        Status     = 'pending'
+    }
+
+    $request = Get-ZoomMeetingRegistrants @params @ApiKeySecret
+  
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'GET'
+    }
+    
+    It 'Uses the correct URI and path parameter' {
+        $Request.Uri.Scheme | Should Be 'https'
+        $Request.Uri.Authority | Should Be 'api.zoom.us'
+        $Request.Uri.AbsolutePath | Should Be "/v2/meetings/$($MeetingId)/registrants"
+    }
+
+    It 'Uses the correct query parameters' {
+        $queries = @("status=$($params.Status)", "page_size=$($PageSize)", "page_number=$($PageNumber)")
+        $queries | ForEach-Object {
+            $Request.Uri.Query | Should BeLike "*$_*"
+        }
+    }
+}
+
+Describe 'Get-ZoomMeetingsFromUser' {
+    $Type = 'scheduled'
+    $request = Get-ZoomMeetingsFromUser -UserId $UserId -type $Type -PageSize $PageSize -PageNumber $PageNumber @ApiKeySecret
+
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'GET'
+    }
+
+    It 'Uses the correct URI and path parameter' {
+        $Request.Uri.Scheme | Should Be 'https'
+        $Request.Uri.Authority | Should Be 'api.zoom.us'
+        $Request.Uri.AbsolutePath | Should Be "/v2/users/$($UserId)/meetings"
+    }
+
+    It 'Uses the correct query parameters' {
+        $queries = @("type=$Type", "page_size=$PageSize", "page_number=$PageNumber")
+        $queries | ForEach-Object {
+            $Request.Uri.Query | Should BeLike "*$_*"
+        }
+    }
+}
+
+Describe 'Get-ZoomPastMeetingDetails' {
+    $request = Get-ZoomPastMeetingDetails -MeetingUuid $MeetingUuid @ApiKeySecret
+    
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'GET'
+    }
+
+    It 'Uses the correct URI and path parameter' {
+        $Request.Uri | Should Be "https://api.zoom.us/v2/past_meetings/$MeetingUuid"
+    }
+}
+
+Describe 'Get-ZoomPastMeetingParticipants' {
+    $NextPageToken = 'NextPageTokenTest'
+    $request = Get-ZoomPastMeetingParticipants -MeetingUuid $MeetingUuid -PageSize $PageSize -NextPageToken $NextPageToken @ApiKeySecret
+
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'GET'
+    }
+
+    It 'Uses the correct URI and path parameter' {
+        $Request.Uri.Scheme | Should Be 'https'
+        $Request.Uri.Authority | Should Be 'api.zoom.us'
+        $Request.Uri.AbsolutePath | Should Be "/v2/past_meetings/$MeetingUuid/participants"
+    }
+
+    It 'Uses the correct query parameters' {
+        $queries = @("next_page_token=$NextPageToken", "page_size=$PageSize")
+        $queries | ForEach-Object {
+            $Request.Uri.Query | Should BeLike "*$_*"
+        }
+    }
+}
+
+Describe 'Get-ZoomRegistrationQuestions' {
+    $request = Get-ZoomRegistrationQuestions -MeetingId $MeetingId @ApiKeySecret
+
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'GET'
+    }
+
+    It 'Uses the correct uri and path parameter' {
+        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants/questions"
+    }
+}
+Describe 'New-ZoomMeeting' {}
+
+Describe 'Remove-ZoomMeeting' {
+    $ScheduleForReminder = 'TestReminder'
+    $request = Remove-ZoomMeeting -MeetingId $MeetingId -OccurrenceId $OccurrenceId -ScheduleForReminder $ScheduleForReminder @ApiKeySecret
+    
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'DELETE'
+    }
+
+    It 'Uses the correct URI and path parameter' {
+        $Request.Uri.Scheme | Should Be 'https'
+        $Request.Uri.Authority | Should Be 'api.zoom.us'
+        $Request.Uri.AbsolutePath | Should Be "/v2/meetings/$MeetingId"
+    }
+
+    It 'Uses the correct query parameters' {
+        $queries = @("occurrence_id=$OccurrenceId", "schedule_for_reminder=$ScheduleForReminder")
+        $queries | ForEach-Object {
+            $Request.Uri.Query | Should BeLike "*$_*"
+        }
+    }
+}
+
+Describe 'Remove-ZoomMeetingPoll' {
+    $PollId = '123'
+    $request = Remove-ZoomMeetingPoll -MeetingId $MeetingId -PollId $PollId @ApiKeySecret
+    
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'DELETE'
+    }
+
+    It 'Uses the correct URI and path parameter' {
+        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
+    }
+}
+Describe 'Update-ZoomMeeting' {}
+Describe 'Update-ZoomMeetingLiveStream' {}
+Describe 'Update-ZoomMeetingPoll' {}
+Describe 'Update-ZoomMeetingRegistrationQuestions' {
+    $schema = '{
+        "type": "object",
+        "title": "Meeting Registrant Questions",
+        "description": "Meeting Registrant Questions",
+        "properties": {
+          "questions": {
+            "type": "array",
+            "description": "Array of Registrant Questions",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field_name": {
+                  "type": "string",
+                  "description": "Field name of the question.",
+                  "enum": [
+                    "address",
+                    "city",
+                    "country",
+                    "zip",
+                    "state",
+                    "phone",
+                    "industry",
+                    "org",
+                    "job_title",
+                    "purchasing_time_frame",
+                    "role_in_purchase_process",
+                    "no_of_employees",
+                    "comments"
+                  ],
+                  "x-enum-descriptions": [
+                    "Address",
+                    "City",
+                    "Country/Region",
+                    "Zip/Postal Code",
+                    "State/Province",
+                    "Phone",
+                    "Industry",
+                    "Organization",
+                    "Job Title",
+                    "Purchasing Time Frame",
+                    "Role in Purchase Process",
+                    "Number of Employees",
+                    "Questions & Comments"
+                  ]
+                },
+                "required": {
+                  "type": "boolean",
+                  "description": "Indicates whether or not the displayed fields are required to be filled out by registrants."
+                }
+              }
+            }
+          },
+          "custom_questions": {
+            "type": "array",
+            "description": "Array of Registrant Custom Questions",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Title of the custom question."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Type of the question being asked.",
+                  "enum": [
+                    "short",
+                    "single"
+                  ],
+                  "x-enum-descriptions": [
+                    "Short Answer",
+                    "Single Answer"
+                  ]
+                },
+                "required": {
+                  "type": "boolean",
+                  "description": "Indicates whether or not the custom question is required to be answered by participants or not."
+                },
+                "answers": {
+                  "type": "array",
+                  "description": "Answer choices for the question. Can not be used for `short` question type as this type of question requires registrants to type out the answer.",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }'
+
+    $params = @{
+        MeetingId     = $MeetingId
+        Questions  = @(
+            @{'FieldName' = 'Address'},
+            @{'FieldName' = 'City'}
+        )
+        CustomQuestions  = @(
+            @{
+                'title' = 'Title'
+                'type'  = 'single'
+                'required' = $True
+                'answers' = ('Mr','Ms')
+            },
+            @{
+                'title' = 'Favorite Color'
+                'type'  = 'short'
+                'required' = $True
+          }
+        )
+    }
+    
+    $request = Update-ZoomMeetingRegistrationQuestions @params @ApiKeySecret
+
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'PATCH'
+    }
+
+    It 'Uses the correct uri and path parameter' {
+        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants/questions"
+    }
+
+    It 'Validates against the JSON schema' {
+        Test-Json -Json $request.Body -Schema $schema | Should Be $True
+    }
+}
+
+Describe 'Update-ZoomMeetingRegistrantStatus' {
+    $schema = '{
+        "type": "object",
+        "description": "Registrant Status:<br>`approve` - Approve registrant.<br>`cancel` - Cancel registrant.<br>`deny` - Deny registrant.",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "approve",
+              "cancel",
+              "deny"
+            ],
+            "x-enum-descriptions": [
+              "Approve registrant",
+              "Cancel registrant",
+              "Deny registrant"
+            ]
+          },
+          "registrants": {
+            "type": "array",
+            "description": "List of registrants.",
+            "maximum": 30,
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "action"
+        ]
+      }'
+
+    $params = @{
+        MeetingId     = $MeetingId
+        OccurrenceId = $OccurrenceId
+        Action       = 'approve'
+        Registrants  = @(
+            @{'id'    = 'testid'},
+            @{'email' = 'testemail'},
+            @{'id'    = 'testid'; 'email' = 'testemail'}
+        )
+    }
+
+    $request = Update-ZoomMeetingRegistrantStatus @params @ApiKeySecret
+
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'PUT'
+    }
+
+    It 'Uses the correct uri and path parameter' {
+        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants/status"
+    }
+
+    It 'Validates against the JSON schema' {
+        Test-Json -Json $request.Body -Schema $schema | Should Be $True
+    }
+}
+
+Describe 'Update-ZoomMeetingStatus' {
+    $schema = '{
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "end"
+            ],
+            "x-enum-descriptions": [
+              "end a meeting"
+            ],
+            "description": "`end` - End a meeting."
+          }
+        }
+      }'
+
+    $request = Update-ZoomMeetingStatus -MeetingId $MeetingId @ApiKeySecret
+
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'PUT'
+    }
+
+    It 'Uses the correct uri and path parameter' {
+        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/status"
+    }
+
+    It 'Validates against the JSON schema' {
+        Test-Json -Json $request.Body -Schema $schema | Should Be $True
     }
 }

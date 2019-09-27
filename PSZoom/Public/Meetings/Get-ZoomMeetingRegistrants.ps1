@@ -7,7 +7,7 @@ List registrants of a meeting.
 .PARAMETER MeetingId
 The meeting ID.
 .PARAMETER OccurenceId
-The meeting occurence ID.
+The meeting Occurrence ID.
 .PARAMETER Status
 The registrant status:
 Pending - Registrant's status is pending.
@@ -55,6 +55,8 @@ function Get-ZoomMeetingRegistrants {
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiSecret
+
+        #Need to add an all switch
     )
 
     begin {
@@ -63,14 +65,13 @@ function Get-ZoomMeetingRegistrants {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/registrants"
+        $request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/registrants"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-        $query = @{
-            'status'      = $Status
-            'page_size'   = $PageSize
-            'page_number' = $PageNumber
-        }
-        $Request.Query = $query.ToString()
+        $query.Add('status', $Status)
+        $query.Add('page_size', $PageSize)
+        $query.Add('page_number', $PageNumber)
+
+        $request.Query = $query.ToString()
         
         try {
             $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET

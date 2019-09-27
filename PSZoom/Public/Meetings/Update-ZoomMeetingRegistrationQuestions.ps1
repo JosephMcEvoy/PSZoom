@@ -30,12 +30,34 @@ The Api Secret.
 .OUTPUTS
 .LINK
 .EXAMPLE
-Update-ZoomRegistrationQuestions 123456789
-
+$params = @{
+        MeetingId = $MeetingId
+        ApiKey    = $ApiKey
+        ApiSecret = $ApiSecret
+        Questions = @(
+            @{'FieldName' = 'Address'},
+            @{'FieldName' = 'City'}
+        )
+        CustomQuestions  = @(
+            @{
+                'title' = 'Title'
+                'type'  = 'single'
+                'required' = $True
+                'answers' = ('Mr','Ms')
+            },
+            @{
+                'title' = 'Favorite Color'
+                'type'  = 'short'
+                'required' = $True
+          }
+        )
+    }
+    
+$request = Update-ZoomMeetingRegistrationQuestions @params
 
 #>
 
-function Update-ZoomRegistrationQuestions {
+function Update-ZoomMeetingRegistrationQuestions {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -65,21 +87,21 @@ function Update-ZoomRegistrationQuestions {
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
     process {
-        $RequestBody = @{}
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/registrants/questions"
+        $requestBody = @{}
         
         if ($PSBoundParameters.ContainsKey('Questions')) {
-            $RequestBody.Add('questions', $Questions)
+            $requestBody.Add('questions', $Questions)
         }
-
+        
         if ($PSBoundParameters.ContainsKey('Questions')) {
-            $RequestBody.Add('customquestions', $CustomQuestions)
+            $requestBody.Add('customquestions', $CustomQuestions)
         }
-
-    
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/registrants/questions"
+        
+        $requestBody = $requestBody | ConvertTo-Json
     
         try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method PATCH
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PATCH
         } catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
@@ -87,6 +109,17 @@ function Update-ZoomRegistrationQuestions {
         Write-Output $response
     }
 }
+
+<#
+I would like to make these into classes that can be referenced from some sort
+of classes file. Not sure how this works or if its feasible.
+
+EXAMPLE
+Update-ZoomRegistrationQuestions 123456789 -questions (New-ZoomRegistrantQuestion -FieldName 'Address'),(New-ZoomRegistrantQuestion -FieldName 'City')
+
+EXAMPLE
+Update-ZoomRegistrationQuestions 123456789 -customquestions (New-ZoomRegistrantCustomQuestion -title 'Title' -type 'single' -required $True -answers 'Mr','Ms'),`
+(New-ZoomRegistrantCustomQuestion -title 'Favorite Color' -type 'single' -required $True -answers 'Blue','Red')
 
 function New-ZoomRegistrantQuestion {
     param (
@@ -139,3 +172,4 @@ function New-ZoomRegistrantCustomQuestion {
 
     Write-Output $CustomQuestion
 }
+#>

@@ -7,7 +7,7 @@ Retrieve the details of a meeting.
 .PARAMETER MeetingId
 The meeting ID.
 .PARAMETER OcurrenceId
-The occurence ID.
+The Occurrence ID.
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret

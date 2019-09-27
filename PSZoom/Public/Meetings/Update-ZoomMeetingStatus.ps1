@@ -1,9 +1,9 @@
 <#
 
 .SYNOPSIS
-Update a meeting’s status.
+End a meeting by updating its status.
 .DESCRIPTION
-Update a meeting’s status.
+End a meeting by updating its status.
 .PARAMETER MeetingId
 The meeting ID.
 .PARAMETER Action
@@ -12,14 +12,15 @@ The update action. Available actions: end.
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
-.OUTPUTS
 .LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/meetings/meetingstatus
 .EXAMPLE
-Update-MeetingStatus -MeetingId '123456789' -Action 'End'
+Ends a meeting.
+Update-MeetingStatus -MeetingId '123456789'
 
 #>
 
-function Update-MeetingStatus {
+function Update-ZoomMeetingStatus {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -36,7 +37,7 @@ function Update-MeetingStatus {
             Position = 1
         )]
         [ValidateSet('end')]
-        [string]$Action,
+        [string]$Action = 'end',
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -53,14 +54,14 @@ function Update-MeetingStatus {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/status"
 
-        if ($PSBoundParameters.ContainsKey('Action')) {
-            $RequestBody = @{
-                'action' = $Action
-            }
+        $requestBody = @{
+            'action' = $Action
         }
 
+        $requestBody = $requestBody | ConvertTo-Json
+
         try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method PUT
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PUT
         } catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }

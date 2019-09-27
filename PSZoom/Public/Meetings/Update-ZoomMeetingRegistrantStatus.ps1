@@ -35,7 +35,21 @@ function Update-ZoomMeetingRegistrantStatus {
             Position=1
         )]
         [Alias('occurence_id')]
-        [string]$OcurrenceId,
+        [string]$OccurrenceId,
+
+        [Parameter(
+            Mandatory = $True,    
+            ValueFromPipelineByPropertyName = $True, 
+            Position=2
+        )]
+        [ValidateSet('approve', 'cancel', 'deny')]
+        [string]$Action,
+
+        [Parameter(
+            ValueFromPipelineByPropertyName = $True, 
+            Position=3
+        )]
+        [hashtable[]]$Registrants,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -56,10 +70,20 @@ function Update-ZoomMeetingRegistrantStatus {
         if ($PSBoundParameters.ContainsKey('OcurrenceId')) {
             $query.Add('occurrence_id', $OcurrenceId)
             $Request.Query = $query.toString()
-        }        
+        }
+        
+        $requestBody = @{
+            'action' = $Action
+        }
+
+        if ($PSBoundParameters.ContainsKey('registrants')) {
+            $requestBody.Add('registrants', ($Registrants))
+        }
+
+        $requestBody = $requestBody | ConvertTo-Json
 
         try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method PUT
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PUT
         } catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }

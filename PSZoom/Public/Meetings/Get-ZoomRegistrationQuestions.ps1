@@ -30,15 +30,6 @@ function Get-ZoomRegistrationQuestions {
         [Alias('meeting_id')]
         [string]$MeetingId,
 
-        [Parameter(
-            Mandatory = $True,
-            Position = 1,
-            ValueFromPipelineByPropertyName = $True
-            
-        )]
-        [Alias('poll_id')]
-        [string]$PollId,
-
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 

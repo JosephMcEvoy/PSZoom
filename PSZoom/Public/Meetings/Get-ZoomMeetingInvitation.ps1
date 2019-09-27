@@ -15,7 +15,6 @@ The Api Secret.
 .EXAMPLE
 Get-ZoomMeetingInvitation 123456789
 
-
 #>
 
 function Get-ZoomMeetingInvitation {

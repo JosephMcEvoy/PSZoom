@@ -30,13 +30,6 @@ function Get-ZoomPastMeetingDetails {
         [Alias('uuid')]
         [string]$MeetingUuid,
 
-        [Parameter(
-            Position = 1,
-            ValueFromPipelineByPropertyName = $True
-        )]
-        [Alias('occurence_id')]
-        [string]$OcurrenceId,
-
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
@@ -51,10 +44,9 @@ function Get-ZoomPastMeetingDetails {
 
     process {
         $Uri = "https://api.zoom.us/v2/past_meetings/$MeetingUuid"
-        $RequestBody = @{ }
         
         try {
-            $response = Invoke-RestMethod -Uri $Uri -Headers $headers -Body $RequestBody -Method GET
+            $response = Invoke-RestMethod -Uri $Uri -Headers $headers -Method GET
         } catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }

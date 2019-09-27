@@ -7,7 +7,7 @@ Delete a meeting.
 .PARAMETER MeetingId
 The meeting ID.
 .PARAMETER OcurrenceId
-The occurence ID.
+The Occurrence ID.
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret
@@ -35,14 +35,23 @@ function Remove-ZoomMeeting {
             ValueFromPipelineByPropertyName = $True, 
             Position=1
         )]
-        [Alias('ocurrence_id')]
-        [string]$OcurrenceId,
+        [Alias('occurrence_id')]
+        [string]$OccurrenceId,
+
+        [Parameter(
+            ValueFromPipelineByPropertyName = $True, 
+            Position=1
+        )]
+        [Alias('schedule_for_reminder')]
+        [string]$ScheduleForReminder,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
         [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [string]$ApiSecret,
+
+        [switch]$Passthru
     )
 
     begin {
@@ -53,9 +62,17 @@ function Remove-ZoomMeeting {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId"
 
-        if ($PSBoundParameters.ContainsKey('OcurrenceId')) {
-            $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-            $query.Add('occurence_id', $OcurrenceId)
+        if ($PSBoundParameters.ContainsKey('OccurrenceId') -or $PSBoundParameters.ContainsKey('ScheduleForReminder')) {
+            $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+            
+            if ($PSBoundParameters.ContainsKey('OccurrenceId')) {
+                $query.Add('occurrence_id', $OccurrenceId)
+            }  
+
+            if ($PSBoundParameters.ContainsKey('ScheduleForReminder')){
+                $query.Add('schedule_for_reminder', $ScheduleForReminder)
+            }
+
             $Request.Query = $query.ToString()
         }
 
@@ -64,7 +81,10 @@ function Remove-ZoomMeeting {
         } catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
-
-        Write-Verbose "Meeting $MeetingId Removed."
+        if (-not $Passthru) {
+            Write-Output $response
+        } else {
+            Write-Output $Passthru
+        }
     }
 }

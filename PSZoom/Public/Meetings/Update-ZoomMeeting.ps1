@@ -7,7 +7,7 @@ Update the details of a meeting.
 .PARAMETER MeetingId
 The meeting ID.
 .PARAMETER OcurrenceId
-Meeting occurence id. Support change of agenda, start_time, duration, settings: {host_video, participant_video, join_before_host, mute_upon_entry, waiting_room, auto_recording}
+Meeting Occurrence id. Support change of agenda, start_time, duration, settings: {host_video, participant_video, join_before_host, mute_upon_entry, waiting_room, auto_recording}
 .PARAMETER ScheduleFor
 Email or userid if you want to schedule meeting for another user.
 .PARAMETER Topic

@@ -2,8 +2,7 @@ $ConfirmPreference = 'High'
 $PSVersion = $PSVersionTable.PSVersion.Major
 $ModuleName = $ENV:BHProjectName
 $ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
-$Module = Get-Module $ModuleName
-$Commands = $Module.ExportedCommands.Keys
+
 
 #Using these variables for local testing
 #PSVersion = $PSVersionTable.PSVersion.Major
@@ -30,7 +29,8 @@ foreach ($file in $Private) {
     }
 }
 
-
+$Module = Get-Module $ModuleName
+$Commands = $Module.ExportedCommands.Keys
 
 Mock Invoke-RestMethod -ModuleName $ModuleName {
     $Response = @{

@@ -2008,8 +2008,11 @@ Describe 'Remove-ZoomMeetingPoll' {
     }
 }
 Describe 'Update-ZoomMeeting' {}
+
 Describe 'Update-ZoomMeetingLiveStream' {}
+
 Describe 'Update-ZoomMeetingPoll' {}
+
 Describe 'Update-ZoomMeetingRegistrationQuestions' {
     $schema = '{
         "type": "object",

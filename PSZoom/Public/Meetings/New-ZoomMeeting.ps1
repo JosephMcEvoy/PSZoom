@@ -804,6 +804,7 @@ function New-ZoomMeeting {
         }
   
         #### Misc Settings End #####
+        
         $requestBody = ConvertTo-Json $requestBody -Depth 10
 
         try {
@@ -812,10 +813,7 @@ function New-ZoomMeeting {
         catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
-        finally {
-            Write-Output $response
-        }
-        
-        #Write-Output $requestBody | ConvertTo-Json | Set-Clipboard
+
+        Write-Output $response
     }
 }

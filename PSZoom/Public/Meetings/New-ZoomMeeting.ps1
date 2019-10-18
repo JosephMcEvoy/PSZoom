@@ -804,7 +804,7 @@ function New-ZoomMeeting {
         }
   
         #### Misc Settings End #####
-        
+
         $requestBody = ConvertTo-Json $requestBody -Depth 10
 
         try {

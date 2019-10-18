@@ -1,6 +1,6 @@
 # PSZoom #
 - - - - 
-A Powershell wrapper to interface with the Zoom Api (Zoom Video Communications). 
+PSZoom is a Powershell wrapper to interface with the Zoom Api (Zoom Video Communications). 
 
 # Getting Started #
 ## Using PowershellGallery ##

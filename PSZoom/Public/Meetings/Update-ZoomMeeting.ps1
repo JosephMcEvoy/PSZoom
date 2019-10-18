@@ -6,7 +6,7 @@ Update the details of a meeting.
 Update the details of a meeting.
 .PARAMETER MeetingId
 The meeting ID.
-.PARAMETER OcurrenceId
+.PARAMETER OccurrenceId
 Meeting Occurrence id. Support change of agenda, start_time, duration, settings: {host_video, participant_video, join_before_host, mute_upon_entry, waiting_room, auto_recording}
 .PARAMETER ScheduleFor
 Email or userid if you want to schedule meeting for another user.
@@ -97,8 +97,8 @@ None - No registration required (2)
 .PARAMETER RegistrationType
 Registration type. Used for recurring meeting with fixed time only. 
 RegisterOnceAndAttendAll' - Attendees register once and can attend any of the occurrences.(1)
-RegisterForEachOccurence' - Attendees need to register for each occurrence to attend.(2)
-RegisterOnceAndChooseOccurences' - Attendees register once and can choose one or more occurrences to attend.(3)
+RegisterForEachoccurrence' - Attendees need to register for each occurrence to attend.(2)
+RegisterOnceAndChooseoccurrences' - Attendees register once and can choose one or more occurrences to attend.(3)
 .PARAMETER Audio
 Determine how participants can join the audio portion of the meeting.<br>`both` - Both Telephony and VoIP.<br>`telephony` - Telephony only.<br>`voip` - VoIP only.
 .PARAMETER AutoRecording
@@ -125,14 +125,13 @@ List of global dial-in numbers. This is an array of objects. Format:
     [string]'city'         = 'Sao Paulo'
     [string]'number'       = '+12332357613'
     [string]'type'         = <Type of number>
-.OUTPUTS
 .LINK
+https://marketplace.zoom.us/docs/api-reference/zoom-api/meetings/meetingupdate
 .PARAMETER ApiKey
 The API key.
 .PARAMETER ApiSecret
 The API secret.
 #>
-. "$PSScriptRoot\Get-ZoomMeeting.ps1"
 
 function Update-ZoomMeeting {
   [CmdletBinding(DefaultParameterSetName="Instant")]
@@ -150,8 +149,8 @@ function Update-ZoomMeeting {
         Position=1,
         ValueFromPipelineByPropertyName = $True
     )]
-    [Alias('ocurrence_ids')]
-    [string]$OcurrenceIds,
+    [Alias('occurrence_id')]
+    [string]$OccurrenceId,
 
     [Parameter(ValueFromPipelineByPropertyName = $True)]
     [ValidateNotNullOrEmpty()]
@@ -262,7 +261,7 @@ function Update-ZoomMeeting {
     [string]$ApprovalType,
 
     [Parameter(ValueFromPipelineByPropertyName = $True)]
-    [ValidateSet('RegisterOnceAndAttendAll', 'RegisterForEachOccurence', 'RegisterOnceAndChooseOccurences', 0, 1, 2)]
+    [ValidateSet('RegisterOnceAndAttendAll', 'RegisterForEachoccurrence', 'RegisterOnceAndChooseoccurrences', 0, 1, 2)]
     [Alias('registration_type')]
     [string]$RegistrationType,
 
@@ -319,23 +318,16 @@ function Update-ZoomMeeting {
   )
   
   begin {
-    $Uri = "https://api.zoom.us/v2/meetings/$MeetingId}"
-
-    #Get Zoom Api Credentials
-    if (-not $ApiKey -or -not $ApiSecret) {
-        $ApiCredentials = Get-ZoomApiCredentials
-        $ApiKey = $ApiCredentials.ApiKey
-        $ApiSecret = $ApiCredentials.ApiSecret
-    }
-
     #Generate Headers with JWT (JSON Web Token)
     $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
   }
   
   process {
-    if ($PSBoundParameters.ContainsKey('OcurrenceIds')) {
+    $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId"
+
+    if ($PSBoundParameters.ContainsKey('OccurrenceId')) {
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-        $query.Add('occurence_id', $OcurrenceIds)
+        $query.Add('occurrence_id', $OccurrenceId)
         $Request.Query = $query.ToString()
     }
 
@@ -349,7 +341,7 @@ function Update-ZoomMeeting {
     }
 
     #The following parameters are added by default and are added to the request body
-    $RequestBody = @{
+    $requestBody = @{
         'api_key'      = $ApiKey
         'api_secret'   = $ApiSecret
     }
@@ -368,10 +360,10 @@ function Update-ZoomMeeting {
     #Removes parameter if not provided in function call.
     $OptionalParameters = Remove-NonPSBoundParameters($OptionalParameters)
 
-    #Adds parameters to RequestBody
+    #Adds parameters to requestBody
     foreach ($Key in $OptionalParameters.Keys) {
         if ($OptionalParameters.$Key -gt 0) {
-            $RequestBody.Add($Key, $OptionalParameters.$Key)
+            $requestBody.Add($Key, $OptionalParameters.$Key)
         }
     }
 
@@ -379,8 +371,8 @@ function Update-ZoomMeeting {
     if ($PSBoundParameters.ContainsKey('RegistrationType')) {
         $RegistrationType = switch ($RegistrationType) {
             'RegisterOnceAndAttendAll' { '1' }
-            'RegisterForEachOccurence' { '2' }
-            'RegisterOnceAndChooseOccurences' { '3' }
+            'RegisterForEachoccurrence' { '2' }
+            'RegisterOnceAndChooseoccurrences' { '3' }
         }
     }
 
@@ -446,8 +438,8 @@ function Update-ZoomMeeting {
     if ($PSBoundParameters.ContainsKey('RegistrationType')) {
         $RegistrationType = switch ($RegistrationType) {
             'RegisterOnceAndAttendAll' { '1' }
-            'RegisterForEachOccurence' { '2' }
-            'RegisterOnceAndChooseOccurences' { '3' }
+            'RegisterForEachoccurrence' { '2' }
+            'RegisterOnceAndChooseoccurrences' { '3' }
         }
     }
 
@@ -492,15 +484,17 @@ function Update-ZoomMeeting {
         'tracking_fields' = $TrackingFields
     }
 
-    #Add objects to RequestBody if not empty.
+    #Add objects to requestBody if not empty.
     foreach ($Key in $allObjects.Keys) {
-        if ($allObjects.$Key -gt 0) {
-            $RequestBody.Add($Key, $allObjects.$Key)
+        if ($allObjects.$Key.Count -gt 0) {
+            $requestBody.Add($Key, $allObjects.$Key)
         }
     }
 
+    $requestBody = ConvertTo-Json $requestBody -Depth 10
+
     try {
-        $response = Invoke-RestMethod -Uri $Uri -Headers $Headers -Body ($RequestBody | ConvertTo-Json) -Method Patch
+        $response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body $requestBody -Method Patch
     } catch {
         Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
     }

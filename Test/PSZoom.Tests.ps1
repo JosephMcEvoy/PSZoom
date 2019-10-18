@@ -5,9 +5,9 @@ $ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
 
 
 #Using these variables for local testing
-#PSVersion = $PSVersionTable.PSVersion.Major
-#ModuleName = 'PSZoom'
-#ModulePath = "d:\dev\$ModuleName\$ModuleName"
+#$PSVersion = $PSVersionTable.PSVersion.Major
+#$ModuleName = 'PSZoom'
+#$ModulePath = "d:\dev\$ModuleName\$ModuleName"
 
 # Verbose output for non-master builds on appveyor. Handy for troubleshooting. Splat @Verbose against commands as needed (here or in pester tests).
 $Verbose = @{ }
@@ -56,18 +56,21 @@ Mock -ModuleName $ModuleName Invoke-RestMethod {
 
 
 #Additional variables to use when testing
-$AssistantId  = 'TestAssistantId'
+$AssistantId = 'TestAssistantId'
 $AssistantId2 = 'TestAssistantId2'
-$UserEmail    = 'TestEmail@test.com'
-$UserId       = 'TestUserId@test.com'
-$UserId2      = 'TestUserId2@test.com'
-$GroupId      = 'TestGroupId'
-$MeetingId    = 1234567890
+$UserEmail = 'TestEmail@test.com'
+$UserId = 'TestUserId@test.com'
+$UserId2 = 'TestUserId2@test.com'
+$GroupId = 'TestGroupId'
+$MeetingId = 1234567890
 $MeetingUuid = '123456789'
-$OccurenceId  = 987654321
-$PageNumber   = 1
-$PageSize     = 300
-$PollId       = '987654321'
+$OccurrenceId = 987654321
+$PageNumber = 1
+$PageSize = 300
+$PollId = '987654321'
+$StreamUrl = 'http://www.streamurltest.com'
+$StreamKey = 'TestStreamKey'
+$PageUrl = 'http://www.pageurltest.com'
 $ApiKeySecret = @{
     ApiKey    = 'TestApiKey'
     ApiSecret = 'TestApiSecret'
@@ -680,7 +683,7 @@ Describe 'Update-ZoomUserPassword' {
         ]
       }'
 
-    $request = Update-ZoomUserPassword -UserId $UserId -password 'testpassword'  @ApiKeySecret
+    $request = Update-ZoomUserpassword -UserId $UserId -password 'testpassword'  @ApiKeySecret
 
     It 'Uses the correct method' {
         $request.Method | Should Be 'PUT'
@@ -1817,27 +1820,27 @@ Describe 'Add-ZoomMeetingRegistrant' {
 }
 
 Describe 'Get-ZoomEndedMeetingInstances' {
-  $request = Get-ZoomEndedMeetingInstances -MeetingId $MeetingId @ApiKeySecret
+    $request = Get-ZoomEndedMeetingInstances -MeetingId $MeetingId @ApiKeySecret
 
-  It 'Uses the correct method' {
-      $request.Method | Should Be 'GET'
-  }
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'GET'
+    }
 
-  It 'Uses the correct URI and path parameter' {
-      $request.Uri | Should be "https://api.zoom.us/v2/past_meetings/$MeetingId/instances"
-  }
+    It 'Uses the correct URI and path parameter' {
+        $request.Uri | Should be "https://api.zoom.us/v2/past_meetings/$MeetingId/instances"
+    }
 }
 
 Describe 'Get-ZoomMeeting' {
-  $request = Get-ZoomMeeting -MeetingId $MeetingId -OcurrenceId $OccurenceId @ApiKeySecret
+    $request = Get-ZoomMeeting -MeetingId $MeetingId -OccurrenceId $OccurrenceId @ApiKeySecret
 
-  It 'Uses the correct method' {
-      $request.Method | Should Be 'GET'
-  }
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'GET'
+    }
 
-  It 'Uses the correct uri and query parameter' {
-      $request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)?occurrence_id=$($OccurenceId)"
-  }
+    It 'Uses the correct uri and query parameter' {
+        $request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)?occurrence_id=$($OccurrenceId)"
+    }
 }   
 
 Describe 'Get-ZoomMeetingInvitation' {
@@ -1850,7 +1853,7 @@ Describe 'Get-ZoomMeetingInvitation' {
     It 'Uses the correct uri and query parameter' {
         $request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)/invitation"
     }
-  }
+}
 
 Describe 'Get-ZoomMeetingPoll' {
     $request = Get-ZoomMeetingPoll -MeetingId $MeetingId -PollId $PollId @ApiKeySecret
@@ -1971,7 +1974,512 @@ Describe 'Get-ZoomRegistrationQuestions' {
         $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants/questions"
     }
 }
-Describe 'New-ZoomMeeting' {}
+Describe 'New-ZoomMeeting' {
+    $schema = '{
+    "type": "object",
+    "description": "Meeting object",
+    "properties": {
+      "uuid": {
+        "type": "string",
+        "description": "Unique meeting ID. Each meeting instance will generate its own Meeting UUID."
+      },
+      "id": {
+        "description": "Meeting ID: also known as the meeting number.",
+        "type": "integer"
+      },
+      "host_id": {
+        "type": "string",
+        "description": "ID of the user who is set as host of meeting."
+      },
+      "topic": {
+        "type": "string",
+        "description": "Meeting topic"
+      },
+      "type": {
+        "type": "integer",
+        "description": "Meeting Type",
+        "default": 2,
+        "enum": [
+          1,
+          2,
+          3,
+          8
+        ],
+        "x-enum-descriptions": [
+          "Instant Meeting",
+          "Scheduled Meeting",
+          "Recurring Meeting with no fixed time",
+          "Recurring Meeting with fixed time"
+        ]
+      },
+      "start_time": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Meeting start time"
+      },
+      "duration": {
+        "type": "integer",
+        "description": "Meeting duration"
+      },
+      "timezone": {
+        "type": "string",
+        "description": "Timezone to format start_time"
+      },
+      "created_at": {
+        "type": "string",
+        "format": "date-time",
+        "description": "The date and time at which this meeting was created."
+      },
+      "agenda": {
+        "type": "string",
+        "description": "Agenda"
+      },
+      "start_url": {
+        "type": "string",
+        "description": "Start url"
+      },
+      "join_url": {
+        "type": "string",
+        "description": "Join url"
+      },
+      "password": {
+        "type": "string",
+        "description": "Meeting password. Password may only contain the following characters: `[a-z A-Z 0-9 @ - _ * !]`"
+      },
+      "h323_password": {
+        "type": "string",
+        "description": "H.323/SIP room system password"
+      },
+      "pmi": {
+        "type": "integer",
+        "description": "Personal Meeting Id. Only used for scheduled meetings and recurring meetings with no fixed time.",
+        "format": "int64"
+      },
+      "tracking_fields": {
+        "type": "array",
+        "description": "Tracking fields",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string",
+              "description": "Tracking fields type"
+            },
+            "value": {
+              "type": "string",
+              "description": "Tracking fields value"
+            }
+          }
+        }
+      },
+      "occurrences": {
+        "type": "array",
+        "description": "Array of occurrence objects.",
+        "items": {
+          "type": "object",
+          "description": "Occurence object.",
+          "properties": {
+            "occurrence_id": {
+              "type": "integer",
+              "description": "Occurrence ID."
+            },
+            "start_time": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Start time."
+            },
+            "duration": {
+              "type": "integer",
+              "description": "Duration."
+            },
+            "status": {
+              "type": "string",
+              "description": "Occurrence status."
+            }
+          }
+        }
+      },
+      "settings": {
+        "type": "object",
+        "description": "Meeting settings.",
+        "properties": {
+          "host_video": {
+            "type": "boolean",
+            "description": "Start video when the host joins the meeting."
+          },
+          "participant_video": {
+            "type": "boolean",
+            "description": "Start video when participants join the meeting."
+          },
+          "cn_meeting": {
+            "type": "boolean",
+            "description": "Host meeting in China.",
+            "default": false
+          },
+          "in_meeting": {
+            "type": "boolean",
+            "description": "Host meeting in India.",
+            "default": false
+          },
+          "join_before_host": {
+            "type": "boolean",
+            "description": "Allow participants to join the meeting before the host starts the meeting. Only used for scheduled or recurring meetings.",
+            "default": false
+          },
+          "mute_upon_entry": {
+            "type": "boolean",
+            "description": "Mute participants upon entry.",
+            "default": false
+          },
+          "watermark": {
+            "type": "boolean",
+            "description": "Add watermark when viewing a shared screen.",
+            "default": false
+          },
+          "use_pmi": {
+            "type": "boolean",
+            "description": "Use a personal meeting ID. Only used for scheduled meetings and recurring meetings with no fixed time.",
+            "default": false
+          },
+          "approval_type": {
+            "type": "integer",
+            "default": 2,
+            "description": "`0` - Automatically approve.<br>`1` - Manually approve.<br>`2` - No registration required.",
+            "enum": [
+              0,
+              1,
+              2
+            ],
+            "x-enum-descriptions": [
+              "Automatically Approve",
+              "Manually Approve",
+              "No Registration Required"
+            ]
+          },
+          "registration_type": {
+            "type": "integer",
+            "description": "Registration type. Used for recurring meeting with fixed time only. <br>`1` Attendees register once and can attend any of the occurrences.<br>`2` Attendees need to register for each occurrence to attend.<br>`3` Attendees register once and can choose one or more occurrences to attend.",
+            "default": 1,
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "x-enum-descriptions": [
+              "Attendees register once and can attend any of the occurrences",
+              "Attendees need to register for each occurrence to attend",
+              "Attendees register once and can choose one or more occurrences to attend"
+            ]
+          },
+          "audio": {
+            "type": "string",
+            "description": "Determine how participants can join the audio portion of the meeting.<br>`both` - Both Telephony and VoIP.<br>`telephony` - Telephony only.<br>`voip` - VoIP only.",
+            "default": "both",
+            "enum": [
+              "both",
+              "telephony",
+              "voip"
+            ],
+            "x-enum-descriptions": [
+              "Both Telephony and VoIP",
+              "Telephony only",
+              "VoIP only"
+            ]
+          },
+          "auto_recording": {
+            "type": "string",
+            "description": "Automatic recording:<br>`local` - Record on local.<br>`cloud` -  Record on cloud.<br>`none` - Disabled.",
+            "default": "none",
+            "enum": [
+              "local",
+              "cloud",
+              "none"
+            ],
+            "x-enum-descriptions": [
+              "Record to local device",
+              "Record to cloud",
+              "No Recording"
+            ]
+          },
+          "enforce_login": {
+            "type": "boolean",
+            "description": "Only signed in users can join this meeting."
+          },
+          "enforce_login_domains": {
+            "type": "string",
+            "description": "Only signed in users with specified domains can join meetings."
+          },
+          "alternative_hosts": {
+            "type": "string",
+            "description": "Alternative hosts emails or IDs: multiple values separated by a comma."
+          },
+          "close_registration": {
+            "type": "boolean",
+            "description": "Close registration after event date",
+            "default": false
+          },
+          "waiting_room": {
+            "type": "boolean",
+            "description": "Enable waiting room",
+            "default": false
+          },
+          "global_dial_in_countries": {
+            "type": "array",
+            "description": "List of global dial-in countries",
+            "items": {
+              "type": "string"
+            }
+          },
+          "global_dial_in_numbers": {
+            "type": "array",
+            "description": "Global Dial-in Countries/Regions",
+            "items": {
+              "type": "object",
+              "properties": {
+                "country": {
+                  "type": "string",
+                  "description": "Country code. For example, BR."
+                },
+                "country_name": {
+                  "type": "string",
+                  "description": "Full name of country. For example, Brazil."
+                },
+                "city": {
+                  "type": "string",
+                  "description": "City of the number, if any. For example, Chicago."
+                },
+                "number": {
+                  "type": "string",
+                  "description": "Phone number. For example, +1 2332357613."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Type of number. ",
+                  "enum": [
+                    "toll",
+                    "tollfree"
+                  ]
+                }
+              }
+            }
+          },
+          "contact_name": {
+            "type": "string",
+            "description": "Contact name for registration"
+          },
+          "contact_email": {
+            "type": "string",
+            "description": "Contact email for registration"
+          },
+          "registrants_confirmation_email": {
+            "type": "boolean",
+            "description": "Send confirmation email to registrants"
+          }
+        }
+      },
+      "recurrence": {
+        "type": "object",
+        "description": "Recurrence object.",
+        "properties": {
+          "type": {
+            "type": "integer",
+            "description": "Recurrence meeting types:<br>`1` - Daily.<br>`2` - Weekly.<br>`3` - Monthly.",
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "x-enum-descriptions": [
+              "Daily",
+              "Weekly",
+              "Monthly"
+            ]
+          },
+          "repeat_interval": {
+            "type": "integer",
+            "description": "At which interval should the meeting repeat? For a daily meeting theres a maximum of 90 days. For a weekly meeting there is a maximum of 12 weeks. For a monthly meeting there is a maximum of 3 months."
+          },
+          "monthly_day": {
+            "type": "integer",
+            "description": "Day in the month the meeting is to be scheduled. The value range is from 1 to 31."
+          },
+          "monthly_week": {
+            "type": "integer",
+            "description": "The week a meeting will recur each month.<br>`-1` - Last week.<br>`1` - First week.<br>`2` - Second week.<br>`3` - Third week.<br>`4` - Fourth week.",
+            "enum": [
+              -1,
+              1,
+              2,
+              3,
+              4
+            ],
+            "x-enum-descriptions": [
+              "Last week",
+              "First week",
+              "Second week",
+              "Third week",
+              "Fourth week"
+            ]
+          },
+          "monthly_week_day": {
+            "type": "integer",
+            "description": "The weekday a meeting should recur each month.<br>`1` - Sunday.<br>`2` - Monday.<br>`3` - Tuesday.<br>`4` -  Wednesday.<br>`5` - Thursday.<br>`6` - Friday.<br>`7` - Saturday.",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "x-enum-descriptions": [
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ]
+          },
+          "end_times": {
+            "type": "integer",
+            "description": "Select how many times the meeting will recur before it is canceled. (Cannot be used with \"end_date_time\".)",
+            "default": 1,
+            "maximum": 50
+          },
+          "end_date_time": {
+            "type": "string",
+            "description": "Select a date the meeting will recur before it is canceled. Should be in UTC time, such as 2017-11-25T12:00:00Z. (Cannot be used with \"end_times\".)",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }'
+
+    #Mandatory Parameters for all parameter types
+    $mandatoryParams = @{    
+        Topic  = 'Test Topic'
+        UserId = $UserId
+    }
+
+    #Optional Parameters
+    $optionalparams = @{
+        Schedulefor = 'TestUser@Company.com'
+        Timezone    = 'Timezone'
+        Password    = 'TestPassword'
+        Agenda      = 'TestAgenda'
+        #Trackingfields = 'TestTrackingFields'
+    }
+
+    $settingsparams = @{
+        Alternativehosts      = 'alternativehosttest@company.com'
+        Approvaltype          = 'automatic'
+        Audio                 = 'both'
+        Autorecording         = 'local'
+        Closeregistration     = $True
+        Cnmeeting             = $True
+        Contactemail          = $True
+        Contactname           = $True
+        Enforcelogin          = $True
+        Enforcelogindomains   = 'enforcelogindomainstest'
+        Globaldialincountries = $True
+        Hostvideo             = $True
+        Inmeeting             = $True
+        Joinbeforehost        = $True
+        Muteuponentry         = $True
+        Registrationtype      = 'RegisterOnceAndAttendAll'
+        Usepmi                = $True
+        Waitingroom           = $True
+        Watermark             = $True
+    }
+
+    Context 'Instant Meeting' {
+        $request = New-ZoomMeeting @mandatoryParams @optionalparams @settingsparams @ApiKeySecret
+    
+        It 'Uses the correct method' {
+            $request.Method | Should Be 'POST'
+        }
+  
+        It 'Uses the correct URI and path parameter' {
+            $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/meetings"
+        }
+
+        It 'Validates against the JSON schema' {
+            Test-Json -Json $request.Body -Schema $schema | Should Be $True
+        }
+    }
+
+    $scheduleParams = @{
+        StartTime = '2019-10-18T15:00:00Z'
+        Duration = 60
+    }
+
+    Context 'Scheduled Meeting' {
+        $request = New-ZoomMeeting @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
+
+        It 'Validates against the JSON schema' {
+            Test-Json -Json $request.Body -Schema $schema | Should Be $True
+        }
+    }
+
+    Context 'Recurrence No Fixed Time Meeting' {
+        $params = @{
+            RecurrenceNoFixedTime = $True
+        }
+  
+        $request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @ApiKeySecret
+
+        It 'Validates against the JSON schema' {
+            Test-Json -Json $request.Body -Schema $schema | Should Be $True
+        }
+    }
+
+    Context 'Recurrence By Day Meeting' {
+        $params = @{
+            EndTimes = 2
+            Daily = $True
+            RepeatInterval = 1
+        }
+  
+        $request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
+
+        It 'Validates against the JSON schema' {
+            Test-Json -Json $request.Body -Schema $schema | Should Be $True
+        }
+    }
+
+    Context 'Recurrence By Week Meeting' {
+        $params = @{
+            WeeklyDays = 'Sunday', 'Monday', 'Tuesday'
+            EndDateTime = '2019-11-25T12:00:00Z'
+            RepeatInterval = 2
+        }
+  
+        $request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
+
+        It 'Validates against the JSON schema' {
+            Test-Json -Json $request.Body -Schema $schema | Should Be $True
+        }
+    }
+
+    Context 'Recurrence By MonthDay Meeting' {
+        $params = @{
+            MonthlyWeek = 'FirstWeek'
+            MonthlyWeekDay = 'Tuesday'
+            EndDateTime = '2019-11-25T12:00:00Z'
+            RepeatInterval = 2
+        }
+  
+        $request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
+
+        It 'Validates against the JSON schema' {
+            Test-Json -Json $request.Body -Schema $schema | Should Be $True
+        }
+    }
+}
 
 Describe 'Remove-ZoomMeeting' {
     $ScheduleForReminder = 'TestReminder'
@@ -2007,11 +2515,557 @@ Describe 'Remove-ZoomMeetingPoll' {
         $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
     }
 }
-Describe 'Update-ZoomMeeting' {}
+Describe 'Update-ZoomMeeting' {
+    $schema = '{
+    "type": "object",
+    "description": "Meeting object",
+    "properties": {
+      "schedule_for": {
+        "type": "string",
+        "description": "Email or userId if you want to schedule meeting for another user."
+      },
+      "topic": {
+        "type": "string",
+        "description": "Meeting topic."
+      },
+      "type": {
+        "type": "integer",
+        "description": "Meeting Types:<br>`1` - Instant meeting.<br>`2` - Scheduled meeting.<br>`3` - Recurring meeting with no fixed time.<br>`8` - Recurring meeting with a fixed time.",
+        "default": 2,
+        "enum": [
+          1,
+          2,
+          3,
+          8
+        ],
+        "x-enum-descriptions": [
+          "Instant Meeting",
+          "Scheduled Meeting",
+          "Recurring Meeting with no fixed time",
+          "Recurring Meeting with fixed time"
+        ]
+      },
+      "start_time": {
+        "type": "string",
+        "format": "date-time",
+      },
+      "duration": {
+        "type": "integer",
+        "description": "Meeting duration (minutes). Used for scheduled meetings only."
+      },
+      "timezone": {
+        "type": "string",
+        "description": "Time zone to format start_time. For example, \"America/Los_Angeles\". For scheduled meetings only. Please reference our [time zone](#timezones) list for supported time zones and their formats."
+      },
+      "password": {
+        "type": "string",
+        "description": "Password to join the meeting. Password may only contain the following characters: [a-z A-Z 0-9 @ - _ * !]. Max of 10 characters.",
+        "maxLength": 10
+      },
+      "agenda": {
+        "type": "string",
+        "description": "Meeting description."
+      },
+      "tracking_fields": {
+        "type": "array",
+        "description": "Tracking fields",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string",
+              "description": "Tracking fields type"
+            },
+            "value": {
+              "type": "string",
+              "description": "Tracking fields value"
+            }
+          }
+        }
+      },
+      "recurrence": {
+        "type": "object",
+        "description": "Recurrence object.",
+        "properties": {
+          "type": {
+            "type": "integer",
+            "description": "Recurrence meeting types:<br>`1` - Daily.<br>`2` - Weekly.<br>`3` - Monthly.",
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "x-enum-descriptions": [
+              "Daily",
+              "Weekly",
+              "Monthly"
+            ]
+          },
+          "repeat_interval": {
+            "type": "integer",
+            "description": "At which interval should the meeting repeat? For a daily meeting theres a maximum of 90 days. For a weekly meeting there is a maximum of 12 weeks. For a monthly meeting there is a maximum of 3 months."
+          },
+          "weekly_days": {
+            "type": "integer",
+            "description": "Days of the week the meeting should repeat. \nNote: Multiple values should be separated by a comma. <br>`1`  - Sunday. <br>`2` - Monday.<br>`3` - Tuesday.<br>`4` -  Wednesday.<br>`5` -  Thursday.<br>`6` - Friday.<br>`7` - Saturday.",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "x-enum-descriptions": [
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ]
+          },
+          "monthly_day": {
+            "type": "integer",
+            "description": "Day in the month the meeting is to be scheduled. The value range is from 1 to 31."
+          },
+          "monthly_week": {
+            "type": "integer",
+            "description": "The week a meeting will recur each month.<br>`-1` - Last week.<br>`1` - First week.<br>`2` - Second week.<br>`3` - Third week.<br>`4` - Fourth week.",
+            "enum": [
+              -1,
+              1,
+              2,
+              3,
+              4
+            ],
+            "x-enum-descriptions": [
+              "Last week",
+              "First week",
+              "Second week",
+              "Third week",
+              "Fourth week"
+            ]
+          },
+          "monthly_week_day": {
+            "type": "integer",
+            "description": "The weekday a meeting should recur each month.<br>`1` - Sunday.<br>`2` - Monday.<br>`3` - Tuesday.<br>`4` -  Wednesday.<br>`5` - Thursday.<br>`6` - Friday.<br>`7` - Saturday.",
+            "enum": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "x-enum-descriptions": [
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ]
+          },
+          "end_times": {
+            "type": "integer",
+            "description": "Select how many times the meeting will recur before it is canceled. (Cannot be used with \"end_date_time\".)",
+            "default": 1,
+            "maximum": 50
+          },
+          "end_date_time": {
+            "type": "string",
+            "description": "Select a date the meeting will recur before it is canceled. Should be in UTC time, such as 2017-11-25T12:00:00Z. (Cannot be used with \"end_times\".)",
+            "format": "date-time"
+          }
+        }
+      },
+      "settings": {
+        "type": "object",
+        "description": "Meeting settings.",
+        "properties": {
+          "host_video": {
+            "type": "boolean",
+            "description": "Start video when the host joins the meeting."
+          },
+          "participant_video": {
+            "type": "boolean",
+            "description": "Start video when participants join the meeting."
+          },
+          "cn_meeting": {
+            "type": "boolean",
+            "description": "Host meeting in China.",
+            "default": false
+          },
+          "in_meeting": {
+            "type": "boolean",
+            "description": "Host meeting in India.",
+            "default": false
+          },
+          "join_before_host": {
+            "type": "boolean",
+            "description": "Allow participants to join the meeting before the host starts the meeting. Only used for scheduled or recurring meetings.",
+            "default": false
+          },
+          "mute_upon_entry": {
+            "type": "boolean",
+            "description": "Mute participants upon entry.",
+            "default": false
+          },
+          "watermark": {
+            "type": "boolean",
+            "description": "Add watermark when viewing a shared screen.",
+            "default": false
+          },
+          "use_pmi": {
+            "type": "boolean",
+            "description": "Use a personal meeting ID. Only used for scheduled meetings and recurring meetings with no fixed time.",
+            "default": false
+          },
+          "approval_type": {
+            "type": "integer",
+            "default": 2,
+            "description": "`0` - Automatically approve.<br>`1` - Manually approve.<br>`2` - No registration required.",
+            "enum": [
+              0,
+              1,
+              2
+            ],
+            "x-enum-descriptions": [
+              "Automatically Approve",
+              "Manually Approve",
+              "No Registration Required"
+            ]
+          },
+          "registration_type": {
+            "type": "integer",
+            "description": "Registration type. Used for recurring meeting with fixed time only. <br>`1` Attendees register once and can attend any of the occurrences.<br>`2` Attendees need to register for each occurrence to attend.<br>`3` Attendees register once and can choose one or more occurrences to attend.",
+            "default": 1,
+            "enum": [
+              1,
+              2,
+              3
+            ],
+            "x-enum-descriptions": [
+              "Attendees register once and can attend any of the occurrences",
+              "Attendees need to register for each occurrence to attend",
+              "Attendees register once and can choose one or more occurrences to attend"
+            ]
+          },
+          "audio": {
+            "type": "string",
+            "description": "Determine how participants can join the audio portion of the meeting.<br>`both` - Both Telephony and VoIP.<br>`telephony` - Telephony only.<br>`voip` - VoIP only.",
+            "default": "both",
+            "enum": [
+              "both",
+              "telephony",
+              "voip"
+            ],
+            "x-enum-descriptions": [
+              "Both Telephony and VoIP",
+              "Telephony only",
+              "VoIP only"
+            ]
+          },
+          "auto_recording": {
+            "type": "string",
+            "description": "Automatic recording:<br>`local` - Record on local.<br>`cloud` -  Record on cloud.<br>`none` - Disabled.",
+            "default": "none",
+            "enum": [
+              "local",
+              "cloud",
+              "none"
+            ],
+            "x-enum-descriptions": [
+              "Record to local device",
+              "Record to cloud",
+              "No Recording"
+            ]
+          },
+          "enforce_login": {
+            "type": "boolean",
+            "description": "Only signed in users can join this meeting."
+          },
+          "enforce_login_domains": {
+            "type": "string",
+            "description": "Only signed in users with specified domains can join meetings."
+          },
+          "alternative_hosts": {
+            "type": "string",
+            "description": "Alternative hosts emails or IDs: multiple values separated by a comma."
+          },
+          "close_registration": {
+            "type": "boolean",
+            "description": "Close registration after event date",
+            "default": false
+          },
+          "waiting_room": {
+            "type": "boolean",
+            "description": "Enable waiting room",
+            "default": false
+          },
+          "global_dial_in_countries": {
+            "type": "array",
+            "description": "List of global dial-in countries",
+            "items": {
+              "type": "string"
+            }
+          },
+          "global_dial_in_numbers": {
+            "type": "array",
+            "description": "Global Dial-in Countries/Regions",
+            "items": {
+              "type": "object",
+              "properties": {
+                "country": {
+                  "type": "string",
+                  "description": "Country code. For example, BR."
+                },
+                "country_name": {
+                  "type": "string",
+                  "description": "Full name of country. For example, Brazil."
+                },
+                "city": {
+                  "type": "string",
+                  "description": "City of the number, if any. For example, Chicago."
+                },
+                "number": {
+                  "type": "string",
+                  "description": "Phone number. For example, +1 2332357613."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Type of number. ",
+                  "enum": [
+                    "toll",
+                    "tollfree"
+                  ]
+                }
+              }
+            }
+          },
+          "contact_name": {
+            "type": "string",
+            "description": "Contact name for registration"
+          },
+          "contact_email": {
+            "type": "string",
+            "description": "Contact email for registration"
+          },
+          "registrants_confirmation_email": {
+            "type": "boolean",
+            "description": "Send confirmation email to registrants"
+          }
+        }
+      }
+    }
+  }'
 
-Describe 'Update-ZoomMeetingLiveStream' {}
+    $params = @{
+        MeetingId    = $MeetingId
+        OccurrenceId = $OccurrenceId
+    }
+  
+    $request = Update-ZoomMeeting @params @ApiKeySecret
 
-Describe 'Update-ZoomMeetingPoll' {}
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'PATCH'
+    }
+
+    It 'Uses the query parameter' {
+        $request.Uri.Query | Should Be "?occurrence_id=$OccurrenceId"
+    }
+
+    It 'Uses the correct URI and path parameter' {
+        $Request.Uri.Scheme | Should Be 'https'
+        $Request.Uri.Authority | Should Be 'api.zoom.us'
+        $Request.Uri.AbsolutePath | Should Be "/v2/meetings/$MeetingId"
+    }
+}
+
+Describe 'Update-ZoomMeetingLiveStreamStatus' {
+    $schema = '{
+    "type": "object",
+    "description": "Meeting live stream status.",
+    "properties": {
+      "action": {
+        "type": "string",
+        "description": "Action.",
+        "enum": [
+          "start",
+          "stop"
+        ],
+        "x-enum-descriptions": [
+          "Start a meeting live stream.",
+          "Stop a meeting live stream."
+        ]
+      },
+      "settings": {
+        "type": "object",
+        "properties": {
+          "active_speaker_name": {
+            "type": "boolean",
+            "description": "Display the name of the active speaker during a livestream."
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "description": "Live stream display name."
+          }
+        }
+      }
+    }
+  }'
+  
+    $params = @{
+        MeetingId = $MeetingId
+        StreamUrl = $StreamUrl
+        StreamKey = $StreamKey
+        PageUrl   = $PageUrl
+    }
+  
+    $request = Update-ZoomMeetingLiveStreamStatus @params @ApiKeySecret
+
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'PATCH'
+    }
+
+    It 'Uses the correct URI and path parameter' {
+        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/livestream/status"
+    }
+
+    It 'Validates against the JSON schema' {
+        Test-Json -Json $request.Body -Schema $schema | Should Be $True
+    }
+}
+
+Describe 'Update-ZoomMeetingLiveStream' {
+    $schema = '{
+    "type": "object",
+    "description": "Meeting live stream.",
+    "properties": {
+      "stream_url": {
+        "type": "string",
+        "maxLength": 1024,
+        "description": "Streaming URL."
+      },
+      "stream_key": {
+        "type": "string",
+        "maxLength": 512,
+        "description": "Stream name and key."
+      },
+      "page_url": {
+        "type": "string",
+        "description": "The livestream page URL.",
+        "format": "uri",
+        "maxLength": 1024
+      }
+    },
+    "required": [
+      "stream_url",
+      "stream_key"
+    ]
+  }'
+  
+    $params = @{
+        MeetingId = $MeetingId
+        StreamUrl = $StreamUrl
+        StreamKey = $StreamKey
+        PageUrl   = $PageUrl
+    }
+
+    $request = Update-ZoomMeetingLiveStream @params @ApiKeySecret
+
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'PATCH'
+    }
+
+    It 'Uses the correct URI and path parameters' {
+        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/livestream"
+    }
+
+    It 'Validates against the JSON schema' {
+        Test-Json -Json $request.Body -Schema $schema | Should Be $True
+    }
+}
+
+Describe 'Update-ZoomMeetingPoll' {
+    $schema = '{
+    "type": "object",
+    "title": "Poll",
+    "description": "Poll",
+    "properties": {
+      "title": {
+        "type": "string",
+        "description": "Title for the poll."
+      },
+      "questions": {
+        "type": "array",
+        "description": "Array of Polls",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Question to be asked to the attendees."
+            },
+            "type": {
+              "type": "string",
+              "description": "Poll Question & Answer type:<br>`single` - Single choice<br>`mutliple` - Multiple choice",
+              "enum": [
+                "single",
+                "multiple"
+              ],
+              "x-enum-descriptions": [
+                "single answer",
+                "multiple answer"
+              ]
+            },
+            "answers": {
+              "type": "array",
+              "description": "Answers to the questions",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }'
+
+    $params = @{
+        MeetingId = $MeetingId
+        PollId    = $PollId
+        Title     = 'Test Poll Title'
+        Questions = @(
+            @{
+                'name'    = 'testname1'
+                'type'    = 'multiple'
+                'answers' = @('answer1', 'answer2')
+            }
+        )
+    }
+
+    $request = Update-ZoomMeetingPoll @params @ApiKeySecret
+
+    It 'Uses the correct method' {
+        $request.Method | Should Be 'PUT'
+    }
+
+    It 'Uses the correct URI and path parameters' {
+        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
+    }
+
+    It 'Validates against the JSON schema' {
+        Test-Json -Json $request.Body -Schema $schema | Should Be $True
+    }
+}
 
 Describe 'Update-ZoomMeetingRegistrationQuestions' {
     $schema = '{
@@ -2106,23 +3160,23 @@ Describe 'Update-ZoomMeetingRegistrationQuestions' {
       }'
 
     $params = @{
-        MeetingId     = $MeetingId
-        Questions  = @(
-            @{'FieldName' = 'Address'},
-            @{'FieldName' = 'City'}
+        MeetingId       = $MeetingId
+        Questions       = @(
+            @{'FieldName' = 'Address' },
+            @{'FieldName' = 'City' }
         )
-        CustomQuestions  = @(
+        CustomQuestions = @(
             @{
-                'title' = 'Title'
-                'type'  = 'single'
+                'title'    = 'Title'
+                'type'     = 'single'
                 'required' = $True
-                'answers' = ('Mr','Ms')
+                'answers'  = @('Mr', 'Ms')
             },
             @{
-                'title' = 'Favorite Color'
-                'type'  = 'short'
+                'title'    = 'Favorite Color'
+                'type'     = 'short'
                 'required' = $True
-          }
+            }
         )
     }
     
@@ -2182,13 +3236,13 @@ Describe 'Update-ZoomMeetingRegistrantStatus' {
       }'
 
     $params = @{
-        MeetingId     = $MeetingId
+        MeetingId    = $MeetingId
         OccurrenceId = $OccurrenceId
         Action       = 'approve'
         Registrants  = @(
-            @{'id'    = 'testid'},
-            @{'email' = 'testemail'},
-            @{'id'    = 'testid'; 'email' = 'testemail'}
+            @{'id' = 'testid' },
+            @{'email' = 'testemail' },
+            @{'id' = 'testid'; 'email' = 'testemail' }
         )
     }
 

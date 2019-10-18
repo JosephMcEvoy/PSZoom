@@ -52,11 +52,20 @@ function Update-ZoomMeetingPoll {
         [Alias('meeting_id')]
         [string]$MeetingId,
 
+        [Parameter(
+            Mandatory = $True, 
+            ValueFromPipeline = $True, 
+            ValueFromPipelineByPropertyName = $True,
+            Position = 0
+        )]
+        [Alias('poll_id')]
+        [string]$PollId,
+
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Title,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
-        [string[]]$Questions,
+        [hashtable[]]$Questions,
         
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -71,28 +80,30 @@ function Update-ZoomMeetingPoll {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/polls"
-        $RequestBody = @{}
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
+        $requestBody = @{}
 
         if ($PSBoundParameters.ContainsKey('Title')) {
-            $RequestBody.Add('title', $Title)
+            $requestBody.Add('title', $Title)
         }        
-
         
         if ($PSBoundParameters.ContainsKey('Questions')) {
-            $RequestBody.Add('questions', $Questions)
+            $requestBody.Add('questions', $Questions)
         }
 
+        $requestBody = ConvertTo-Json $requestBody -Depth 10 #Uses -Depth because the questions.answers array is flattened without it.
+
         try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method POST
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PUT
         } catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
-        
+
         Write-Output $response
     }
 }
 
+<#
 function New-ZoomMeetingPollQuestion {
     param (
         [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
@@ -115,3 +126,4 @@ function New-ZoomMeetingPollQuestion {
     }
     
 }
+#>

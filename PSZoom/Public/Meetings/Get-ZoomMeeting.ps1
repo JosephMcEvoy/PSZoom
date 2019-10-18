@@ -37,7 +37,7 @@ function Get-ZoomMeeting {
             Position=1
         )]
         [Alias('ocurrence_id')]
-        [string]$OcurrenceId,
+        [string]$OccurrenceId,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -56,8 +56,8 @@ function Get-ZoomMeeting {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
 
-        if ($PSBoundParameters.ContainsKey('OcurrenceId')) {
-            $query.Add('occurrence_id', $OcurrenceId)
+        if ($PSBoundParameters.ContainsKey('OccurrenceId')) {
+            $query.Add('occurrence_id', $OccurrenceId)
             $Request.Query = $query.toString()
         }        
         try {

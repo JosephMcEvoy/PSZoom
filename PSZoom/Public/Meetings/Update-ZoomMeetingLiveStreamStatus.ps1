@@ -15,10 +15,10 @@ The Api Secret.
 .EXAMPLE
 Update-ZoomMeetingLiveStream  123456789
 
-
+22
 #>
 
-function Update-ZoomMeetingLiveStream {
+function Update-ZoomMeetingLiveStreamStatus {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -30,18 +30,12 @@ function Update-ZoomMeetingLiveStream {
         [Alias('meeting_id')]
         [string]$MeetingId,
 
-        [Parameter(
-            ValueFromPipelineByPropertyName = $True,
-            Mandatory = $True
-        )]
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateLength(0, 1024)]
         [Alias('stream_url')]
         [string]$StreamUrl,
 
-        [Parameter(
-            ValueFromPipelineByPropertyName = $True,
-            Mandatory = $True
-        )]
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateLength(0, 512)]
         [Alias('stream_key')]
         [string]$StreamKey,
@@ -64,20 +58,25 @@ function Update-ZoomMeetingLiveStream {
     }
 
     process {
-        $uri = "https://api.zoom.us/v2/meetings/$MeetingId/livestream"
-        $requestBody = @{
-            'stream_url' = $StreamUrl
-            'stream_key' = $StreamKey
+        $Uri = "https://api.zoom.us/v2/meetings/$MeetingId/livestream/status"
+        $requestBody = @{}
+
+        if ($PSBoundParameters.ContainsKey('StreamUrl')) {
+            $requestBody.Add('stream_url', $StreamUrl)
+        }
+
+        if ($PSBoundParameters.ContainsKey('StreamKey')) {
+            $requestBody.Add('stream_key', $StreamKey)
         }
 
         if ($PSBoundParameters.ContainsKey('PageUrl')) {
             $requestBody.Add('page_url', $PageUrl)
         }
+        
+        $requestBody = $requestBody | ConvertTo-Json
 
-        $requestBody = ConvertTo-Json $requestBody
-                
         try {
-            $response = Invoke-RestMethod -Uri $uri -Headers $headers -Body $requestBody -Method PATCH
+            $response = Invoke-RestMethod -Uri $Uri -Headers $headers -Body $requestBody -Method PATCH
         } catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }

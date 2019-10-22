@@ -45,11 +45,15 @@ THe API secret.
 No output. Can use Passthru switch to pass UserId to output.
 
 .EXAMPLE`
+Update a user's name.
 Update-ZoomUser -UserId askywakler@thejedi.com -Type Pro -FirstName Anakin -LastName Skywalker -ApiKey $ApiKey -ApiSecret $ApiSecret
+
+.EXAMPLE
+Update the host key of all user's that have 'jedi' in their email.
+(Get-ZoomUsers -allpages) | select Email | ? {$_ -like '*jedi*'} | update-zoomuser -hostkey 001138
 
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userupdate
-
 
 #>
 

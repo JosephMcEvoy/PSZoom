@@ -143,14 +143,14 @@ function New-ZoomRoomMeeting {
             }
             
             $RequestBody = ConvertTo-Json $RequestBody -Depth 2
-<#
+
             try {
                 $response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body $RequestBody -Method POST
             } catch {
                 Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
             }
-#>
-            Write-Output $RequestBody
+
+            Write-Output $response
         }
     }
 }

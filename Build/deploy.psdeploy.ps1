@@ -10,7 +10,6 @@ if ( $env:BHModulePath -and
             To PSGallery
             WithOptions @{
                 ApiKey = $ENV:NugetApiKey
-                SkipAutomaticTags = $True
             }
         }
     }

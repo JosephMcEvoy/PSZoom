@@ -7,11 +7,12 @@
 #
 
 @{
+
     # Script module or binary module file associated with this manifest.
     RootModule = 'PSZoom.psm1'
     
     # Version number of this module.
-    ModuleVersion = '1.0.12'
+    ModuleVersion = '1.0.19'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -68,7 +69,8 @@
     # NestedModules = @()
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Add-ZoomGroupMember', 'Add-ZoomMeetingRegistrant', 'Add-ZoomUserAssistants', 'Connect-ZoomRoomMeeting', 'Disconnect-ZoomRoomMeeting', 'Get-ZoomActiveInactiveHostReports', 'Get-ZoomEndedMeetingInstances', 'Get-ZoomGroup', 'Get-ZoomGroupLockSettings', 'Get-ZoomGroups', 'Get-ZoomGroupSettings', 'Get-ZoomMeeting', 'Get-ZoomMeetingInvitation', 'Get-ZoomMeetingPoll', 'Get-ZoomMeetingPolls', 'Get-ZoomMeetingRegistrants', 'Get-ZoomMeetingsFromUser', 'Get-ZoomPastMeetingDetails', 'Get-ZoomPastMeetingParticipants', 'Get-ZoomPersonalMeetingRoomName', 'Get-ZoomRegistrationQuestions', 'Get-ZoomRooms', 'Get-ZoomTelephoneReports', 'Get-ZoomUser', 'Get-ZoomUserAssistants', 'Get-ZoomUserEmailStatus', 'Get-ZoomUserPermissions', 'Get-ZoomUsers', 'Get-ZoomUserSchedulers', 'Get-ZoomUserSettings', 'Get-ZoomUserToken', 'New-ZoomGroup', 'New-ZoomMeeting', 'New-ZoomMeetingPoll', 'New-ZoomRoomInvite', 'New-ZoomRoomMeeting', 'New-ZoomUser', 'Remove-ZoomGroup', 'Remove-ZoomGroupMembers', 'Remove-ZoomMeeting', 'Remove-ZoomMeetingPoll','Remove-ZoomSpecificUserAssistant', 'Remove-ZoomRoomMeeting',  'Remove-ZoomSpecificUserScheduler', 'Remove-ZoomUser', 'Remove-ZoomUserAssistants', 'Remove-ZoomUserSchedulers', 'Restart-ZoomRoom', 'Revoke-ZoomUserSsoToken', 'Update-MeetingStatus', 'Update-ZoomGroup', 'Update-ZoomGroupLockSettings', 'Update-ZoomGroupSettings', 'Update-ZoomMeeting', 'Update-ZoomMeetingLiveStream', 'Update-ZoomMeetingLiveStream', 'Update-ZoomMeetingLiveStreamStatus', 'Update-ZoomMeetingPoll', 'Update-ZoomMeetingRegistrantStatus', 'Update-ZoomMeetingRegistrationQuestions', 'Update-ZoomMeetingStatus', 'Update-ZoomProfilePicture', 'Update-ZoomUser', 'Update-ZoomUserEmail', 'Update-ZoomUserpassword', 'Update-ZoomUserSettings', 'Update-ZoomUserStatus')
+    FunctionsToExport = @('Connect-ZoomRoomMeeting','Disconnect-ZoomRoomMeeting','Get-ZoomRooms','New-ZoomRoomInvite','New-ZoomRoomMeeting','Remove-ZoomRoomMeeting','Restart-ZoomRoom','Stop-ZoomRoomMeeting','Add-ZoomGroupMember','Add-ZoomMeetingRegistrant','Add-ZoomUserAssistants','Get-ZoomActiveInactiveHostReports','Get-ZoomEndedMeetingInstances','Get-ZoomGroup','Get-ZoomGroupLockSettings','Get-ZoomGroups','Get-ZoomGroupSettings','Get-ZoomMeeting','Get-ZoomMeetingInvitation','Get-ZoomMeetingPoll','Get-ZoomMeetingPolls','Get-ZoomMeetingRegistrants','Get-ZoomMeetingsFromUser','Get-ZoomPastMeetingDetails','Get-ZoomPastMeetingParticipants','Get-ZoomPersonalMeetingRoomName','Get-ZoomRegistrationQuestions','Get-ZoomTelephoneReports','Get-ZoomUser','Get-ZoomUserAssistants','Get-ZoomUserEmailStatus','Get-ZoomUserPermissions','Get-ZoomUsers','Get-ZoomUserSchedulers','Get-ZoomUserSettings','Get-ZoomUserToken','New-ZoomGroup','New-ZoomMeeting','New-ZoomMeetingPoll','New-ZoomUser','Remove-ZoomGroup','Remove-ZoomGroupMembers','Remove-ZoomMeeting','Remove-ZoomMeetingPoll','Remove-ZoomSpecificUserAssistant','Remove-ZoomSpecificUserScheduler','Remove-ZoomUser','Remove-ZoomUserAssistants','Remove-ZoomUserSchedulers','Revoke-ZoomUserSsoToken','Update-ZoomGroup','Update-ZoomGroupLockSettings','Update-ZoomGroupSettings','Update-ZoomMeeting','Update-ZoomMeetingLiveStream','Update-ZoomMeetingLiveStreamStatus','Update-ZoomMeetingPoll','Update-ZoomMeetingRegistrantStatus','Update-ZoomMeetingRegistrationQuestions','Update-ZoomMeetingStatus','Update-ZoomProfilePicture','Update-ZoomUser','Update-ZoomUserEmail','Update-ZoomUserpassword','Update-ZoomUserSettings','Update-ZoomUserStatus')
+    
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     CmdletsToExport = '*'
     
@@ -89,7 +91,9 @@
     
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
     PrivateData = @{
+    
         PSData = @{
+    
             # Tags applied to this module. These help with module discovery in online galleries.
             Tags = @('Zoom', 'ZoomMeeting', 'Wrapper', 'ZoomAPI', 'PSZoom', 'Api')
     
@@ -114,5 +118,5 @@
     
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''
-}
     
+    }

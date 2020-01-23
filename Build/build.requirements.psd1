@@ -11,7 +11,7 @@
     }
     'PSDeploy' = @{
         DependencyType = 'PSGalleryNuget'
-        Version = '1.0.2'
+        Version = '1.0.3'
     }
     'BuildHelpers' = @{
         DependencyType = 'PSGalleryNuget'

@@ -12,7 +12,7 @@
     RootModule = 'PSZoom.psm1'
     
     # Version number of this module.
-    ModuleVersion = '1.0.19'
+    ModuleVersion = '1.1.00'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -95,7 +95,7 @@
         PSData = @{
     
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags = @('Zoom', 'ZoomAPI', 'API')
+            Tags = @('Zoom', 'ZoomAPI', 'API', 'ZoomMeeting', 'Meeting')
     
             # A URL to the license for this module.
             LicenseUri = 'https://github.com/JosephMcEvoy/PSZoom/blob/master/LICENSE'
@@ -120,3 +120,5 @@
     # DefaultCommandPrefix = ''
     
     }
+
+    publish-module 

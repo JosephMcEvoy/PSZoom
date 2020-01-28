@@ -44,6 +44,7 @@ Get-ZoomMeeting 123456789
 ```
 
 # Available Functions #
+Use get-help for more information about each function.
 Add-ZoomGroupMember  
 Add-ZoomMeetingRegistrant  
 Add-ZoomUserAssistants  

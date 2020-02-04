@@ -9,11 +9,11 @@ Add assistants to a user. Assistants are the users to whom the current user has 
 .PARAMETER UserId
 The user ID or email address.
 
-.PARAMETER Assistants
-List of user's assistants. User assistant object format:
-    Id <string>
-    Email <String>
-Can also use New-ZoomUserAssistant.
+.PARAMETER AssistantId
+The ID of the assistant. If using an assistant's ID, an email is not needed.
+
+.PARAMETER AssistantEmail
+The email of the assistant. If using an assistant's Email, an id is not needed.
 
 .PARAMETER ApiKey
 The Api Key.

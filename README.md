@@ -112,3 +112,6 @@ Update-ZoomUserEmail
 Update-ZoomUserpassword  
 Update-ZoomUserSettings  
 Update-ZoomUserStatus  
+  
+# Note about Rate Limiting #
+Zoom has a rate limit of 10 requests per second. Rate limiting / monitoring is not built into PSZoom at this time.

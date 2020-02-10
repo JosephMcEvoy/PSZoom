@@ -60,7 +60,7 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userupdate
 $Global:ZoomApiKey = 'ZoomApiKey'
 $Global:ZoomApiSecret = 'ZoomApiSecret'
 
-function New-FHZoomUser {
+function New-CompanyZoomUser {
     [CmdletBinding(DefaultParameterSetName = 'AdAccount')]
     param (
         [Parameter(

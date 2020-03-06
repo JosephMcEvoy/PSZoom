@@ -43,9 +43,9 @@ function Sync-ZoomUsersWithAdGroup() {
 
         [string]$TransferAccount,
 
-        [switch]$NoAdd = $False,
+        [switch]$Add = $False,
 
-        [switch]$NoRemove = $False,
+        [switch]$Remove = $False,
 
         [string]$ApiKey,
 
@@ -102,14 +102,14 @@ function Sync-ZoomUsersWithAdGroup() {
                 }
 
                 #Add users to Zoom that are in the $AdGroup and not in $UserExceptions.
-                if (-not $NoAdd) {
+                if ($Add) {
                     Write-Verbose "Adding missing users that are in $AdGroup to Zoom. Skipping users in UserExceptions."
 
                     if ($PScmdlet.ShouldProcess("$AdDiff", 'Add')) {
                         $AdDiff | ForEach-Object {
                             Write-Verbose "Adding user $_.EmailAddress to Zoom."
                             try {
-                                #New-FhZoomUser -AdAccount $_.EmailAddress.split('@')[0] @params
+                                #New-CompanyZoomUser -AdAccount $_.EmailAddress.split('@')[0] @params
                             } catch {
                                 Write-Error -Message "Unable to add user $($_.EmailAddress). $($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
                             }
@@ -119,7 +119,7 @@ function Sync-ZoomUsersWithAdGroup() {
                 
                 #This can be potentially dangerous. You should be testing before deploying this.
                 #Remove Zoom users who are in Zoom but are not in the $AdGroup and not in $UserExceptions.
-                if (-not $NoRemove) {
+                if ($Remove) {
                     Write-Verbose "Removing users from Zoom that are not in $AdGroup. Skipping users in UserExceptions."
 
                     $ZoomDiff = $AdZoomDiff | Where-Object -Property SideIndicator -eq '=>' | Select-Object -Property 'EmailAddress'

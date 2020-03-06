@@ -36,7 +36,8 @@ function Sync-ZoomUsersWithAdGroup() {
                     return $False
                 }
         })]
-        [string]$AdGroup,
+        [Alias("AdGroup")]
+        [string[]]$AdGroups,
         
         [string[]]$UserExceptions = @(),
 
@@ -50,99 +51,108 @@ function Sync-ZoomUsersWithAdGroup() {
 
         [string]$ApiSecret
     )
-    
-    $UserExceptions += $TransferAccount, "" #Adds transfer account to exceptions, along with any blanks.
-
-    #Compare the $ADGroup with the full list of Zoom users.
-    Write-Verbose 'Finding AD Group members.'
-
-    $AdGroupMembers = (Get-ADGroup $AdGroup -Properties Member | Select-Object -ExpandProperty Member | Get-ADUser -Property EmailAddress | Select-Object EmailAddress)
-
-    $AdGroupMembers = $AdGroupMembers | Foreach-Object { 
-        return [PSCustomObject]@{
-            EmailAddress = "$($_.EmailAddress)"
+    begin {
+        if ($TransferAccount) {
+            $UserExceptions += $TransferAccount, "" #Adds transfer account to exceptions
         }
-    } | Where-Object EmailAddress -NotIn $UserExceptions
-
-    Write-Verbose "Found $($AdGroupMembers.EmailAdress.count) users in $AdGroup (exceptions excluded)."
-
-    Write-Verbose 'Finding active and inactive Zoom users.'
-    $ZoomUsers = (Get-ZoomUsers -status active -allpages) + (Get-Zoomusers -status inactive -allpages)
-
-    $ZoomUsers = $ZoomUsers | ForEach-Object {
-        return [PSCustomObject]@{
-            EmailAddress = "$($_.email)"
-        }
-    } | Where-Object EmailAddress -NotIn $UserExceptions
-    
-    Write-Verbose "Found $($ZoomUsers.EmailAddress.count) Zoom users (exceptions excluded)."
-
-    $AdZoomDiff = Compare-Object -ReferenceObject $AdGroupMembers -DifferenceObject $ZoomUsers -Property EmailAddress |  Where-Object EmailAddress -ne ""
-
-    Write-Verbose "Compared $AdGroup against Zoom users."
-
-    if ($AdZoomDiff.count -eq 0) {
-        Write-Verbose 'Zoom and ADGroup are already in sync. Exiting...'
-        exit 0
     }
 
-    Write-Verbose "Found the following users are not in sync: `n $($AdZoomDiff | ForEach-Object {"$($_.EmailAddress, $_.SideIndicator)`n"})"
-    
-    #Add users to Zoom that are in the $AdGroup and not in $UserExceptions.
-    Write-Verbose "Adding missing users that are in $AdGroup to Zoom. Skipping users in UserExceptions."
+    process {
+            foreach ($AdGroup in $AdGroups) {
+                #Compare the $ADGroup with the full list of Zoom users.
+                Write-Verbose "Finding AD Group $AdGroup members."
 
-    $AdDiff = $AdZoomDiff | Where-Object -Property SideIndicator -eq '<=' | Select-Object -Property 'EmailAddress'
+                $AdGroupMembers = (Get-ADGroup $AdGroup -Properties Member | Select-Object -ExpandProperty Member | Get-ADUser -Property EmailAddress | Select-Object EmailAddress)
 
-    $params = @{
-        ApiKey = $ApiKey
-        ApiSecret = $ApiSecret
-    }
+                $AdGroupMembers = $AdGroupMembers | Foreach-Object { 
+                    return [PSCustomObject]@{
+                        EmailAddress = "$($_.EmailAddress)"
+                    }
+                } | Where-Object EmailAddress -NotIn $UserExceptions
 
-    if (-not $NoAdd) {
-        if ($PScmdlet.ShouldProcess("$AdDiff", 'Add')) {
-            $AdDiff | ForEach-Object {
-                Write-Verbose "Adding user $_.EmailAddress to Zoom."
-                try {
-                    New-CompanyZoomUser -AdAccount $_.EmailAddress.split('@')[0] @params
-                } catch {
-                    Write-Error -Message "Unable to add user $($_.EmailAddress). $($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
+                Write-Verbose "Found $($AdGroupMembers.EmailAdress.count) users in $AdGroup (exceptions excluded)."
+                Write-Verbose 'Finding active and inactive Zoom users.'
+
+                $ZoomUsers = (Get-ZoomUsers -status active -allpages) + (Get-Zoomusers -status inactive -allpages)
+
+                $ZoomUsers = $ZoomUsers | ForEach-Object {
+                    return [PSCustomObject]@{
+                        EmailAddress = "$($_.email)"
+                    }
+                } | Where-Object EmailAddress -NotIn $UserExceptions
+                
+                Write-Verbose "Found $($ZoomUsers.EmailAddress.count) Zoom users (exceptions excluded)."
+
+                $AdZoomDiff = Compare-Object -ReferenceObject $AdGroupMembers -DifferenceObject $ZoomUsers -Property EmailAddress |  Where-Object EmailAddress -ne ""
+
+                Write-Verbose "Compared $AdGroup against Zoom users."
+
+                if ($AdZoomDiff.count -eq 0) {
+                    Write-Verbose 'Zoom and ADGroup are already in sync. Exiting...'
+                    exit 0
                 }
-            }
+
+                Write-Verbose "Found the following users are not in sync: `n $($AdZoomDiff | ForEach-Object {"$($_.EmailAddress, $_.SideIndicator)`n"})"
+
+                $AdDiff = $AdZoomDiff | Where-Object -Property SideIndicator -eq '<=' | Select-Object -Property 'EmailAddress'
+
+                $params = @{
+                    ApiKey = $ApiKey
+                    ApiSecret = $ApiSecret
+                }
+
+                #Add users to Zoom that are in the $AdGroup and not in $UserExceptions.
+                if (-not $NoAdd) {
+                    Write-Verbose "Adding missing users that are in $AdGroup to Zoom. Skipping users in UserExceptions."
+
+                    if ($PScmdlet.ShouldProcess("$AdDiff", 'Add')) {
+                        $AdDiff | ForEach-Object {
+                            Write-Verbose "Adding user $_.EmailAddress to Zoom."
+                            try {
+                                #New-FhZoomUser -AdAccount $_.EmailAddress.split('@')[0] @params
+                            } catch {
+                                Write-Error -Message "Unable to add user $($_.EmailAddress). $($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
+                            }
+                        }
+                    }
+                }
+                
+                #This can be potentially dangerous. You should be testing before deploying this.
+                #Remove Zoom users who are in Zoom but are not in the $AdGroup and not in $UserExceptions.
+                if (-not $NoRemove) {
+                    Write-Verbose "Removing users from Zoom that are not in $AdGroup. Skipping users in UserExceptions."
+
+                    $ZoomDiff = $AdZoomDiff | Where-Object -Property SideIndicator -eq '=>' | Select-Object -Property 'EmailAddress'
+
+                    if ($PScmdlet.ShouldProcess("$($ZoomDiff.EmailAddress)", 'Remove')) {
+                        $ZoomDiff | ForEach-Object {
+                            Write-Verbose "Removing user $_.EmailAddress from Zoom."
+                            try {
+                                Remove-ZoomUser -UserId $_.EmailAddress -TransferEmail $TransferEmail -TransferMeeting $True -TransferWebinar $True -TransferRecording $True @params
+                            } catch {
+                                Write-Error -Message "Unable to remove user $($_.EmailAddress). $($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
+                            }
+                        }
+                    }
+                }
+
+                Write-Output $AdDiff
         }
     }
+
+    end {}
     
-    #This can be potentially dangerous. You should be testing before deploying this.
-    #Remove Zoom users who are in Zoom but are not in the $AdGroup and not in $UserExceptions.
-    #if (-not $NoRemove) {
-    #    Write-Verbose "Removing users from Zoom that are not in $AdGroup. Skipping users in UserExceptions."
-    #
-    #    $ZoomDiff = $AdZoomDiff | Where-Object -Property SideIndicator -eq '=>' | Select-Object -Property 'EmailAddress'
-    #
-    #    if ($PScmdlet.ShouldProcess("$($ZoomDiff.EmailAddress)", 'Remove')) {
-    #        $ZoomDiff | ForEach-Object {
-    #            Write-Verbose "Removing user $_.EmailAddress from Zoom."
-    #            try {
-    #                Remove-ZoomUser -UserId $_.EmailAddress -TransferEmail $TransferEmail -TransferMeeting $True -TransferWebinar $True -TransferRecording $True @params
-    #            } catch {
-    #                Write-Error -Message "Unable to remove user $($_.EmailAddress). $($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-    #            }
-    #        }
-    #    }
-    #}
 }
 
 $Global:ZoomApiKey = 'ZoomApiKey'
 $Global:ZoomApiSecret = 'ZoomApiSecret'
 
-$params = @{
-  ADGroup = 'ZoomUsers'
-  TransferAccount = 'AVAdmin@deathstar.com'
-  UserExceptions = @(
+$UserExceptions = @(
     'DVader@deathstar.com', #Don't mess with Vader's account under any circumstances.
     'AVAdmin@deathstar.com' #Or the AV admin
-  )
-  NoRemove = $True
-  NoAdd = $True
-}
+)
 
-Sync-ZoomUsersWithAdGroup @params -Verbose
+$AdGroups = 'ZoomUsers'
+$TransferAccount = 'AVAdmin@deathstar.com'
+
+Sync-ZoomUsersWithAdGroup -AdGroups $AdGroups -UserExceptions $UserExceptions -TransferAccount $TransferAccount -ApiKey $ZoomApiKey -ApiSecret $ZoomApiKey -NoRemove -NoAdd -Confirm -Verbose

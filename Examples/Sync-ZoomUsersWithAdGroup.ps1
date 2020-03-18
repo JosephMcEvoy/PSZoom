@@ -155,4 +155,4 @@ $UserExceptions = @(
 $AdGroups = 'ZoomUsers'
 $TransferAccount = 'AVAdmin@deathstar.com'
 
-Sync-ZoomUsersWithAdGroup -AdGroups $AdGroups -UserExceptions $UserExceptions -TransferAccount $TransferAccount -ApiKey $ZoomApiKey -ApiSecret $ZoomApiKey -NoRemove -NoAdd -Confirm -Verbose
+Sync-ZoomUsersWithAdGroup -AdGroups $AdGroups -UserExceptions $UserExceptions -TransferAccount $TransferAccount -ApiKey $ZoomApiKey -ApiSecret $ZoomApiKey -Confirm -Verbose

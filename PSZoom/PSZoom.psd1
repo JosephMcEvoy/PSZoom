@@ -120,5 +120,3 @@
     # DefaultCommandPrefix = ''
     
     }
-
-    publish-module 

@@ -58,6 +58,7 @@ Get-ZoomGroupLockSettings
 Get-ZoomGroups  
 Get-ZoomGroupSettings  
 Get-ZoomMeeting  
+Get-ZoomMeetingCloudRecordings  
 Get-ZoomMeetingInvitation  
 Get-ZoomMeetingPoll  
 Get-ZoomMeetingPolls  

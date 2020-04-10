@@ -96,9 +96,9 @@ local - Record on local.
 cloud -  Record on cloud.
 none - Disabled.
 .PARAMETER EnforceLogin
-Only signed in users can join this meeting.
+Only signed in users can join this meeting. This parameter is deprecated and will not be supported in the future. As an alternative, use the "MeetingAuthentication", "AuthenticationOption" and "AuthenticationDomains" parameters.
 .PARAMETER EnforceLoginDomains
-Only signed in users with specified domains can join meetings.
+Only signed in users with specified domains can join meetings. This parameter is deprecated and will not be supported in the future. As an alternative, use the "MeetingAuthentication", "AuthenticationOption" and "AuthenticationDomains" parameters.
 .PARAMETER AlternativeHosts
 Alternative host's emails or IDs: multiple values separated by a comma.
 .PARAMETER CloseRegistration
@@ -111,6 +111,14 @@ List of global dial-in countries
 Contact name for registration
 .PARAMETER ContacEmail
 Contact email for registration
+.PARAMETER MeetingAuthentication
+Only authenticatd users can join meetings.
+.PARAMETER AuthenticationOption
+Meeting authentication option id.
+.PARAMETER AuthenticationDomains
+If user has configured "Sign into Zoom with Specified Domains" option, this will list the doamins that are authenticated.
+.PARAMETER AuthenticationName
+Authentication name set in the authentication profile.
 .PARAMETER ApiKey
 The API key.
 .PARAMETER ApiSecret
@@ -578,6 +586,22 @@ function New-ZoomMeeting {
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('contact_email')]
         [string]$ContactEmail,
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('meeting_authentication')]
+        [bool]$MeetingAuthentication,
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('authentication_option')]
+        [string]$AuthenticationOption,
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('authentication_domains')]
+        [string]$AuthenticationDomains,
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('authentication_name')]
+        [string]$AuthenticationName,
   
         [string]$ApiKey,
   
@@ -794,6 +818,10 @@ function New-ZoomMeeting {
             'use_pmi'                 = 'UsePMI'
             'waiting_room'            = 'WaitingRoom'
             'watermark'               = 'Watermark'
+            'meeting_authentication'  = 'MeetingAuthentication'
+            'authentication_option'   = 'AuthenticationOption' 
+            'authentication_domains'  = 'AuthenticationDomains'
+            'authentication_name'     = 'AuthenticationName'   
         }
   
         #Adds additional setting parameters to Settings object.

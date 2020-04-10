@@ -2,21 +2,32 @@
 
 .SYNOPSIS
 Retrieve the details of a meeting.
+
 .DESCRIPTION
 Retrieve the details of a meeting.
+
 .PARAMETER MeetingId
 The meeting ID.
+
 .PARAMETER OcurrenceId
 The Occurrence ID.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
+
 .LINK
+
 .EXAMPLE
 Get-ZoomMeeting 123456789
 
+.EXAMPLE
+Get the host of a Zoom meeting.
+Get-ZoomMeeting 123456789 | Select-Object host_id | Get-ZoomUser
 
 #>
 

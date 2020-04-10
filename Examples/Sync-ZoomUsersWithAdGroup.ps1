@@ -11,9 +11,9 @@ The name of the AdGroup that Zoom syncs to.
 Users to ignore from Zoom and Active Directory.
 .PARAMETER TransferAccount
 Specifies the account to transfer meetings to. This is automatically added to UserExceptions.
-.PARAMETER NoAdd
+.PARAMETER Add
 A switch to skip all user additions.
-.PARAMETER NoRemove
+.PARAMETER Remove
 A switch to skip all user deletions.
 .PARAMETER ApiKey
 The API key.
@@ -88,7 +88,7 @@ function Sync-ZoomUsersWithAdGroup() {
                 Write-Verbose "Compared $AdGroup against Zoom users."
 
                 if ($AdZoomDiff.count -eq 0) {
-                    Write-Verbose 'Zoom and ADGroup are already in sync. Exiting...'
+                    Write-Verbose 'Zoom and ADGroup are in sync. No changes made.'
                     exit 0
                 }
 

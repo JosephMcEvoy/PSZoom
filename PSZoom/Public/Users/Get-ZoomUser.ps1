@@ -19,7 +19,12 @@ The Api Secret.
 An object with the Zoom API response.
 
 .EXAMPLE
+Retrieve a user's info.
 Get-ZoomUser jsmith@lawfirm.com
+
+.EXAMPLE
+Get the host of a Zoom meeting.
+Get-ZoomMeeting 123456789 | Select-Object host_id | Get-ZoomUser
 
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/user
@@ -36,7 +41,7 @@ function Get-ZoomUser {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('email', 'emailaddress', 'id', 'user_id', 'ids', 'userids', 'emails', 'emailaddresses')]
+        [Alias('email', 'emailaddress', 'id', 'user_id', 'ids', 'userids', 'emails', 'emailaddresses', 'host_id')]
         [string[]]$UserId,
 
         [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]

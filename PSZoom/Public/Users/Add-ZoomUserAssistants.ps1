@@ -1,10 +1,10 @@
 <#
 
 .SYNOPSIS
-Add assistants to a user.
+Add assistants to user(s).
 
 .DESCRIPTION
-Add assistants to a user. Assistants are the users to whom the current user has assigned scheduling privilege on the user’s behalf.
+Add assistants to user(s). Assistants are the users to whom the current user has assigned scheduling privilege on the user’s behalf.
 
 .PARAMETER UserId
 The user ID or email address.
@@ -51,7 +51,7 @@ function Add-ZoomUserAssistants {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('Email', 'EmailAddress', 'ID', 'user_id', 'UserIds', 'Emails', 'IDs')]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('assistantemails')]

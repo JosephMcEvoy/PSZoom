@@ -107,9 +107,11 @@ local - Record on local.
 cloud -  Record on cloud.
 none - Disabled.
 .PARAMETER EnforceLogin
-Only signed in users can join this meeting.
+Only signed in users can join this meeting. This parameter is deprecated and will not be supported in the future. 
+As an alternative, use the "MeetingAuthentication", "AuthenticationOption" and "AuthenticationDomains" parameters.
 .PARAMETER EnforceLoginDomains
-Only signed in users with specified domains can join meetings.
+Only signed in users with specified domains can join meetings. This parameter is deprecated and will not be supported in the future. 
+As an alternative, use the "MeetingAuthentication", "AuthenticationOption" and "AuthenticationDomains" parameters.
 .PARAMETER AlternativeHosts
 Alternative host's emails or IDs: multiple values separated by a comma.
 .PARAMETER CloseRegistration
@@ -125,6 +127,14 @@ List of global dial-in numbers. This is an array of objects. Format:
     [string]'city'         = 'Sao Paulo'
     [string]'number'       = '+12332357613'
     [string]'type'         = <Type of number>
+.PARAMETER MeetingAuthentication
+Only authenticatd users can join meetings.
+.PARAMETER AuthenticationOption
+Meeting authentication option id.
+.PARAMETER AuthenticationDomains
+If user has configured "Sign into Zoom with Specified Domains" option, this will list the doamins that are authenticated.
+.PARAMETER AuthenticationName
+Authentication name set in the authentication profile.
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/meetings/meetingupdate
 .PARAMETER ApiKey
@@ -310,6 +320,21 @@ function Update-ZoomMeeting {
     [Alias('global_dial_in_numbers')]
     [hashtable[]]$GlobalDialInNumbers,
 
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('meeting_authentication')]
+    [bool]$MeetingAuthentication,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('authentication_option')]
+    [string]$AuthenticationOption,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('authentication_domains')]
+    [string]$AuthenticationDomains,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('authentication_name')]
+    [string]$AuthenticationName,
     [ValidateNotNullOrEmpty()]
     [string]$ApiKey,
 
@@ -464,6 +489,10 @@ function Update-ZoomMeeting {
         'contact_name'            = 'ContactName'
         'contact_email'           = 'ContacEmail'
         'global_dial_in_numbers'  = 'GlobalDialInNumbers'
+        'meeting_authentication'  = 'MeetingAuthentication'
+        'authentication_option'   = 'AuthenticationOption' 
+        'authentication_domains'  = 'AuthenticationDomains'
+        'authentication_name'     = 'AuthenticationName'   
     }
 
     $Settings = Remove-NonPSBoundParameters($Settings)

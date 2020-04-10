@@ -34,7 +34,7 @@ function Get-ZoomUserAssistants {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('Email', 'EmailAddress', 'Id', 'user_id', 'userids', 'ids', 'emailaddresses','emails')]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,

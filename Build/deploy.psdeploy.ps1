@@ -1,5 +1,5 @@
 ﻿# Publish to gallery with a few restrictions
-if ( $env:BHModulePath -and
+if ($env:BHModulePath -and
     $env:BHBuildSystem -ne 'Unknown' -and
     $env:BHBranchName -eq "master" -and
     $env:BHCommitMessage -match '!deploy'
@@ -11,8 +11,9 @@ if ( $env:BHModulePath -and
             WithOptions @{
                 ApiKey = $ENV:NugetApiKey
                 Tags = 'Zoom', 'ZoomAPI', 'API'
+            }
         }
-    }
+    } 
 } else {
     "Skipping deployment: To deploy, ensure that...`n" +
     "`t* You are in a known build system (Current: $ENV:BHBuildSystem)`n" +

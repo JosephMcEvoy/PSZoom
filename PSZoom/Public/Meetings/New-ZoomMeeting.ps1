@@ -589,6 +589,10 @@ function New-ZoomMeeting {
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('meeting_authentication')]
+        [bool]$RegistrantsEmailNotification,
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('meeting_authentication')]
         [bool]$MeetingAuthentication,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
@@ -799,29 +803,30 @@ function New-ZoomMeeting {
         }
   
         $Settings = @{
-            'alternative_hosts'       = 'AlternativeHosts'
-            'approval_type'           = 'ApprovalType'
-            'audio'                   = 'Audio'
-            'auto_recording'          = 'AutoRecording'
-            'close_registration'      = 'CloseRegistration'
-            'cn_meeting'              = 'CNMeeting'
-            'contact_email'           = 'ContacEmail'
-            'contact_name'            = 'ContactName'
-            'enforce_login'           = 'Enfogin'
-            'enforce_login_domains'   = 'EnforceLoginDomains'
-            'global_dialin_countries' = 'GlobalDialInCountries'
-            'host_video'              = 'HostVideo'
-            'in_meeting'              = 'INMeeting'
-            'join_before_host'        = 'JoinBeforeHost'
-            'mute_upon_entry'         = 'Mutentry'
-            'registration_type'       = 'RegistrationType'
-            'use_pmi'                 = 'UsePMI'
-            'waiting_room'            = 'WaitingRoom'
-            'watermark'               = 'Watermark'
-            'meeting_authentication'  = 'MeetingAuthentication'
-            'authentication_option'   = 'AuthenticationOption' 
-            'authentication_domains'  = 'AuthenticationDomains'
-            'authentication_name'     = 'AuthenticationName'   
+            'alternative_hosts'              = 'AlternativeHosts'
+            'approval_type'                  = 'ApprovalType'
+            'audio'                          = 'Audio'
+            'auto_recording'                 = 'AutoRecording'
+            'close_registration'             = 'CloseRegistration'
+            'cn_meeting'                     = 'CNMeeting'
+            'contact_email'                  = 'ContacEmail'
+            'contact_name'                   = 'ContactName'
+            'enforce_login'                  = 'Enfogin'
+            'enforce_login_domains'          = 'EnforceLoginDomains'
+            'global_dialin_countries'        = 'GlobalDialInCountries'
+            'host_video'                     = 'HostVideo'
+            'in_meeting'                     = 'INMeeting'
+            'join_before_host'               = 'JoinBeforeHost'
+            'mute_upon_entry'                = 'Mutentry'
+            'registration_type'              = 'RegistrationType'
+            'use_pmi'                        = 'UsePMI'
+            'waiting_room'                   = 'WaitingRoom'
+            'watermark'                      = 'Watermark'
+            'meeting_authentication'         = 'MeetingAuthentication'
+            'registrants_email_notification' = 'RegistrantsEmailNotification'
+            'authentication_option'          = 'AuthenticationOption' 
+            'authentication_domains'         = 'AuthenticationDomains'
+            'authentication_name'            = 'AuthenticationName'   
         }
   
         #Adds additional setting parameters to Settings object.

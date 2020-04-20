@@ -12,7 +12,7 @@
     RootModule = 'PSZoom.psm1'
     
     # Version number of this module.
-    ModuleVersion = '1.1.00'
+    ModuleVersion = '1.1.01'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -27,7 +27,7 @@
     CompanyName = 'Unknown'
     
     # Copyright statement for this module
-    Copyright = '(c) 2019 Joseph McEvoy. All rights reserved.'
+    Copyright = '(c) 2020 Joseph McEvoy. All rights reserved.'
     
     # Description of the functionality provided by this module
     Description = 'A collection of Powershell tools to interface with the Zoom Api.'

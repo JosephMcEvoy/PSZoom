@@ -322,6 +322,10 @@ function Update-ZoomMeeting {
 
     [Parameter(ValueFromPipelineByPropertyName = $True)]
     [Alias('meeting_authentication')]
+    [bool]$RegistrantsEmailNotification,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('meeting_authentication')]
     [bool]$MeetingAuthentication,
 
     [Parameter(ValueFromPipelineByPropertyName = $True)]
@@ -489,6 +493,7 @@ function Update-ZoomMeeting {
         'contact_name'            = 'ContactName'
         'contact_email'           = 'ContacEmail'
         'global_dial_in_numbers'  = 'GlobalDialInNumbers'
+        'meeting_authentication'  = 'MeetingAuthentication'
         'meeting_authentication'  = 'MeetingAuthentication'
         'authentication_option'   = 'AuthenticationOption' 
         'authentication_domains'  = 'AuthenticationDomains'

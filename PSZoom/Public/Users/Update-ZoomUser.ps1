@@ -172,6 +172,7 @@ function Update-ZoomUser {
             }
 
             $KeyValuePairs = @{
+                'first_name'  = $FirstName
                 'last_name'   = $LastName
                 'timezone'    = $Timezone
                 'language'    = $Language

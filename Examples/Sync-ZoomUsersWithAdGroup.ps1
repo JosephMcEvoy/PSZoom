@@ -8,13 +8,13 @@ Any users in Zoom who are not in the AD Group are REMOVED from Zoom if the -Remo
 .PARAMETER AdGroup
 The name of the AdGroup that Zoom syncs to.
 .PARAMETER UserExceptions
-Users to ignore from Zoom and Active Directory.
+Users to ignore from Zoom and/or Active Directory.
 .PARAMETER TransferAccount
 Specifies the account to transfer meetings to. This is automatically added to UserExceptions.
 .PARAMETER Add
-A switch to skip all user additions.
+A switch to add all user additions.
 .PARAMETER Remove
-A switch to skip all user deletions.
+A switch to remove all user deletions.
 .PARAMETER ApiKey
 The API key.
 .PARAMETER ApiSecret

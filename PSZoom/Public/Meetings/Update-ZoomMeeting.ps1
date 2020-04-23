@@ -321,7 +321,7 @@ function Update-ZoomMeeting {
     [hashtable[]]$GlobalDialInNumbers,
 
     [Parameter(ValueFromPipelineByPropertyName = $True)]
-    [Alias('meeting_authentication')]
+    [Alias('Registrants_Email_Notification')]
     [bool]$RegistrantsEmailNotification,
 
     [Parameter(ValueFromPipelineByPropertyName = $True)]
@@ -493,7 +493,6 @@ function Update-ZoomMeeting {
         'contact_name'            = 'ContactName'
         'contact_email'           = 'ContacEmail'
         'global_dial_in_numbers'  = 'GlobalDialInNumbers'
-        'meeting_authentication'  = 'MeetingAuthentication'
         'meeting_authentication'  = 'MeetingAuthentication'
         'authentication_option'   = 'AuthenticationOption' 
         'authentication_domains'  = 'AuthenticationDomains'

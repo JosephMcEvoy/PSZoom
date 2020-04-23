@@ -588,7 +588,7 @@ function New-ZoomMeeting {
         [string]$ContactEmail,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
-        [Alias('meeting_authentication')]
+        [Alias('registrants_email_notification')]
         [bool]$RegistrantsEmailNotification,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]

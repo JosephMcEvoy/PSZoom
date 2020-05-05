@@ -1,20 +1,20 @@
 <#
 
 .DESCRIPTION
-This script takes an ADGroup, then compares the email addresses in the group against Zoom. Then it adds/removes users in order to "sync"
-the ADGroup with Zoom.
+This script takes an ADGroup, then compares the email addresses in the group against Zoom. Then it adds/removes users in order 
+to "sync" the ADGroup with Zoom.
 Any users in the AD Group who are not in Zoom are CREATED in Zoom if the -Add switch is specified.
 Any users in Zoom who are not in the AD Group are REMOVED from Zoom if the -Remove switch as specified.
 .PARAMETER AdGroup
 The name of the AdGroup that Zoom syncs to.
 .PARAMETER UserExceptions
-Users to ignore from Zoom and Active Directory.
+Users to ignore from Zoom and/or Active Directory.
 .PARAMETER TransferAccount
 Specifies the account to transfer meetings to. This is automatically added to UserExceptions.
 .PARAMETER Add
-A switch to skip all user additions.
+A switch to add all user additions.
 .PARAMETER Remove
-A switch to skip all user deletions.
+A switch to remove all user deletions.
 .PARAMETER ApiKey
 The API key.
 .PARAMETER ApiSecret

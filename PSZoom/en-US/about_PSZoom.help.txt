@@ -27,6 +27,7 @@ SEE ALSO
         Get-ZoomGroups
         Get-ZoomGroupSettings
         Get-ZoomMeeting
+        Get-ZoomMeetingCloudRecordings
         Get-ZoomMeetingInvitation
         Get-ZoomMeetingPoll
         Get-ZoomMeetingPolls
@@ -35,6 +36,9 @@ SEE ALSO
         Get-ZoomPastMeetingDetails
         Get-ZoomPastMeetingParticipants
         Get-ZoomPersonalMeetingRoomName
+        Get-ZoomMeetingRecordings
+        Get-ZoomRecordings
+        Get-ZoomUserRecordings
         Get-ZoomRegistrationQuestions
         Get-ZoomRooms
         Get-ZoomTelephoneReports

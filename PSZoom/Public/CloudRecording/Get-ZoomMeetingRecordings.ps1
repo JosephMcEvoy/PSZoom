@@ -16,7 +16,7 @@ An object with the Zoom API response.
 
 .EXAMPLE
 Retrieve a meeting's cloud recording info.
-Get-ZoomMeetingCloudRecordings 123456789
+Get-ZoomMeetingRecordings 123456789
 
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/cloud-recording/recordingget
@@ -24,7 +24,7 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/cloud-recording/recordin
 
 #>
 
-function Get-ZoomMeetingCloudRecordings {
+function Get-ZoomMeetingRecordings {
     [CmdletBinding()]
     param (
         [Parameter(

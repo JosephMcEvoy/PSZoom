@@ -55,7 +55,7 @@ $recordings = Get-ZoomRecordings -UserId luke@thejedi.com -From 2020-01-01 -To 2
 $downloadURLs = $recordings.psobject.properties.value.recording_files.download_url
 
 .LINK
-https://marketplace.zoom.us/docs/api-reference/zoom-api/cloud-recording/recordingget
+https://marketplace.zoom.us/docs/api-reference/zoom-api/cloud-recording/recordingslist
 
 #>
 
@@ -69,7 +69,7 @@ function Get-ZoomRecordings {
             Position = 0
         )]
         [Alias('userids')]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [ValidateRange(1, 300)]
         [string]$PageSize = 30,

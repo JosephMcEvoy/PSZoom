@@ -4,10 +4,13 @@
 Update the details of a meeting.
 .DESCRIPTION
 Update the details of a meeting.
+This API has a rate limit of 100 requests per day. Therefore, a meeting can only be updated for a maximum of 100 
+times within a 24 hour window.
 .PARAMETER MeetingId
 The meeting ID.
 .PARAMETER OccurrenceId
-Meeting Occurrence id. Support change of agenda, start_time, duration, settings: {host_video, participant_video, join_before_host, mute_upon_entry, waiting_room, auto_recording}
+Meeting Occurrence id. Support change of agenda, start_time, duration, settings: {host_video, participant_video, 
+join_before_host, mute_upon_entry, waiting_room, auto_recording}
 .PARAMETER ScheduleFor
 Email or userid if you want to schedule meeting for another user.
 .PARAMETER Topic
@@ -19,21 +22,20 @@ Scheduled meeting (2)
 Recurring meeting with no fixed time (3)
 Recurring meeting with fixed time. (8)
 .PARAMETER StartTime
-Meeting start time. When using a format like \"yyyy-MM-dd'T'HH:mm:ss'Z'\", always use GMT time. When using a format like \"yyyy-MM-dd'T'HH:mm:ss\", 
-you should use local time and specify the time zone. This is only used for scheduled meetings and recurring meetings with a fixed time.
+Meeting start time. When using a format like \"yyyy-MM-dd'T'HH:mm:ss'Z'\", always use GMT time. When using a format 
+like \"yyyy-MM-dd'T'HH:mm:ss\", you should use local time and specify the time zone. This is only used for scheduled 
+meetings and recurring meetings with a fixed time.
 .PARAMETER Duration
 Meeting duration (minutes). Used for scheduled meetings only.
 .PARAMETER Timezone
 Time zone to format start_time. For example, \"America/Los_Angeles\". For scheduled meetings only. 
-Please reference our [time zone](https://marketplace.zoom.us/docs/api-reference/other-references/abbreviation-lists#timezones) list for supported time zones and their formats.
+Please reference our [time zone](https://marketplace.zoom.us/docs/api-reference/other-references/abbreviation-lists#timezones) 
+list for supported time zones and their formats.
 .PARAMETER Password
-Password to join the meeting. Password may only contain the following characters: [a-z A-Z 0-9 @ - _ *]. Max of 10 characters.
+Password to join the meeting. Password may only contain the following characters: [a-z A-Z 0-9 @ - _ *]. 
+Max of 10 characters.
 .PARAMETER Agenda
 Meeting description.
-.PARAMETER Field
-Tracking fields type.
-.PARAMETER Value
-Tracking fields value.
 .PARAMETER RecurrenceType
 Recurrence meeting types: 
 Daily (1)
@@ -73,7 +75,8 @@ Saturday (7)
 .PARAMETER EndTimes
 Select how many timse the meeting will recur before it is canceled. (Cannot be used with "RecurrenceEndDateTime".)
 .PARAMETER EndDateTime
-Select a date the meeting will recur before it is canceled. Should be in UTC time, such as 2017-11-25T12:00:00Z. (Cannot be used with "RecurrenceEndTimes".)
+Select a date the meeting will recur before it is canceled. Should be in UTC time, such as 2017-11-25T12:00:00Z. 
+(Cannot be used with "RecurrenceEndTimes".)
 .PARAMETER HostVideo
 Start video when the host joins the meeting.
 .PARAMETER ParticipantVideo
@@ -83,7 +86,8 @@ Host meeting in China.
 .PARAMETER INMeeting
 Host meeting in India.
 .PARAMETER JoinBeforeHost
-Allow participants to join the meeting before the host starts the meeting. Only used for scheduled or recurring meetings.
+Allow participants to join the meeting before the host starts the meeting. Only used for scheduled or recurring 
+meetings.
 .PARAMETER MuteUponEntry
 Mute participants upon entry.
 .PARAMETER Watermark
@@ -100,7 +104,10 @@ RegisterOnceAndAttendAll' - Attendees register once and can attend any of the oc
 RegisterForEachoccurrence' - Attendees need to register for each occurrence to attend.(2)
 RegisterOnceAndChooseoccurrences' - Attendees register once and can choose one or more occurrences to attend.(3)
 .PARAMETER Audio
-Determine how participants can join the audio portion of the meeting.<br>`both` - Both Telephony and VoIP.<br>`telephony` - Telephony only.<br>`voip` - VoIP only.
+Determine how participants can join the audio portion of the meeting.
+`both` - Both Telephony and VoIP
+`telephony` - Telephony only
+`voip` - VoIP only
 .PARAMETER AutoRecording
 Automatic recording:
 local - Record on local.
@@ -110,8 +117,9 @@ none - Disabled.
 Only signed in users can join this meeting. This parameter is deprecated and will not be supported in the future. 
 As an alternative, use the "MeetingAuthentication", "AuthenticationOption" and "AuthenticationDomains" parameters.
 .PARAMETER EnforceLoginDomains
-Only signed in users with specified domains can join meetings. This parameter is deprecated and will not be supported in the future. 
-As an alternative, use the "MeetingAuthentication", "AuthenticationOption" and "AuthenticationDomains" parameters.
+Only signed in users with specified domains can join meetings. This parameter is deprecated and will not be 
+supported in the future. As an alternative, use the "MeetingAuthentication", "AuthenticationOption" and 
+"AuthenticationDomains" parameters.
 .PARAMETER AlternativeHosts
 Alternative host's emails or IDs: multiple values separated by a comma.
 .PARAMETER CloseRegistration
@@ -132,7 +140,8 @@ Only authenticatd users can join meetings.
 .PARAMETER AuthenticationOption
 Meeting authentication option id.
 .PARAMETER AuthenticationDomains
-If user has configured "Sign into Zoom with Specified Domains" option, this will list the doamins that are authenticated.
+If user has configured "Sign into Zoom with Specified Domains" option, this will list the doamins that are 
+authenticated.
 .PARAMETER AuthenticationName
 Authentication name set in the authentication profile.
 .LINK
@@ -386,6 +395,25 @@ function Update-ZoomMeeting {
         'tracking_fields' = 'TrackingFields'
     }
 
+    function Remove-NonPSBoundParameters {
+        param (
+            $Obj,
+            $Parameters = $PSBoundParameters
+        )
+    
+        process {
+            $NewObj = @{}
+    
+            foreach ($Key in $Obj.Keys) {
+                if ($Parameters.ContainsKey($Obj.$Key)){
+                    $Newobj.Add($Key, (get-variable $Obj.$Key).value)
+                }
+            }
+    
+            return $NewObj
+        }
+    }
+    
     #Removes parameter if not provided in function call.
     $OptionalParameters = Remove-NonPSBoundParameters($OptionalParameters)
 
@@ -500,21 +528,10 @@ function Update-ZoomMeeting {
     }
 
     $Settings = Remove-NonPSBoundParameters($Settings)
-
-    #Tracking Field Object
-    $TrackingFields = @{}
-
-    if ($PSBoundParameters.ContainsKey('Field')) {
-        $TrackingFields.Add('field', $Field)
-    }
-    if ($PSBoundParameters.ContainsKey('Value')) {
-        $TrackingFields.Add('value', $Value)
-    }
         
     $allObjects = @{
         'recurrence' = $Recurrence
         'settings'   = $Settings
-        'tracking_fields' = $TrackingFields
     }
 
     #Add objects to requestBody if not empty.
@@ -533,24 +550,6 @@ function Update-ZoomMeeting {
     }
 
     Write-Output $response
+    
   }
-}
-
-function Remove-NonPSBoundParameters {
-    param (
-        $Obj,
-        $Parameters = $PSBoundParameters
-    )
-
-    process {
-        $NewObj = @{}
-
-        foreach ($Key in $Obj.Keys) {
-            if ($Parameters.ContainsKey($Obj.$Key)){
-                $Newobj.Add($Key, (get-variable $Obj.$Key).value)
-            }
-        }
-
-        return $NewObj
-    }
 }

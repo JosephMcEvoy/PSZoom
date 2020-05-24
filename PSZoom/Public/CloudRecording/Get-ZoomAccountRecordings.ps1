@@ -45,7 +45,7 @@ Retrieve an account's cloud recordings from April 5th 2020 through May 5th 2020.
 Get-ZoomAccountRecordings -AccountId me -From 2020-05-01 -To 2020-05-05 -Pagesize 300
 
 .LINK
-https://marketplace.zoom.us/docs/api-reference/zoom-api/cloud-recording/recordingslist
+https://marketplace.zoom.us/docs/api-reference/zoom-api/cloud-recording/getaccountcloudrecording
 
 #>
 

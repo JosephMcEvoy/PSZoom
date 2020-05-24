@@ -6,7 +6,7 @@ to "sync" the ADGroup with Zoom.
 Any users in the AD Group who are not in Zoom are CREATED in Zoom if the -Add switch is specified.
 Any users in Zoom who are not in the AD Group are REMOVED from Zoom if the -Remove switch as specified.
 .PARAMETER AdGroup
-The name of the AdGroup that Zoom syncs to.
+The name of the AdGroup that Zoom syncs with.
 .PARAMETER UserExceptions
 Users to ignore from Zoom and/or Active Directory.
 .PARAMETER TransferAccount

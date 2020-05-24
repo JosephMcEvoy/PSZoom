@@ -27,11 +27,11 @@ Send a meeting's recordings to the trash.
 Remove-ZoomMeetingRecordings 123456789
 
 .EXAMPLE
-Send multiple meeting recordings to the trash.
-Remove-ZoomMeetingRecordings 123456789,987654321
+Remove multiple recording files from a meeting to the trash.
+Remove-ZoomMeetingRecordingsFile -MeetingID 123456789 -Id 789634,786123
 
 .LINK
-https://marketplace.zoom.us/docs/api-reference/zoom-api/cloud-recording/recordingdelete
+https://marketplace.zoom.us/docs/api-reference/zoom-api/cloud-recording/recordingdeleteone
 
 #>
 

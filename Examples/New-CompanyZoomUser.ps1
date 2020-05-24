@@ -2,13 +2,13 @@
 .SYNOPSIS
 Creates a Zoom user given inputs.
 .DESCRIPTION
-Created a Zoom user given inputs. Can also create a Zoom user given only the AD account. This is an example script 
+Creates a Zoom user given inputs. Can also create a Zoom user given only the AD account. This is an example script 
 and needs to be customized for your business needs. The script maps AD account properties to properties in Zoom. By 
 default it maps things such as phone number to Zoom PMI, office location to Zoom group (there's a switch statement 
 that should be modified if this is to be used), and other mappings. It also adds 'admin@company.com' as a scheduling 
 assistant by default.
 .PARAMETER Action
-Specify how to create the new user:
+Specify how to create the new user.
 .PARAMETER Email
 User email address.
 .PARAMETER Type
@@ -47,6 +47,8 @@ The API key.
 THe API secret.
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
+.EXAMPLE
+New-CompanyZoomUser lskywalker
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/usercreate
 .LINK

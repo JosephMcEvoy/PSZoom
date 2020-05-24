@@ -20,6 +20,7 @@ SEE ALSO
         Add-ZoomUserAssistants
         Connect-ZoomRoomMeeting
         Disconnect-ZoomRoomMeeting
+        Get-ZoomAccountRecordings
         Get-ZoomActiveInactiveHostReports
         Get-ZoomEndedMeetingInstances
         Get-ZoomGroup
@@ -31,6 +32,7 @@ SEE ALSO
         Get-ZoomMeetingInvitation
         Get-ZoomMeetingPoll
         Get-ZoomMeetingPolls
+        Get-ZoomMeetingRecordings
         Get-ZoomMeetingRegistrants
         Get-ZoomMeetingsFromUser
         Get-ZoomPastMeetingDetails
@@ -39,6 +41,7 @@ SEE ALSO
         Get-ZoomMeetingRecordings
         Get-ZoomRecordings
         Get-ZoomUserRecordings
+        Get-ZoomRecordings
         Get-ZoomRegistrationQuestions
         Get-ZoomRooms
         Get-ZoomTelephoneReports
@@ -60,6 +63,8 @@ SEE ALSO
         Remove-ZoomGroupMembers
         Remove-ZoomMeeting
         Remove-ZoomMeetingPollRemove-ZoomSpecificUserAssistant
+        Remove-ZoomMeetingRecordings
+        Remove-ZoomMeetingRecordingFile
         Remove-ZoomRoomMeeting 
         Remove-ZoomSpecificUserScheduler
         Remove-ZoomUser

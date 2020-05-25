@@ -22,8 +22,8 @@ Scheduled meeting (2)
 Recurring meeting with no fixed time (3)
 Recurring meeting with fixed time. (8)
 .PARAMETER StartTime
-Meeting start time. When using a format like \"yyyy-MM-dd'T'HH:mm:ss'Z'\", always use GMT time. When using a format 
-like \"yyyy-MM-dd'T'HH:mm:ss\", you should use local time and specify the time zone. This is only used for scheduled 
+Meeting start time. When using a format like "yyyy-MM-dd'T'HH:mm:ss'Z'", always use GMT time. When using a format 
+like "yyyy-MM-dd'T'HH:mm:ss", you should use local time and specify the time zone. This is only used for scheduled 
 meetings and recurring meetings with a fixed time.
 .PARAMETER Duration
 Meeting duration (minutes). Used for scheduled meetings only.

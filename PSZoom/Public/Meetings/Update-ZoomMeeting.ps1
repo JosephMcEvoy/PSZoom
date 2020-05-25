@@ -393,6 +393,7 @@ function Update-ZoomMeeting {
         'password'        = 'Password'
         'agenda'          = 'Agenda'
         'tracking_fields' = 'TrackingFields'
+        'start_time'      = 'StartTime'
     }
 
     function Remove-NonPSBoundParameters {
@@ -427,8 +428,8 @@ function Update-ZoomMeeting {
     #Recurrence object
     if ($PSBoundParameters.ContainsKey('RegistrationType')) {
         $RegistrationType = switch ($RegistrationType) {
-            'RegisterOnceAndAttendAll' { '1' }
-            'RegisterForEachoccurrence' { '2' }
+            'RegisterOnceAndAttendAll'         { '1' }
+            'RegisterForEachoccurrence'        { '2' }
             'RegisterOnceAndChooseoccurrences' { '3' }
         }
     }
@@ -550,6 +551,5 @@ function Update-ZoomMeeting {
     }
 
     Write-Output $response
-    
   }
 }

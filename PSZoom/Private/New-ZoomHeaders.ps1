@@ -4,6 +4,8 @@
 Generated Zoom headers.
 .EXAMPLE
 $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+.EXAMPLE
+$Headers = New-ZoomHeaders -Token $Token
 .OUTPUTS
 Generic dictionary.
 
@@ -12,10 +14,13 @@ Generic dictionary.
 function New-ZoomHeaders {
     param (
         [string]$ApiKey,
-        [string]$ApiSecret
+        [string]$ApiSecret,
+        [string]$Token
     )
-    $Credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
-    $Token = New-Jwt -Algorithm 'HS256' -type 'JWT' -Issuer $Credentials.ApiKey -SecretKey $Credentials.ApiSecret -ValidforSeconds 30
+
+    if (-not $Token) {
+        $Token = New-ZoomApiToken -ApiKey $ApiKey -ApiSecret $ApiSecret -ValidforSeconds 30
+    }
 
     Write-Verbose 'Generating Headers'
     $Headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"

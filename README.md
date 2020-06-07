@@ -78,6 +78,7 @@ Get-ZoomUsers
 Get-ZoomUserSchedulers  
 Get-ZoomUserSettings  
 Get-ZoomUserToken  
+New-ZoomApiToken  
 New-ZoomGroup  
 New-ZoomMeeting  
 New-ZoomMeetingPoll  

@@ -14,11 +14,9 @@ function New-ZoomApiToken {
     [OutputType([string])]
     param (
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
         [Parameter()]
-        [ValidateNotNullOrEmpty()]
         [string]$ApiSecret,
 
         [Parameter()]

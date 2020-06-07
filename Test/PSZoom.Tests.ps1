@@ -2414,7 +2414,7 @@ Describe 'New-ZoomMeeting' {
 
     $scheduleParams = @{
         StartTime = '2019-10-18T15:00:00Z'
-        Duration = 60
+        Duration  = 60
     }
 
     Context 'Scheduled Meeting' {
@@ -2439,8 +2439,8 @@ Describe 'New-ZoomMeeting' {
 
     Context 'Recurrence By Day Meeting' {
         $params = @{
-            EndTimes = 2
-            Daily = $True
+            EndTimes       = 2
+            Daily          = $True
             RepeatInterval = 1
         }
   
@@ -2453,8 +2453,8 @@ Describe 'New-ZoomMeeting' {
 
     Context 'Recurrence By Week Meeting' {
         $params = @{
-            WeeklyDays = 'Sunday', 'Monday', 'Tuesday'
-            EndDateTime = '2019-11-25T12:00:00Z'
+            WeeklyDays     = 'Sunday', 'Monday', 'Tuesday'
+            EndDateTime    = '2019-11-25T12:00:00Z'
             RepeatInterval = 2
         }
   
@@ -2467,9 +2467,9 @@ Describe 'New-ZoomMeeting' {
 
     Context 'Recurrence By MonthDay Meeting' {
         $params = @{
-            MonthlyWeek = 'FirstWeek'
+            MonthlyWeek    = 'FirstWeek'
             MonthlyWeekDay = 'Tuesday'
-            EndDateTime = '2019-11-25T12:00:00Z'
+            EndDateTime    = '2019-11-25T12:00:00Z'
             RepeatInterval = 2
         }
   
@@ -3290,5 +3290,34 @@ Describe 'Update-ZoomMeetingStatus' {
 
     It 'Validates against the JSON schema' {
         Test-Json -Json $request.Body -Schema $schema | Should Be $True
+    }
+}
+
+InModuleScope $ModuleName {
+    Describe 'New-ZoomApiToken' {
+        Mock Get-ZoomApiCredentials {
+            return @{
+                ApiKey    = 'key'
+                ApiSecret = 'secret'
+            }
+        }
+
+        Mock New-Jwt {
+            return 'token.token.token'
+        }
+
+        $token = New-ZoomApiToken -ApiKey 'key' -ApiSecret 'secret'
+
+        It 'Get-ZoomApiCredentials is called' {
+            Assert-MockCalled Get-ZoomApiCredentials -Exactly 1
+        }
+
+        It 'New-Jwt is called' {
+            Assert-MockCalled New-Jwt -Exactly 1
+        }
+
+        It 'Valid token returned' {
+            $token | Should -Be 'token.token.token'
+        }
     }
 }

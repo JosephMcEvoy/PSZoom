@@ -136,7 +136,7 @@ Update-ZoomUserpassword
 Update-ZoomUserSettings  
 Update-ZoomUserStatus  
   
-## Webinar ##
+## Webinars ##
 Get-ZoomWebinar  
 Get-ZoomWebinarsFromUser  
 

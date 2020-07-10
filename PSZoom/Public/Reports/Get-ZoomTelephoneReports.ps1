@@ -7,10 +7,10 @@ Retrieve a telephone report for a specified period of time.
 Retrieve a telephone report for a specified period of time.
 
 .PARAMETER From
-Start date in 'yyyy-mm-dd' format.
+Start date.
 
 .PARAMETER To
-End date in 'yyyy-mm-dd' format.
+End date.
 
 .PARAMETER PageSize
 The number of records returned within a single API call.
@@ -21,6 +21,9 @@ The current page number of returned records.
 .PARAMETER YearTiDate
 Use this switch to automatically retrieve all entries for the calendar year.
 
+.PARAMETER CombineAllPages
+If a report has multiple pages this will loop through all pages automatically and place all telephony usage found 
+from each page into the telephony_usage field of the report generated. The page size is set automatically to 300.
 .PARAMETER Type
 Audio types: 1 - Toll-free Call-in & Call-out. The only option is 1. This defaults to 1.
 Note that Zoom documents this as a request parameter so it is included here. However it has no practical use at the moment.
@@ -48,16 +51,19 @@ function Get-ZoomTelephoneReports {
             ValueFromPipelineByPropertyName = $True,
             ParameterSetName = 'Default'
         )]
-        [ValidatePattern('([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))')]
-        [string]$From,
+        [Parameter(ParameterSetName = 'CombineAllPages')]
+        [datetime]$From,
 
         [Parameter(
             Mandatory = $True, 
             ValueFromPipelineByPropertyName = $True,
             ParameterSetName = 'Default'
         )]
-        [ValidatePattern('([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))')]
-        [string]$To,
+        [Parameter(ParameterSetName = 'CombineAllPages')]
+        [datetime]$To,
+
+        [Parameter(ParameterSetName = 'CombineAllPages')]
+        [switch]$CombineAllPages,
 
         [Parameter(
             ValueFromPipelineByPropertyName = $True,
@@ -78,6 +84,7 @@ function Get-ZoomTelephoneReports {
             ValueFromPipelineByPropertyName = $True,
             ParameterSetName = 'Default'
         )]
+        [Parameter(ParameterSetName = 'CombineAllPages')]
         [ValidateSet(1)]
         [int]$Type = 1,
 
@@ -93,35 +100,37 @@ function Get-ZoomTelephoneReports {
     begin {
         #Generate Headers and JWT (JSON Web Token)
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+        if ($From) {
+            [string]$From = $From.ToString('yyyy-MM-dd')
+        }
+        if ($To){
+            [string]$To = $To.ToString('yyyy-MM-dd')
+        }
+        
     }
 
     process {
-        if ($YearToDate) {
-                [int]$Requests = 0
-                $MonthRanges = (Get-YtdMonthlyDateRanges)
-                $AllTelephoneReports = New-Object System.Collections.Generic.List[System.Object]
-
-                foreach ($Key in $MonthRanges.Keys) {
-                    $TotalPages = (Get-ZoomTelephoneReports -from "$($MonthRanges.$Key.begin)" -to "$($MonthRanges.$Key.end)" -pagesize 300 -pagenumber 1).page_count
-                    
-                    for ($i = 1; $i -le $TotalPages; $i++) {
-                        if (($Requests % 10) -eq 0) {  #Zoom limits the number of requests to 10 per second
-                            Start-Sleep -seconds 2
-                        }
-            
-                        $CurrentPage = (Get-ZoomTelephoneReports -from "$($MonthRanges.$Key.begin)" -to "$($MonthRanges.$Key.end)" -pagesize 300 -pagenumber $i).telephony_usage
-                        
-                        foreach ($Entry in $CurrentPage) {
-                            $AllTelephoneReports.Add($Entry)
-                        }
-            
-                        $Requests++
+        if ($PsCmdlet.ParameterSetName -eq 'CombineAllPages') {
+                $InitialReport = Get-ZoomTelephoneReports -From $From -To $To -PageSize 300 -PageNumber 1 -Type $Type
+                $TotalPages = $InitialReport.page_count
+                $CombinedReport = [PSCustomObject]@{
+                    From                  = $From
+                    To                    = $To
+                    Page_count            = $InitialReport.page_count
+                    Total_records         = $InitialReport.total_records
+                    telephony_usage       = $InitialReport.telephony_usage
+                }
+    
+                if ($TotalPages -gt 1) {
+                    for ($i=2; $i -le $TotalPages; $i++){
+                        $telephony_usage = (Get-ZoomTelephoneReports -From $From -To $To -PageSize 300 -PageNumber $i -Type $Type).telephony_usage
+                        $CombinedReport.telephony_usage += $telephony_usage
                     }
                 }
-                write-output $AllTelephoneReports
+    
+                Write-Output $CombinedReport
         } else {
             $Request = [System.UriBuilder]"https://api.zoom.us/v2/report/telephone"
-            $RequestBody = @{ }
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
             $query.Add('type', $Type)
             $query.Add('from', $From)
@@ -130,11 +139,7 @@ function Get-ZoomTelephoneReports {
             $query.Add('page_number', $PageNumber)
             $Request.Query = $query.ToString()
 
-            try {
-                $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method GET
-            } catch {
-                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-            }
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
             
             Write-Output $response
         }

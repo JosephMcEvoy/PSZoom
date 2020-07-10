@@ -12,7 +12,7 @@ $ModulePath = Join-Path $ENV:BHProjectPath $ModuleName
 # Verbose output for non-master builds on appveyor. Handy for troubleshooting. Splat @Verbose against commands as needed (here or in pester tests).
 $Verbose = @{ }
 if ($ENV:BHBranchName -notlike "master" -or $env:BHCommitMessage -match "!verbose") {
-    $Verbose.add("Verbose", $True)
+	$Verbose.add("Verbose", $True)
 }
 
 Import-Module $ModulePath -Force
@@ -21,37 +21,37 @@ Import-Module $ModulePath -Force
 $Private = @(Get-ChildItem -Path "$ModulePath\Private\" -include '*.ps1' -recurse -ErrorAction SilentlyContinue)
 
 foreach ($file in $Private) {
-    try {
-        . $file.fullname
-    }
-    catch {
-        Write-Error -Message "Failed to import function $($ps1.fullname): $_"
-    }
+	try {
+		. $file.fullname
+	}
+	catch {
+		Write-Error -Message "Failed to import function $($ps1.fullname): $_"
+	}
 }
 
 $Module = Get-Module $ModuleName
 $Commands = $Module.ExportedCommands.Keys
 
 Mock Invoke-RestMethod -ModuleName $ModuleName {
-    $Response = @{
-        Body    = $Body
-        Uri     = $Uri
-        Method  = $Method
-        Headers = $Headers
-    }
+	$Response = @{
+		Body    = $Body
+		Uri     = $Uri
+		Method  = $Method
+		Headers = $Headers
+	}
 
-    Write-Output $Response
+	Write-Output $Response
 }
 
 Mock -ModuleName $ModuleName Invoke-RestMethod {
-    $Response = @{
-        Body    = $Body
-        Uri     = $Uri
-        Method  = $Method
-        Headers = $Headers
-    }
+	$Response = @{
+		Body    = $Body
+		Uri     = $Uri
+		Method  = $Method
+		Headers = $Headers
+	}
 
-    Write-Output $Response
+	Write-Output $Response
 }
 
 
@@ -72,105 +72,185 @@ $StreamUrl = 'http://www.streamurltest.com'
 $StreamKey = 'TestStreamKey'
 $PageUrl = 'http://www.pageurltest.com'
 $ApiKeySecret = @{
-    ApiKey    = 'TestApiKey'
-    ApiSecret = 'TestApiSecret'
+	ApiKey    = 'TestApiKey'
+	ApiSecret = 'TestApiSecret'
 }
 
-Describe 'PSZoom General Tests' {
-    It 'Should be the correct name' {
-        $Module.Name | Should Be $ModuleName
-    }
-
-    It 'Should generate a JWT correctly' {
-        $token = (New-JWT -Algorithm 'HS256' -type 'JWT' -Issuer 123 -SecretKey 456 -ValidforSeconds 30)
-        $parsedToken = (Parse-JWTtoken -Token $token)
-        $parsedToken.'alg' | Should -Be 'HS256'
-        $parsedToken.'typ' | Should -Be 'JWT'
-        $parsedToken.'iss' | Should -Be '123'
-        $parsedToken.'exp' | Should -Not -BeNullOrEmpty
-    }
-
-    It 'Should create the correct headers' {
-        $headers = New-ZoomHeaders @ApiKeySecret
-        $headers.'content-type' | Should -Be 'application/json'
-        $headers.'authorization' | Should -BeLike '*bearer*'
-    }
+Describe 'PSZoom Core Tests' {
+	It 'Should be the correct name' {
+		$Module.Name | Should Be $ModuleName
+	}
 }
+
+
+	Describe 'New-JWT' {
+		It 'Should generate a JWT correctly' {
+			$token = (New-JWT -Algorithm 'HS256' -type 'JWT' -Issuer 123 -SecretKey 456 -ValidforSeconds 30)
+			$parsedToken = (Parse-JWTtoken -Token $token)
+			$parsedToken.'alg' | Should -Be 'HS256'
+			$parsedToken.'typ' | Should -Be 'JWT'
+			$parsedToken.'iss' | Should -Be '123'
+			$parsedToken.'exp' | Should -Not -BeNullOrEmpty
+		}
+	}
+
+	Describe 'New-ZoomHeaders' {
+		It 'Should create the correct headers' {
+			$headers = New-ZoomHeaders @ApiKeySecret
+			$headers.'content-type'  | Should -Be 'application/json'
+			$headers.'authorization' | Should -BeLike '*bearer*'
+		}
+	}
+
+	Describe 'Get-ZoomApiCredentials' {}
+	
+InModuleScope $ModuleName {
+	Describe 'New-ZoomApiToken' {
+		Mock Get-ZoomApiCredentials {
+			return @{
+				ApiKey    = 'key'
+				ApiSecret = 'secret'
+			}
+		}
+
+		Mock New-Jwt {
+			return 'token.token.token'
+		}
+
+		$token = New-ZoomApiToken -ApiKey 'key' -ApiSecret 'secret'
+
+		It 'Get-ZoomApiCredentials is called' {
+			Assert-MockCalled Get-ZoomApiCredentials -Exactly 1
+		}
+
+		It 'New-Jwt is called' {
+			Assert-MockCalled New-Jwt -Exactly 1
+		}
+
+		It 'Valid token returned' {
+			$token | Should -Be 'token.token.token'
+		}
+	}
+}
+
+Describe 'Get-DateRanges' {
+	$Ranges = Get-DateRanges -From '2020-01-01' -To '2020-03-03'
+
+	It 'Correctly gets ranges from 2020-01-01 to 2020-03-03' {
+		$Ranges.'012020'.begin | Should -Be '2020-01-01'
+		$Ranges.'012020'.end   | Should -Be '2020-01-31'
+		$Ranges.'022020'.begin | Should -Be '2020-02-01'
+		$Ranges.'022020'.end   | Should -Be '2020-02-29'
+		$Ranges.'032020'.begin | Should -Be '2020-03-01'
+		$Ranges.'032020'.end   | Should -Be '2020-03-03'
+	}
+}
+
+Describe 'ConvertTo-StringWithCommas' {}
+Describe 'Get-LastSixMonthsDateRanges' {}
+Describe 'Get-YTDMonthlyDateRanges' {}
+Describe 'Get-ZoomApiCredentials' {}
+Describe 'Get-ZoomTimeZones' {}
+Describe 'Invoke-ZoomRestMethod' {}
 
 Describe 'PSZoom Meeting Tests' {
-    Context 'Strict mode' {
-        Set-StrictMode -Version 'latest'
+	Context 'Strict mode' {
+		Set-StrictMode -Version 'latest'
 
-        It 'Should load' {
-            $MeetingCommands = @(
-                'Add-ZoomMeetingRegistrant',
-                'Get-ZoomEndedMeetingInstances',
-                'Get-ZoomMeeting',
-                'Get-ZoomMeetingInvitation',
-                'Get-ZoomMeetingPoll',
-                'Get-ZoomMeetingRegistrants',
-                'Get-ZoomMeetingsFromUser',
-                'Get-ZoomPastMeetingDetails',
-                'Get-ZoomPastMeetingParticipants',
-                'Get-ZoomRegistrationQuestions',
-                'Get-ZoomTelephoneReports',
-                'New-ZoomMeetingPoll',
-                'Remove-ZoomMeeting',
-                'Remove-ZoomMeetingPoll',
-                'Update-MeetingStatus',
-                'Update-ZoomMeeting',
-                'Update-ZoomMeetingLiveStream',
-                'Update-ZoomMeetingPoll',
-                'Update-ZoomMeetingRegistrantStatus'
-            )
-            
-            $MeetingCommands | ForEach-Object {
-                $MeetingCommands -contains $_ | Should Be $true
-            }
-        }
-    }
+		It 'Should load' {
+			$MeetingCommands = @(
+				'Add-ZoomMeetingRegistrant',
+				'Get-ZoomEndedMeetingInstances',
+				'Get-ZoomMeeting',
+				'Get-ZoomMeetingInvitation',
+				'Get-ZoomMeetingPoll',
+				'Get-ZoomMeetingRegistrants',
+				'Get-ZoomMeetingsFromUser',
+				'Get-ZoomPastMeetingDetails',
+				'Get-ZoomPastMeetingParticipants',
+				'Get-ZoomRegistrationQuestions',
+				'Get-ZoomTelephoneReports',
+				'New-ZoomMeetingPoll',
+				'Remove-ZoomMeeting',
+				'Remove-ZoomMeetingPoll',
+				'Update-MeetingStatus',
+				'Update-ZoomMeeting',
+				'Update-ZoomMeetingLiveStream',
+				'Update-ZoomMeetingPoll',
+				'Update-ZoomMeetingRegistrantStatus'
+			)
+          
+			$MeetingCommands | ForEach-Object {
+				$MeetingCommands -contains $_ | Should Be $true
+			}
+		}
+	}
 }
 
 Describe 'PSZoom User Tests' {
-    Context 'Strict mode' {
-        Set-StrictMode -Version 'latest'
+	Context 'Strict mode' {
+		Set-StrictMode -Version 'latest'
 
-        It 'Should load' {
-            $UserCommands = @(
-                'Get-ZoomRegistrationQuestions',
-                'Get-ZoomSpecificUser',
-                'Get-ZoomTelephoneReports',
-                'Get-ZoomUserAssistants',
-                'Get-ZoomUserEmailStatus',
-                'Get-ZoomUserPermissions',
-                'Get-ZoomUsers',
-                'Get-ZoomUserSchedulers',
-                'Get-ZoomUserSettings',
-                'Get-ZoomUserToken',
-                'New-ZoomUser',
-                'Remove-ZoomSpecificUserAssistant',
-                'Remove-ZoomSpecificUserScheduler',
-                'Remove-ZoomUser',
-                'Remove-ZoomUserAssistants',
-                'Remove-ZoomUserSchedulers',
-                'Revoke-ZoomUserSsoToken',
-                'Update-ZoomProfilePicture',
-                'Update-ZoomUser',
-                'Update-ZoomUserEmail',
-                'Update-ZoomUserpassword',
-                'Update-ZoomUserSettings',
-                'Update-ZoomUserStatus'
-            )
+		It 'Should load' {
+			$UserCommands = @(
+				'Get-ZoomRegistrationQuestions',
+				'Get-ZoomSpecificUser',
+				'Get-ZoomTelephoneReports',
+				'Get-ZoomUserAssistants',
+				'Get-ZoomUserEmailStatus',
+				'Get-ZoomUserPermissions',
+				'Get-ZoomUsers',
+				'Get-ZoomUserSchedulers',
+				'Get-ZoomUserSettings',
+				'Get-ZoomUserToken',
+				'New-ZoomUser',
+				'Remove-ZoomSpecificUserAssistant',
+				'Remove-ZoomSpecificUserScheduler',
+				'Remove-ZoomUser',
+				'Remove-ZoomUserAssistants',
+				'Remove-ZoomUserSchedulers',
+				'Revoke-ZoomUserSsoToken',
+				'Update-ZoomProfilePicture',
+				'Update-ZoomUser',
+				'Update-ZoomUserEmail',
+				'Update-ZoomUserpassword',
+				'Update-ZoomUserSettings',
+				'Update-ZoomUserStatus'
+			)
             
-            $UserCommands | ForEach-Object {
-                $UserCommands -contains $_ | Should Be $true
-            }
-        }
-    }
+			$UserCommands | ForEach-Object {
+				$UserCommands -contains $_ | Should Be $true
+			}
+		}
+	}
+}
+
+Describe 'PSZoom Report Tests' {
+	Context 'Strict mode' {
+		Set-StrictMode -Version 'latest'
+
+		Mock Invoke-RestMethod {
+			Write-Output $Body, $Uri, $Method
+		}
+
+		$ReportCommands = @(
+			'Get-ZoomActiveInactiveHostReports',
+			'Get-ZoomTelephoneReports',
+			'Get-ZoomDailyUsageReport',
+			'Get-ZoomWebinarDetailsReport',
+			'Get-ZoomWebinarParticipantsReport'
+		)
+
+		It 'Should load' {
+			$ReportCommands | ForEach-Object {
+				$ReportCommands -contains $_ | Should Be $True
+			}
+		}
+	}
 }
 
 Describe 'Add-ZoomUserAssistant' {
-    $schema = '{
+	$schema = '{
     "type": "object",
     "title": "User assistants List",
     "description": "List of users assistants.",
@@ -196,96 +276,96 @@ Describe 'Add-ZoomUserAssistant' {
     }
     }'
 
-    $params = @{
-        UserId         = $UserEmail
-        AssistantEmail = 'testemail1', 'testemail2'
-        AssistantId    = 'testid1', 'testid2'
-    }
+	$params = @{
+		UserId         = $UserEmail
+		AssistantEmail = 'testemail1', 'testemail2'
+		AssistantId    = 'testid1', 'testid2'
+	}
 
-    $request = Add-ZoomUserAssistants @params @ApiKeySecret
+	$request = Add-ZoomUserAssistants @params @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'POST'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'POST'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserEmail/assistants"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/users/$UserEmail/assistants"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Get-ZoomPersonalMeetingRoomName' {
-    $VanityName = 'Test'
-    $request = Get-ZoomPersonalMeetingRoomName -VanityName $VanityName @ApiKeySecret
+	$VanityName = 'Test'
+	$request = Get-ZoomPersonalMeetingRoomName -VanityName $VanityName @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-    It 'Uses the query parameter' {
-        $request.Uri.Query | Should Be "?vanity_name=$VanityName"
-    }
+	It 'Uses the query parameter' {
+		$request.Uri.Query | Should Be "?vanity_name=$VanityName"
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri.Scheme | Should Be 'https'
-        $Request.Uri.Authority | Should Be 'api.zoom.us'
-        $Request.Uri.AbsolutePath | Should Be '/v2/users/vanity_name'
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri.Scheme | Should Be 'https'
+		$Request.Uri.Authority | Should Be 'api.zoom.us'
+		$Request.Uri.AbsolutePath | Should Be '/v2/users/vanity_name'
+	}
 }
 
 Describe 'Get-ZoomUser' {
-    $request = Get-ZoomUser -UserId $UserId @ApiKeySecret
+	$request = Get-ZoomUser -UserId $UserId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId"
+	}
 }
 
 Describe 'Get-ZoomUserAssistants' {
-    $request = Get-ZoomUserAssistants -UserId $UserId @ApiKeySecret
+	$request = Get-ZoomUserAssistants -UserId $UserId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/assistants"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/assistants"
+	}
 }
 
 Describe 'Get-ZoomUserEmailStatus' {
-    $request = Get-ZoomUserEmailStatus -UserId $UserId @ApiKeySecret
+	$request = Get-ZoomUserEmailStatus -UserId $UserId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-    It 'Uses the correct uri and query parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/users/email?email=$UserId".replace('@', '%40')
-    }
+	It 'Uses the correct uri and query parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/users/email?email=$UserId".replace('@', '%40')
+	}
 }
 
 Describe 'Get-ZoomUserPermissions' {
-    $request = Get-ZoomUserPermissions -UserId $UserId @ApiKeySecret
+	$request = Get-ZoomUserPermissions -UserId $UserId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/permissions"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/permissions"
+	}
 }
 
 Describe 'New-ZoomUser' {
-    $schema = '{
+	$schema = '{
     "type": "object",
     "properties": {
         "action": {
@@ -355,185 +435,185 @@ Describe 'New-ZoomUser' {
     ]
     }'
 
-    $params = @{
-        Email     = 'testemail@test.com'
-        Action    = 'ssoCreate'
-        Type      = 'pro'
-        FirstName = 'testfirstname'
-        LastName  = 'testlastname'
-        Password  = 'testpassword'
-    }
+	$params = @{
+		Email     = 'testemail@test.com'
+		Action    = 'ssoCreate'
+		Type      = 'pro'
+		FirstName = 'testfirstname'
+		LastName  = 'testlastname'
+		Password  = 'testpassword'
+	}
 
-    $request = New-ZoomUser @params @ApiKeySecret
+	$request = New-ZoomUser @params @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'POST'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'POST'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/users"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/users"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Remove-ZoomSpecificUserAssistant' {
-    $request = Remove-ZoomSpecificUserAssistant -UserId $UserId -AssistantId $AssistantId @ApiKeySecret
+	$request = Remove-ZoomSpecificUserAssistant -UserId $UserId -AssistantId $AssistantId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'DELETE'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'DELETE'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/assistants/$AssistantId"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/assistants/$AssistantId"
+	}
 
-    It 'Invokes rest method for multiple user IDs' {
-        Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId @ApiKeySecret
-        Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
-    }
+	It 'Invokes rest method for multiple user IDs' {
+		Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId @ApiKeySecret
+		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+	}
 
-    It 'Invokes rest method for multiple user schedulers' {
-        Remove-ZoomSpecificUserAssistant -UserId $UserId-AssistantId $AssistantId, $AssistantId2 @ApiKeySecret
-        Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
-    }
+	It 'Invokes rest method for multiple user schedulers' {
+		Remove-ZoomSpecificUserAssistant -UserId $UserId-AssistantId $AssistantId, $AssistantId2 @ApiKeySecret
+		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+	}
     
-    It 'Invokes rest method for multiple user IDs and schedulers at the same time' {
-        Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId, $AssistantId2 @ApiKeySecret
-        Assert-MockCalled -CommandName Invoke-RestMethod -Times 4 -Scope It -ModuleName $ModuleName
-    }
+	It 'Invokes rest method for multiple user IDs and schedulers at the same time' {
+		Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId, $AssistantId2 @ApiKeySecret
+		Assert-MockCalled -CommandName Invoke-RestMethod -Times 4 -Scope It -ModuleName $ModuleName
+	}
 }
 
 Describe 'Remove-ZoomSpecificUserScheduler' {
-    $request = Remove-ZoomSpecificUserScheduler -UserId $UserId -SchedulerId $AssistantId @ApiKeySecret
+	$request = Remove-ZoomSpecificUserScheduler -UserId $UserId -SchedulerId $AssistantId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'DELETE'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'DELETE'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/schedulers/$AssistantId"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/schedulers/$AssistantId"
+	}
 
-    It 'Invokes rest method for multiple user IDs' {
-        Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId @ApiKeySecret
-        Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
-    }
+	It 'Invokes rest method for multiple user IDs' {
+		Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId @ApiKeySecret
+		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+	}
 
-    It 'Invokes rest method for multiple user schedulers' {
-        Remove-ZoomSpecificUserAssistant -UserId $UserId-AssistantId $AssistantId, $AssistantId2 @ApiKeySecret
-        Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
-    }
+	It 'Invokes rest method for multiple user schedulers' {
+		Remove-ZoomSpecificUserAssistant -UserId $UserId-AssistantId $AssistantId, $AssistantId2 @ApiKeySecret
+		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+	}
     
-    It 'Invokes rest method for multiple user IDs and schedulers at the same time' {
-        Remove-ZoomSpecificUserScheduler -UserId $UserId, $UserId2 -SchedulerId $AssistantId, $AssistantId2 @ApiKeySecret
-        Assert-MockCalled -CommandName Invoke-RestMethod -Times 4 -Scope It -ModuleName $ModuleName
-    }
+	It 'Invokes rest method for multiple user IDs and schedulers at the same time' {
+		Remove-ZoomSpecificUserScheduler -UserId $UserId, $UserId2 -SchedulerId $AssistantId, $AssistantId2 @ApiKeySecret
+		Assert-MockCalled -CommandName Invoke-RestMethod -Times 4 -Scope It -ModuleName $ModuleName
+	}
 }
 
 Describe 'Remove-ZoomUser' {
-    $request = Remove-ZoomUser -UserId $UserId -Action Delete -TransferEmail $UserId2 -TransferMeeting -TransferRecording  @ApiKeySecret
+	$request = Remove-ZoomUser -UserId $UserId -Action Delete -TransferEmail $UserId2 -TransferMeeting -TransferRecording  @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'DELETE'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'DELETE'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri.Scheme | Should Be 'https'
-        $Request.Uri.Authority | Should Be 'api.zoom.us'
-        $Request.Uri.AbsolutePath | Should Be "/v2/users/$UserId"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri.Scheme | Should Be 'https'
+		$Request.Uri.Authority | Should Be 'api.zoom.us'
+		$Request.Uri.AbsolutePath | Should Be "/v2/users/$UserId"
+	}
 
-    It 'Uses the correct query parameters' {
-        $queries = @('action=Delete', "transfer_email=$UserId2".replace('@', '%40'), 'transfer_meeting=True', 'transfer_recording=True')
-        $queries | ForEach-Object {
-            $Request.Uri.Query | Should BeLike "*$_*"
-        }
-    }
+	It 'Uses the correct query parameters' {
+		$queries = @('action=Delete', "transfer_email=$UserId2".replace('@', '%40'), 'transfer_meeting=True', 'transfer_recording=True')
+		$queries | ForEach-Object {
+			$Request.Uri.Query | Should BeLike "*$_*"
+		}
+	}
     
-    It 'Invokes rest method for each user inputted' {
-        Remove-ZoomUser -UserId $UserId, $UserId2 @ApiKeySecret
-        Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
-    }
+	It 'Invokes rest method for each user inputted' {
+		Remove-ZoomUser -UserId $UserId, $UserId2 @ApiKeySecret
+		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+	}
 }
 
 Describe 'Remove-ZoomUserAssistants' {
-    $request = Remove-ZoomUserAssistants -UserId $UserId @ApiKeySecret
+	$request = Remove-ZoomUserAssistants -UserId $UserId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'DELETE'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'DELETE'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/assistants"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/assistants"
+	}
     
-    It 'Invokes rest method for each user inputted' {
-        Remove-ZoomUserAssistants -UserId $UserId, $UserId2 @ApiKeySecret
-        Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
-    }
+	It 'Invokes rest method for each user inputted' {
+		Remove-ZoomUserAssistants -UserId $UserId, $UserId2 @ApiKeySecret
+		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+	}
 }
 
 Describe 'Remove-ZoomUserSchedulers' {
-    $request = Remove-ZoomUserSchedulers -UserId $UserId @ApiKeySecret
+	$request = Remove-ZoomUserSchedulers -UserId $UserId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'DELETE'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'DELETE'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/schedulers"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/schedulers"
+	}
     
-    It 'Invokes rest method for each user inputted' {
-        Remove-ZoomUserSchedulers -UserId $UserId, $UserId2 @ApiKeySecret
-        Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
-    }
+	It 'Invokes rest method for each user inputted' {
+		Remove-ZoomUserSchedulers -UserId $UserId, $UserId2 @ApiKeySecret
+		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+	}
 }
 
 Describe 'Revoke-ZoomUserSsoToken' {
-    $request = Revoke-ZoomUserSsoToken -UserId $UserId @ApiKeySecret
+	$request = Revoke-ZoomUserSsoToken -UserId $UserId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'DELETE'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'DELETE'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/token"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/token"
+	}
     
-    It 'Invokes rest method for each user inputted' {
-        Revoke-ZoomUserSsoToken -UserId $UserId, $UserId2 @ApiKeySecret
-        Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
-    }
+	It 'Invokes rest method for each user inputted' {
+		Revoke-ZoomUserSsoToken -UserId $UserId, $UserId2 @ApiKeySecret
+		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
+	}
 }
 
 Describe 'Update-ZoomProfilePicture' {
-    Mock Test-Path -ModuleName $ModuleName {
-        return $True
-    }
+	Mock Test-Path -ModuleName $ModuleName {
+		return $True
+	}
 
-    Mock Get-Content -ModuleName $ModuleName {
-        return $True
-    }
+	Mock Get-Content -ModuleName $ModuleName {
+		return $True
+	}
 
-    $request = Update-ZoomProfilePicture -UserId $UserId -Filename 'testimg.jpg' @ApiKeySecret
+	$request = Update-ZoomProfilePicture -UserId $UserId -Filename 'testimg.jpg' @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'POST'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'POST'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/picture"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/picture"
+	}
 
-    #Still need a test for request body
+	#Still need a test for request body
 }
 
 Describe 'Update-ZoomUser' {
-    $schema = '{
+	$schema = '{
         "type": "object",
         "description": "The user update object represents a user on Zoom.",
         "properties": {
@@ -601,45 +681,45 @@ Describe 'Update-ZoomUser' {
         }
       }'
 
-    $params = @{
-        UserId     = $UserId
-        LoginType  = 'sso'
-        Type       = 'pro'
-        FirstName  = 'test first name'
-        LastName   = 'test last name'
-        Pmi        = '1234567890'
-        UsePmi     = $True
-        Timezone   = 'Pacific/Honolulu'
-        Language   = 'english'
-        Dept       = 'test department'
-        VanityName = 'test vanity name'
-        HostKey    = '123456'
-        CmsUserId  = '654321'
-    }
+	$params = @{
+		UserId     = $UserId
+		LoginType  = 'sso'
+		Type       = 'pro'
+		FirstName  = 'test first name'
+		LastName   = 'test last name'
+		Pmi        = '1234567890'
+		UsePmi     = $True
+		Timezone   = 'Pacific/Honolulu'
+		Language   = 'english'
+		Dept       = 'test department'
+		VanityName = 'test vanity name'
+		HostKey    = '123456'
+		CmsUserId  = '654321'
+	}
 
-    $request = Update-ZoomUser @params @ApiKeySecret
+	$request = Update-ZoomUser @params @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PATCH'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PATCH'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri.Scheme | Should Be 'https'
-        $Request.Uri.Authority | Should Be 'api.zoom.us'
-        $Request.Uri.AbsolutePath | Should Be "/v2/users/$UserId"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri.Scheme | Should Be 'https'
+		$Request.Uri.Authority | Should Be 'api.zoom.us'
+		$Request.Uri.AbsolutePath | Should Be "/v2/users/$UserId"
+	}
 
-    It 'Uses the correct query parameters' {
-        $Request.Uri.Query | Should Be '?login_type=101'
-    }
+	It 'Uses the correct query parameters' {
+		$Request.Uri.Query | Should Be '?login_type=101'
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Update-ZoomUserEmail' {
-    $schema = '{
+	$schema = '{
         "type": "object",
         "properties": {
           "email": {
@@ -653,23 +733,23 @@ Describe 'Update-ZoomUserEmail' {
         ]
       }'
 
-    $request = Update-ZoomUserEmail -UserId $UserId -email $UserId2  @ApiKeySecret
+	$request = Update-ZoomUserEmail -UserId $UserId -email $UserId2  @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PUT'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PUT'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/email"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/email"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Update-ZoomUserPassword' {
-    $schema = '{
+	$schema = '{
         "type": "object",
         "properties": {
           "password": {
@@ -683,23 +763,23 @@ Describe 'Update-ZoomUserPassword' {
         ]
       }'
 
-    $request = Update-ZoomUserpassword -UserId $UserId -password 'testpassword'  @ApiKeySecret
+	$request = Update-ZoomUserpassword -UserId $UserId -password 'testpassword'  @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PUT'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PUT'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/password"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/password"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Update-ZoomUserSettings' {
-    $schema = '{
+	$schema = '{
         "title": "User settings",
         "type": "object",
         "properties": {
@@ -1082,89 +1162,89 @@ Describe 'Update-ZoomUserSettings' {
         }
       }'
 
-    $params = @{
-        AllowLiveStreaming              = $true
-        AlternativeHostReminder         = $true
-        Annotation                      = $true
-        AttendeeOnHold                  = $true
-        AttentionTracking               = $true
-        AudioConferenceInfo             = $true
-        AudioType                       = 'both'
-        AutoDeleteCmr                   = $true
-        AutoDeleteCmrDay                = $true
-        AutoRecording                   = 'local'
-        AutoSavingChat                  = $true
-        BreakoutRoom                    = $true
-        CallOut                         = $true
-        CallOutCountries                = $true
-        CancelMeetingReminder           = $true
-        Chat                            = $true
-        ClosedCaption                   = $true
-        CloudRecording                  = $true
-        CoHost                          = $true
-        CustomLiveStreaming             = $true
-        CustomServiceInstructions       = $true
-        E2eEncryption                   = $true
-        EntryExitChim                   = 'all'
-        FarEndCameraControl             = $true
-        Feedback                        = $true
-        FileTransfer                    = $true
-        ForcePmiJbhPassword             = $true
-        GroupHd                         = $true
-        HostPauseStopRecording          = $true
-        HostVideo                       = $true
-        JoinBeforeHost                  = $true
-        LargeMeeting                    = $true
-        LargeMeetingCapacity            = $true
-        LocalRecording                  = $true
-        MeetingCapacity                 = $true
-        NonVerbalFeedback               = $true
-        ParticipantsVideo               = $true
-        Polling                         = $true
-        PrivateChat                     = $true
-        PstnPasswordProtected           = $true
-        RecordAudioFile                 = $true
-        RecordGalleryView               = $true
-        RecordingAudioTranscrip         = $true
-        RecordPlayVoic                  = $true
-        RecordSpeakerView               = $true
-        RemoteControl                   = $true
-        RemoteSupport                   = $true
-        SaveChatText                    = $true
-        ScheduleForReminder             = $true
-        ShareDualCamera                 = $true
-        ShowInternationalNumbersLink    = $true
-        ShowInternationalNumbersLinkTsp = $true
-        ShowTimestamp                   = $true
-        ThirdPartyAudio                 = $true
-        UsePmiForInstantMeetings        = $true
-        UsePmiForScheduledMeetings      = $true
-        UserId                          = $UserId
-        VirtualBackground               = $true
-        WaitingRoom                     = $true
-        Webinar                         = $true
-        WebinarCapacity                 = $true
-        WorkplaceByFacebook             = $true
-        ZoomPhone                       = $true
-    }
+	$params = @{
+		AllowLiveStreaming              = $true
+		AlternativeHostReminder         = $true
+		Annotation                      = $true
+		AttendeeOnHold                  = $true
+		AttentionTracking               = $true
+		AudioConferenceInfo             = $true
+		AudioType                       = 'both'
+		AutoDeleteCmr                   = $true
+		AutoDeleteCmrDay                = $true
+		AutoRecording                   = 'local'
+		AutoSavingChat                  = $true
+		BreakoutRoom                    = $true
+		CallOut                         = $true
+		CallOutCountries                = $true
+		CancelMeetingReminder           = $true
+		Chat                            = $true
+		ClosedCaption                   = $true
+		CloudRecording                  = $true
+		CoHost                          = $true
+		CustomLiveStreaming             = $true
+		CustomServiceInstructions       = $true
+		E2eEncryption                   = $true
+		EntryExitChim                   = 'all'
+		FarEndCameraControl             = $true
+		Feedback                        = $true
+		FileTransfer                    = $true
+		ForcePmiJbhPassword             = $true
+		GroupHd                         = $true
+		HostPauseStopRecording          = $true
+		HostVideo                       = $true
+		JoinBeforeHost                  = $true
+		LargeMeeting                    = $true
+		LargeMeetingCapacity            = $true
+		LocalRecording                  = $true
+		MeetingCapacity                 = $true
+		NonVerbalFeedback               = $true
+		ParticipantsVideo               = $true
+		Polling                         = $true
+		PrivateChat                     = $true
+		PstnPasswordProtected           = $true
+		RecordAudioFile                 = $true
+		RecordGalleryView               = $true
+		RecordingAudioTranscrip         = $true
+		RecordPlayVoic                  = $true
+		RecordSpeakerView               = $true
+		RemoteControl                   = $true
+		RemoteSupport                   = $true
+		SaveChatText                    = $true
+		ScheduleForReminder             = $true
+		ShareDualCamera                 = $true
+		ShowInternationalNumbersLink    = $true
+		ShowInternationalNumbersLinkTsp = $true
+		ShowTimestamp                   = $true
+		ThirdPartyAudio                 = $true
+		UsePmiForInstantMeetings        = $true
+		UsePmiForScheduledMeetings      = $true
+		UserId                          = $UserId
+		VirtualBackground               = $true
+		WaitingRoom                     = $true
+		Webinar                         = $true
+		WebinarCapacity                 = $true
+		WorkplaceByFacebook             = $true
+		ZoomPhone                       = $true
+	}
 
-    $request = Update-ZoomUserSettings @params @ApiKeySecret
+	$request = Update-ZoomUserSettings @params @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PATCH'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PATCH'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/settings"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/settings"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Update-ZoomUserStatus' {
-    $schema = '{
+	$schema = '{
         "description": "The action.",
         "type": "object",
         "properties": {
@@ -1186,49 +1266,49 @@ Describe 'Update-ZoomUserStatus' {
         ]
       }'
 
-    $request = Update-ZoomUserStatus -UserId $UserId -action deactivate @ApiKeySecret
+	$request = Update-ZoomUserStatus -UserId $UserId -action deactivate @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PUT'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PUT'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/status"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/status"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 #Group Tests
 Describe 'PSZoom Group Tests' {
-    Context 'Strict mode' {
-        Set-StrictMode -Version 'latest'
-        $GroupCommands = @(
-            'Add-ZoomGroupMember',
-            'Get-ZoomGroupLockSettings',
-            'Get-ZoomGroups',
-            'Get-ZoomGroupSettings',
-            'Get-ZoomSpecificGroup',
-            'New-ZoomGroup',
-            'Remove-ZoomGroup',
-            'Remove-ZoomGroupMembers',
-            'Update-ZoomGroup',
-            'Update-ZoomGroupLockSettings',
-            'Update-ZoomGroupSettings'
-        )
+	Context 'Strict mode' {
+		Set-StrictMode -Version 'latest'
+		$GroupCommands = @(
+			'Add-ZoomGroupMember',
+			'Get-ZoomGroupLockSettings',
+			'Get-ZoomGroups',
+			'Get-ZoomGroupSettings',
+			'Get-ZoomSpecificGroup',
+			'New-ZoomGroup',
+			'Remove-ZoomGroup',
+			'Remove-ZoomGroupMembers',
+			'Update-ZoomGroup',
+			'Update-ZoomGroupLockSettings',
+			'Update-ZoomGroupSettings'
+		)
 
-        It 'Should load' {
-            $GroupCommands | ForEach-Object {
-                $GroupCommands -contains $_ | Should Be $True
-            }
-        }
-    }
+		It 'Should load' {
+			$GroupCommands | ForEach-Object {
+				$GroupCommands -contains $_ | Should Be $True
+			}
+		}
+	}
 }
     
 Describe 'Add-ZoomGroupMember' {
-    $schema = '{
+	$schema = '{
             "type": "object",
             "properties": {
               "members": {
@@ -1252,71 +1332,71 @@ Describe 'Add-ZoomGroupMember' {
             }
           }'
         
-    $request = Add-ZoomGroupMember -GroupId $GroupId -MemberEmail $UserEmail @ApiKeySecret
+	$request = Add-ZoomGroupMember -GroupId $GroupId -MemberEmail $UserEmail @ApiKeySecret
         
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'POST'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'POST'
+	}
         
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/members"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/members"
+	}
         
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Get-ZoomGroup' {
-    $request = Get-ZoomGroup -GroupId $GroupId -ApiKey 123 -ApiSecret 456
+	$request = Get-ZoomGroup -GroupId $GroupId -ApiKey 123 -ApiSecret 456
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
     
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId"
+	}
 }
 
 Describe 'Get-ZoomGroupLockSettings' {
-    $request = Get-ZoomGroupLockSettings -GroupId $GroupId @ApiKeySecret
+	$request = Get-ZoomGroupLockSettings -GroupId $GroupId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
     
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/lock_settings"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/lock_settings"
+	}
 }
 
 Describe 'Get-ZoomGroups' {
-    $request = Get-ZoomGroups -FullApiResponse @ApiKeySecret
+	$request = Get-ZoomGroups -FullApiResponse @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
     
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/groups"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/groups"
+	}
 }
 
 Describe 'Get-ZoomGroupSettings' {
-    $request = Get-ZoomGroupSettings -GroupId $GroupId @ApiKeySecret
+	$request = Get-ZoomGroupSettings -GroupId $GroupId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
     
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/settings"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/settings"
+	}
 }
 
 Describe 'New-ZoomGroup' {
-    $schema = '{
+	$schema = '{
             "type": "object",
             "properties": {
                 "name": {
@@ -1326,35 +1406,35 @@ Describe 'New-ZoomGroup' {
             }
         }'
         
-    $request = New-ZoomGroup -Name 'TestGroupName' @ApiKeySecret
+	$request = New-ZoomGroup -Name 'TestGroupName' @ApiKeySecret
     
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'POST'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'POST'
+	}
     
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be 'https://api.zoom.us/v2/groups'
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be 'https://api.zoom.us/v2/groups'
+	}
     
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Remove-ZoomGroup' {
-    $request = Remove-ZoomGroup -GroupId $GroupId @ApiKeySecret
+	$request = Remove-ZoomGroup -GroupId $GroupId @ApiKeySecret
     
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'DELETE'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'DELETE'
+	}
     
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId"
+	}
 }
 
 Describe 'Update-ZoomGroup' {
-    $schema = '{
+	$schema = '{
             "type": "object",
             "properties": {
               "name": {
@@ -1364,91 +1444,91 @@ Describe 'Update-ZoomGroup' {
             }
           }'
         
-    $request = Update-ZoomGroup -GroupId $GroupId -Name 'NewName' @ApiKeySecret
+	$request = Update-ZoomGroup -GroupId $GroupId -Name 'NewName' @ApiKeySecret
     
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PATCH'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PATCH'
+	}
     
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId"
+	}
     
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 $updateGroupParams = @{
-    AccountUserAccessRecording      = $true
-    AlertGuestJoin                  = $true
-    AllowShowZoomWindows            = $true
-    AlternativeHostReminder         = $true
-    Annotation                      = $true
-    AttendeeOnHold                  = $true
-    AttentionTracking               = $true
-    AudioConferenceInfo             = 'testaudioconferenceinfo'
-    AudioType                       = $true
-    AutoAnswer                      = $true
-    AutoRecording                   = $true
-    AutoSavingChat                  = $true
-    BreakoutRoom                    = $true
-    CancelMeetingReminder           = $true
-    Chat                            = $true
-    ClosedCaption                   = $true
-    CloudRecording                  = $true
-    CloudRecordingAvailableReminder = $true
-    CloudRecordingDownload          = $true
-    CloudRecordingDownloadHost      = $true
-    CoHost                          = $true
-    E2eEncryption                   = $true
-    EntryExitChime                  = 'testchime'
-    FarEndCameraControl             = $true
-    Feedback                        = $true
-    FileTransfer                    = $true
-    ForcePmiJbhPassword             = $true
-    GroupHd                         = $true
-    HostDeleteCloudRecording        = $true
-    HostVideo                       = $true
-    JbhReminder                     = $true
-    JoinBeforeHost                  = $true
-    LocalRecording                  = $true
-    MuteUponEntry                   = $true
-    NonVerbalFeedback               = $true
-    OnlyHostViewDeviceList          = $true
-    OriginalAudio                   = $true
-    ParticipantVideo                = $true
-    Polling                         = $true
-    PostMeetingFeedback             = $true
-    PrivateChat                     = $true
-    PstnPasswordProtected           = $true
-    RecordAudioFile                 = $true
-    RecordGalleryView               = $true
-    RecordingAudioTranscript        = $true
-    RecordPlayOwnVoice              = $true
-    RecordSpeakerView               = $true
-    RemoteControl                   = $true
-    RemoteSupport                   = $true
-    RequirePasswordForAllMeetings   = $true
-    SaveChatText                    = $true
-    ScheduleForHostReminder         = $true
-    ScreenSharing                   = $true
-    SendingDefaultEmailInvites      = $true
-    ShowBrowserJoinLink             = $true
-    ShowDeviceList                  = $true
-    ShowMeetingControlToolbar       = $true
-    ShowTimestamp                   = $true
-    StereoAudio                     = $true
-    ThirdPartyAudio                 = $true
-    UpcomingMeetingReminder         = $true
-    UseHtmlFormatEmail              = $true
-    VirtualBackground               = $true
-    WaitingRoom                     = $true
-    Whiteboard                      = $true
+	AccountUserAccessRecording      = $true
+	AlertGuestJoin                  = $true
+	AllowShowZoomWindows            = $true
+	AlternativeHostReminder         = $true
+	Annotation                      = $true
+	AttendeeOnHold                  = $true
+	AttentionTracking               = $true
+	AudioConferenceInfo             = 'testaudioconferenceinfo'
+	AudioType                       = $true
+	AutoAnswer                      = $true
+	AutoRecording                   = $true
+	AutoSavingChat                  = $true
+	BreakoutRoom                    = $true
+	CancelMeetingReminder           = $true
+	Chat                            = $true
+	ClosedCaption                   = $true
+	CloudRecording                  = $true
+	CloudRecordingAvailableReminder = $true
+	CloudRecordingDownload          = $true
+	CloudRecordingDownloadHost      = $true
+	CoHost                          = $true
+	E2eEncryption                   = $true
+	EntryExitChime                  = 'testchime'
+	FarEndCameraControl             = $true
+	Feedback                        = $true
+	FileTransfer                    = $true
+	ForcePmiJbhPassword             = $true
+	GroupHd                         = $true
+	HostDeleteCloudRecording        = $true
+	HostVideo                       = $true
+	JbhReminder                     = $true
+	JoinBeforeHost                  = $true
+	LocalRecording                  = $true
+	MuteUponEntry                   = $true
+	NonVerbalFeedback               = $true
+	OnlyHostViewDeviceList          = $true
+	OriginalAudio                   = $true
+	ParticipantVideo                = $true
+	Polling                         = $true
+	PostMeetingFeedback             = $true
+	PrivateChat                     = $true
+	PstnPasswordProtected           = $true
+	RecordAudioFile                 = $true
+	RecordGalleryView               = $true
+	RecordingAudioTranscript        = $true
+	RecordPlayOwnVoice              = $true
+	RecordSpeakerView               = $true
+	RemoteControl                   = $true
+	RemoteSupport                   = $true
+	RequirePasswordForAllMeetings   = $true
+	SaveChatText                    = $true
+	ScheduleForHostReminder         = $true
+	ScreenSharing                   = $true
+	SendingDefaultEmailInvites      = $true
+	ShowBrowserJoinLink             = $true
+	ShowDeviceList                  = $true
+	ShowMeetingControlToolbar       = $true
+	ShowTimestamp                   = $true
+	StereoAudio                     = $true
+	ThirdPartyAudio                 = $true
+	UpcomingMeetingReminder         = $true
+	UseHtmlFormatEmail              = $true
+	VirtualBackground               = $true
+	WaitingRoom                     = $true
+	Whiteboard                      = $true
 }
 
 Describe 'Update-ZoomGroupLockSettings' -Verbose {
-    $schema = '{
+	$schema = '{
             "type": "object",
             "properties": {
               "schedule_meeting": {
@@ -1695,23 +1775,23 @@ Describe 'Update-ZoomGroupLockSettings' -Verbose {
             }
           }'
         
-    $request = Update-ZoomGroupLockSettings -GroupId $GroupId @updateGroupParams @ApiKeySecret
-    Write-Verbose $request.body
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PATCH'
-    }
+	$request = Update-ZoomGroupLockSettings -GroupId $GroupId @updateGroupParams @ApiKeySecret
+	Write-Verbose $request.body
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PATCH'
+	}
     
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/lock_settings"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/lock_settings"
+	}
     
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Update-ZoomGroupSettings' {
-    $schema = '{
+	$schema = '{
             "type": "object",
             "properties": {
               "name": {
@@ -1721,44 +1801,23 @@ Describe 'Update-ZoomGroupSettings' {
             }
           }'
         
-    $request = Update-ZoomGroupSettings -GroupId $GroupId @updateGroupParams @ApiKeySecret
+	$request = Update-ZoomGroupSettings -GroupId $GroupId @updateGroupParams @ApiKeySecret
     
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PATCH'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PATCH'
+	}
     
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/settings"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/groups/$GroupId/settings"
+	}
     
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
-}
-
-Describe 'PSZoom Report Tests' {
-    Context 'Strict mode' {
-        Set-StrictMode -Version 'latest'
-
-        Mock Invoke-RestMethod {
-            Write-Output $Body, $Uri, $Method
-        }
-
-        $ReportCommands = @(
-            'Get-ZoomActiveInactiveHostReports',
-            'Get-ZoomTelephoneReports'
-        )
-
-        It 'Should load' {
-            $ReportCommands | ForEach-Object {
-                $ReportCommands -contains $_ | Should Be $True
-            }
-        }
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Add-ZoomMeetingRegistrant' {
-    $schema = '{
+	$schema = '{
         "type": "object",
         "properties": {
           "id": {
@@ -1784,198 +1843,198 @@ Describe 'Add-ZoomMeetingRegistrant' {
         }
       }'
 
-    $params = @{
-        Address               = 'Address'
-        City                  = 'City'
-        Comments              = 'Comments'
-        Country               = 'Country'
-        Email                 = $UserId2
-        FirstName             = 'FirstName'
-        Industry              = 'Industry'
-        JobTitle              = 'JobTitle'
-        LastName              = 'LastName'
-        MeetingId             = $MeetingId
-        NoOfEmployees         = '1-20'
-        Org                   = 'Org'
-        Phone                 = 'Phone'
-        PurchasingTimeFrame   = 'Within a month'
-        RoleInPurchaseProcess = 'Decision Maker'
-        State                 = 'State'
-        Zip                   = 'Zip'
-    }
+	$params = @{
+		Address               = 'Address'
+		City                  = 'City'
+		Comments              = 'Comments'
+		Country               = 'Country'
+		Email                 = $UserId2
+		FirstName             = 'FirstName'
+		Industry              = 'Industry'
+		JobTitle              = 'JobTitle'
+		LastName              = 'LastName'
+		MeetingId             = $MeetingId
+		NoOfEmployees         = '1-20'
+		Org                   = 'Org'
+		Phone                 = 'Phone'
+		PurchasingTimeFrame   = 'Within a month'
+		RoleInPurchaseProcess = 'Decision Maker'
+		State                 = 'State'
+		Zip                   = 'Zip'
+	}
 
-    $request = Add-ZoomMeetingRegistrant @params @ApiKeySecret
+	$request = Add-ZoomMeetingRegistrant @params @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'POST'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'POST'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Get-ZoomEndedMeetingInstances' {
-    $request = Get-ZoomEndedMeetingInstances -MeetingId $MeetingId @ApiKeySecret
+	$request = Get-ZoomEndedMeetingInstances -MeetingId $MeetingId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $request.Uri | Should be "https://api.zoom.us/v2/past_meetings/$MeetingId/instances"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$request.Uri | Should be "https://api.zoom.us/v2/past_meetings/$MeetingId/instances"
+	}
 }
 
 Describe 'Get-ZoomMeeting' {
-    $request = Get-ZoomMeeting -MeetingId $MeetingId -OccurrenceId $OccurrenceId @ApiKeySecret
+	$request = Get-ZoomMeeting -MeetingId $MeetingId -OccurrenceId $OccurrenceId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-    It 'Uses the correct uri and query parameter' {
-        $request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)?occurrence_id=$($OccurrenceId)"
-    }
+	It 'Uses the correct uri and query parameter' {
+		$request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)?occurrence_id=$($OccurrenceId)"
+	}
 }   
 
 Describe 'Get-ZoomMeetingInvitation' {
-    $request = Get-ZoomMeetingInvitation -MeetingId $MeetingId @ApiKeySecret
+	$request = Get-ZoomMeetingInvitation -MeetingId $MeetingId @ApiKeySecret
   
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
   
-    It 'Uses the correct uri and query parameter' {
-        $request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)/invitation"
-    }
+	It 'Uses the correct uri and query parameter' {
+		$request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)/invitation"
+	}
 }
 
 Describe 'Get-ZoomMeetingPoll' {
-    $request = Get-ZoomMeetingPoll -MeetingId $MeetingId -PollId $PollId @ApiKeySecret
+	$request = Get-ZoomMeetingPoll -MeetingId $MeetingId -PollId $PollId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-    It 'Uses the correct uri and query parameter' {
-        $request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)/polls/$($PollId)"
-    }
+	It 'Uses the correct uri and query parameter' {
+		$request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)/polls/$($PollId)"
+	}
 }
 
 Describe 'Get-ZoomMeetingPolls' {
-    $request = Get-ZoomMeetingPolls -MeetingId $MeetingId @ApiKeySecret
+	$request = Get-ZoomMeetingPolls -MeetingId $MeetingId @ApiKeySecret
   
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
   
-    It 'Uses the correct uri and query parameter' {
-        $request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)/polls"
-    }
+	It 'Uses the correct uri and query parameter' {
+		$request.Uri | Should be "https://api.zoom.us/v2/meetings/$($MeetingId)/polls"
+	}
 }
 
 Describe 'Get-ZoomMeetingRegistrants' {
-    $params = @{
-        MeetingId  = $MeetingId
-        Status     = 'pending'
-        PageSize   = $PageSize
-        PageNumber = $PageNumber
-    }
+	$params = @{
+		MeetingId  = $MeetingId
+		Status     = 'pending'
+		PageSize   = $PageSize
+		PageNumber = $PageNumber
+	}
 
-    $request = Get-ZoomMeetingRegistrants @params @ApiKeySecret
+	$request = Get-ZoomMeetingRegistrants @params @ApiKeySecret
   
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
     
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri.Scheme | Should Be 'https'
-        $Request.Uri.Authority | Should Be 'api.zoom.us'
-        $Request.Uri.AbsolutePath | Should Be "/v2/meetings/$($MeetingId)/registrants"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri.Scheme | Should Be 'https'
+		$Request.Uri.Authority | Should Be 'api.zoom.us'
+		$Request.Uri.AbsolutePath | Should Be "/v2/meetings/$($MeetingId)/registrants"
+	}
 
-    It 'Uses the correct query parameters' {
-        $queries = @("status=$($params.Status)", "page_size=$($PageSize)", "page_number=$($PageNumber)")
-        $queries | ForEach-Object {
-            $Request.Uri.Query | Should BeLike "*$_*"
-        }
-    }
+	It 'Uses the correct query parameters' {
+		$queries = @("status=$($params.Status)", "page_size=$($PageSize)", "page_number=$($PageNumber)")
+		$queries | ForEach-Object {
+			$Request.Uri.Query | Should BeLike "*$_*"
+		}
+	}
 }
 
 Describe 'Get-ZoomMeetingsFromUser' {
-    $Type = 'scheduled'
-    $request = Get-ZoomMeetingsFromUser -UserId $UserId -type $Type -PageSize $PageSize -PageNumber $PageNumber @ApiKeySecret
+	$Type = 'scheduled'
+	$request = Get-ZoomMeetingsFromUser -UserId $UserId -type $Type -PageSize $PageSize -PageNumber $PageNumber @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri.Scheme | Should Be 'https'
-        $Request.Uri.Authority | Should Be 'api.zoom.us'
-        $Request.Uri.AbsolutePath | Should Be "/v2/users/$($UserId)/meetings"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri.Scheme | Should Be 'https'
+		$Request.Uri.Authority | Should Be 'api.zoom.us'
+		$Request.Uri.AbsolutePath | Should Be "/v2/users/$($UserId)/meetings"
+	}
 
-    It 'Uses the correct query parameters' {
-        $queries = @("type=$Type", "page_size=$PageSize", "page_number=$PageNumber")
-        $queries | ForEach-Object {
-            $Request.Uri.Query | Should BeLike "*$_*"
-        }
-    }
+	It 'Uses the correct query parameters' {
+		$queries = @("type=$Type", "page_size=$PageSize", "page_number=$PageNumber")
+		$queries | ForEach-Object {
+			$Request.Uri.Query | Should BeLike "*$_*"
+		}
+	}
 }
 
 Describe 'Get-ZoomPastMeetingDetails' {
-    $request = Get-ZoomPastMeetingDetails -MeetingUuid $MeetingUuid @ApiKeySecret
+	$request = Get-ZoomPastMeetingDetails -MeetingUuid $MeetingUuid @ApiKeySecret
     
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/past_meetings/$MeetingUuid"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/past_meetings/$MeetingUuid"
+	}
 }
 
 Describe 'Get-ZoomPastMeetingParticipants' {
-    $NextPageToken = 'NextPageTokenTest'
-    $request = Get-ZoomPastMeetingParticipants -MeetingUuid $MeetingUuid -PageSize $PageSize -NextPageToken $NextPageToken @ApiKeySecret
+	$NextPageToken = 'NextPageTokenTest'
+	$request = Get-ZoomPastMeetingParticipants -MeetingUuid $MeetingUuid -PageSize $PageSize -NextPageToken $NextPageToken @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri.Scheme | Should Be 'https'
-        $Request.Uri.Authority | Should Be 'api.zoom.us'
-        $Request.Uri.AbsolutePath | Should Be "/v2/past_meetings/$MeetingUuid/participants"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri.Scheme | Should Be 'https'
+		$Request.Uri.Authority | Should Be 'api.zoom.us'
+		$Request.Uri.AbsolutePath | Should Be "/v2/past_meetings/$MeetingUuid/participants"
+	}
 
-    It 'Uses the correct query parameters' {
-        $queries = @("next_page_token=$NextPageToken", "page_size=$PageSize")
-        $queries | ForEach-Object {
-            $Request.Uri.Query | Should BeLike "*$_*"
-        }
-    }
+	It 'Uses the correct query parameters' {
+		$queries = @("next_page_token=$NextPageToken", "page_size=$PageSize")
+		$queries | ForEach-Object {
+			$Request.Uri.Query | Should BeLike "*$_*"
+		}
+	}
 }
 
 Describe 'Get-ZoomRegistrationQuestions' {
-    $request = Get-ZoomRegistrationQuestions -MeetingId $MeetingId @ApiKeySecret
+	$request = Get-ZoomRegistrationQuestions -MeetingId $MeetingId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'GET'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-    It 'Uses the correct uri and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants/questions"
-    }
+	It 'Uses the correct uri and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants/questions"
+	}
 }
 Describe 'New-ZoomMeeting' {
-    $schema = '{
+	$schema = '{
     "type": "object",
     "description": "Meeting object",
     "properties": {
@@ -2359,164 +2418,164 @@ Describe 'New-ZoomMeeting' {
     }
   }'
 
-    #Mandatory Parameters for all parameter types
-    $mandatoryParams = @{    
-        Topic  = 'Test Topic'
-        UserId = $UserId
-    }
+	#Mandatory Parameters for all parameter types
+	$mandatoryParams = @{    
+		Topic  = 'Test Topic'
+		UserId = $UserId
+	}
 
-    #Optional Parameters
-    $optionalparams = @{
-        Schedulefor = 'TestUser@Company.com'
-        Timezone    = 'Timezone'
-        Password    = 'TestPassword'
-        Agenda      = 'TestAgenda'
-        #Trackingfields = 'TestTrackingFields'
-    }
+	#Optional Parameters
+	$optionalparams = @{
+		Schedulefor = 'TestUser@Company.com'
+		Timezone    = 'Timezone'
+		Password    = 'TestPassword'
+		Agenda      = 'TestAgenda'
+		#Trackingfields = 'TestTrackingFields'
+	}
 
-    $settingsparams = @{
-        Alternativehosts      = 'alternativehosttest@company.com'
-        Approvaltype          = 'automatic'
-        Audio                 = 'both'
-        Autorecording         = 'local'
-        Closeregistration     = $True
-        Cnmeeting             = $True
-        Contactemail          = $True
-        Contactname           = $True
-        Enforcelogin          = $True
-        Enforcelogindomains   = 'enforcelogindomainstest'
-        Globaldialincountries = $True
-        Hostvideo             = $True
-        Inmeeting             = $True
-        Joinbeforehost        = $True
-        Muteuponentry         = $True
-        Registrationtype      = 'RegisterOnceAndAttendAll'
-        Usepmi                = $True
-        Waitingroom           = $True
-        Watermark             = $True
-    }
+	$settingsparams = @{
+		Alternativehosts      = 'alternativehosttest@company.com'
+		Approvaltype          = 'automatic'
+		Audio                 = 'both'
+		Autorecording         = 'local'
+		Closeregistration     = $True
+		Cnmeeting             = $True
+		Contactemail          = $True
+		Contactname           = $True
+		Enforcelogin          = $True
+		Enforcelogindomains   = 'enforcelogindomainstest'
+		Globaldialincountries = $True
+		Hostvideo             = $True
+		Inmeeting             = $True
+		Joinbeforehost        = $True
+		Muteuponentry         = $True
+		Registrationtype      = 'RegisterOnceAndAttendAll'
+		Usepmi                = $True
+		Waitingroom           = $True
+		Watermark             = $True
+	}
 
-    Context 'Instant Meeting' {
-        $request = New-ZoomMeeting @mandatoryParams @optionalparams @settingsparams @ApiKeySecret
+	Context 'Instant Meeting' {
+		$request = New-ZoomMeeting @mandatoryParams @optionalparams @settingsparams @ApiKeySecret
     
-        It 'Uses the correct method' {
-            $request.Method | Should Be 'POST'
-        }
+		It 'Uses the correct method' {
+			$request.Method | Should Be 'POST'
+		}
   
-        It 'Uses the correct URI and path parameter' {
-            $Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/meetings"
-        }
+		It 'Uses the correct URI and path parameter' {
+			$Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/meetings"
+		}
 
-        It 'Validates against the JSON schema' {
-            Test-Json -Json $request.Body -Schema $schema | Should Be $True
-        }
-    }
+		It 'Validates against the JSON schema' {
+			Test-Json -Json $request.Body -Schema $schema | Should Be $True
+		}
+	}
 
-    $scheduleParams = @{
-        StartTime = '2019-10-18T15:00:00Z'
-        Duration  = 60
-    }
+	$scheduleParams = @{
+		StartTime = '2019-10-18T15:00:00Z'
+		Duration  = 60
+	}
 
-    Context 'Scheduled Meeting' {
-        $request = New-ZoomMeeting @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
+	Context 'Scheduled Meeting' {
+		$request = New-ZoomMeeting @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
 
-        It 'Validates against the JSON schema' {
-            Test-Json -Json $request.Body -Schema $schema | Should Be $True
-        }
-    }
+		It 'Validates against the JSON schema' {
+			Test-Json -Json $request.Body -Schema $schema | Should Be $True
+		}
+	}
 
-    Context 'Recurrence No Fixed Time Meeting' {
-        $params = @{
-            RecurrenceNoFixedTime = $True
-        }
+	Context 'Recurrence No Fixed Time Meeting' {
+		$params = @{
+			RecurrenceNoFixedTime = $True
+		}
   
-        $request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @ApiKeySecret
+		$request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @ApiKeySecret
 
-        It 'Validates against the JSON schema' {
-            Test-Json -Json $request.Body -Schema $schema | Should Be $True
-        }
-    }
+		It 'Validates against the JSON schema' {
+			Test-Json -Json $request.Body -Schema $schema | Should Be $True
+		}
+	}
 
-    Context 'Recurrence By Day Meeting' {
-        $params = @{
-            EndTimes       = 2
-            Daily          = $True
-            RepeatInterval = 1
-        }
+	Context 'Recurrence By Day Meeting' {
+		$params = @{
+			EndTimes       = 2
+			Daily          = $True
+			RepeatInterval = 1
+		}
   
-        $request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
+		$request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
 
-        It 'Validates against the JSON schema' {
-            Test-Json -Json $request.Body -Schema $schema | Should Be $True
-        }
-    }
+		It 'Validates against the JSON schema' {
+			Test-Json -Json $request.Body -Schema $schema | Should Be $True
+		}
+	}
 
-    Context 'Recurrence By Week Meeting' {
-        $params = @{
-            WeeklyDays     = 'Sunday', 'Monday', 'Tuesday'
-            EndDateTime    = '2019-11-25T12:00:00Z'
-            RepeatInterval = 2
-        }
+	Context 'Recurrence By Week Meeting' {
+		$params = @{
+			WeeklyDays     = 'Sunday', 'Monday', 'Tuesday'
+			EndDateTime    = '2019-11-25T12:00:00Z'
+			RepeatInterval = 2
+		}
   
-        $request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
+		$request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
 
-        It 'Validates against the JSON schema' {
-            Test-Json -Json $request.Body -Schema $schema | Should Be $True
-        }
-    }
+		It 'Validates against the JSON schema' {
+			Test-Json -Json $request.Body -Schema $schema | Should Be $True
+		}
+	}
 
-    Context 'Recurrence By MonthDay Meeting' {
-        $params = @{
-            MonthlyWeek    = 'FirstWeek'
-            MonthlyWeekDay = 'Tuesday'
-            EndDateTime    = '2019-11-25T12:00:00Z'
-            RepeatInterval = 2
-        }
+	Context 'Recurrence By MonthDay Meeting' {
+		$params = @{
+			MonthlyWeek    = 'FirstWeek'
+			MonthlyWeekDay = 'Tuesday'
+			EndDateTime    = '2019-11-25T12:00:00Z'
+			RepeatInterval = 2
+		}
   
-        $request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
+		$request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
 
-        It 'Validates against the JSON schema' {
-            Test-Json -Json $request.Body -Schema $schema | Should Be $True
-        }
-    }
+		It 'Validates against the JSON schema' {
+			Test-Json -Json $request.Body -Schema $schema | Should Be $True
+		}
+	}
 }
 
 Describe 'Remove-ZoomMeeting' {
-    $ScheduleForReminder = 'TestReminder'
-    $request = Remove-ZoomMeeting -MeetingId $MeetingId -OccurrenceId $OccurrenceId -ScheduleForReminder $ScheduleForReminder @ApiKeySecret
+	$ScheduleForReminder = 'TestReminder'
+	$request = Remove-ZoomMeeting -MeetingId $MeetingId -OccurrenceId $OccurrenceId -ScheduleForReminder $ScheduleForReminder @ApiKeySecret
     
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'DELETE'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'DELETE'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri.Scheme | Should Be 'https'
-        $Request.Uri.Authority | Should Be 'api.zoom.us'
-        $Request.Uri.AbsolutePath | Should Be "/v2/meetings/$MeetingId"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri.Scheme | Should Be 'https'
+		$Request.Uri.Authority | Should Be 'api.zoom.us'
+		$Request.Uri.AbsolutePath | Should Be "/v2/meetings/$MeetingId"
+	}
 
-    It 'Uses the correct query parameters' {
-        $queries = @("occurrence_id=$OccurrenceId", "schedule_for_reminder=$ScheduleForReminder")
-        $queries | ForEach-Object {
-            $Request.Uri.Query | Should BeLike "*$_*"
-        }
-    }
+	It 'Uses the correct query parameters' {
+		$queries = @("occurrence_id=$OccurrenceId", "schedule_for_reminder=$ScheduleForReminder")
+		$queries | ForEach-Object {
+			$Request.Uri.Query | Should BeLike "*$_*"
+		}
+	}
 }
 
 Describe 'Remove-ZoomMeetingPoll' {
-    $PollId = '123'
-    $request = Remove-ZoomMeetingPoll -MeetingId $MeetingId -PollId $PollId @ApiKeySecret
+	$PollId = '123'
+	$request = Remove-ZoomMeetingPoll -MeetingId $MeetingId -PollId $PollId @ApiKeySecret
     
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'DELETE'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'DELETE'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
+	}
 }
 Describe 'Update-ZoomMeeting' {
-    $schema = '{
+	$schema = '{
     "type": "object",
     "description": "Meeting object",
     "properties": {
@@ -2865,30 +2924,30 @@ Describe 'Update-ZoomMeeting' {
     }
   }'
 
-    $params = @{
-        MeetingId    = $MeetingId
-        OccurrenceId = $OccurrenceId
-    }
+	$params = @{
+		MeetingId    = $MeetingId
+		OccurrenceId = $OccurrenceId
+	}
   
-    $request = Update-ZoomMeeting @params @ApiKeySecret
+	$request = Update-ZoomMeeting @params @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PATCH'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PATCH'
+	}
 
-    It 'Uses the query parameter' {
-        $request.Uri.Query | Should Be "?occurrence_id=$OccurrenceId"
-    }
+	It 'Uses the query parameter' {
+		$request.Uri.Query | Should Be "?occurrence_id=$OccurrenceId"
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri.Scheme | Should Be 'https'
-        $Request.Uri.Authority | Should Be 'api.zoom.us'
-        $Request.Uri.AbsolutePath | Should Be "/v2/meetings/$MeetingId"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri.Scheme | Should Be 'https'
+		$Request.Uri.Authority | Should Be 'api.zoom.us'
+		$Request.Uri.AbsolutePath | Should Be "/v2/meetings/$MeetingId"
+	}
 }
 
 Describe 'Update-ZoomMeetingLiveStreamStatus' {
-    $schema = '{
+	$schema = '{
     "type": "object",
     "description": "Meeting live stream status.",
     "properties": {
@@ -2922,30 +2981,30 @@ Describe 'Update-ZoomMeetingLiveStreamStatus' {
     }
   }'
   
-    $params = @{
-        MeetingId = $MeetingId
-        StreamUrl = $StreamUrl
-        StreamKey = $StreamKey
-        PageUrl   = $PageUrl
-    }
+	$params = @{
+		MeetingId = $MeetingId
+		StreamUrl = $StreamUrl
+		StreamKey = $StreamKey
+		PageUrl   = $PageUrl
+	}
   
-    $request = Update-ZoomMeetingLiveStreamStatus @params @ApiKeySecret
+	$request = Update-ZoomMeetingLiveStreamStatus @params @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PATCH'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PATCH'
+	}
 
-    It 'Uses the correct URI and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/livestream/status"
-    }
+	It 'Uses the correct URI and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/livestream/status"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Update-ZoomMeetingLiveStream' {
-    $schema = '{
+	$schema = '{
     "type": "object",
     "description": "Meeting live stream.",
     "properties": {
@@ -2972,30 +3031,30 @@ Describe 'Update-ZoomMeetingLiveStream' {
     ]
   }'
   
-    $params = @{
-        MeetingId = $MeetingId
-        StreamUrl = $StreamUrl
-        StreamKey = $StreamKey
-        PageUrl   = $PageUrl
-    }
+	$params = @{
+		MeetingId = $MeetingId
+		StreamUrl = $StreamUrl
+		StreamKey = $StreamKey
+		PageUrl   = $PageUrl
+	}
 
-    $request = Update-ZoomMeetingLiveStream @params @ApiKeySecret
+	$request = Update-ZoomMeetingLiveStream @params @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PATCH'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PATCH'
+	}
 
-    It 'Uses the correct URI and path parameters' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/livestream"
-    }
+	It 'Uses the correct URI and path parameters' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/livestream"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Update-ZoomMeetingPoll' {
-    $schema = '{
+	$schema = '{
     "type": "object",
     "title": "Poll",
     "description": "Poll",
@@ -3039,36 +3098,36 @@ Describe 'Update-ZoomMeetingPoll' {
     }
   }'
 
-    $params = @{
-        MeetingId = $MeetingId
-        PollId    = $PollId
-        Title     = 'Test Poll Title'
-        Questions = @(
-            @{
-                'name'    = 'testname1'
-                'type'    = 'multiple'
-                'answers' = @('answer1', 'answer2')
-            }
-        )
-    }
+	$params = @{
+		MeetingId = $MeetingId
+		PollId    = $PollId
+		Title     = 'Test Poll Title'
+		Questions = @(
+			@{
+				'name'    = 'testname1'
+				'type'    = 'multiple'
+				'answers' = @('answer1', 'answer2')
+			}
+		)
+	}
 
-    $request = Update-ZoomMeetingPoll @params @ApiKeySecret
+	$request = Update-ZoomMeetingPoll @params @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PUT'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PUT'
+	}
 
-    It 'Uses the correct URI and path parameters' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
-    }
+	It 'Uses the correct URI and path parameters' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Update-ZoomMeetingRegistrationQuestions' {
-    $schema = '{
+	$schema = '{
         "type": "object",
         "title": "Meeting Registrant Questions",
         "description": "Meeting Registrant Questions",
@@ -3159,44 +3218,44 @@ Describe 'Update-ZoomMeetingRegistrationQuestions' {
         }
       }'
 
-    $params = @{
-        MeetingId       = $MeetingId
-        Questions       = @(
-            @{'FieldName' = 'Address' },
-            @{'FieldName' = 'City' }
-        )
-        CustomQuestions = @(
-            @{
-                'title'    = 'Title'
-                'type'     = 'single'
-                'required' = $True
-                'answers'  = @('Mr', 'Ms')
-            },
-            @{
-                'title'    = 'Favorite Color'
-                'type'     = 'short'
-                'required' = $True
-            }
-        )
-    }
+	$params = @{
+		MeetingId       = $MeetingId
+		Questions       = @(
+			@{'FieldName' = 'Address' },
+			@{'FieldName' = 'City' }
+		)
+		CustomQuestions = @(
+			@{
+				'title'    = 'Title'
+				'type'     = 'single'
+				'required' = $True
+				'answers'  = @('Mr', 'Ms')
+			},
+			@{
+				'title'    = 'Favorite Color'
+				'type'     = 'short'
+				'required' = $True
+			}
+		)
+	}
     
-    $request = Update-ZoomMeetingRegistrationQuestions @params @ApiKeySecret
+	$request = Update-ZoomMeetingRegistrationQuestions @params @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PATCH'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PATCH'
+	}
 
-    It 'Uses the correct uri and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants/questions"
-    }
+	It 'Uses the correct uri and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants/questions"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Update-ZoomMeetingRegistrantStatus' {
-    $schema = '{
+	$schema = '{
         "type": "object",
         "description": "Registrant Status:<br>`approve` - Approve registrant.<br>`cancel` - Cancel registrant.<br>`deny` - Deny registrant.",
         "properties": {
@@ -3235,34 +3294,34 @@ Describe 'Update-ZoomMeetingRegistrantStatus' {
         ]
       }'
 
-    $params = @{
-        MeetingId    = $MeetingId
-        OccurrenceId = $OccurrenceId
-        Action       = 'approve'
-        Registrants  = @(
-            @{'id' = 'testid' },
-            @{'email' = 'testemail' },
-            @{'id' = 'testid'; 'email' = 'testemail' }
-        )
-    }
+	$params = @{
+		MeetingId    = $MeetingId
+		OccurrenceId = $OccurrenceId
+		Action       = 'approve'
+		Registrants  = @(
+			@{'id' = 'testid' },
+			@{'email' = 'testemail' },
+			@{'id' = 'testid'; 'email' = 'testemail' }
+		)
+	}
 
-    $request = Update-ZoomMeetingRegistrantStatus @params @ApiKeySecret
+	$request = Update-ZoomMeetingRegistrantStatus @params @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PUT'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PUT'
+	}
 
-    It 'Uses the correct uri and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants/status"
-    }
+	It 'Uses the correct uri and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/registrants/status"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
 Describe 'Update-ZoomMeetingStatus' {
-    $schema = '{
+	$schema = '{
         "type": "object",
         "properties": {
           "action": {
@@ -3278,46 +3337,78 @@ Describe 'Update-ZoomMeetingStatus' {
         }
       }'
 
-    $request = Update-ZoomMeetingStatus -MeetingId $MeetingId @ApiKeySecret
+	$request = Update-ZoomMeetingStatus -MeetingId $MeetingId @ApiKeySecret
 
-    It 'Uses the correct method' {
-        $request.Method | Should Be 'PUT'
-    }
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'PUT'
+	}
 
-    It 'Uses the correct uri and path parameter' {
-        $Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/status"
-    }
+	It 'Uses the correct uri and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/status"
+	}
 
-    It 'Validates against the JSON schema' {
-        Test-Json -Json $request.Body -Schema $schema | Should Be $True
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
+}
+  
+#Webinar Tests
+Describe 'Get-ZoomWebinar' {
+	$schema = '{
+      "type": "object",
+      "properties": {
+        "webinarId": {
+          "type": "string",
+          "description": "The webinar ID or webinar UUID. If given the webinar ID it will take the last webinar instance.",
+          "required": true
+        }
+      },
+      "required": [
+        "webinarId"
+      ]
+    }'
+
+	$request = Get-ZoomWebinar -WebinarId $MeetingId @ApiKeySecret
+
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
+
+	It 'Uses the correct uri and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/webinars/$MeetingId"
+	}
+
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }
 
-InModuleScope $ModuleName {
-    Describe 'New-ZoomApiToken' {
-        Mock Get-ZoomApiCredentials {
-            return @{
-                ApiKey    = 'key'
-                ApiSecret = 'secret'
-            }
-        }
+Describe 'Get-ZoomWebinarsFromUser' {
+	$schema = '{
+    "type": "object",
+    "properties": {
+      "userId": {
+        "type": "string",
+        "description": "The user ID or email address of the user. For user-level apps, pass `me` as the value for userId.",
+        "required": true
+      }
+    },
+    "required": [
+      "userId"
+    ]
+  }'
 
-        Mock New-Jwt {
-            return 'token.token.token'
-        }
+	$request = Get-ZoomWebinar -WebinarId $MeetingId @ApiKeySecret
 
-        $token = New-ZoomApiToken -ApiKey 'key' -ApiSecret 'secret'
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'GET'
+	}
 
-        It 'Get-ZoomApiCredentials is called' {
-            Assert-MockCalled Get-ZoomApiCredentials -Exactly 1
-        }
+	It 'Uses the correct uri and path parameter' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$MeetingId/webinars"
+	}
 
-        It 'New-Jwt is called' {
-            Assert-MockCalled New-Jwt -Exactly 1
-        }
-
-        It 'Valid token returned' {
-            $token | Should -Be 'token.token.token'
-        }
-    }
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
 }

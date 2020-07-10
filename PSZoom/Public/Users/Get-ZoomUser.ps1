@@ -57,12 +57,12 @@ function Get-ZoomUser {
 
     begin {
         #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 
     process {
         foreach ($id in $UserId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id"
+            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id"
 
             if ($PSBoundParameters.ContainsKey('LoginType')) {
                 $LoginType = switch ($LoginType) {
@@ -78,12 +78,7 @@ function Get-ZoomUser {
                 $Request.Query = $query.ToString()
             }
         
-
-            try {
-                $response = Invoke-RestMethod -Uri $request.Uri -Headers $Headers -Method GET
-            } catch {
-                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-            }
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
             
             Write-Output $response
         }

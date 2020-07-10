@@ -36,7 +36,7 @@ function Get-ZoomMeetingsFromUser {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
-        [string]$UserId,
+        [string[]]$UserId,
 
         [ValidateSet('scheduled', 'live', 'upcoming')]
         [string]$Type = 'live',
@@ -61,19 +61,21 @@ function Get-ZoomMeetingsFromUser {
     }
 
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/meetings"
-        $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-        $query.add('type', $Type)
-        $query.add('page_size', $PageSize)
-        $query.add('page_number', $PageNumber)
-        $request.Query = $query.ToString()
+        foreach ($id in $UserId) {
+            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id/meetings"
+            $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
+            $query.add('type', $Type)
+            $query.add('page_size', $PageSize)
+            $query.add('page_number', $PageNumber)
+            $request.Query = $query.ToString()
         
-        try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
+            try {
+                $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
+            } catch {
+                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
+            }
+            
+            Write-Output $response
         }
-        
-        Write-Output $response
     }
 }

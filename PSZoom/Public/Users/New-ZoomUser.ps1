@@ -18,9 +18,9 @@ number or random personal vanity URL.
 User email address.
 
 .PARAMETER Type
-Basic (1)
-Pro (2)
-Corp (3)
+Basic    (1)
+Pro      (2)
+Corp. (3)
 
 .PARAMETER FirstName
 User's first namee: cannot contain more than 5 Chinese words.
@@ -163,11 +163,7 @@ function New-ZoomUser {
         $requestBody = $requestBody | ConvertTo-Json
 
         if ($PScmdlet.ShouldProcess) {
-            try {
-                $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method Post
-            } catch {
-                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-            }
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method Post
 
             if ($passthru) {
                 Write-Output $Email

@@ -1,24 +1,13 @@
+. "$PSScriptRoot\Get-DateRanges.ps1"
+
 function Get-LastSixMonthsDateRanges {
     param (
         [string]$Format = 'yyyy-MM-dd'
     )
 
-    $Date = (Get-Date)
-    $Year = $Date.Year
-    $Month = $Date.AddMonths(-6)
-
-    $Ranges = @{}
-
-    while ($Month -lt (Get-Date $Date -day 1)) {
-        $Month = $Month.AddMonths(1)
-
-        $Range = @{
-            'begin' = Get-Date $Month -Format $Format
-            'end'   = Get-Date ($Month.AddDays([DateTime]::DaysInMonth($Month.Year, $Month.Month) - 1)) -Format $Format
-        }
-
-        $Ranges.Add((Get-Date $Month -Format MMMMMMMMM), $Range)
-    }
+    $From = (Get-Date).AddMonths(-6).AddDays(2) #Zoom requires that reports are within 6 months. The 2 additional days allow for this.
+    $To = (Get-Date)
+    $Ranges = Get-DateRanges -From $From -To $To
 
     Write-Output $Ranges
 }

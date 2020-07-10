@@ -8,8 +8,10 @@ Retrieve an active or inactive host report for a specified period of time.
 The time range for the report is limited to a month and the month should fall under the past six months.
 
 .PARAMETER Month
+The month.
 
 .PARAMETER Year
+The year.
 
 .PARAMETER ApiKey
 The Api Key.
@@ -69,12 +71,8 @@ function Get-ZoomDailyUsageReport {
             $Request.Query = $query.ToString()
         }
         
-        try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
-        
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
+            
         Write-Output $response
     }
 }

@@ -45,6 +45,15 @@ Get-ZoomMeeting 123456789
 # Available Functions #
 Use get-help for more information about each function.
 
+
+
+## Cloud Recordings ##
+Get-ZoomAccountRecordings  
+Get-ZoomAccountRecordings  
+Get-ZoomMeetingCloudRecordings  
+Remove-ZoomMeetingRecordingFile  
+Remove-ZoomMeetingRecordings  
+
 ## Groups ##
 Add-ZoomGroupMember  
 Get-ZoomGroup  
@@ -57,37 +66,7 @@ Remove-ZoomGroupMembers
 Update-ZoomGroup  
 Update-ZoomGroupLockSettings  
 Update-ZoomGroupSettings  
-
-## Cloud Recordings ##
-Get-ZoomAccountRecordings  
-Get-ZoomAccountRecordings  
-Get-ZoomMeetingCloudRecordings  
-Remove-ZoomMeetingRecordingFile  
-Remove-ZoomMeetingRecordings  
-
-## Users ##
-Add-ZoomUserAssistants  
-Get-ZoomUser  
-Get-ZoomUserEmailStatus  
-Get-ZoomUserPermissions  
-Get-ZoomUsers  
-Get-ZoomUserSchedulers  
-Get-ZoomUserSettings  
-Get-ZoomUserToken  
-New-ZoomUser  
-Remove-ZoomSpecificUserAssistant  
-Remove-ZoomSpecificUserScheduler  
-Remove-ZoomUser  
-Remove-ZoomUserAssistants  
-Remove-ZoomUserSchedulers  
-Revoke-ZoomUserSsoToken  
-Update-ZoomProfilePicture  
-Update-ZoomUser  
-Update-ZoomUserEmail  
-Update-ZoomUserpassword  
-Update-ZoomUserSettings  
-Update-ZoomUserStatus  
-
+  
 ## Meetings ##
 Add-ZoomRegistrant  
 Get-ZoomEndedMeetingInstances  
@@ -114,7 +93,7 @@ Update-ZoomMeetingPoll
 Update-ZoomMeetingRegistrantStatus  
 Update-ZoomMeetingRegistrationQuestions  
 Update-ZoomMeetingStatus  
-
+  
 ## Reports ##
 Get-ZoomActiveInactiveHostReports  
 Get-ZoomDailyUsageReport  
@@ -123,7 +102,7 @@ Get-ZoomRegistrationQuestions
 Get-ZoomTelephoneReports  
 Get-ZoomWebinarDetailsReport  
 Get-ZoomWebinarParticipantsReport  
-
+  
 ## Rooms ##
 Get-ZoomRooms  
 Disconnect-ZoomRoomMeeting  
@@ -133,7 +112,30 @@ Remove-ZoomRoomMeeting
 Restart-ZoomRoom  
 Remove-ZoomRoomMeeting  
 Stop-ZoomRoomMeeting  
-
+  
+## Users ##
+Add-ZoomUserAssistants  
+Get-ZoomUser  
+Get-ZoomUserEmailStatus  
+Get-ZoomUserPermissions  
+Get-ZoomUsers  
+Get-ZoomUserSchedulers  
+Get-ZoomUserSettings  
+Get-ZoomUserToken  
+New-ZoomUser  
+Remove-ZoomSpecificUserAssistant  
+Remove-ZoomSpecificUserScheduler  
+Remove-ZoomUser  
+Remove-ZoomUserAssistants  
+Remove-ZoomUserSchedulers  
+Revoke-ZoomUserSsoToken  
+Update-ZoomProfilePicture  
+Update-ZoomUser  
+Update-ZoomUserEmail  
+Update-ZoomUserpassword  
+Update-ZoomUserSettings  
+Update-ZoomUserStatus  
+  
 ## Webinar ##
 Get-ZoomWebinar  
 Get-ZoomWebinarsFromUser  

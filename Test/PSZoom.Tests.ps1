@@ -3394,7 +3394,7 @@ Describe 'Get-ZoomWebinarsFromUser' {
     ]
   }'
 
-	$request = Get-ZoomWebinarsFromUser -WebinarId $MeetingId @ApiKeySecret
+	$request = Get-ZoomWebinarsFromUser -User $UserId @ApiKeySecret
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'

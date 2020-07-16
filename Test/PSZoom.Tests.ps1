@@ -3401,6 +3401,6 @@ Describe 'Get-ZoomWebinarsFromUser' {
 	}
 
 	It 'Uses the correct uri and path parameter' {
-		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$MeetingId/webinars"
+		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/webinars"
 	}
 }

@@ -3394,13 +3394,13 @@ Describe 'Get-ZoomWebinarsFromUser' {
     ]
   }'
 
-	$request = Get-ZoomWebinarsFromUser -User $UserId @ApiKeySecret
+	$request = Get-ZoomWebinarsFromUser -UserId $UserId @ApiKeySecret
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
 	}
 
 	It 'Uses the correct uri and path parameter' {
-		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/webinars"
+		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$UserId/webinars?page_size=30&page_number=1"
 	}
 }

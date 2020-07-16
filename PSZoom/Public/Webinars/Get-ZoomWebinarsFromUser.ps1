@@ -50,7 +50,7 @@ function Get-ZoomWebinarsFromUser {
             ValueFromPipelineByPropertyName = $True,
             Position = 0
         )]
-        [Alias('user_id')]
+        [Alias('user_id', 'user')]
         [string[]]$UserId,
 
         [ValidateRange(1,300)]

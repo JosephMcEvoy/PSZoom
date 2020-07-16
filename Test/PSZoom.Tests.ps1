@@ -3377,10 +3377,6 @@ Describe 'Get-ZoomWebinar' {
 	It 'Uses the correct uri and path parameter' {
 		$Request.Uri | Should Be "https://api.zoom.us/v2/webinars/$MeetingId"
 	}
-
-	It 'Validates against the JSON schema' {
-		Test-Json -Json $request.Body -Schema $schema | Should Be $True
-	}
 }
 
 Describe 'Get-ZoomWebinarsFromUser' {
@@ -3406,9 +3402,5 @@ Describe 'Get-ZoomWebinarsFromUser' {
 
 	It 'Uses the correct uri and path parameter' {
 		$Request.Uri | Should Be "https://api.zoom.us/v2/users/$MeetingId/webinars"
-	}
-
-	It 'Validates against the JSON schema' {
-		Test-Json -Json $request.Body -Schema $schema | Should Be $True
 	}
 }

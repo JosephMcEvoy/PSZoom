@@ -15,6 +15,16 @@ Specifies the account to transfer meetings to. This is automatically added to Us
 A switch to add all user additions.
 .PARAMETER Remove
 A switch to remove all user deletions.
+.EXAMPLE
+$UserExceptions = @(
+    'DVader@deathstar.com', #Don't mess with Vader's account under any circumstances.
+    'AVAdmin@deathstar.com' #Or the AV admin
+)
+
+$AdGroups = 'ZoomUsers'
+$TransferAccount = 'AVAdmin@deathstar.com'
+
+Sync-ZoomUsersWithAdGroup -AdGroups $AdGroups -UserExceptions $UserExceptions -TransferAccount $TransferAccount -ApiKey $ZoomApiKey -ApiSecret $ZoomApiKey -Confirm -Verbose
 .PARAMETER ApiKey
 The API key.
 .PARAMETER ApiSecret
@@ -143,16 +153,3 @@ function Sync-ZoomUsersWithAdGroup() {
     end {}
     
 }
-
-$Global:ZoomApiKey = 'ZoomApiKey'
-$Global:ZoomApiSecret = 'ZoomApiSecret'
-
-$UserExceptions = @(
-    'DVader@deathstar.com', #Don't mess with Vader's account under any circumstances.
-    'AVAdmin@deathstar.com' #Or the AV admin
-)
-
-$AdGroups = 'ZoomUsers'
-$TransferAccount = 'AVAdmin@deathstar.com'
-
-Sync-ZoomUsersWithAdGroup -AdGroups $AdGroups -UserExceptions $UserExceptions -TransferAccount $TransferAccount -ApiKey $ZoomApiKey -ApiSecret $ZoomApiKey -Confirm -Verbose

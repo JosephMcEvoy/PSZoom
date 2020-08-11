@@ -115,7 +115,12 @@ function Invoke-ZoomRestMethod {
     try {
         $response = Invoke-RestMethod @params
     } catch {
-        $errorDetails = ConvertFrom-Json $_.errorDetails -AsHashtable
+        if ($PSVersionTable.PSVersion.Major -lt 6) {
+            $errorDetails = ConvertFrom-Json $_.errorDetails
+        } else {
+            $errorDetails = ConvertFrom-Json $_.errorDetails -AsHashtable
+        }
+
         $exception = $_.exception
         $targetObject = $_.targetObject
         $errorCode = $exception.message.split(':')[1] -replace '[^0-9]*'

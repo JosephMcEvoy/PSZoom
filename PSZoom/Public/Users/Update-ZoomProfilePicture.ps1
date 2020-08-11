@@ -50,35 +50,35 @@ function Update-ZoomProfilePicture {
 
     begin {
         #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 
     process {
         foreach ($user in $UserId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/picture"
+            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/picture"
             $LF = "`r`n";
 
             if ($PSVersionTable.PSVersion.Major -lt 6) {
-                $FileBytes = Get-Content -Path $FileName -Encoding Byte
+                $fileBytes = Get-Content -Path $FileName -Encoding Byte
             } else {
-                $FileBytes = Get-Content -Path $FileName -AsByteStream
+                $fileBytes = Get-Content -Path $FileName -AsByteStream
             }
             
-            $FileContent = [System.Text.Encoding]::GetEncoding('iso-8859-1').GetString($FileBytes);
-            $Boundary = [System.Guid]::NewGuid().ToString()
+            $fileContent = [System.Text.Encoding]::GetEncoding('iso-8859-1').GetString($fileBytes);
+            $boundary = [System.Guid]::NewGuid().ToString()
     
     
-            $RequestBody = ( 
-                "--$Boundary",
+            $requestBody = ( 
+                "--$boundary",
                 "Content-Disposition: form-data; name=`"pic_file`"; filename=`"$FileName`"",
                 "Content-Type: image/jpeg$LF",
-                "$FileContent",
-                "--$Boundary--"
+                "$fileContent",
+                "--$boundary--"
             ) -join $LF
     
             
             try {
-                $response = Invoke-RestMethod -Uri $request.Uri -ContentType "multipart/form-data; boundary=`"$Boundary`"" -Headers $headers -Body $RequestBody -Method POST
+                $response = Invoke-RestMethod -Uri $request.Uri -ContentType "multipart/form-data; boundary=`"$boundary`"" -Headers $headers -Body $requestBody -Method POST
             } catch {
                 Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
             }

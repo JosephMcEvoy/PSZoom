@@ -58,10 +58,6 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userupdate
 
 #requires -module PSZoom, ActiveDirectory
 
-#Set the global Zoom API Key / Secret.
-$Global:ZoomApiKey = 'ZoomApiKey'
-$Global:ZoomApiSecret = 'ZoomApiSecret'
-
 function New-CompanyZoomUser {
     [CmdletBinding(DefaultParameterSetName = 'AdAccount')]
     param (

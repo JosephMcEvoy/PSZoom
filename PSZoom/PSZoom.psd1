@@ -12,7 +12,7 @@
     RootModule = 'PSZoom.psm1'
     
     # Version number of this module.
-    ModuleVersion = '1.1.8'
+    ModuleVersion = '1.1.81'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()

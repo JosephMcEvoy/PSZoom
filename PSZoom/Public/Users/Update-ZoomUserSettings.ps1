@@ -28,11 +28,32 @@ Require a password for personal meetings if attendees can join before host.
 .PARAMETER PstnPasswordProtected 
 Generate and require password for participants joining by phone.
 
+.PARAMETER
+
 .PARAMETER UsePmiForScheduledMeetings 
 Use Personal Meeting ID (PMI) when scheduling a meeting.
 
 .PARAMETER UsePmiForInstantMeetings 
 Use Personal Meeting ID (PMI) when starting an instant meeting.
+
+.PARAMETER RequirePasswordForSchedulingNewMeetings
+Require a passcode for meetings which have already been scheduled.
+
+.PARAMETER RequirePasswordForScheduledMeetings
+"Passcode for already scheduled meetings."
+
+.PARAMETER RequirePasswordForInstantMeetings
+Require a passcode for instant meetings. If you use PMI for your instant meetings, this option will be disabled. 
+This setting is always enabled for free accounts and Pro accounts with a single host and cannot be modified for 
+these accounts.
+
+.PARAMETER RequirePasswordForPmiMeetings
+Require a passcode for Personal Meeting ID (PMI). This setting is always enabled for free accounts and Pro accounts 
+with a single host and cannot be modified for these accounts.
+
+.PARAMETER EmbedPasswordInJoinLink
+If the value is set to `true`, the meeting passcode will be encrypted and included in the join meeting link to allow 
+participants to join with just one click without having to enter the passcode.
 
 .PARAMETER E2eEncryption 
 End-to-end encryption required for all meetings.
@@ -149,6 +170,7 @@ Save chat text from the meeting.
 
 .PARAMETER ShowTimestamp  
 Show timestamp on video.
+
 .PARAMETER RecordingAudioTranscript 
 
 Audio transcript.
@@ -214,7 +236,7 @@ Update-ZoomUserSettings -UserId 'dvader@thesith.com' -JoinBeforeHost $True
 #>
 
 function Update-ZoomUserSettings {    
-    [CmdletBinding(SupportsShouldProcess = $True)]
+    [CmdletBinding()]
     Param(
         [Parameter(
             Mandatory = $True,
@@ -270,18 +292,70 @@ function Update-ZoomUserSettings {
         [bool]$PstnPasswordProtected, 
             
         [Parameter(
-            HelpMessage = 'Use Personal Meeting ID (PMI) when scheduling a meeting\n', 
+            HelpMessage = 'Use Personal Meeting ID (PMI) when scheduling a meeting.', 
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('use_pmi_for_scheduled_meetings')]
         [bool]$UsePmiForScheduledMeetings, 
             
         [Parameter(
-            HelpMessage = 'Use Personal Meeting ID (PMI) when starting an instant meeting\n', 
+            HelpMessage = 'Use Personal Meeting ID (PMI) when starting an instant meeting.', 
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('use_pmi_for_instant_meetings')]
         [bool]$UsePmiForInstantMeetings, 
+
+        [Parameter(
+            HelpMessage = 'Require a passcode for instant meetings. If you use PMI for your isntant meetings, this option will be disabled. This setting is always enabled for free accounts and Pro accounts with a single host and cannot be mofidied for these accounts.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('require_password_for_scheduling_new_meetings')]
+        [bool]$RequirePasswordForSchedulingNewMeetings, 
+
+        [Parameter(
+            HelpMessage = 'Require a passcode for meetings which have already been scheduled.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('require_password_for_scheduling_new_meetings')]
+        [bool]$RequirePasswordForScheduledMeetings, 
+
+        [Parameter(
+            HelpMessage = 'Require a passcode for Personal Meeting ID (PMI). This setting is always enabled for free accounts and Pro accounts with a isngle host and cannot be modified for these accounts.',
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [ValidateSet("jbh_only", "all", "none")]
+        [Alias('require_password_for_pmi_meetings')]
+        [bool]$RequirePasswordForPMIMeetings, 
+
+        [Parameter(
+            HelpMessage = 'Require a passcode for instant meetings. If you use PMI for your instant meetings, this option will be disabled. This setting is always enabled for free accounts and Pro accounts with a single host and cannot be modified for these accounts.',
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [ValidateSet("jbh_only", "all", "none")]
+        [Alias('require_password_for_pmi_meetings')]
+        [bool]$RequirePasswordForInstantMeetings, 
+
+        [Parameter(
+            HelpMessage = 'PMI passcode.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('pmi_passcode', 'PMIpasscode')]
+        [string]$PMIPassword, 
+
+        [Parameter(
+            HelpMessage = 'Require a passcode for Personal Meeting ID (PMI). This setting is always enabled for free accounts and Pro accounts with a isngle host and cannot be modified for these accounts.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('embed_password_in_join_link')]
+        [bool]$EmbedPasswordInJoinLink, 
+
+        #Meeting Password Requirement Object
+        [Parameter(
+            HelpMessage = 'Account wide meeting/webinar (https://support.zoom.us/hc/en-us/articles/360033559832-Meeting-and-webinar-passwords#h_a427384b-e383-4f80-864d-794bf0a37604).', 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('meeting_password_requirement')]
+        [object]$MeetingPasswordRequirement, 
 
         #inMeeting 
         [Parameter(
@@ -554,7 +628,7 @@ function Update-ZoomUserSettings {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('recording_audio_transcript')]
-        [bool]$RecordingAudioTranscript, 
+        [bool]$recordingAudioTranscript, 
 
         [Parameter(
             HelpMessage = 'Automatic recording<br>`local` - Record on local.<br>`cloud` - Record on cloud.<br>`none` - Disabled.', 
@@ -681,92 +755,97 @@ function Update-ZoomUserSettings {
     
     begin {
         #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 
     process {
         foreach ($user in $UserId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/settings"
+            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/settings"
 
-            $ScheduleMeeting = @{
-                'host_video'                          = 'HostVideo'
-                'participants_video'                  = 'ParticipantsVideo'
-                'audio_type'                          = 'AudioType'
-                'join_before_host'                    = 'JoinBeforeHost'
-                'force_pmi_jbh_password'              = 'ForcePmiJbhPassword'
-                'pstn_password_protected'             = 'PstnPasswordProtected'
-                'use_pmi_for_scheduled_meetings'      = 'UsePmiForScheduledMeetings'
-                'use_pmi_for_instant_meetings'        = 'UsePmiForInstantMeetings'
+            $scheduleMeeting = @{
+                'host_video'                                  = 'HostVideo'
+                'participants_video'                          = 'ParticipantsVideo'
+                'audio_type'                                  = 'AudioType'
+                'join_before_host'                            = 'JoinBeforeHost'
+                'force_pmi_jbh_password'                      = 'ForcePmiJbhPassword'
+                'pstn_password_protected'                     = 'PstnPasswordProtected'
+                'use_pmi_for_scheduled_meetings'              = 'UsePmiForScheduledMeetings'
+                'use_pmi_for_instant_meetings'                = 'UsePmiForInstantMeetings'
+                'require_password_for_scheduling_newmeetings' = 'RequirePasswordForSchedulingNewMeetings'
+                'require_password_for_scheduled_meetings'     = 'RequirePasswordForScheduledMeetings'
+                'require_password_for_instant_meetings'       = 'RequirePasswordForInstantMeetings'
+                'require_password_for_pmi_meetings'           = 'RequirePasswordForPmiMeetings'
+                'embed_password_in_join_link'                 = 'EmbedPasswordInJoinLink'
             }
 
-            $InMeeting = @{    
-                'e2e_encryption'                      = 'E2eEncryption'
-                'chat'                                = 'Chat' 
-                'private_chat'                        = 'PrivateChat' 
-                'auto_saving_chat'                    = 'AutoSavingChat' 
-                'entry_exit_chim'                     = 'EntryExitChim' 
-                'record_play_voice'                   = 'RecordPlayVoice'
-                'file_transfer'                       = 'FileTransfer' 
-                'feedback'                            = 'Feedback' 
-                'co_host'                             = 'CoHost' 
-                'polling'                             = 'Polling' 
-                'attendee_on_hold'                    = 'AttendeeOnHold' 
-                'annotation'                          = 'Annotation' 
-                'remote_control'                      = 'RemoteControl' 
-                'non_verbal_feedback'                 = 'NonVerbalFeedback' 
-                'breakout_room'                       = 'BreakoutRoom' 
-                'remote_support'                      = 'RemoteSupport' 
-                'closed_caption'                      = 'ClosedCaption' 
-                'group_hd'                            = 'GroupHd' 
-                'virtual_background'                  = 'VirtualBackground' 
-                'far_end_camera_control '             = 'FarEndCameraControl' 
-                'share_dual_camera'                   = 'ShareDualCamera' 
-                'attention_tracking'                  = 'AttentionTracking' 
-                'waiting_room'                        = 'WaitingRoom' 
-                'allow_live_streaming'                = 'AllowLiveStreaming'
-                'workplace_by_facebook'               = 'WorkplaceByFacebook'
-                'custom_live_streaming'               = 'CustomLiveStreaming'
-                'custom_service_instructions'         = 'CustomServiceInstructions'
+            $inMeeting = @{    
+                'e2e_encryption'              = 'E2eEncryption'
+                'chat'                        = 'Chat' 
+                'private_chat'                = 'PrivateChat' 
+                'auto_saving_chat'            = 'AutoSavingChat' 
+                'entry_exit_chim'             = 'EntryExitChim' 
+                'record_play_voice'           = 'RecordPlayVoice'
+                'file_transfer'               = 'FileTransfer' 
+                'feedback'                    = 'Feedback' 
+                'co_host'                     = 'CoHost' 
+                'polling'                     = 'Polling' 
+                'attendee_on_hold'            = 'AttendeeOnHold' 
+                'annotation'                  = 'Annotation' 
+                'remote_control'              = 'RemoteControl' 
+                'non_verbal_feedback'         = 'NonVerbalFeedback' 
+                'breakout_room'               = 'BreakoutRoom' 
+                'remote_support'              = 'RemoteSupport' 
+                'closed_caption'              = 'ClosedCaption' 
+                'group_hd'                    = 'GroupHd' 
+                'virtual_background'          = 'VirtualBackground' 
+                'far_end_camera_control '     = 'FarEndCameraControl' 
+                'share_dual_camera'           = 'ShareDualCamera' 
+                'attention_tracking'          = 'AttentionTracking' 
+                'waiting_room'                = 'WaitingRoom' 
+                'allow_live_streaming'        = 'AllowLiveStreaming'
+                'workplace_by_facebook'       = 'WorkplaceByFacebook'
+                'custom_live_streaming'       = 'CustomLiveStreaming'
+                'custom_service_instructions' = 'CustomServiceInstructions'
             }
 
-            $EmailNotification = @{    
-                'jbh_reminder'                        = 'bhReminder' 
-                'cancel_meeting_reminder'             = 'ancelMeetingReminder'
-                'alternative_host_reminder'           = 'lternativeHostReminder'
-                'schedule_for_reminder'               = 'cheduleForReminder'
+            $emailNotification = @{    
+                'jbh_reminder'              = 'bhReminder' 
+                'cancel_meeting_reminder'   = 'ancelMeetingReminder'
+                'alternative_host_reminder' = 'lternativeHostReminder'
+                'schedule_for_reminder'     = 'cheduleForReminder'
             }
                 
-            $Recording = @{    
-                'local_recording'                     = 'LocalRecording'
-                'cloud_recording'                     = 'CloudRecording'
-                'record_speaker_view'                 = 'RecordSpeakerView'
-                'record_gallery_view'                 = 'RecordGalleryView'
-                'record_audio_file'                   = 'RecordAudioFile'
-                'save_chat_text'                      = 'SaveChatText'
-                'show_timestamp'                      = 'ShowTimestamp'
-                'recording_audio_transcript'          = 'RecordingAudioTranscrip'
-                'auto_recording'                      = 'AutoRecording'
-                'host_pause_stop_recording '          = 'HostPauseStopRecording'
-                'auto_delete_cmr'                     = 'AutoDeleteCmr'
-                'auto_delete_cmr_days'                = 'AutoDeleteCmrDay'
+            $recording = @{    
+                'local_recording'            = 'LocalRecording'
+                'cloud_recording'            = 'CloudRecording'
+                'record_speaker_view'        = 'RecordSpeakerView'
+                'record_gallery_view'        = 'RecordGalleryView'
+                'record_audio_file'          = 'RecordAudioFile'
+                'save_chat_text'             = 'SaveChatText'
+                'show_timestamp'             = 'ShowTimestamp'
+                'recording_audio_transcript' = 'RecordingAudioTranscrip'
+                'auto_recording'             = 'AutoRecording'
+                'host_pause_stop_recording ' = 'HostPauseStopRecording'
+                'auto_delete_cmr'            = 'AutoDeleteCmr'
+                'auto_delete_cmr_days'       = 'AutoDeleteCmrDay'
             }
 
-            $Telephony = @{    
-                'third_party_audio '                  = 'ThirdPartyAudio'
-                'audio_conference_info'               = 'AudioConferenceInfo'
-                'show_international_numbers_link'     = 'ShowInternationalNumbersLink'
+            $telephony = @{    
+                'third_party_audio '              = 'ThirdPartyAudio'
+                'audio_conference_info'           = 'AudioConferenceInfo'
+                'show_international_numbers_link' = 'ShowInternationalNumbersLink'
             }
 
-            $Feature = @{    
-                'meeting_capacity'                    = 'MeetingCapacity'
-                'large_meeting'                       = 'LargeMeeting'
-                'large_meeting_capacity'              = 'LargeMeetingCapacity'
-                'webinar'                             = 'Webinar'
-                'webinar_capacity'                    = 'WebinarCapacity'
-                'zoom_phone'                          = 'ZoomPhone'
+            $feature = @{    
+                'meeting_capacity'       = 'MeetingCapacity'
+                'large_meeting'          = 'LargeMeeting'
+                'large_meeting_capacity' = 'LargeMeetingCapacity'
+                'webinar'                = 'Webinar'
+                'webinar_capacity'       = 'WebinarCapacity'
+                'zoom_phone'             = 'ZoomPhone'
             }
 
-            $Tsp = @{
+            $tsp = @{
                 'call_out'                            = 'CallOut'
                 'call_out_countries'                  = 'CallOutCountries'
                 'show_international_numbers_link_tsp' = 'ShowInternationalNumbersLinkTsp'
@@ -779,34 +858,34 @@ function Update-ZoomUserSettings {
                 )
 
                 process {
-                    $NewObj = @{}
+                    $newObj = @{}
             
-                    foreach ($Key in $Obj.Keys) {
-                        if ($Parameters.ContainsKey($Obj.$Key)){
-                            $Newobj.Add($Key, (get-variable $Obj.$Key).value)
+                    foreach ($key in $Obj.keys) {
+                        if ($Parameters.ContainsKey($Obj.$key)){
+                            $newobj.Add($key, (get-variable $Obj.$key).value)
                         }
                     }
             
-                    return $NewObj
+                    return $newObj
                 }
             }
             
-            $ScheduleMeeting = Remove-NonPSBoundParameters($ScheduleMeeting)
-            $InMeeting = Remove-NonPSBoundParameters($InMeeting)
-            $EmailNotification = Remove-NonPSBoundParameters($EmailNotification)
-            $Recording = Remove-NonPSBoundParameters($Recording)
-            $Telephony = Remove-NonPSBoundParameters($Telephony)
-            $Feature = Remove-NonPSBoundParameters($Feature)
-            $Tsp = Remove-NonPSBoundParameters($Tsp)
+            $scheduleMeeting = Remove-NonPSBoundParameters($scheduleMeeting)
+            $inMeeting = Remove-NonPSBoundParameters($inMeeting)
+            $emailNotification = Remove-NonPSBoundParameters($emailNotification)
+            $recording = Remove-NonPSBoundParameters($recording)
+            $telephony = Remove-NonPSBoundParameters($telephony)
+            $feature = Remove-NonPSBoundParameters($feature)
+            $tsp = Remove-NonPSBoundParameters($tsp)
 
             $allObjects = @{
-                'schedule_meeting'     = $ScheduleMeeting
-                'in_meeting'           = $InMeeting
-                'email_notification'   = $EmailNotification
-                'recording'            = $Recording
-                'telephony'            = $Telephony
-                'feature'              = $Feature
-                'tsp'                  = $Tsp
+                'schedule_meeting'     = $scheduleMeeting
+                'in_meeting'           = $inMeeting
+                'email_notification'   = $emailNotification
+                'recording'            = $recording
+                'telephony'            = $telephony
+                'feature'              = $feature
+                'tsp'                  = $tsp
             }
 
             $requestBody = @{}
@@ -821,7 +900,7 @@ function Update-ZoomUserSettings {
 
             if ($pscmdlet.ShouldProcess) {
                 try {
-                    $response = Invoke-RestMethod -Uri $request.Uri -Headers $Headers -Body $requestBody -Method Patch
+                    $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method Patch
                 } catch {
                     Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
                 }

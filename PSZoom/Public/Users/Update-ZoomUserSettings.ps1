@@ -55,6 +55,9 @@ with a single host and cannot be modified for these accounts.
 If the value is set to `true`, the meeting passcode will be encrypted and included in the join meeting link to allow 
 participants to join with just one click without having to enter the passcode.
 
+.PARAMETER MeetingPasswordRequirement
+Account wide meeting/webinar passcode requirements. Read more about the object properties in the API documentation.
+
 .PARAMETER E2eEncryption 
 End-to-end encryption required for all meetings.
 
@@ -118,8 +121,6 @@ Enable virtual background.
 .PARAMETER FarEndCameraControl  
 Allow another user to take control of the camera.
 
-.PARAMETER ShareDualCamera  
-Share dual camera (deprecated).
 .PARAMETER AttentionTracking  
 Allow host to see if a participant does not have Zoom in focus during screen sharing.
 
@@ -162,9 +163,10 @@ Record the active speaker view.
 
 .PARAMETER RecordGalleryView  
 Record the gallery view.
-.PARAMETER RecordAudioFile  
 
+.PARAMETER RecordAudioFile  
 Record an audio only file.
+
 .PARAMETER SaveChatText  
 Save chat text from the meeting.
 
@@ -172,10 +174,13 @@ Save chat text from the meeting.
 Show timestamp on video.
 
 .PARAMETER RecordingAudioTranscript 
-
 Audio transcript.
+
 .PARAMETER AutoRecording
-Automatic recording<br>`local` - Record on local.<br>`cloud` - Record on cloud.<br>`none` - Disabled.
+Automatic recording.
+local - Record on local.
+cloud - Record on cloud.
+none - Disabled.
 
 .PARAMETER HostPauseStopRecording  
 Host can pause/stop the auto recording in the cloud.
@@ -185,6 +190,23 @@ Auto delete cloud recordings.
 
 .PARAMETER AutoDeleteCmrDays 
 A specified number of days of auto delete cloud recordings.
+
+.PARAMETER RecordingDisclaimer
+Show a disclaimer to participants before a recording starts.
+
+.PARAMETER AskParticipantsToConsentDisclaimer
+This field can be used if `recording_disclaimer` is set to true. 
+This field indicates whether or not you would like to ask participants for consent when a recording starts. 
+The value can be one of the following:
+true: Ask participants for consent when a recording starts.
+false: Do not ask participants for consent when a recording starts.
+
+.PARAMETER AskHostToConfirmDisclaimer
+Ask host to confirm the disclaimer.
+
+.PARAMETER RecordingPasswordRequirement
+This object represents the minimum passcode requirements set for recordings via Account Recording Settings. 
+Read more about the object properties in the API documentation.
 
 .PARAMETER ThirdPartyAudio 
 Third party audio conference.
@@ -316,23 +338,22 @@ function Update-ZoomUserSettings {
             HelpMessage = 'Require a passcode for meetings which have already been scheduled.', 
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('require_password_for_scheduling_new_meetings')]
+        [Alias('require_password_for_scheduled_meetings')]
         [bool]$RequirePasswordForScheduledMeetings, 
 
         [Parameter(
             HelpMessage = 'Require a passcode for Personal Meeting ID (PMI). This setting is always enabled for free accounts and Pro accounts with a isngle host and cannot be modified for these accounts.',
             ValueFromPipelineByPropertyName = $True
         )]
-        [ValidateSet("jbh_only", "all", "none")]
+        [ValidateSet('jbh_only', 'all', 'none')]
         [Alias('require_password_for_pmi_meetings')]
-        [bool]$RequirePasswordForPMIMeetings, 
+        [string]$RequirePasswordForPMIMeetings, 
 
         [Parameter(
             HelpMessage = 'Require a passcode for instant meetings. If you use PMI for your instant meetings, this option will be disabled. This setting is always enabled for free accounts and Pro accounts with a single host and cannot be modified for these accounts.',
             ValueFromPipelineByPropertyName = $True
         )]
-        [ValidateSet("jbh_only", "all", "none")]
-        [Alias('require_password_for_pmi_meetings')]
+        [Alias('require_password_for_instant_meetings')]
         [bool]$RequirePasswordForInstantMeetings, 
 
         [Parameter(
@@ -343,7 +364,7 @@ function Update-ZoomUserSettings {
         [string]$PMIPassword, 
 
         [Parameter(
-            HelpMessage = 'Require a passcode for Personal Meeting ID (PMI). This setting is always enabled for free accounts and Pro accounts with a isngle host and cannot be modified for these accounts.', 
+            HelpMessage = 'Require a passcode for Personal Meeting ID (PMI). This setting is always enabled for free accounts and Pro accounts with a single host and cannot be modified for these accounts.', 
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('embed_password_in_join_link')]
@@ -351,7 +372,7 @@ function Update-ZoomUserSettings {
 
         #Meeting Password Requirement Object
         [Parameter(
-            HelpMessage = 'Account wide meeting/webinar (https://support.zoom.us/hc/en-us/articles/360033559832-Meeting-and-webinar-passwords#h_a427384b-e383-4f80-864d-794bf0a37604).', 
+            HelpMessage = 'Account wide meeting/webinar password settings.', 
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('meeting_password_requirement')]
@@ -573,6 +594,7 @@ function Update-ZoomUserSettings {
         [Alias('schedule_for_reminder')]
         [bool]$ScheduleForReminder, 
         
+        
         #recording
         [Parameter(
             HelpMessage = 'Local recording.', 
@@ -660,6 +682,35 @@ function Update-ZoomUserSettings {
         [Alias('auto_delete_cmr_days')]
         [int]$AutoDeleteCmrDays, 
 
+        [Parameter(
+            HelpMessage = 'A specified number of days of auto delete cloud recordings.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('recording_disclaimer')]
+        [bool]$RecordingDisclaimer,
+
+        [Parameter(
+            HelpMessage = 'A specified number of days of auto delete cloud recordings.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('ask_participants_to_consent_disclaimer')]
+        [bool]$AskParticipantsToConsentDisclaimer,
+
+        [Parameter(
+            HelpMessage = 'A specified number of days of auto delete cloud recordings.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('ask_host_to_confirm_disclaimer')]
+        [bool]$AskHostToConfirmDisclaimer,
+
+        [Parameter(
+            HelpMessage = 'A specified number of days of auto delete cloud recordings.', 
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('recording_password_requirement')]
+        [object]$RecordingPasswordRequirement,
+
+
         #telephony
         [Parameter(
             HelpMessage = 'Third party audio conference.', 
@@ -714,6 +765,7 @@ function Update-ZoomUserSettings {
         )]
         [Alias('zoom_phone')]
         [bool]$ZoomPhone, 
+
 
         #tsp
         [Parameter(
@@ -816,18 +868,22 @@ function Update-ZoomUserSettings {
             }
                 
             $recording = @{    
-                'local_recording'            = 'LocalRecording'
-                'cloud_recording'            = 'CloudRecording'
-                'record_speaker_view'        = 'RecordSpeakerView'
-                'record_gallery_view'        = 'RecordGalleryView'
-                'record_audio_file'          = 'RecordAudioFile'
-                'save_chat_text'             = 'SaveChatText'
-                'show_timestamp'             = 'ShowTimestamp'
-                'recording_audio_transcript' = 'RecordingAudioTranscrip'
-                'auto_recording'             = 'AutoRecording'
-                'host_pause_stop_recording ' = 'HostPauseStopRecording'
-                'auto_delete_cmr'            = 'AutoDeleteCmr'
-                'auto_delete_cmr_days'       = 'AutoDeleteCmrDay'
+                'local_recording'                        = 'LocalRecording'
+                'cloud_recording'                        = 'CloudRecording'
+                'record_speaker_view'                    = 'RecordSpeakerView'
+                'record_gallery_view'                    = 'RecordGalleryView'
+                'record_audio_file'                      = 'RecordAudioFile'
+                'save_chat_text'                         = 'SaveChatText'
+                'show_timestamp'                         = 'ShowTimestamp'
+                'recording_audio_transcript'             = 'RecordingAudioTranscript'
+                'auto_recording'                         = 'AutoRecording'
+                'host_pause_stop_recording '             = 'HostPauseStopRecording'
+                'auto_delete_cmr'                        = 'AutoDeleteCmr'
+                'auto_delete_cmr_days'                   = 'AutoDeleteCmrDay'
+                'recording_disclaimer'                   = 'RecordingDisclaimer'
+                'ask_participants_to_consent_disclaimer' = 'AskParticipantsToConsentDisclaimer'
+                'ask_host_to_confirm_disclaimer'         = 'AskHostToCOnfirmDisclaimer'
+                'recording_password_requirement'         = 'RecordingPasswordRequirement'
             }
 
             $telephony = @{    

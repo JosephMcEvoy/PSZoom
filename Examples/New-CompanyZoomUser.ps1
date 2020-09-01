@@ -1,56 +1,94 @@
 <#
 .SYNOPSIS
 Creates a Zoom user given inputs.
+
 .DESCRIPTION
 Creates a Zoom user given inputs. Can also create a Zoom user given only the AD account. This is an example script 
 and needs to be customized for your business needs. The script maps AD account properties to properties in Zoom. By 
 default it maps things such as phone number to Zoom PMI, office location to Zoom group (there's a switch statement 
 that should be modified if this is to be used), and other mappings. It also adds 'admin@company.com' as a scheduling 
 assistant by default.
+
 .PARAMETER Action
 Specify how to create the new user.
+
 .PARAMETER Email
 User email address.
+
 .PARAMETER Type
 Basic (1)
 Pro (2)
 Corp (3)
+
 .PARAMETER FirstName
 User's first namee: cannot contain more than 5 Chinese words.
+
 .PARAMETER LastName
 User's last name: cannot contain more than 5 Chinese words.
+
 .PARAMETER Password
 User password. Only used for the "autoCreate" function. The password has to have a minimum of 8 characters and maximum of 32 characters. 
 It must have at least one letter (a, b, c..), at least one number (1, 2, 3...) and include both uppercase and lowercase letters. 
 It should not contain only one identical character repeatedly ('11111111' or 'aaaaaaaa') and it cannot contain consecutive characters ('12345678' or 'abcdefgh').
+
 .PARAMETER GroupId
 The name of the group the user will be added to.
+
 .PARAMETER Pmi
 Personal Meeting ID, long, length must be 10.
+
 .PARAMETER UsePmi
 Use Personal Meeting ID for instant meetings.
+
 .PARAMETER Language
 Language.
+
 .PARAMETER Dept
 Department for user profile: use for report.
+
 .PARAMETER VanityName
 Personal meeting room name.
+
 .PARAMETER HostKey
 Host key. It should be a 6-10 digit number.
+
 .PARAMETER CMSUserId
 Kaltura user ID.
+
 .PARAMETER SchedulingAssistant
-The Zoom user that will have scheduling permissions,
+The Zoom user that will have scheduling permissions.
+
+.PARAMETER RequirePasswordForSchedulingNewMeetings
+Require a passcode for meetings which have already been scheduled.
+
+.PARAMETER RequirePasswordForInstantMeetings
+Require a passcode for instant meetings. If you use PMI for your instant meetings, this option will be disabled. 
+This setting is always enabled for free accounts and Pro accounts with a single host and cannot be modified for 
+these accounts.
+
+.PARAMETER RequirePasswordForPmiMeetings
+Require a passcode for Personal Meeting ID (PMI). This setting is always enabled for free accounts and Pro accounts 
+with a single host and cannot be modified for these accounts.
+
+.PARAMETER EmbedPasswordInJoinLink
+If the value is set to `true`, the meeting passcode will be encrypted and included in the join meeting link to allow 
+participants to join with just one click without having to enter the passcode.
+
 .PARAMETER ApiKey
 The API key.
+
 .PARAMETER ApiSecret
 THe API secret.
+
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
+
 .EXAMPLE
 New-CompanyZoomUser lskywalker
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/usercreate
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userupdate
 
@@ -283,19 +321,28 @@ function New-CompanyZoomUser {
 
             #Update parameters that cant be entered with new user
             $updateParams = @{
-                UserId     = 'Email'
-                HostKey    = 'HostKey'
-                Pmi        = 'Pmi'
-                Timezone   = 'Timezone'
-                Language   = 'Language'
-                Dept       = 'Department'
-                VanityName = 'VanityName'
-                UsePmi    =  'UsePmi'
+                UserId                                   = 'Email'
+                HostKey                                  = 'HostKey'
+                Pmi                                      = 'Pmi'
+                Timezone                                 = 'Timezone'
+                Language                                 = 'Language'
+                Dept                                     = 'Department'
+                VanityName                               = 'VanityName'
+                UsePmi                                   =  'UsePmi'
+                RequirePasswordForSchedulingNewMeetings  = 'RequirePasswordForSchedulingNewMeetings' 
+                RequirePasswordForPmiMeetings            = 'RequirePasswordForPmiMeetings' 
+                EmbedPasswordInJoinLink                  = 'EmbedPasswordInJoinLink' 
             }
 
             $updateParams = Remove-NonPsBoundParameters($updateParams)
 
-            Update-ZoomUser @updateParams @creds
+            $passwordSettings = @{
+                = $True
+                = 'all'
+                = $True
+            }
+
+            Update-ZoomUser @updateParams @passwordSettings @creds
 
             #Add user to group
             if ($GroupId) {

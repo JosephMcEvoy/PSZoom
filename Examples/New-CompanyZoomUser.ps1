@@ -336,12 +336,6 @@ function New-CompanyZoomUser {
 
             $updateParams = Remove-NonPsBoundParameters($updateParams)
 
-            $passwordSettings = @{
-                = $True
-                = 'all'
-                = $True
-            }
-
             Update-ZoomUser @updateParams @passwordSettings @creds
 
             #Add user to group

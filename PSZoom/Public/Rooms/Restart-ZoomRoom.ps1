@@ -1,19 +1,23 @@
 <#
 
 .SYNOPSIS
-Join a meeting from the Zoom Rooms Client if the meeting number is available. Start an instant meeting if the 
-meeting number is empty.
+Restart Zoom Room client.
+
 .DESCRIPTION
-Join a meeting from the Zoom Rooms Client if the meeting number is available. Start an instant meeting if the 
-meeting number is empty.
+Restart Zoom Room client.
+
 .PARAMETER RoomId
-The ID of the room that is leaving the meeting.
+The ID of the room that is restarting.
+
 .PARAMETER JsonRPC
 A string specifying the version of the JSON-RPC protocol. Default is 2.0.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
 JSON object that looks like:
 {
@@ -24,16 +28,23 @@ JSON object that looks like:
   },
   "id": "49cf01a4-517e-4a49-b4d6-07237c38b749"
 }
+
 .LINK
 https://marketplace.zoom.us/docs/guides/zoom-rooms/zoom-rooms-api
+
 .EXAMPLE
-Disconnect-ZoomRoomMeeting dEaS6ZJZTOCBKL1oeyc9rA
+Restart-ZoomRoom dEaS6ZJZTOCBKL1oeyc9rA
+
 .EXAMPLE
-Disconnect-ZoomRoomMeeting -RoomId dEaS6ZJZTOCBKL1oeyc9rA
+Restart-ZoomRoom -RoomId dEaS6ZJZTOCBKL1oeyc9rA
+
+.EXAMPLE
+Restart all Zoom rooms:
+Get-ZoomRooms | Restart-ZoomRoom
 
 #>
 
-function Disconnect-ZoomRoomMeeting {
+function Restart-ZoomRoom {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -47,7 +58,7 @@ function Disconnect-ZoomRoomMeeting {
 
         [string]$JsonRPC = '2.0',
 
-        [string]$Method = 'leave',
+        [string]$Method = 'restart',
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -58,22 +69,22 @@ function Disconnect-ZoomRoomMeeting {
 
     begin {
         #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 
     process {
-        foreach ($Id in $RoomId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$Id/meetings"  
+        foreach ($id in $RoomId) {
+            $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$id/zrclient"  
 
-            $RequestBody = @{
+            $requestBody = @{
                 'jsonrpc' = $JsonRpc
                 'method'  = $Method
             }
             
-            $RequestBody = ConvertTo-Json $RequestBody -Depth 2
+            $requestBody = ConvertTo-Json $requestBody -Depth 2
     
             try {
-                $response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body $RequestBody -Method POST
+                $response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $requestBody -Method POST
              } catch {
                  Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
              }

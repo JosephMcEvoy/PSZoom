@@ -1,16 +1,23 @@
 <#
 .SYNOPSIS
 Retrieve the ID, Room_Name, Calendar_Name, eMail, Account_Type, Status, Device_IP, Camera, Microphone, Speaker, Last_Start_Time, Issues, Health.
+
 .DESCRIPTION
 Retrieve the ID, Room_Name, Calendar_Name, eMail, Account_Type, Status, Device_IP, Camera, Microphone, Speaker, Last_Start_Time, Issues, Health.
+
 .PARAMETER PageSize
 The number of records returned within a single API call (Min 30 - MAX 300)
+
 .PARAMETER NextPageToken
-The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
+The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds 
+the current page size. The expiration period for this token is 15 minutes.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
 {
     "page_count":  1,
@@ -74,10 +81,8 @@ function Get-DashboardZoomRooms {
         [Alias('page_size')]
         [int]$PageSize = 30,
 
-        [Parameter(Mandatory = $false)]
         [Alias('next_page_token')]
-        [string]
-        $NextPageToken,
+        [string]$NextPageToken,
 
         [switch]$Full = $False,
 
@@ -90,20 +95,20 @@ function Get-DashboardZoomRooms {
 
     begin {
         #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/metrics/zoomrooms"
+        $request = [System.UriBuilder]"https://api.zoom.us/v2/metrics/zoomrooms"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('page_size', $PageSize)
         if ($NextPageToken) {
             $query.Add('next_page_token', $NextPageToken)
         }
-        $Request.Query = $query.ToString()
+        $request.Query = $query.ToString()
 
         try {
-            $response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Method GET
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
         }
         catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation

@@ -1,14 +1,19 @@
 <#
 .SYNOPSIS
-Retrieve the ID, Room_Name, Device_Type, App_Version, App_Target_Version Device_System, Status.
+Retrieve the ID, Room Name, Device Type, App Version, App Target Version Device System, Status.
+
 .DESCRIPTION
-Retrieve the ID, Room_Name, Device_Type, App_Version, App_Target_Version Device_System, Status.
+Retrieve the ID, Room Name, Device Type, App Version, App Target Version Device System, Status.
+
 .PARAMETER RoomID
 The Unique Identifier of the zoom room. This can be retrived from (List-ZoomRooms).id
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
 [
     {
@@ -29,17 +34,19 @@ The Api Secret.
         "status":  "Offline"
     }
 ]
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/rooms/listzrdevices
+
 .EXAMPLE
 List-ZoomRoomDevices -RoomID 'V5-1Nno-Sf-gtHn_k-GaRw'
 #>
 
-function List-ZoomRoomDevices {
+function Get-ZoomRoomDevices {
     [CmdletBinding()]
     param (
         # The status of the Zoom Room
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $True)]
         [string]
         $RoomID,
 
@@ -52,14 +59,14 @@ function List-ZoomRoomDevices {
 
     begin {
         #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$($RoomID)/devices"
+        $request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$($RoomID)/devices"
 
         try {
-            $response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Method GET
+            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
         }
         catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation

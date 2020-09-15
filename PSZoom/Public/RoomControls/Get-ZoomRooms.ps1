@@ -67,26 +67,22 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/rooms/listzoomrooms
 List-ZoomRooms
 #>
 
-function List-ZoomRooms {
+function Get-ZoomRooms {
     [CmdletBinding()]
     param (
         # The status of the Zoom Room
         [Parameter(Mandatory = $false)]
         [ValidateSet("Offline", "Avalible", "InMeeting", "UnderConstruction")]
-        [string]
-        $status,
+        [string]$Status,
 
         # Type of Zoom Rooms
         [Parameter(Mandatory = $false)]
         [ValidateSet("ZoomRoom", "SchedulingDisplayOnly", "DigitalSignageOnly")]
-        [string]
-        $type,
+        [string]$Type,
 
         # Use this query parameter with a value of $true if you would like to see Zoom Rooms in your account that have not been assigned to anyone yet.
-        [Parameter(Mandatory = $false)]
         [Alias('unassigned_rooms')]
-        [Bool]
-        $UnassignedRooms = $false,
+        [Bool]$UnassignedRooms = $False,
 
         #The number of records returned within a single API call (Zoom default = 30)
         [Parameter(
@@ -95,20 +91,15 @@ function List-ZoomRooms {
         )]
         [ValidateRange(30, 300)]
         [Alias('page_size')]
-        [int]
-        $PageSize = 30,
+        [int]$PageSize = 30,
 
         # The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
-        [Parameter(Mandatory = $false)]
         [Alias('next_page_token')]
-        [string]
-        $NextPageToken,
+        [string]$NextPageToken,
 
         # Parent location ID of the Zoom Room
-        [Parameter(Mandatory = $false)]
         [Alias('location_id')]
-        [string]
-        $LocationId,
+        [string]$LocationId,
 
         [switch]$Full = $False,
 
@@ -151,10 +142,10 @@ function List-ZoomRooms {
         }
 
         if ($Full) {
-            Write-Output $response | ConvertTo-Json -Depth 10
+            Write-Output $response
         }
         else {
-            Write-Output $response.rooms | ConvertTo-Json -Depth 10
+            Write-Output $response.rooms
         }
         
     }

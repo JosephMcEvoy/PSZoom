@@ -47,8 +47,7 @@ function Get-ZoomRoomDevices {
     param (
         # The status of the Zoom Room
         [Parameter(Mandatory = $True)]
-        [string]
-        $RoomID,
+        [string]$RoomID,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -72,7 +71,7 @@ function Get-ZoomRoomDevices {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
         
-        $response.devices | ConvertTo-Json -Depth 10
+        Write-Output $response.devices
     }
 }
 

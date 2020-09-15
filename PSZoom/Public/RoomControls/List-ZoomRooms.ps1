@@ -141,7 +141,8 @@ function List-ZoomRooms {
         if ($LocationId) {
             $query.Add('location_id', $LocationId)
         }
-
+        $Request.Query = $query.ToString()
+        
         try {
             $response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Method GET
         }

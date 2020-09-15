@@ -1,18 +1,22 @@
 <#
 
 .SYNOPSIS
-Retrieve the Zoom Rooms ID and name.
+Retrieve the ID, Room_ID, Name, Location_ID, Status.
 .DESCRIPTION
-Retrieve the Zoom Rooms ID and name.
-.PARAMETER JsonRPC
-A String specifying the version of the JSON-RPC protocol. Default is 2.0.
-.PARAMETER Name
-Retrive all zoom rooms, if it is blank, retrive zoom rooms. Max of 100.
-.PARAMETER Page
-Smiliar to pagination, retrive zoom rooms belongs to this page if there are too many zoom rooms under an account. 
-The value should be greater than or equal to 1 and less than or equal to 10.
+Retrieve the ID, Room_ID, Name, Location_ID, Status.
+.PARAMETER Status
+The status of the Zoom Room ["Offline", "Avalible", "InMeeting", "UnderConstruction"]
+.PARAMETER Type
+Type of Zoom Rooms ["ZoomRoom", "SchedulingDisplayOnly", "DigitalSignageOnly"]
+.PARAMETER UnassignedRooms
+Use this query parameter with a value of $true if you would like to see 
+Zoom Rooms in your account that have not been assigned to anyone yet.
 .PARAMETER PageSize
-Smiliar to pagination, retrive how many zoom rooms per page. the value should be greater than or equal to 1 and less than or equal to 100.
+The number of records returned within a single API call (Min 30 - MAX 300)
+.PARAMETER NextPageToken
+The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
+.PARAMETER LocationID
+Parent location ID of the Zoom Room
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret
@@ -20,77 +24,82 @@ The Api Secret.
 .OUTPUTS
 When using -Full switch, receives JSON Response that looks like:
     {
-    "jsonrpc": "2.0",
-    "result": {
-        "send_at": "2017-09-26T05:50:29Z",
-        "data": [
-        {
-            "zr_name": "My Zoom Room1",
-            "zr_id": "63UtYMhSQZaBRPCNRXrD8A"
-        },
-        {
-            "zr_name": "My Zoom Room2",
-            "zr_id": "295bUg9STYaK-7NKz6KB1g"
-        }
-        ]
-    },
-    "id": "49cf01a4-517e-4a49-b4d6-07237c38b749"
+    "page_size":  30,
+    "next_page_token":  "Nz4oT3zfKtl5Ya6shico68mjiKWklN6qmU2",
+    "rooms":  [
+                  {
+                      "id":  "bo5ZalTCRZ6dsutGR4SF2A",        
+                      "room_id":  "8Fudh-eORuCPpWNk5G7tHg",   
+                      "name":  "My Zoom Room1",
+                      "location_id":  "0Dwnr3pfRbFPDVZSulvUuQ",      
+                      "status":  "Available"
+                  },
+                  {
+                      "id":  "GT7dHGEGSve3_To2rGJ8yB",
+                      "room_id":  "VAOjXdS_Q7pZ3btqTMGNSA",
+                      "name":  "My Zoom Room2",  
+                      "location_id":  "uOHlx4lwR34sQ4Uxft-Nhg",      
+                      "status":  "Available"
+                  }
+              ]
     }
 
 When not using -Full, a JSON response that looks like:
-    {
-        "zr_name": "My Zoom Room1",
-        "zr_id": "63UtYMhSQZaBRPCNRXrD8A"
-    },
-    {
-        "zr_name": "My Zoom Room2",
-        "zr_id": "295bUg9STYaK-7NKz6KB1g"
-    }
+    [
+        {
+            "id":  "bo5ZalTCRZ6dsutGR4SF2A",
+            "room_id":  "8Fudh-eORuCPpWNk5G7tHg",    
+            "name":  "My Zoom Room1",     
+            "location_id":  "0Dwnr3pfRbFPDVZSulvUuQ",
+            "status":  "Available"
+        },
+        {
+            "id":  "GT7dHGEGSve3_To2rGJ8yB",
+            "room_id":  "VAOjXdS_Q7pZ3btqTMGNSA",
+            "name":  "My Zoom Room2",  
+            "location_id":  "uOHlx4lwR34sQ4Uxft-Nhg",      
+            "status":  "Available"
+        }
+    ]
 .LINK
-https://marketplace.zoom.us/docs/guides/zoom-rooms/zoom-rooms-api
+https://marketplace.zoom.us/docs/api-reference/zoom-api/rooms/listzoomrooms
 .EXAMPLE
-Get-ZoomRooms
-
-
+List-ZoomRooms
 #>
 
 function Get-ZoomRooms {
     [CmdletBinding()]
     param (
-        [Parameter(
-            Position = 0,
-            ValueFromPipelineByPropertyName = $True,
-            ValueFromPipeline = $True
-        )]
-        [Alias('zr_name')]
-        [string]$Name = '',
+        # The status of the Zoom Room
+        [Parameter(Mandatory = $false)]
+        [ValidateSet("Offline", "Avalible", "InMeeting", "UnderConstruction")]
+        [string]$Status,
 
-        [Parameter(
-            ValueFromPipelineByPropertyName = $True,
-            Position = 1
-        )]
-        [ValidateRange(1,10)]
-        [int]$Page = 1,
-            
+        # Type of Zoom Rooms
+        [Parameter(Mandatory = $false)]
+        [ValidateSet("ZoomRoom", "SchedulingDisplayOnly", "DigitalSignageOnly")]
+        [string]$Type,
+
+        # Use this query parameter with a value of $true if you would like to see Zoom Rooms in your account that have not been assigned to anyone yet.
+        [Alias('unassigned_rooms')]
+        [Bool]$UnassignedRooms = $False,
+
+        #The number of records returned within a single API call (Zoom default = 30)
         [Parameter(
             ValueFromPipelineByPropertyName = $True, 
             Position = 2
         )]
-        [ValidateRange(1,100)]
+        [ValidateRange(30, 300)]
         [Alias('page_size')]
-        [int]$PageSize = 100,
+        [int]$PageSize = 30,
 
-        [Parameter(
-            Position = 3,
-            ValueFromPipelineByPropertyName = $True
-        )]
-        [string]$Method = 'list',
+        # The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
+        [Alias('next_page_token')]
+        [string]$NextPageToken,
 
-        [Parameter(
-            Position = 4,
-            ValueFromPipelineByPropertyName = $True
-        )]
-        [string]$JsonRpc = '2.0',
+        # Parent location ID of the Zoom Room
+        [Alias('location_id')]
+        [string]$LocationId,
 
         [switch]$Full = $False,
 
@@ -107,30 +116,37 @@ function Get-ZoomRooms {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/zrlist"
-
-        $RequestBody = @{
-            'jsonrpc'   = $JsonRpc
-            'method'    = $Method
-            'params'    = @{
-                'zr_name'   = $Name
-                'page'      = $Page
-                'page_size' = $PageSize
-            }
+        $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms"
+        $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+        $query.Add('page_size', $PageSize)
+        $query.Add('unassigned_rooms', $unassigned_rooms)
+        if ($status) {
+            $query.Add('status', $status)
         }
+        if ($type) {
+            $query.Add('type', $type)
+        }
+        if ($NextPageToken) {
+            $query.Add('next_page_token', $NextPageToken)
+        }
+        if ($LocationId) {
+            $query.Add('location_id', $LocationId)
+        }
+        $Request.Query = $query.ToString()
         
-        $RequestBody = ConvertTo-Json $RequestBody -Depth 2
-
         try {
-           $response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body $RequestBody -Method POST
-        } catch {
+            $response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Method GET
+        }
+        catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }
 
         if ($Full) {
             Write-Output $response
-        } else {
-            Write-Output $response.result.data
         }
+        else {
+            Write-Output $response.rooms
+        }
+        
     }
 }

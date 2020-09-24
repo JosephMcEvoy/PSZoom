@@ -209,6 +209,22 @@ function New-CompanyZoomUser {
             ValueFromPipelineByPropertyName = $True
         )]
         [string[]]$SchedulingAssistant = 'admin@company.com',
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('require_password_for_scheduling_new_meetings')]
+        [bool]$RequirePasswordForSchedulingNewMeetings, 
+
+        [ValidateSet('jbh_only', 'all', 'none')]
+        [Alias('require_password_for_pmi_meetings')]
+        [string]$RequirePasswordForPMIMeetings, 
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('require_password_for_instant_meetings')]
+        [bool]$RequirePasswordForInstantMeetings, 
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('embed_password_in_join_link')]
+        [bool]$EmbedPasswordInJoinLink, 
             
         [Parameter(ParameterSetName = 'AdAccount')]
         [Parameter(ParameterSetName = 'Manual')]
@@ -284,6 +300,10 @@ function New-CompanyZoomUser {
                 ApiSecret  = 'ApiSecret'
             }
 
+            if (Get-ZoomUser $Email -ErrorAction SilentlyContinue) {
+                throw "User already exists in Zoom."
+            }
+
             #Create new user
             $defaultNewUserParams = @{
                 Action    = $Action
@@ -329,15 +349,23 @@ function New-CompanyZoomUser {
                 Dept                                     = 'Department'
                 VanityName                               = 'VanityName'
                 UsePmi                                   =  'UsePmi'
-                RequirePasswordForSchedulingNewMeetings  = 'RequirePasswordForSchedulingNewMeetings' 
-                RequirePasswordForPmiMeetings            = 'RequirePasswordForPmiMeetings' 
-                EmbedPasswordInJoinLink                  = 'EmbedPasswordInJoinLink' 
             }
 
             $updateParams = Remove-NonPsBoundParameters($updateParams)
 
-            Update-ZoomUser @updateParams @passwordSettings @creds
+            Update-ZoomUser @updateParams @creds
 
+            #Update Zoom User Meeting Settings
+            $updateSettingParams = @{
+                UserId                                   = 'Email'
+                RequirePasswordForSchedulingNewMeetings  = 'RequirePasswordForSchedulingNewMeetings'
+                RequirePasswordForPmiMeetings            = 'RequirePasswordForPmiMeetings'
+                EmbedPasswordInJoinLink                  = 'EmbedPasswordInJoinLink'
+            }
+
+            $updateSettingParams = Remove-NonPsBoundParameters($updateSettingParams)
+            
+            Update-ZoomUserSettings @updateSettingParams @creds
             #Add user to group
             if ($GroupId) {
                 Add-ZoomGroupMember -groupid $GroupId -MemberEmail $email @creds

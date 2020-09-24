@@ -1,17 +1,25 @@
 <#
 
 .SYNOPSIS
-Restart Zoom Room client.
+Join a meeting from the Zoom Rooms Client if the meeting number is available. Start an instant meeting if the 
+meeting number is empty.
+
 .DESCRIPTION
-Restart Zoom Room client.
+Join a meeting from the Zoom Rooms Client if the meeting number is available. Start an instant meeting if the 
+meeting number is empty.
+
 .PARAMETER RoomId
-The ID of the room that is restarting.
+The ID of the room that is leaving the meeting.
+
 .PARAMETER JsonRPC
 A string specifying the version of the JSON-RPC protocol. Default is 2.0.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
 JSON object that looks like:
 {
@@ -24,17 +32,17 @@ JSON object that looks like:
 }
 .LINK
 https://marketplace.zoom.us/docs/guides/zoom-rooms/zoom-rooms-api
+
 .EXAMPLE
-Restart-ZoomRoom dEaS6ZJZTOCBKL1oeyc9rA
+Disconnect-ZoomRoomMeeting dEaS6ZJZTOCBKL1oeyc9rA
+
 .EXAMPLE
-Restart-ZoomRoom -RoomId dEaS6ZJZTOCBKL1oeyc9rA
-.EXAMPLE
-Restart all Zoom rooms:
-Get-ZoomRooms | Restart-ZoomRoom
+Disconnect-ZoomRoomMeeting -RoomId dEaS6ZJZTOCBKL1oeyc9rA
+
 
 #>
 
-function Restart-ZoomRoom {
+function Disconnect-ZoomRoomMeeting {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -48,7 +56,7 @@ function Restart-ZoomRoom {
 
         [string]$JsonRPC = '2.0',
 
-        [string]$Method = 'restart',
+        [string]$Method = 'leave',
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -59,22 +67,22 @@ function Restart-ZoomRoom {
 
     begin {
         #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 
     process {
-        foreach ($Id in $RoomId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$Id/zrclient"  
+        foreach ($id in $RoomId) {
+            $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$id/meetings"  
 
-            $RequestBody = @{
+            $requestBody = @{
                 'jsonrpc' = $JsonRpc
                 'method'  = $Method
             }
             
-            $RequestBody = ConvertTo-Json $RequestBody -Depth 2
+            $requestBody = ConvertTo-Json $requestBody -Depth 2
     
             try {
-                $response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body $RequestBody -Method POST
+                $response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $requestBody -Method POST
              } catch {
                  Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
              }

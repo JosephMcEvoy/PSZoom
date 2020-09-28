@@ -104,7 +104,10 @@ Get-ZoomWebinarDetailsReport
 Get-ZoomWebinarParticipantsReport  
   
 ## Rooms ##
+Get-DashboardZoomRooms  
 Get-ZoomRooms  
+Get-ZoomRoomDevices  
+Get-ZoomRoomLocations  
 Disconnect-ZoomRoomMeeting  
 New-ZoomRoomInvite  
 New-ZoomRoomMeeting  

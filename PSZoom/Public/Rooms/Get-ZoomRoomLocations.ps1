@@ -16,8 +16,8 @@ Use this parameter to filter the response by a specific location hierarchy level
 The number of records returned within a single API call (Min 30 - MAX 300)
 
 .PARAMETER NextPageToken
-The next page token is used to paginate through large result sets. A next page token will be returned whenever the set 
-of available results exceeds the current page size. The expiration period for this token is 15 minutes.
+The next page token is used to paginate through large result sets. A next page token will be returned whenever the
+set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
 
 .PARAMETER ApiKey
 The Api Key.
@@ -63,7 +63,9 @@ function Get-ZoomRoomLocations {
         [Alias('page_size')]
         [int]$PageSize = 30,
 
-        # The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
+        # The next page token is used to paginate through large result sets. A next page token will be returned 
+        # whenever the set of available results exceeds the current page size. The expiration period for this token 
+        # is 15 minutes.
         [Alias('next_page_token')]
         [string]$NextPageToken,
 

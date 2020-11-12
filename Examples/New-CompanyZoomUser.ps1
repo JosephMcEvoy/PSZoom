@@ -1,4 +1,5 @@
 <#
+
 .SYNOPSIS
 Creates a Zoom user given inputs.
 
@@ -94,7 +95,7 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userupdate
 
 #>
 
-#requires -module PSZoom, ActiveDirectory
+#requires -modules PSZoom, ActiveDirectory
 
 function New-CompanyZoomUser {
     [CmdletBinding(DefaultParameterSetName = 'AdAccount')]

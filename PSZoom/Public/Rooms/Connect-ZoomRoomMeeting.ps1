@@ -56,6 +56,13 @@ Connect-ZoomRoomMeeting dEaS6ZJZTOCBKL1oeyc9rA 123456789 password12
 .EXAMPLE
 Connect-ZoomRoomMeeting -RoomId dEaS6ZJZTOCBKL1oeyc9rA -MeetingId 1234567890 -Password password12 -Force
 
+.EXAMPLE
+$ZoomRoom = 'NYC1', 'BOS1'
+$Meeting = '123456789'
+$AllRooms = Get-ZoomRooms
+foreach ($Room in $ZoomRoom) {
+    $AllRooms | Where-Object zr_name -eq $Room | Connect-ZoomRoomMeeting -MeetingNumber $Meeting
+}
 
 #>
 

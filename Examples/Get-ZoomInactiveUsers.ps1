@@ -2,25 +2,35 @@
 
 .SYNOPSIS
 Get inactive hosts and users who have not used telephony actively.
+
 .DESCRIPTION
 Get inactive hosts and users who have not used telephony actively. A user logging on to account is
 not considered active. This cmdlet compares those users who have not hosted a meeting in Zoom and have
 not used Zoom for telephone only meetings for the entire provided time period.
+
 .PARAMETER FROM
 The start date in 'yyyy-MM-dd' format. Zoom limits the reports to the last 6 months. 
 Default is 6 months from current day.
+
 .PARAMETER To
 The end date in 'yyyy-MM-dd' format. Default is the current date.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .OUTPUTS
+
 .LINK
+
 .EXAMPLE
 Get-ZoomInactiveUsers -From (Get-date).AddDays(-30)
 
 #>
+
+#requires -modules PSZoom
 
 function Get-ZoomInactiveUsers {
     [CmdletBinding()]

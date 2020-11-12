@@ -5,16 +5,22 @@ This script takes an ADGroup, then compares the email addresses in the group aga
 to "sync" the ADGroup with Zoom.
 Any users in the AD Group who are not in Zoom are CREATED in Zoom if the -Add switch is specified.
 Any users in Zoom who are not in the AD Group are REMOVED from Zoom if the -Remove switch as specified.
+
 .PARAMETER AdGroup
 The name of the AdGroup that Zoom syncs with.
+
 .PARAMETER UserExceptions
 Users to ignore from Zoom and/or Active Directory.
+
 .PARAMETER TransferAccount
 Specifies the account to transfer meetings to. This is automatically added to UserExceptions.
+
 .PARAMETER Add
-A switch to add all user additions.
+Any users in the AD Group who are not in Zoom are CREATED in Zoom if the -Add switch is specified.
+
 .PARAMETER Remove
-A switch to remove all user deletions.
+Any users in Zoom who are not in the AD Group are REMOVED from Zoom if the -Remove switch as specified.
+
 .EXAMPLE
 $UserExceptions = @(
     'DVader@deathstar.com', #Don't mess with Vader's account under any circumstances.
@@ -25,8 +31,10 @@ $AdGroups = 'ZoomUsers'
 $TransferAccount = 'AVAdmin@deathstar.com'
 
 Sync-ZoomUsersWithAdGroup -AdGroups $AdGroups -UserExceptions $UserExceptions -TransferAccount $TransferAccount -ApiKey $ZoomApiKey -ApiSecret $ZoomApiKey -Confirm -Verbose
+
 .PARAMETER ApiKey
 The API key.
+
 .PARAMETER ApiSecret
 The API secret.
 
@@ -119,7 +127,7 @@ function Sync-ZoomUsersWithAdGroup() {
                         $AdDiff | ForEach-Object {
                             Write-Verbose "Adding user $_.EmailAddress to Zoom."
                             try {
-                                #New-CompanyZoomUser -AdAccount $_.EmailAddress.split('@')[0] @params
+                                New-CompanyZoomUser -AdAccount $_.EmailAddress.split('@')[0] @params
                             } catch {
                                 Write-Error -Message "Unable to add user $($_.EmailAddress). $($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
                             }

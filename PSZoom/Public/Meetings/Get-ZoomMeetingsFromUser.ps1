@@ -38,6 +38,11 @@ function Get-ZoomMeetingsFromUser {
         [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
         [string[]]$UserId,
 
+        [Parameter(
+            Position = 1,
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
         [ValidateSet('scheduled', 'live', 'upcoming')]
         [string]$Type = 'live',
         
@@ -61,7 +66,10 @@ function Get-ZoomMeetingsFromUser {
     }
 
     process {
+        #This makes the Type parameter a bit friendlier with other cmdlets and Zoom API responses
+
         foreach ($id in $UserId) {
+
             $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id/meetings"
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
             $query.add('type', $Type)

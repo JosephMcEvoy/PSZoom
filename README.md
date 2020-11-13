@@ -142,6 +142,7 @@ Update-ZoomUserStatus
 ## Webinars ##
 Get-ZoomWebinar  
 Get-ZoomWebinarsFromUser  
+Get-ZoomWebinarPanelists  
 
 ## Utility ##
 New-ZoomApiToken  

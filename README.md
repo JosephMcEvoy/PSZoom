@@ -58,6 +58,7 @@ Remove-ZoomMeetingRecordings
 Add-ZoomGroupMember  
 Get-ZoomGroup  
 Get-ZoomGroupLockSettings  
+Get-ZoomGroupMembers  
 Get-ZoomGroups  
 Get-ZoomGroupSettings  
 New-ZoomGroup  

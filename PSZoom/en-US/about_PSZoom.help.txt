@@ -2,91 +2,118 @@ TOPIC
     about_PSZoom
 
 SHORT DESCRIPTION
-    PSZoom is a Powershell API wrapper.
+    PSZoom is a Powershell API wrapper that wraps Zoom Video API.
 
 DETAILED DESCRIPTION
-    PSZoom allows users to work with the Zoom API through Powershell functions.
-    The module tries to wrap each API call that Zoom has with their API v2 documentation.
+    PSZoom allows users to work with the Zoom Video API through Powershell functions.
+    The module wraps many API calls from Zoom's API v2 documentation.
     You can find their documentation at https://marketplace.zoom.us/docs/api-reference/zoom-api.
 
     Cmdlets are named with approved Powershell verbs but keeping to as close to Zoom's API reference as possible.
-    For example Zoom has an API call that they named 'List User Assistants'. In PSZoom it is named 
-    Get-ZoomUserAssistants. In general each cmdlet has associated help which includes a link (found under .LINK) 
+    For example, Zoom has two API calls that they named "List User Assistants" and "Update Zoom Meeting". In PSZoom it is named 
+    Get-ZoomUserAssistants and Update-ZoomMeeting. In general each cmdlet has associated help which includes a link (found under .LINK) 
     to the API call that it is wrapping.
 
+    Zoom has a rate limit that varies depending on your account and the type of request. Rate limiting / monitoring is not built into PSZoom at this time.
+
 SEE ALSO
-        Add-ZoomGroupMember
-        Add-ZoomMeetingRegistrant
-        Add-ZoomUserAssistants
-        Connect-ZoomRoomMeeting
-        Disconnect-ZoomRoomMeeting
-        Get-ZoomAccountRecordings
-        Get-ZoomActiveInactiveHostReports
-        Get-ZoomEndedMeetingInstances
-        Get-ZoomGroup
-        Get-ZoomGroupLockSettings
-        Get-ZoomGroups
-        Get-ZoomGroupSettings
-        Get-ZoomMeeting
-        Get-ZoomMeetingCloudRecordings
-        Get-ZoomMeetingInvitation
-        Get-ZoomMeetingPoll
-        Get-ZoomMeetingPolls
-        Get-ZoomMeetingRecordings
-        Get-ZoomMeetingRegistrants
-        Get-ZoomMeetingsFromUser
-        Get-ZoomPastMeetingDetails
-        Get-ZoomPastMeetingParticipants
-        Get-ZoomPersonalMeetingRoomName
-        Get-ZoomMeetingRecordings
-        Get-ZoomRecordings
-        Get-ZoomUserRecordings
-        Get-ZoomRecordings
-        Get-ZoomRegistrationQuestions
-        Get-ZoomRooms
-        Get-ZoomTelephoneReports
-        Get-ZoomUser
-        Get-ZoomUserAssistants
-        Get-ZoomUserEmailStatus
-        Get-ZoomUserPermissions
-        Get-ZoomUsers
-        Get-ZoomUserSchedulers
-        Get-ZoomUserSettings
-        Get-ZoomUserToken
-        New-ZoomGroup
-        New-ZoomMeeting
-        New-ZoomMeetingPoll
-        New-ZoomRoomInvite
-        New-ZoomRoomMeeting
-        New-ZoomUser
-        Remove-ZoomGroup
-        Remove-ZoomGroupMembers
-        Remove-ZoomMeeting
-        Remove-ZoomMeetingPollRemove-ZoomSpecificUserAssistant
-        Remove-ZoomMeetingRecordings
-        Remove-ZoomMeetingRecordingFile
-        Remove-ZoomRoomMeeting 
-        Remove-ZoomSpecificUserScheduler
-        Remove-ZoomUser
-        Remove-ZoomUserAssistants
-        Remove-ZoomUserSchedulers
-        Restart-ZoomRoom
-        Revoke-ZoomUserSsoToken
-        Update-MeetingStatus
-        Update-ZoomGroup
-        Update-ZoomGroupLockSettings
-        Update-ZoomGroupSettings
-        Update-ZoomMeeting
-        Update-ZoomMeetingLiveStream
-        Update-ZoomMeetingLiveStream
-        Update-ZoomMeetingLiveStreamStatus
-        Update-ZoomMeetingPoll
-        Update-ZoomMeetingRegistrantStatus
-        Update-ZoomMeetingRegistrationQuestions
-        Update-ZoomMeetingStatus
-        Update-ZoomProfilePicture
-        Update-ZoomUser
-        Update-ZoomUserEmail
-        Update-ZoomUserpassword
-        Update-ZoomUserSettings
-        Update-ZoomUserStatus
+    Cloud Recordings 
+        Get-ZoomAccountRecordings  
+        Get-ZoomAccountRecordings  
+        Get-ZoomMeetingCloudRecordings  
+        Remove-ZoomMeetingRecordingFile  
+        Remove-ZoomMeetingRecordings  
+
+    Groups 
+        Add-ZoomGroupMember  
+        Get-ZoomGroup  
+        Get-ZoomGroupLockSettings  
+        Get-ZoomGroupMembers  
+        Get-ZoomGroups  
+        Get-ZoomGroupSettings  
+        New-ZoomGroup  
+        Remove-ZoomGroup  
+        Remove-ZoomGroupMembers  
+        Update-ZoomGroup  
+        Update-ZoomGroupLockSettings  
+        Update-ZoomGroupSettings  
+  
+    Meetings 
+        Add-ZoomRegistrant  
+        Get-ZoomEndedMeetingInstances  
+        Get-ZoomMeeting  
+        Get-ZoomMeetingCloudRecordings  
+        Get-ZoomMeetingInvitation  
+        Get-ZoomMeetingPoll  
+        Get-ZoomMeetingPolls  
+        Get-ZoomMeetingRegistrants  
+        Get-ZoomMeetingsFromUser  
+        Get-ZoomPastMeetingDetails  
+        Get-ZoomPastMeetingParticipants  
+        Get-ZoomPersonalMeetingRoomName  
+        New-ZoomMeeting  
+        New-ZoomMeetingPoll  
+        Remove-ZoomMeeting  
+        Remove-ZoomMeetingPoll  
+        Update-MeetingStatus  
+        Update-ZoomMeeting  
+        Update-ZoomMeetingLiveStream  
+        Update-ZoomMeetingLiveStream  
+        Update-ZoomMeetingLiveStreamStatus  
+        Update-ZoomMeetingPoll  
+        Update-ZoomMeetingRegistrantStatus  
+        Update-ZoomMeetingRegistrationQuestions  
+        Update-ZoomMeetingStatus  
+
+    Reports 
+        Get-ZoomActiveInactiveHostReports  
+        Get-ZoomDailyUsageReport  
+        Get-ZoomMeetingParticipantsReport  
+        Get-ZoomRegistrationQuestions  
+        Get-ZoomTelephoneReports  
+        Get-ZoomWebinarDetailsReport  
+        Get-ZoomWebinarParticipantsReport  
+
+    Rooms 
+        Get-DashboardZoomRooms  
+        Get-ZoomRooms  
+        Get-ZoomRoomDevices  
+        Get-ZoomRoomLocations  
+        Disconnect-ZoomRoomMeeting  
+        New-ZoomRoomInvite  
+        New-ZoomRoomMeeting  
+        Remove-ZoomRoomMeeting  
+        Restart-ZoomRoom  
+        Remove-ZoomRoomMeeting  
+        Stop-ZoomRoomMeeting  
+  
+    Users 
+        Add-ZoomUserAssistants  
+        Get-ZoomUser  
+        Get-ZoomUserEmailStatus  
+        Get-ZoomUserPermissions  
+        Get-ZoomUsers  
+        Get-ZoomUserSchedulers  
+        Get-ZoomUserSettings  
+        Get-ZoomUserToken  
+        New-ZoomUser  
+        Remove-ZoomSpecificUserAssistant  
+        Remove-ZoomSpecificUserScheduler  
+        Remove-ZoomUser  
+        Remove-ZoomUserAssistants  
+        Remove-ZoomUserSchedulers  
+        Revoke-ZoomUserSsoToken  
+        Update-ZoomProfilePicture  
+        Update-ZoomUser  
+        Update-ZoomUserEmail  
+        Update-ZoomUserpassword  
+        Update-ZoomUserSettings  
+        Update-ZoomUserStatus  
+  
+    Webinars 
+        Get-ZoomWebinar  
+        Get-ZoomWebinarsFromUser  
+        Get-ZoomWebinarPanelists  
+
+    Utility 
+        New-ZoomApiToken

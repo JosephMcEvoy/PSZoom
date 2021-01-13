@@ -1,4 +1,4 @@
-﻿# Publish to gallery with a few restrictions
+﻿#Publish to gallery with a few restrictions
 if ($env:BHModulePath -and
     $env:BHBuildSystem -ne 'Unknown' -and
     $env:BHBranchName -eq "master" -and

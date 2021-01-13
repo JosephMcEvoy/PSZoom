@@ -1,7 +1,6 @@
 # PSZoom #
 - - - - 
-PSZoom is a Powershell wrapper to interface with Zoom's API (Zoom Video Communications). The module wraps many API calls from Zoom's API v2 documentation.  
-You can find Zoom's documentation at https://marketplace.zoom.us/docs/api-reference/zoom-api.  
+PSZoom is a Powershell wrapper to interface with Zoom's API (Zoom Video Communications). The module wraps many API calls from Zoom's API v2 documentation. You can find Zoom's documentation at https://marketplace.zoom.us/docs/api-reference/zoom-api. PSZoom is not an official module.
 
 Cmdlets are named with approved Powershell verbs but keeping to as close to Zoom's API reference as possible.  
 For example, Zoom has two API calls that they named "List User Assistants" and "Update Zoom Meeting". In PSZoom it is named  

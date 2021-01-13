@@ -11,6 +11,7 @@ if ($env:BHModulePath -and
             WithOptions @{
                 ApiKey = $ENV:NugetApiKey
                 Tags = 'Zoom', 'ZoomAPI', 'API'
+                SkipAutomaticTags = $True
             }
         }
     } 

@@ -44,6 +44,13 @@ Get-ZoomGroups | where-object {$_ -eq 'Dark Side'} | Add-ZoomGroupMembers -email
 Add a single user to all groups matching 'Side'.
 Get-ZoomGroups | where-object {$_ -like '*Side*'} | Add-ZoomGroupMembers -email 'askywalker@theforce.com'
 
+.EXAMPLE
+Find all users without a group then select users based off of Office location from Active Directory
+then add them to a group.
+(((get-zoomusers -all) | where-object group_ids -eq $Null).email).replace('@domain.com','') | ```
+get-aduser -property office,EmailAddress | where-object office -eq 'New Mexico' | select emailaddress | ```
+get-zoomuser | select id | Add-ZoomGroupMembers -groupid xxxxxxSQQKvOyy234gd
+
 #>
 
 function Add-ZoomGroupMember  {

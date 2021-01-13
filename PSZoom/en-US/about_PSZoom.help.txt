@@ -2,17 +2,19 @@ TOPIC
     about_PSZoom
 
 SHORT DESCRIPTION
-    PSZoom is a Powershell API wrapper.
+    PSZoom is a Powershell API wrapper that wraps Zoom Video API.
 
 DETAILED DESCRIPTION
-    PSZoom allows users to work with the Zoom API through Powershell functions.
-    The module tries to wrap each API call that Zoom has with their API v2 documentation.
+    PSZoom allows users to work with the Zoom Video API through Powershell functions.
+    The module wraps many API calls from Zoom's API v2 documentation.
     You can find their documentation at https://marketplace.zoom.us/docs/api-reference/zoom-api.
 
     Cmdlets are named with approved Powershell verbs but keeping to as close to Zoom's API reference as possible.
-    For example Zoom has an API call that they named 'List User Assistants'. In PSZoom it is named 
-    Get-ZoomUserAssistants. In general each cmdlet has associated help which includes a link (found under .LINK) 
+    For example, Zoom has two API calls that they named "List User Assistants" and "Update Zoom Meeting". In PSZoom it is named 
+    Get-ZoomUserAssistants and Update-ZoomMeeting. In general each cmdlet has associated help which includes a link (found under .LINK) 
     to the API call that it is wrapping.
+
+    Zoom has a rate limit that varies depending on your account and the type of request. Rate limiting / monitoring is not built into PSZoom at this time.
 
 SEE ALSO
     Cloud Recordings 

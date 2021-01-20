@@ -151,6 +151,3 @@ Get-ZoomWebinarPanelists
 
 ## Utility ##
 New-ZoomApiToken  
-  
-# Note about Rate Limiting #
-Zoom has a rate limit that varies depending on your account and the type of request. Rate limiting / monitoring is not built into PSZoom at this time.

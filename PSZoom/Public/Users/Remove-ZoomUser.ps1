@@ -9,7 +9,7 @@ Delete a user on your account.
 .PARAMETER Action
 Delete action options:
 disassociate - Disassociate a user. This is the default.
-delete - Permanently dlete a user.
+delete - Permanently delete a user.
 Note: To delete pending user in the account, use disassociate.
 
 .PARAMETER TransferEmail

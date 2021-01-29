@@ -40,7 +40,6 @@ function Get-ZoomMeetingsFromUser {
 
         [Parameter(
             Position = 1,
-            ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
         [ValidateSet('scheduled', 'live', 'upcoming')]

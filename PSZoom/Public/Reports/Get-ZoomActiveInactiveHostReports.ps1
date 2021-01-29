@@ -30,6 +30,10 @@ page into the Users field of the report generated. The page size is set automati
 Use this switch to retrieve an array of the last 6 months of reports. This automatically combines users from 
 each page into the Users field of each report. The page size is set automatically to 300.
 
+.PARAMETER NextPageToken
+The next page token is used to paginate through large result sets. A next page token will be returned whenever the 
+set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
+
 .PARAMETER ApiKey
 The Api Key.
 
@@ -111,6 +115,11 @@ function Get-ZoomActiveInactiveHostReports {
         [Parameter(ParameterSetName = 'CombineAllPages')]
         [switch]$CombineAllPages,
 
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'CombineAllPages')]
+        [Parameter(ParameterSetName = 'LastSixMonths')]
+        [string]$NextPageToken,
+
         [int]$RateLimit = 20,
 
         [string]$ApiKey,
@@ -134,12 +143,19 @@ function Get-ZoomActiveInactiveHostReports {
             $query.Add('page_size', $PageSize)
             $query.Add('page_number', $PageNumber)
             $query.Add('type', $Type)
+
+            if ($NextPageToken) {
+                $query.Add('next_page_token', $NextPageToken)
+            }
+
             $Request.Query = $query.ToString()
 
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
             
             Write-Output $response
-        } elseif ($PsCmdlet.ParameterSetName -eq 'CombineAllPages') {
+        }
+
+        if ($PsCmdlet.ParameterSetName -eq 'CombineAllPages') {
             $InitialReport = Get-ZoomActiveInactiveHostReports -From $From -To $To -PageSize 300 -PageNumber 1 -Type $Type
             $TotalPages = $InitialReport.page_count
             $CombinedReport = [PSCustomObject]@{
@@ -155,18 +171,20 @@ function Get-ZoomActiveInactiveHostReports {
 
             if ($TotalPages -gt 1) {
                 for ($i=2; $i -le $TotalPages; $i++){
-                    $users = (Get-ZoomActiveInactiveHostReports -From $From -To $To -PageSize 300 -PageNumber $i -Type $Type).users
+                    $users = (Get-ZoomActiveInactiveHostReports -From $From -To $To -PageSize 300 -PageNumber $i -Type $Type -NextPageToken $InitialReport.next_page_token).users
                     $CombinedReport.Users += $users
                 }
             }
 
             Write-Output $CombinedReport
-        }  elseif ($PsCmdlet.ParameterSetName -eq 'LastSixMonths') {
+        }
+
+        if ($PsCmdlet.ParameterSetName -eq 'LastSixMonths') {
             $AllReports = @()
-            $monthRanges = (Get-LastSixMonthsDateRanges)
+            $monthRanges = Get-LastSixMonthsDateRanges
 
             foreach ($month in $monthRanges.keys) {
-                $AllReports += (Get-ZoomActiveInactiveHostReports -From $monthRanges."$month".begin -To $monthRanges."$month".end -Pagesize 300 -Type $Type -CombineAllPages)
+                $AllReports += (Get-ZoomActiveInactiveHostReports -From $monthRanges."$month".begin -To $monthRanges."$month".end -Type $Type -CombineAllPages)
             }
 
             Write-Output $AllReports

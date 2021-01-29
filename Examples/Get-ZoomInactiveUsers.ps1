@@ -28,6 +28,16 @@ The Api Secret.
 .EXAMPLE
 Get-ZoomInactiveUsers -From (Get-date).AddDays(-30)
 
+.EXAMPLE
+Get a report of all inactive users and run them by Active Directory to get name and title.
+Afterward, export to a CSV.
+
+$Report = Get-ZoomInactiveUsers
+
+$Report.users | ForEach-Object {
+    get-aduser -filter {EmailAddress -eq $_} -Properties EmailAddress,Description,Title
+} | Select-Object GivenName,Surname,EmailAddress,Description,Title | Export-Csv InactiveUsers.csv
+
 #>
 
 #requires -modules PSZoom
@@ -87,7 +97,7 @@ function Get-ZoomInactiveUsers {
             }
         }
 
-        Write-Output $telephonyUserEmails
+        Write-Output $inactiveUsers
     }
 }
 
@@ -136,3 +146,6 @@ function Get-DateRanges {
 
     Write-Output $Ranges
 }
+
+Get-ZoomInactiveUsers
+

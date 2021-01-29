@@ -10,8 +10,6 @@ if ($env:BHModulePath -and
             To PSGallery
             WithOptions @{
                 ApiKey = $ENV:NugetApiKey
-                Tags = 'Zoom', 'ZoomAPI', 'API'
-                SkipAutomaticTags = $True
             }
         }
     } 

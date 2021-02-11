@@ -1,11 +1,20 @@
 <#
 
 .SYNOPSIS
-Generated Zoom headers.
+Generate Zoom headers.
+
+.PARAMETER ApiKey
+The Zoom API key.
+
+.PARAMETER ApiSecret
+The Zoom API secret.
+
 .EXAMPLE
 $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+
 .EXAMPLE
 $Headers = New-ZoomHeaders -Token $Token
+
 .OUTPUTS
 Generic dictionary.
 

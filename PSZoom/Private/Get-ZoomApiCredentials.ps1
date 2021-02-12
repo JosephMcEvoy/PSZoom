@@ -1,13 +1,17 @@
 <#
 
 .SYNOPSIS
-Gets a hashtable for a Zoom Api REST body that includes the api key and secret.
+Gets a hashtable for a Zoom Api REST body that includes the API key and secret.
+
 .EXAMPLE
 $ZoomApiCredentials = Get-ZoomApiCredentials
+
 .OUTPUTS
 Hashtable
+
 .LINK
 https://marketplace.zoom.us/docs/guides/authorization/jwt/jwt-with-zoom
+
 .LINK
 https://github.com/nickrod518/PowerShell-Scripts/tree/master/Zoom
 

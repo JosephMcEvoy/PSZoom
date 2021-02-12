@@ -71,19 +71,13 @@ function Get-ZoomGroupMembers  {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/members"
+        $request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/members"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('page_size', $PageSize)
         $query.Add('next_page_token', $NextPageToken)
+        $request.Query = $query.ToString()
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
 
-        $Request.Query = $query.ToString()
-
-        try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        } finally {
-            Write-Output $response
-        }
+        Write-Output $response
     }
 }

@@ -29,8 +29,6 @@ $Questions = @(
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
-.OUTPUTS
-.LINK
 .EXAMPLE
 $Questions = @(
     @('Favorite number?', 'multiple', @('1', '2', '3')), @('Favorite letter?', 'multiple', @('a', 'b', 'c'))
@@ -84,12 +82,8 @@ function New-ZoomMeetingPoll {
             $RequestBody.Add('questions', $Questions)
         }
 
-        try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method POST
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
-        
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method POST
+
         Write-Output $response
     }
 }

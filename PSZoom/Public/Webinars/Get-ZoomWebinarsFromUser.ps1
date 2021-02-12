@@ -33,7 +33,9 @@ Zoom API response.
 Get-ZoomWebinarsFromUser lskywalker@thejedi.com
 
 .EXAMPLE
-Export to CSV the participants from all webinars of a particular name from a given user. Does not take into account webinars with over 300 participants.
+Export to CSV the participants from all webinars of a particular name from a given user. Does not take into 
+account webinars with over 300 participants.
+
 $Ids = ((Get-ZoomWebinarsFromUser myoda@thejedi.com -PageSize 300).webinars | where-object topic -eq 'Training').id
 $Ids | foreach-object {
     (Get-ZoomWebinarParticipantsReport $_ -PageSize 300).participants

@@ -158,11 +158,8 @@ function Get-ZoomUsers {
         
         $Request.Query = $query.ToString()
 
-        try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
+
 
         if ($FullApiResponse) {
             Write-Output $response

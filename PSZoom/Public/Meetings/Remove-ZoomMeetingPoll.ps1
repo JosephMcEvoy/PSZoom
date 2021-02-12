@@ -17,7 +17,6 @@ The Api Secret.
 .EXAMPLE
 Remove-ZoomMeetingPoll 123456789 987654321
 
-
 #>
 
 function Remove-ZoomMeetingPoll {
@@ -53,13 +52,8 @@ function Remove-ZoomMeetingPoll {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
-    
-        try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method DELETE
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+        $request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method DELETE
         
         Write-Output $response
     }

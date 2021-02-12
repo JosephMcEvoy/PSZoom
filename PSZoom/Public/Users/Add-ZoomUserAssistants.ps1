@@ -77,7 +77,7 @@ function Add-ZoomUserAssistants {
 
     process {
         foreach ($Id in $UserId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$Id/assistants"
+            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$Id/assistants"
 
             $assistants = @()
     
@@ -89,17 +89,13 @@ function Add-ZoomUserAssistants {
                 $assistants += @{'id' = $id}
             }
     
-            $RequestBody = @{
+            $requestBody = @{
                 'assistants' = $assistants
             }
             
-            $RequestBody = $RequestBody | ConvertTo-Json
-            
-            try {
-                $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method POST
-            } catch {
-                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-            }
+            $requestBody = $requestBody | ConvertTo-Json
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method POST
+
             
             if ($Passthru) {
                 Write-Output $UserId

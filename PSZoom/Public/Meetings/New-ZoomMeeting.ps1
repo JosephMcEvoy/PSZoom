@@ -839,13 +839,7 @@ function New-ZoomMeeting {
         #### Misc Settings End #####
 
         $requestBody = ConvertTo-Json $requestBody -Depth 10
-
-        try {
-            $response = Invoke-RestMethod -Uri $Uri -Headers $Headers -Body $requestBody -Method Post
-        }
-        catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+        $response = Invoke-ZoomRestMethod -Uri $Uri -Headers $Headers -Body $requestBody -Method Post
 
         Write-Output $response
     }

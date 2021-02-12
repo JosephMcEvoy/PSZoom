@@ -60,12 +60,7 @@ function New-ZoomGroup {
 
                 $requestBody = $requestBody | ConvertTo-Json
 
-                try {
-                    $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method POST
-                }
-                catch {
-                    Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-                }
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method POST
 
                 Write-Verbose "Creating group $n."
                 Write-Output $response

@@ -93,11 +93,7 @@ function Update-ZoomMeetingPoll {
 
         $requestBody = ConvertTo-Json $requestBody -Depth 10 #Uses -Depth because the questions.answers array is flattened without it.
 
-        try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PUT
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PUT
 
         Write-Output $response
     }

@@ -97,12 +97,7 @@ function New-ZoomRoomInvite {
         }
         
         $requestBody = ConvertTo-Json $requestBody -Depth 2
-
-        try {
-            $response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Body $requestBody -Method POST
-        } catch {
-                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+        $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Headers $headers -Body $requestBody -Method POST
 
         Write-Output $response
     }

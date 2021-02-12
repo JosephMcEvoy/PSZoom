@@ -45,11 +45,7 @@ function Get-ZoomPastMeetingDetails {
     process {
         $Uri = "https://api.zoom.us/v2/past_meetings/$MeetingUuid"
         
-        try {
-            $response = Invoke-RestMethod -Uri $Uri -Headers $headers -Method GET
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+        $response = Invoke-ZoomRestMethod -Uri $Uri -Headers $headers -Method GET
         
         Write-Output $response
     }

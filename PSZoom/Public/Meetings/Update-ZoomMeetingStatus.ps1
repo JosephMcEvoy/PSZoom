@@ -52,7 +52,7 @@ function Update-ZoomMeetingStatus {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/status"
+        $request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/status"
 
         $requestBody = @{
             'action' = $Action
@@ -60,11 +60,7 @@ function Update-ZoomMeetingStatus {
 
         $requestBody = $requestBody | ConvertTo-Json
 
-        try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PUT
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PUT
         
         Write-Output $response
     }

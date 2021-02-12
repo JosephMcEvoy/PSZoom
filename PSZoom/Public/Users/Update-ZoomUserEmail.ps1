@@ -64,21 +64,18 @@ function Update-ZoomUserEmail {
     }
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/email"
+        $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/email"
 
         $requestBody = @{
             'email' = $Email
         } 
+
         $requestBody = $requestBody | ConvertTo-Json
 
-        try {
-            Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PUT
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        } finally {
-            if ($Passthru) {
-                Write-Output $UserId
-            }
+        Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PUT
+
+        if ($Passthru) {
+            Write-Output $UserId
         }
     }
 }

@@ -12,8 +12,6 @@ The Occurrence ID.
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
-.OUTPUTS
-.LINK
 .EXAMPLE
 Remove-ZoomMeeting 123456789
 
@@ -76,11 +74,8 @@ function Remove-ZoomMeeting {
             $Request.Query = $query.ToString()
         }
 
-        try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method DELETE
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method DELETE
+
         if (-not $Passthru) {
             Write-Output $response
         } else {

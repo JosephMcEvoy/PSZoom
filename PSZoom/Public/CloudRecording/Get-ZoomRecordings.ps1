@@ -103,7 +103,7 @@ function Get-ZoomRecordings {
 
     process {
         foreach ($user in $Userid) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/recordings"
+            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/recordings"
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
 
             if ($PSBoundParameters.ContainsKey('PageSize')) {
@@ -136,12 +136,7 @@ function Get-ZoomRecordings {
             
             $Request.Query = $query.ToString()
 
-            try {
-                $response = Invoke-RestMethod -Uri $request.Uri -Headers $Headers -Body $RequestBody -Method GET
-            }
-            catch {
-                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-            }
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $Headers -Body $RequestBody -Method GET
     
             Write-Output $response
         }

@@ -67,16 +67,12 @@ function Remove-ZoomSpecificUserScheduler {
         foreach ($user in $UserId) {
             foreach ($scheduler in $schedulerId) {
                 if ($PScmdlet.ShouldProcess($user, "Remove $scheduler")) {
-                    $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/schedulers/$scheduler"
+                    $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/schedulers/$scheduler"
+                    
+                    Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method DELETE
 
-                    try {
-                        Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method DELETE
-                    } catch {
-                        Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-                    } finally {
-                        if ($Passthru) {
+                    if ($Passthru) {
                             Write-Output $UserId
-                        }
                     }
                 }
             }

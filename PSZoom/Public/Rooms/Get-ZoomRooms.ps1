@@ -1,10 +1,10 @@
 <#
 
 .SYNOPSIS
-Retrieve the ID, Room_ID, Name, Location_ID, Status.
+Retrieves the ID, Room_ID, Name, Location_ID, Status.
 
 .DESCRIPTION
-Retrieve the ID, Room_ID, Name, Location_ID, Status.
+Retrieves the ID, Room_ID, Name, Location_ID, Status.
 
 .PARAMETER Status
 The status of the Zoom Room ["Offline", "Avalible", "InMeeting", "UnderConstruction"]
@@ -13,11 +13,11 @@ The status of the Zoom Room ["Offline", "Avalible", "InMeeting", "UnderConstruct
 Type of Zoom Rooms ["ZoomRoom", "SchedulingDisplayOnly", "DigitalSignageOnly"]
 
 .PARAMETER UnassignedRooms
-Use this query parameter with a value of $true if you would like to see 
-Zoom Rooms in your account that have not been assigned to anyone yet.
+Use this query parameter with a value of $true if you would like to see Zoom Rooms in your account that have not 
+been assigned to anyone yet.
 
 .PARAMETER PageSize
-The number of records returned within a single API call (Min 30 - MAX 300)
+The number of records returned within a single API call (Min 30 - MAX 300).
 
 .PARAMETER NextPageToken
 The next page token is used to paginate through large result sets. A next page token will be returned whenever the set 
@@ -27,10 +27,10 @@ of available results exceeds the current page size. The expiration period for th
 Parent location ID of the Zoom Room
 
 .PARAMETER ApiKey
-The Api Key.
+The API Key.
 
 .PARAMETER ApiSecret
-The Api Secret.
+The API Secret.
 
 .OUTPUTS
 When using -Full switch, receives JSON Response that looks like:
@@ -83,12 +83,12 @@ function Get-ZoomRooms {
     [CmdletBinding()]
     param (
         # The status of the Zoom Room
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $False)]
         [ValidateSet("Offline", "Avalible", "InMeeting", "UnderConstruction")]
         [string]$Status,
 
         # Type of Zoom Rooms
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $False)]
         [ValidateSet("ZoomRoom", "SchedulingDisplayOnly", "DigitalSignageOnly")]
         [string]$Type,
 
@@ -146,12 +146,8 @@ function Get-ZoomRooms {
         }
         $Request.Query = $query.ToString()
         
-        try {
-            $response = Invoke-RestMethod -Uri $Request.Uri -Headers $headers -Method GET
-        }
-        catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+
+        $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Headers $headers -Method GET
 
         if ($Full) {
             Write-Output $response

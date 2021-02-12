@@ -543,12 +543,7 @@ function Update-ZoomMeeting {
     }
 
     $requestBody = ConvertTo-Json $requestBody -Depth 10
-
-    try {
-        $response = Invoke-RestMethod -Uri $Request.Uri -Headers $Headers -Body $requestBody -Method Patch
-    } catch {
-        Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-    }
+    $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Headers $Headers -Body $requestBody -Method Patch
 
     Write-Output $response
   }

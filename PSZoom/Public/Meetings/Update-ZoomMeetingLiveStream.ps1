@@ -15,7 +15,6 @@ The Api Secret.
 .EXAMPLE
 Update-ZoomMeetingLiveStream  123456789
 
-
 #>
 
 function Update-ZoomMeetingLiveStream {
@@ -76,11 +75,7 @@ function Update-ZoomMeetingLiveStream {
 
         $requestBody = ConvertTo-Json $requestBody
                 
-        try {
-            $response = Invoke-RestMethod -Uri $uri -Headers $headers -Body $requestBody -Method PATCH
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+        $response = Invoke-ZoomRestMethod -Uri $uri -Headers $headers -Body $requestBody -Method PATCH
         
         Write-Output $response
     }

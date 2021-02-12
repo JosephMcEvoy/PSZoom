@@ -61,14 +61,9 @@ function Remove-ZoomSpecificUserAssistant {
     process {
         foreach ($id in $UserId) {
             foreach ($aid in $AssistantId) {
-                $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id/assistants/$aid"
-        
-                try {
-                    $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method DELETE
-                } catch {
-                    Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-                }
-        
+                $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id/assistants/$aid"
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method DELETE
+
                 Write-Output $response
             }
         }

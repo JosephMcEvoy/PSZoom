@@ -76,13 +76,8 @@ function Update-ZoomProfilePicture {
                 "--$boundary--"
             ) -join $LF
     
-            
-            try {
-                $response = Invoke-RestMethod -Uri $request.Uri -ContentType "multipart/form-data; boundary=`"$boundary`"" -Headers $headers -Body $requestBody -Method POST
-            } catch {
-                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-            }
-    
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -ContentType "multipart/form-data; boundary=`"$boundary`"" -Headers $headers -Body $requestBody -Method POST
+
             Write-Output $response
         }
     }

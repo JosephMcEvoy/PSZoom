@@ -75,11 +75,7 @@ function Update-ZoomMeetingLiveStreamStatus {
         
         $requestBody = $requestBody | ConvertTo-Json
 
-        try {
-            $response = Invoke-RestMethod -Uri $Uri -Headers $headers -Body $requestBody -Method PATCH
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+        $response = Invoke-ZoomRestMethod -Uri $uri -Headers $headers -Body $requestBody -Method PATCH
         
         Write-Output $response
     }

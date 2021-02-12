@@ -139,12 +139,7 @@ function Connect-ZoomRoomMeeting {
             }
             
             $requestBody = ConvertTo-Json $requestBody -Depth 2
-
-            try {
-                $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method POST
-            } catch {
-                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-            }
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method POST
 
             Write-Output $response
         }

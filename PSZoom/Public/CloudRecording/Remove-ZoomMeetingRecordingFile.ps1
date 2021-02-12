@@ -73,12 +73,7 @@ function Remove-ZoomMeetingRecordingFile {
             $Request.Query = $query.ToString()
 
             if ($PScmdlet.ShouldProcess($user, 'Remove')) {
-                try {
-                    $response = Invoke-RestMethod -Uri $request.Uri -Headers $Headers -Body $RequestBody -Method DELETE
-                }
-                catch {
-                    Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-                }
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $Headers -Body $RequestBody -Method DELETE
 
                 Write-Output $response
             }

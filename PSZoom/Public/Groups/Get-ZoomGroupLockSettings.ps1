@@ -52,11 +52,8 @@ function Get-ZoomGroupLockSettings  {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/lock_settings"
 
-        try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
-        } catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
+
 
         Write-Output $response   
     }

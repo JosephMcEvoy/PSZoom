@@ -69,11 +69,7 @@ function Update-ZoomGroup  {
         $requestBody = $requestBody | ConvertTo-Json
 
         if ($PScmdlet.ShouldProcess($GroupId, 'Update')) {
-            try {
-                $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PATCH
-            } catch {
-                Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-            }
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PATCH
 
             Write-Verbose "Changed group name to $Name."
             Write-Output $response

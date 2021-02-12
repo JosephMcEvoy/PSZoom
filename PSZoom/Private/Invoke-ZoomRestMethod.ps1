@@ -50,45 +50,45 @@ function Invoke-ZoomRestMethod {
     )
     
     $params = @{
-        Method                          = 'Method'
-        FollowRelLink                   = 'FollowRelLink'
-        MaximumFollowRelLink            = 'MaximumFollowRelLink'
-        ResponseHeadersVariable         = 'ResponseHeadersVariable'
-        StatusCodeVariable              = 'StatusCodeVariable'
-        UseBasicParsing                 = 'UseBasicParsing'
-        Uri                             = 'Uri'
-        WebSession                      = 'WebSession'
-        SessionVariable                 = 'SessionVariable'
         AllowUnencryptedAuthentication  = 'AllowUnencryptedAuthentication'
         Authentication                  = 'Authentication'
-        Credential                      = 'Credential'
-        UseDefaultCredentials           = 'UseDefaultCredentials'
-        CertificateThumbprint           = 'CertificateThumbprint'
+        Body                            = 'Body'
         Certificate                     = 'Certificate'
-        SkipCertificateCheck            = 'SkipCertificateCheck'
-        SslProtocol                     = 'SslProtocol'
-        Token                           = 'Token'
-        UserAgent                       = 'UserAgent'
+        CertificateThumbprint           = 'CertificateThumbprint'
+        ContentType                     = 'ContentType'
+        Credential                      = 'Credential'
         DisableKeepAlive                = 'DisableKeepAlive'
-        TimeoutSec                      = 'TimeoutSec'
+        FollowRelLink                   = 'FollowRelLink'
+        Form                            = 'Form'
         Headers                         = 'Headers'
+        InFile                          = 'InFile'
+        MaximumFollowRelLink            = 'MaximumFollowRelLink'
         MaximumRedirection              = 'MaximumRedirection'
         MaximumRetryCount               = 'MaximumRetryCount'
-        RetryIntervalSec                = 'RetryIntervalSec'
+        Method                          = 'Method'
+        OutFile                         = 'OutFile'
+        PassThru                        = 'PassThru'
+        PreserveAuthorizationOnRedirect = 'PreserveAuthorizationOnRedirect'
         Proxy                           = 'Proxy'
         ProxyCredential                 = 'ProxyCredential'
         ProxyUseDefaultCredentials      = 'ProxyUseDefaultCredentials'
-        Body                            = 'Body'
-        Form                            = 'Form'
-        ContentType                     = 'ContentType'
-        TransferEncoding                = 'TransferEncoding'
-        InFile                          = 'InFile'
-        OutFile                         = 'OutFile'
-        PassThru                        = 'PassThru'
+        ResponseHeadersVariable         = 'ResponseHeadersVariable'
         Resume                          = 'Resume'
-        SkipHttpErrorCheck              = 'SkipHttpErrorCheck'
-        PreserveAuthorizationOnRedirect = 'PreserveAuthorizationOnRedirect'
+        RetryIntervalSec                = 'RetryIntervalSec'
+        SessionVariable                 = 'SessionVariable'
+        SkipCertificateCheck            = 'SkipCertificateCheck'
         SkipHeaderValidatio             = 'SkipHeaderValidation'
+        SkipHttpErrorCheck              = 'SkipHttpErrorCheck'
+        SslProtocol                     = 'SslProtocol'
+        StatusCodeVariable              = 'StatusCodeVariable'
+        TimeoutSec                      = 'TimeoutSec'
+        Token                           = 'Token'
+        TransferEncoding                = 'TransferEncoding'
+        Uri                             = 'Uri'
+        UseBasicParsing                 = 'UseBasicParsing'
+        UseDefaultCredentials           = 'UseDefaultCredentials'
+        UserAgent                       = 'UserAgent'
+        WebSession                      = 'WebSession'
     }
 
     function Remove-NonPsBoundParameters {
@@ -114,10 +114,12 @@ function Invoke-ZoomRestMethod {
 
     try {
         $response = Invoke-RestMethod @params
-    } catch {
+    }
+    catch {
         if ($PSVersionTable.PSVersion.Major -lt 6) {
             $errorDetails = ConvertFrom-Json $_.errorDetails
-        } else {
+        }
+        else {
             $errorDetails = ConvertFrom-Json $_.errorDetails -AsHashtable
         }
 
@@ -125,33 +127,28 @@ function Invoke-ZoomRestMethod {
         $targetObject = $_.targetObject
         $errorCode = $exception.message.split(':')[1] -replace '[^0-9]*'
         $category = switch ($errorCode) {
-            300     { 'InvalidOperation' }
-            400     { 'InvalidOperation' }
-            401     { 'AuthenticationError' }
-            404     { 'InvalidOperation' }
-            409     { 'ResourceExists' }
-            429     { 'LimitsExceeded' }
+            300 { 'InvalidOperation' }
+            400 { 'InvalidOperation' }
+            401 { 'AuthenticationError' }
+            404 { 'InvalidOperation' }
+            409 { 'ResourceExists' }
+            429 { 'LimitsExceeded' }
             Default { 'InvalidOperation' }
         }
         Write-Error -Message "$($exception.message) $($errorDetails.message)" -ErrorId $errorCode `
-        -CategoryReason $errorDetails.message -TargetName $targetObject.requestUri `
-        -CategoryActivity $targetObject.method -Category $category
+            -CategoryReason $errorDetails.message -TargetName $targetObject.requestUri `
+            -CategoryActivity $targetObject.method -Category $category
 
         #Rate limiting logic
-        $retries = 0
 
         if ($errorCode -eq 429) {
-            while ($retries -le 5) {
-                Write-Warning 'Error 429. Too many requests encountered. This is usually because of rate limiting. Retrying in 1 second.'
-                Start-Sleep -Seconds 1
-                $retries++
-                Invoke-ZoomRestMethod @params #This definitely won't work and will create an infinite loop...
-            } else {
-                Write-Error 'Error 429. Too many requests encountered. Cancelling request after 5 retries.'
-            }
-
+            Write-Warning 'Error 429. Too many requests encountered. This is usually because of rate limiting. Retrying in 1 second.'
+            Start-Sleep -Seconds 1
+            Invoke-ZoomRestMethod @params
         }
     }
-
-    Write-Output $response
+    
+    if ($response) {
+        Write-Output $response
+    }
 }

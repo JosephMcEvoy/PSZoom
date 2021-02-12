@@ -52,12 +52,7 @@ function Remove-ZoomGroup {
             #Need to add API rate limiting
             $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$Id"
             if ($PSCmdlet.ShouldProcess($Id, "Remove")) {
-                try {
-                    $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method DELETE
-                }
-                catch {
-                    Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-                }
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method DELETE
                 Write-Verbose "Group $Id deleted."
                 Write-Output $response
             }

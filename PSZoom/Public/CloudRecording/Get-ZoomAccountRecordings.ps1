@@ -105,13 +105,7 @@ function Get-ZoomAccountRecordings {
         } 
         
         $Request.Query = $query.ToString()
-
-        try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $Headers -Body $RequestBody -Method GET
-        }
-        catch {
-            Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-        }
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $Headers -Body $RequestBody -Method GET
 
         Write-Output $response
     }

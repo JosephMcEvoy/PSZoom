@@ -120,13 +120,9 @@ function Add-ZoomGroupMember  {
         $requestBody = $requestBody | ConvertTo-Json
 
         foreach ($Id in $GroupId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$Id/members"
+            $request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$Id/members"
             if ($PScmdlet.ShouldProcess($members, 'Add')) {
-                try {
-                    $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method POST
-                } catch {
-                    Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
-                }
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method POST
 
                 if (-not $passthru) {
                     Write-Output $response

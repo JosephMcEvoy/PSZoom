@@ -46,7 +46,9 @@ function Invoke-ZoomRestMethod {
         [switch]$Resume,
         [switch]$SkipHttpErrorCheck,
         [switch]$PreserveAuthorizationOnRedirect,
-        [switch]$SkipHeaderValidation
+        [switch]$SkipHeaderValidation,
+        [string]$ApiKey,
+        [string]$ApiSecret
     )
     
     $params = @{
@@ -111,6 +113,23 @@ function Invoke-ZoomRestMethod {
     }
 
     $params = Remove-NonPsBoundParameters($params)
+
+    if ($params.Headers -is [ref]) {
+        # Update the token if it has expired.
+        $TokenPayload = ($Headers.Value.authorization -split '\.')[1]
+        $TokenExpireTime = [int]((ConvertFrom-Json ([System.Text.Encoding]::UTF8.GetString(
+                        [Convert]::FromBase64String($TokenPayload + '=' * (4 - $TokenPayload.Length % 4))))).exp)
+        $CurrentUnixTime = ((Get-Date) - (Get-Date '1970/1/1 0:0:0 GMT')).TotalSeconds
+        if ($CurrentUnixTime -ge $TokenExpireTime) {
+            $Headers.Value = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+        }
+
+        $params.Headers = $Headers.Value
+    }
+    elseif ($null -eq $params.Headers) {
+        $params.Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+    }
+
 
     try {
         $response = Invoke-RestMethod @params

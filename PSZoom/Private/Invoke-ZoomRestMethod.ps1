@@ -8,7 +8,7 @@
 function Invoke-ZoomRestMethod {
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     param (
-        $Method,
+        [Microsoft.PowerShell.Commands.WebRequestMethod]$Method,
         [switch]$FollowRelLink,
         [int]$MaximumFollowRelLink,
         [string]$ResponseHeadersVariable,
@@ -159,11 +159,14 @@ function Invoke-ZoomRestMethod {
             -CategoryActivity $targetObject.method -Category $category
 
         #Rate limiting logic
-
         if ($errorCode -eq 429) {
-            Write-Warning 'Error 429. Too many requests encountered. This is usually because of rate limiting. Retrying in 1 second.'
-            Start-Sleep -Seconds 1
-            Invoke-ZoomRestMethod @params
+            # Max retry count: 5
+            if ($script:RetryCount -lt 5) {
+                $script:RetryCount++
+                Write-Warning 'Error 429. Too many requests encountered. This is usually because of rate limiting. Retrying in 1 second.'
+                Start-Sleep -Seconds 1
+                Invoke-ZoomRestMethod @params
+            }
         }
     }
     

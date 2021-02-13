@@ -72,7 +72,7 @@ function Update-ZoomUserEmail {
 
         $requestBody = $requestBody | ConvertTo-Json
 
-        Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PUT
+        Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PUT -ApiKey $ApiKey -ApiSecret $ApiSecret
 
         if ($Passthru) {
             Write-Output $UserId

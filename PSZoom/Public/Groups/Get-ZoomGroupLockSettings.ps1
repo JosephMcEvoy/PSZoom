@@ -52,7 +52,7 @@ function Get-ZoomGroupLockSettings  {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/lock_settings"
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
 
 
         Write-Output $response   

@@ -82,7 +82,7 @@ function Update-ZoomMeetingRegistrantStatus {
 
         $requestBody = $requestBody | ConvertTo-Json
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PUT
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PUT -ApiKey $ApiKey -ApiSecret $ApiSecret
         
         Write-Output $response
     }

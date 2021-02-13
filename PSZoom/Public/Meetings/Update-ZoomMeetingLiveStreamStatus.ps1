@@ -75,7 +75,7 @@ function Update-ZoomMeetingLiveStreamStatus {
         
         $requestBody = $requestBody | ConvertTo-Json
 
-        $response = Invoke-ZoomRestMethod -Uri $uri -Headers $headers -Body $requestBody -Method PATCH
+        $response = Invoke-ZoomRestMethod -Uri $uri -Headers ([ref]$Headers) -Body $requestBody -Method PATCH -ApiKey $ApiKey -ApiSecret $ApiSecret
         
         Write-Output $response
     }

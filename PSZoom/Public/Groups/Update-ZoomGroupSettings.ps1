@@ -578,7 +578,7 @@ function Update-ZoomGroupSettings  {
 
             $request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/settings"
 
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method PATCH
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PATCH -ApiKey $ApiKey -ApiSecret $ApiSecret
 
             if (-not $Passthru) {
                 Write-Output $response

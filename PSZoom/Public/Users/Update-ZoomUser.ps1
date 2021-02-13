@@ -192,7 +192,7 @@ function Update-ZoomUser {
             $RequestBody = $RequestBody | ConvertTo-Json
 
             if ($pscmdlet.ShouldProcess) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $Headers -Body $RequestBody -Method PATCH
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PATCH -ApiKey $ApiKey -ApiSecret $ApiSecret
         
                 if (-not $PassThru) {
                     Write-Output $response

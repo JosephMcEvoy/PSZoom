@@ -112,7 +112,7 @@ function Remove-ZoomUser {
             $request.Query = $query.ToString().ToLower()
             
             if ($PScmdlet.ShouldProcess($user, 'Remove')) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method DELETE
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method DELETE -ApiKey $ApiKey -ApiSecret $ApiSecret
 
                 if ($Passthru) {
                     Write-Output $UserId

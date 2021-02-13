@@ -41,7 +41,7 @@ function Get-ZoomGroup  {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId"
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
 
         
         Write-Output $response

@@ -60,7 +60,7 @@ function New-ZoomGroup {
 
                 $requestBody = $requestBody | ConvertTo-Json
 
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $requestBody -Method POST
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method POST -ApiKey $ApiKey -ApiSecret $ApiSecret
 
                 Write-Verbose "Creating group $n."
                 Write-Output $response

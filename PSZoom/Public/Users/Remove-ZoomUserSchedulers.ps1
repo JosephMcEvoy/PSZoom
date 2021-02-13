@@ -57,7 +57,7 @@ function Remove-ZoomUserSchedulers {
         foreach ($user in $UserId) {
             $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/schedulers"
     
-            Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method DELETE
+            Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method DELETE -ApiKey $ApiKey -ApiSecret $ApiSecret
 
             if ($Passthru) {
                 Write-Output $UserId

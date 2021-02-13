@@ -543,7 +543,7 @@ function Update-ZoomMeeting {
     }
 
     $requestBody = ConvertTo-Json $requestBody -Depth 10
-    $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Headers $Headers -Body $requestBody -Method Patch
+    $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PATCH -ApiKey $ApiKey -ApiSecret $ApiSecret
 
     Write-Output $response
   }

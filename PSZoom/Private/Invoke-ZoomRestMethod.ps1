@@ -118,7 +118,7 @@ function Invoke-ZoomRestMethod {
         # Update the token if it has expired.
         $TokenPayload = ($Headers.Value.authorization -split '\.')[1]
         $TokenExpireTime = [int]((ConvertFrom-Json ([System.Text.Encoding]::UTF8.GetString(
-                        [Convert]::FromBase64String($TokenPayload + '=' * (4 - $TokenPayload.Length % 4))))).exp)
+                        [Convert]::FromBase64String($TokenPayload + '=' * @(0..3)[ - ($TokenPayload.Length % 4)])))).exp)
         $CurrentUnixTime = ((Get-Date) - (Get-Date '1970/1/1 0:0:0 GMT')).TotalSeconds
         if ($CurrentUnixTime -ge $TokenExpireTime) {
             $Headers.Value = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret

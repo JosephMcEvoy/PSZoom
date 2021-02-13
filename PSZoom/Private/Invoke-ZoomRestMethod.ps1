@@ -136,7 +136,8 @@ function Invoke-ZoomRestMethod {
     }
     catch {
         if ($PSVersionTable.PSVersion.Major -lt 6) {
-            $errorDetails = ConvertFrom-Json $_.errorDetails
+            $errorStreamReader = [System.IO.StreamReader]::new($_.exception.Response.GetResponseStream())
+            $errorDetails = ConvertFrom-Json ($errorStreamReader.ReadToEnd())
         }
         else {
             $errorDetails = ConvertFrom-Json $_.errorDetails -AsHashtable

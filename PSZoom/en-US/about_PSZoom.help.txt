@@ -14,7 +14,8 @@ DETAILED DESCRIPTION
     Get-ZoomUserAssistants and Update-ZoomMeeting. In general each cmdlet has associated help which includes a link (found under .LINK) 
     to the API call that it is wrapping.
 
-    Zoom has a rate limit that varies depending on your account and the type of request. Rate limiting / monitoring is not built into PSZoom at this time.
+    Zoom has a rate limit that varies depending on your account and the type of request. If you're making too many requests, the cmdlet 
+    will automatically retry after one second.
 
 SEE ALSO
     Cloud Recordings 

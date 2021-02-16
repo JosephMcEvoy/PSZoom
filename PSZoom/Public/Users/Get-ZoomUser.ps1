@@ -77,9 +77,9 @@ function Get-ZoomUser {
                 $query.Add('login_type', $LoginType)
                 $Request.Query = $query.ToString()
             }
-        
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
-            
+
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+
             Write-Output $response
         }
     }

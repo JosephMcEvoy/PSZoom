@@ -63,7 +63,7 @@ function Remove-ZoomGroupMembers {
                 
                 if ($PScmdlet.ShouldProcess) {
                     Write-Verbose "Removing $MemberId from $GroupId."
-                    $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method DELETE
+                    $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method DELETE -ApiKey $ApiKey -ApiSecret $ApiSecret
 
                     Write-Output $response
                 }

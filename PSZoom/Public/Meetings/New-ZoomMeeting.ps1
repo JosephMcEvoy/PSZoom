@@ -839,7 +839,7 @@ function New-ZoomMeeting {
         #### Misc Settings End #####
 
         $requestBody = ConvertTo-Json $requestBody -Depth 10
-        $response = Invoke-ZoomRestMethod -Uri $Uri -Headers $Headers -Body $requestBody -Method Post
+        $response = Invoke-ZoomRestMethod -Uri $Uri -Headers ([ref]$Headers) -Body $requestBody -Method Post -ApiKey $ApiKey -ApiSecret $ApiSecret
 
         Write-Output $response
     }

@@ -147,7 +147,7 @@ function Get-ZoomRooms {
         $Request.Query = $query.ToString()
         
 
-        $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Headers $headers -Method GET
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
 
         if ($Full) {
             Write-Output $response

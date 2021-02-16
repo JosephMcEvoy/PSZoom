@@ -45,7 +45,7 @@ function Get-ZoomPastMeetingDetails {
     process {
         $Uri = "https://api.zoom.us/v2/past_meetings/$MeetingUuid"
         
-        $response = Invoke-ZoomRestMethod -Uri $Uri -Headers $headers -Method GET
+        $response = Invoke-ZoomRestMethod -Uri $Uri -Headers ([ref]$headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
         
         Write-Output $response
     }

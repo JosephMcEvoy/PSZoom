@@ -68,7 +68,7 @@ function Update-ZoomUserStatus {
             $requestBody = $requestBody | ConvertTo-Json
     
             if ($PScmdlet.ShouldProcess($user, $Action)) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $Headers -Body $requestBody -Method PUT
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PUT -ApiKey $ApiKey -ApiSecret $ApiSecret
 
                 if ($PassThru) {
                     Write-Output $UserId

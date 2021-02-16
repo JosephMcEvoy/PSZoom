@@ -76,7 +76,7 @@ function Update-ZoomProfilePicture {
                 "--$boundary--"
             ) -join $LF
     
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -ContentType "multipart/form-data; boundary=`"$boundary`"" -Headers $headers -Body $requestBody -Method POST
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -ContentType "multipart/form-data; boundary=`"$boundary`"" -Headers ([ref]$headers) -Body $requestBody -Method POST -ApiKey $ApiKey -ApiSecret $ApiSecret
 
             Write-Output $response
         }

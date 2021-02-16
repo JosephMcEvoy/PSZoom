@@ -8,7 +8,7 @@
 function Invoke-ZoomRestMethod {
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     param (
-        $Method,
+        [Microsoft.PowerShell.Commands.WebRequestMethod]$Method,
         [switch]$FollowRelLink,
         [int]$MaximumFollowRelLink,
         [string]$ResponseHeadersVariable,
@@ -46,7 +46,9 @@ function Invoke-ZoomRestMethod {
         [switch]$Resume,
         [switch]$SkipHttpErrorCheck,
         [switch]$PreserveAuthorizationOnRedirect,
-        [switch]$SkipHeaderValidation
+        [switch]$SkipHeaderValidation,
+        [string]$ApiKey,
+        [string]$ApiSecret
     )
     
     $params = @{
@@ -112,12 +114,30 @@ function Invoke-ZoomRestMethod {
 
     $params = Remove-NonPsBoundParameters($params)
 
+    if ($params.Headers -is [ref]) {
+        # Update the token if it has expired.
+        $TokenPayload = ($Headers.Value.authorization -split '\.')[1]
+        $TokenExpireTime = [int]((ConvertFrom-Json ([System.Text.Encoding]::UTF8.GetString(
+                        [Convert]::FromBase64String($TokenPayload + '=' * @(0..3)[ - ($TokenPayload.Length % 4)])))).exp)
+        $CurrentUnixTime = ((Get-Date) - (Get-Date '1970/1/1 0:0:0 GMT')).TotalSeconds
+        if ($CurrentUnixTime -ge $TokenExpireTime) {
+            $Headers.Value = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+        }
+
+        $params.Headers = $Headers.Value
+    }
+    elseif ($null -eq $params.Headers) {
+        $params.Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
+    }
+
+
     try {
         $response = Invoke-RestMethod @params
     }
     catch {
         if ($PSVersionTable.PSVersion.Major -lt 6) {
-            $errorDetails = ConvertFrom-Json $_.errorDetails
+            $errorStreamReader = [System.IO.StreamReader]::new($_.exception.Response.GetResponseStream())
+            $errorDetails = ConvertFrom-Json ($errorStreamReader.ReadToEnd())
         }
         else {
             $errorDetails = ConvertFrom-Json $_.errorDetails -AsHashtable
@@ -140,11 +160,14 @@ function Invoke-ZoomRestMethod {
             -CategoryActivity $targetObject.method -Category $category
 
         #Rate limiting logic
-
         if ($errorCode -eq 429) {
-            Write-Warning 'Error 429. Too many requests encountered. This is usually because of rate limiting. Retrying in 1 second.'
-            Start-Sleep -Seconds 1
-            Invoke-ZoomRestMethod @params
+            # Max retry count: 5
+            if ($script:RetryCount -lt 5) {
+                $script:RetryCount++
+                Write-Warning 'Error 429. Too many requests encountered. This is usually because of rate limiting. Retrying in 1 second.'
+                Start-Sleep -Seconds 1
+                Invoke-ZoomRestMethod @params
+            }
         }
     }
     

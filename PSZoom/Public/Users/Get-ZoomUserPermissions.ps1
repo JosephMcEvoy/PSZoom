@@ -54,7 +54,7 @@ function Get-ZoomUserPermissions {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/permissions"
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
 
 
         Write-Output $response

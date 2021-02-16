@@ -53,7 +53,7 @@ function Get-ZoomUserSchedulers {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/schedulers"
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
 
 
         Write-Output $response

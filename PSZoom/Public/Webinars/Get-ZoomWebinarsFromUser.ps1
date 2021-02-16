@@ -79,9 +79,9 @@ function Get-ZoomWebinarsFromUser {
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
             $query.Add('page_size', $PageSize)
             $query.Add('page_number', $PageNumber)
-            $request.Query = $query.ToString()
             $request.Query = $query.toString()
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method GET
+            $request.Query = $query.toString()
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
     
             Write-Output $response
         }

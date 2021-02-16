@@ -74,7 +74,7 @@ function Update-ZoomUserpassword {
             $requestBody = $requestBody | ConvertTo-Json
 
             if ($PSCmdlet.ShouldProcess) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $Headers -Body $requestBody -Method PUT
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PUT -ApiKey $ApiKey -ApiSecret $ApiSecret
 
                 if (-not $PassThru) {
                     Write-Output $response

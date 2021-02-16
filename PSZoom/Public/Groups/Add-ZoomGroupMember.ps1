@@ -122,7 +122,7 @@ function Add-ZoomGroupMember  {
         foreach ($Id in $GroupId) {
             $request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$Id/members"
             if ($PScmdlet.ShouldProcess($members, 'Add')) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Body $RequestBody -Method POST
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method POST -ApiKey $ApiKey -ApiSecret $ApiSecret
 
                 if (-not $passthru) {
                     Write-Output $response

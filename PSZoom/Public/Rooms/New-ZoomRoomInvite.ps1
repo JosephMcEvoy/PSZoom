@@ -97,7 +97,7 @@ function New-ZoomRoomInvite {
         }
         
         $requestBody = ConvertTo-Json $requestBody -Depth 2
-        $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Headers $headers -Body $requestBody -Method POST
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method POST -ApiKey $ApiKey -ApiSecret $ApiSecret
 
         Write-Output $response
     }

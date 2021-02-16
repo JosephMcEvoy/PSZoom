@@ -74,7 +74,7 @@ function Remove-ZoomMeeting {
             $Request.Query = $query.ToString()
         }
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method DELETE
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method DELETE -ApiKey $ApiKey -ApiSecret $ApiSecret
 
         if (-not $Passthru) {
             Write-Output $response

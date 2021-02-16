@@ -1,7 +1,21 @@
 <#
 
-.DESCRIPTION
+.SYNOPSIS
+Invoke-ZoomRestMethod is used to make API calls to Zoom.
 
+.DESCRIPTION
+Invoke-ZoomRestMethod adds additional functionality to Invoke-RestMethod. It will automatically add the 
+correct headers to the invocation as they pertain to Zoom, based on the API key and secret provided to the 
+cmdlet. It also does some error handling, including retrying the call if there have been too many requests. 
+
+Invoke-ZoomRestMethod can be used to make API calls that don't have a cmdlet associated with the call 
+within PSZoom. See below.
+
+.EXAMPLE
+Get billing information.
+$accountId = 123456789
+$request = [System.UriBuilder]"https://api.zoom.us/v2/accounts/$accountId/billing"
+Invoke-ZoomRestMethod -Uri $request.Uri -ApiKey your_api_key -ApiSecret your_api_secret -Method GET
 
 #>
 

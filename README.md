@@ -4,7 +4,7 @@ PSZoom is a Powershell wrapper to interface with Zoom's API (Zoom Video Communic
 
 Cmdlets are named with approved Powershell verbs but keeping to as close to Zoom's API reference as possible. For example, Zoom has two API calls that they named "List User Assistants" and "Update Zoom Meeting". In PSZoom they are named Get-ZoomUserAssistants and Update-ZoomMeeting, respectively. In general, each cmdlet has associated help which includes a link (found under .LINK) to the API call that it is wrapping.  
   
-Zoom has a rate limit that varies depending on your account and the type of request. Rate limiting / monitoring is not built into PSZoom at this time.  
+Zoom has a rate limit that varies depending on your account and the type of request. If you're making too many requests, the cmdlet will automatically retry after one second.
   
 # Getting started #
 ## Using PowershellGallery ##

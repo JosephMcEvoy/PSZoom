@@ -117,4 +117,5 @@ SEE ALSO
         Get-ZoomWebinarPanelists  
 
     Utility 
+        Invoke-ZoomRestMethod
         New-ZoomApiToken

@@ -370,19 +370,24 @@ function New-ZoomMeeting {
   
         [Parameter(
             Mandatory = $True, 
-            ParameterSetName = 'ScheduledMeeting')]
+            ParameterSetName = 'ScheduledMeeting'
+        )]
         [Parameter(
             Mandatory = $True, 
-            ParameterSetName = 'RecurrenceByDay')]
+            ParameterSetName = 'RecurrenceByDay'
+        )]
         [Parameter(
             Mandatory = $True, 
-            ParameterSetName = 'RecurrenceByWeek')]
+            ParameterSetName = 'RecurrenceByWeek'
+        )]
         [Parameter(
             Mandatory = $True, 
-            ParameterSetName = 'RecurrenceByMonthDay')]
+            ParameterSetName = 'RecurrenceByMonthDay'
+        )]
         [Parameter(
             Mandatory = $True, 
-            ParameterSetName = 'RecurrenceByMonthWeek')]
+            ParameterSetName = 'RecurrenceByMonthWeek'
+        )]
         [int]$Duration,
 
         [Parameter(

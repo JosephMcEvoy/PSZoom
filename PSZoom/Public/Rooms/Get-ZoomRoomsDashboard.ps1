@@ -73,7 +73,7 @@ Get-DashboardZoomRooms
 
 #>
 
-function Get-DashboardZoomRooms {
+function Get-ZoomRoomsDashboard {
     [CmdletBinding()]
     param (
         [Parameter(

@@ -108,9 +108,9 @@ Get-ZoomTelephoneReports
 Get-ZoomWebinarDetailsReport  
 Get-ZoomWebinarParticipantsReport  
   
-## Rooms ##
-Get-DashboardZoomRooms  
+## Rooms ##  
 Get-ZoomRooms  
+Get-ZoomRoomsDashboard  
 Get-ZoomRoomDevices  
 Get-ZoomRoomLocations  
 Disconnect-ZoomRoomMeeting  

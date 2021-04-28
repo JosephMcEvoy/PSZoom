@@ -11,7 +11,7 @@
         Version = '4.9.0'
     }
 
-    'JosephMcEvoy/PSDeploy' = @{
+    'https://github.com/JosephMcEvoy/PSZoom.git' = @{
         DependencyType = 'Github'
         Version = 'Master'
     }

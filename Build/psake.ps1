@@ -11,7 +11,6 @@ Properties {
     $Timestamp = Get-Date -UFormat "%Y%m%d-%H%M%S"
     $PSVersion = $PSVersionTable.PSVersion.Major
     $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"
-    $Verbose = @{}
 
     if ($ENV:BHCommitMessage -match "!verbose") {
         $Verbose = @{Verbose = $True}
@@ -69,7 +68,6 @@ Task Deploy -Depends Build {
         Path = $ProjectRoot
         Force = $true
         Recurse = $true
-        SkipAutomaticTags = $true
     }
 
     Invoke-PSDeploy @Verbose @Params

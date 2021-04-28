@@ -10,7 +10,8 @@
         DependencyType = 'PSGalleryNuget'
         Version = '4.9.0'
     }
-    'JosephMcEvoy/PSDeploy' = @{
+    'PSDeploy' = @{
+        Name = 'https://github.com/JosephMcEvoy/PSDeploy.git'
         DependencyType = 'Github'
         Version = 'Master'
     }

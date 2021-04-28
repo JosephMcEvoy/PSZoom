@@ -14,6 +14,7 @@ ssoCreate - This action is provided for the enabled “Pre-provisioning SSO User
 this way has no password. If not a basic user, a personal vanity URL using the user name (no domain) of 
 the provisioning email will be generated. If the user name or PMI is invalid or occupied, it will use a random 
 number or random personal vanity URL.
+
 .PARAMETER Email
 User email address.
 

@@ -24,7 +24,6 @@ Get-ZoomUserPermissions jsmith@lawfirm.com
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userpermission
 
-
 #>
 
 function Get-ZoomUserPermissions {

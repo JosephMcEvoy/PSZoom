@@ -11,7 +11,9 @@
         Version = '4.9.0'
     }
 
+
     'JosephMcEvoy/PSDeploy' = 'master'
+
 
     BuildHelpers = @{
         DependencyType = 'PSGalleryNuget'

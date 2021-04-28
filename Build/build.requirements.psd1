@@ -10,9 +10,9 @@
         DependencyType = 'PSGalleryNuget'
         Version = '4.9.0'
     }
-    'PSDeploy' = @{
-        DependencyType = 'PSGalleryNuget'
-        Version = '1.0.5'
+    'JosephMcEvoy/PSDeploy' = @{
+        DependencyType = 'Github'
+        Version = 'Master'
     }
     'BuildHelpers' = @{
         DependencyType = 'PSGalleryNuget'

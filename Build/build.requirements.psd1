@@ -6,23 +6,22 @@
     }
 
     # Grab some modules without depending on PowerShellGet
-    'psake' = @{
+    psake = @{
         DependencyType = 'PSGalleryNuget'
         Version = '4.9.0'
     }
 
-    'PSDeploy' = @{
-        Name = 'JosephMcEvoy/PSDeploy'
+    'JosephMcEvoy/PSDeploy' = @{
         DependencyType = 'Github'
         Version = 'Master'
     }
 
-    'BuildHelpers' = @{
+    BuildHelpers = @{
         DependencyType = 'PSGalleryNuget'
         Version = '2.0.16'
     }
     
-    'Pester' = @{
+    Pester = @{
         DependencyType = 'PSGalleryNuget'
         Version = '4.10.1'
     }

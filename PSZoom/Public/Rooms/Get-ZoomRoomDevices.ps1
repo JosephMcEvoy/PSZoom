@@ -66,7 +66,7 @@ function Get-ZoomRoomDevices {
         $request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$($RoomID)/devices"
 
         try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
         }
         catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation

@@ -113,7 +113,7 @@ function Get-ZoomRoomsDashboard {
         $request.Query = $query.ToString()
 
         try {
-            $response = Invoke-RestMethod -Uri $request.Uri -Headers $headers -Method GET
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
         } catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }

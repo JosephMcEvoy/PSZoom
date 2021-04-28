@@ -11,9 +11,8 @@
         Version = '4.9.0'
     }
 
-    'JosephMcEvoy/PSDeploy' = @{
-        DependencyType = 'Github'
-        Version = 'Master'
+    @{
+        'JosephMcEvoy/PSDeploy' = 'master'
     }
 
     BuildHelpers = @{

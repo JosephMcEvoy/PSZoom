@@ -2,22 +2,30 @@
 
 .SYNOPSIS
 Update a user's status.
+
 .DESCRIPTION
 Update a user's status.
+
 .PARAMETER UserId
 The user ID or email address.
+
 .PARAMETER Action
 The action types:
 Activate - Set user status to active.
 Deactivate - Set user status to inactive.
+
 .PARAMETER ApiKey
 The API key.
+
 .PARAMETER ApiSecret
 THe API secret.
+
 .OUTPUTS
 No output. Can use Passthru switch to pass the UserId as an output.
+
 .EXAMPLE`
 Update-ZoomUserStatus -UserId helpdesk@lawfirm.com
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/userstatus
 
@@ -54,7 +62,7 @@ function Update-ZoomUserStatus {
     )
     
     begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
+        # Generate Header with JWT (JSON Web Token) using the Api Key/Secret
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 

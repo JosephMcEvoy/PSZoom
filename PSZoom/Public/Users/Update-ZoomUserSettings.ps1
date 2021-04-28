@@ -255,6 +255,7 @@ Update-ZoomUserSettings -UserId 'dvader@thesith.com' -JoinBeforeHost $True
 
 .EXAMPLE
 'r2d2@rebels.com','c3po@rebels.com' | Update-ZoomUserSettings -hostvideo $True
+
 #>
 
 function Update-ZoomUserSettings {    
@@ -370,7 +371,7 @@ function Update-ZoomUserSettings {
         [Alias('embed_password_in_join_link')]
         [bool]$EmbedPasswordInJoinLink, 
 
-        #Meeting Password Requirement Object
+        # Meeting Password Requirement Object
         [Parameter(
             HelpMessage = 'Account wide meeting/webinar password settings.', 
             ValueFromPipelineByPropertyName = $True
@@ -378,7 +379,7 @@ function Update-ZoomUserSettings {
         [Alias('meeting_password_requirement')]
         [object]$MeetingPasswordRequirement, 
 
-        #inMeeting 
+        # inMeeting 
         [Parameter(
             HelpMessage = 'End-to-end encryption required for all meetings.', 
             ValueFromPipelineByPropertyName = $True
@@ -565,7 +566,7 @@ function Update-ZoomUserSettings {
         [Alias('custom_service_instructions')]
         [string]$CustomServiceInstructions, 
 
-        #emailNotification
+        # emailNotification
         [Parameter(
             HelpMessage = 'When attendees join meeting before host.', 
             ValueFromPipelineByPropertyName = $True
@@ -595,7 +596,7 @@ function Update-ZoomUserSettings {
         [bool]$ScheduleForReminder, 
         
         
-        #recording
+        # recording
         [Parameter(
             HelpMessage = 'Local recording.', 
             ValueFromPipelineByPropertyName = $True
@@ -711,7 +712,7 @@ function Update-ZoomUserSettings {
         [object]$RecordingPasswordRequirement,
 
 
-        #telephony
+        # telephony
         [Parameter(
             HelpMessage = 'Third party audio conference.', 
             ValueFromPipelineByPropertyName = $True
@@ -727,7 +728,7 @@ function Update-ZoomUserSettings {
         [Alias('audio_conference_info ')]
         [string]$AudioConferenceInfo, 
 
-        #feature
+        # feature
         [Parameter(
             HelpMessage = "User's meeting capacity.", 
             ValueFromPipelineByPropertyName = $True
@@ -767,7 +768,7 @@ function Update-ZoomUserSettings {
         [bool]$ZoomPhone, 
 
 
-        #tsp
+        # tsp
         [Parameter(
             HelpMessage = 'Call Out', 
             ValueFromPipelineByPropertyName = $True
@@ -806,7 +807,7 @@ function Update-ZoomUserSettings {
     )
     
     begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
+        # Generate Header with JWT (JSON Web Token) using the Api Key/Secret
         $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 

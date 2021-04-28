@@ -69,6 +69,7 @@ Task Deploy -Depends Build {
         Path = $ProjectRoot
         Force = $true
         Recurse = $true
+        SkipAutomaticTags = $true
     }
 
     Invoke-PSDeploy @Verbose @Params

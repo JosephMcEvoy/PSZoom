@@ -120,8 +120,6 @@ function Get-ZoomActiveInactiveHostReports {
         [Parameter(ParameterSetName = 'LastSixMonths')]
         [string]$NextPageToken,
 
-        [int]$RateLimit = 20,
-
         [string]$ApiKey,
 
         [string]$ApiSecret

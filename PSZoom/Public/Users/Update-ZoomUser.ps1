@@ -8,6 +8,23 @@ Basic (1)
 Pro (2)
 Corp (3)
 
+.PARAMETER LoginType
+The user's login method. Valid inputs are:
+Facebook
+Google
+Apple
+Microsoft
+Mobile
+RingCentra
+API
+ZoomWorkEmail
+SSO
+
+The following are also available in China:
+Phone
+WeChat
+Alipay
+                    
 .PARAMETER FirstName
 User's first namee: cannot contain more than 5 Chinese words.
 
@@ -45,10 +62,10 @@ Users's company.
 Users's location.
 
 .PARAMETER PhoneNumber
-Depreciated: Phone number of the user, To update you must also provide the PhoneCountry field.
+Deprecated: Phone number of the user, To update you must also provide the PhoneCountry field.
 
 .PARAMETER PhoneCountry
-Depreciated: Country ID of the phone number. eg. AU for Australia.
+Deprecated: Country ID of the phone number. eg. AU for Australia.
 
 .PARAMETER GroupID
 Unique identifier of the group that you would like to add a pending user to.
@@ -62,12 +79,12 @@ THe API secret.
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
 
-.EXAMPLE`
+.EXAMPLE
 Update a user's name.
 Update-ZoomUser -UserId askywakler@thejedi.com -Type Pro -FirstName Anakin -LastName Skywalker -ApiKey $ApiKey -ApiSecret $ApiSecret
 
 .EXAMPLE
-Update the host key of all user's that have 'jedi' in their email.
+Update the host key of all users that have 'jedi' in their email.
 (Get-ZoomUsers -allpages) | select Email | ? {$_ -like '*jedi*'} | update-zoomuser -hostkey 001138
 
 .LINK
@@ -89,7 +106,7 @@ function Update-ZoomUser {
         [string[]]$UserId,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
-        [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
+        [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 'Apple', 'Microsoft', 'Mobile', 'RingCentral', 'ZoomWorkEmail', 0, 1, 11, 21, 23, 24, 27, 97, 98, 99, 100, 101)]
         [Alias('login_type')]
         [string]$LoginType,
         
@@ -184,12 +201,19 @@ function Update-ZoomUser {
 
             if ($PSBoundParameters.ContainsKey('LoginType')) {
                 $LoginType = switch ($LoginType) {
-                    'Facebook' { 0 }
-                    'Google' { 1 }
-                    'API' { 99 }
-                    'Zoom' { 100 }
-                    'SSO' { 101 }
-                    Default { $LoginType }
+                    'Facebook'      { 0 }
+                    'Google'        { 1 }
+                    'Phone'         { 11 }
+                    'WeChat'        { 21 }
+                    'Alipay'        { 22 }
+                    'Apple'         { 24 }
+                    'Microsoft'     { 27 }
+                    'Mobile'        { 97 }
+                    'RingCentra'    { 98 }
+                    'API'           { 99 }
+                    'ZoomWorkEmail' { 100 }
+                    'SSO'           { 101 }
+                    Default         { $LoginType }
                 }
                 $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
                 $query.Add('login_type', $LoginType)

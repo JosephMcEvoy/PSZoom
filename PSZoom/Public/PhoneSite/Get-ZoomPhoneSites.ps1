@@ -5,10 +5,9 @@ List all the sites that have been created for an account.
 
 .DESCRIPTION
 Sites allow you to organize Zoom Phone users in your organization. Use this API to list all the  that have been created for an account.
-Because of this, API calls require a page number (default is 1) and page size (default is 30). 
 
 .PARAMETER PageSize
-The number of records returned within a single API call (Min 30 - MAX 300).
+The number of records returned within a single API call (Min 30 - MAX 100).
 
 .PARAMETER NextPageToken
 The next page token is used to paginate through large result sets. A next page token will be returned whenever the set 

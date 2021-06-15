@@ -1,13 +1,13 @@
 <#
 
 .SYNOPSIS
-List users on a Zoom account who have been assigned Zoom Phone licenses.
+List of Zoom Phone template settings.
 
 .DESCRIPTION
-List users on a Zoom account who have been assigned Zoom Phone licenses. 
+This API lets you retrieve a list of all the phone template settings previously created. 
 
 .PARAMETER SiteId
-Unique Identifier of the site. This can be found in the ListPhoneSites API.
+The site ID.
 
 .PARAMETER PageSize
 The number of records returned within a single API call (Min 30 - MAX 100).
@@ -26,26 +26,26 @@ The Api Key.
 The Api Secret.
 
 .LINK
-https://marketplace.zoom.us/docs/api-reference/zoom-api/phone/listphoneusers
+https://marketplace.zoom.us/docs/api-reference/zoom-api/phone/listsettingtemplates
 
 .EXAMPLE
 Return the first page of Zoom phone users.
-Get-ZoomPhoneUsers
+Get-ZoomPhoneSettingTemplates
 
 .EXAMPLE
-Return the first page of Zoom phone users in Site. To find Site ID refer to Get-ZoomPhoneSites
-Get-ZoomPhoneUsers ######
+Return the first page of Phone setting templates
+Get-ZoomPhoneSettingTemplates
 
 .EXAMPLE
-Return Zoom phone sites including the next_page_tokens.
-Get-ZoomPhoneUsers -SiteId ###### -Full
+Return the first page of Phone setting templates for SiteId, refer to Get-ZoomPhoneSites to find SiteId
+Get-ZoomPhoneSettingTemplates -Full
+Get-ZoomPhoneSettingTemplates -SiteId ###### -Full
 
 #>
 
-function Get-ZoomPhoneUsers {
+function Get-ZoomPhoneSettingTemplates {
     [CmdletBinding()]
     param (
-
         [Parameter(
             Mandatory = $False, 
             Position = 0, 
@@ -78,7 +78,7 @@ function Get-ZoomPhoneUsers {
     }
 
     process {
-        $request = [System.UriBuilder]'https://api.zoom.us/v2/phone/users/'
+        $request = [System.UriBuilder]'https://api.zoom.us/v2/phone/setting_templates/'
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('page_size', $PageSize)
         $query.Add('page_number', $PageNumber)
@@ -94,7 +94,7 @@ function Get-ZoomPhoneUsers {
         if ($Full) {
             Write-Output $response
         } else {
-            Write-Output $response.Users
+            Write-Output $response.Templates
         }
     }
 }

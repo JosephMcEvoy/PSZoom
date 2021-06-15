@@ -35,6 +35,24 @@ Host key. It should be a 6-10 digit number.
 .PARAMETER CMSUserId
 Kaltura user ID.
 
+.PARAMETER JobTitle
+Users's job title.
+
+.PARAMETER Company
+Users's company.
+
+.PARAMETER Location
+Users's location.
+
+.PARAMETER PhoneNumber
+Depreciated: Phone number of the user, To update you must also provide the PhoneCountry field.
+
+.PARAMETER PhoneCountry
+Depreciated: Country ID of the phone number. eg. AU for Australia.
+
+.PARAMETER GroupID
+Unique identifier of the group that you would like to add a pending user to.
+
 .PARAMETER ApiKey
 The API key.
 
@@ -122,6 +140,28 @@ function Update-ZoomUser {
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('cms_user_id')]
         [string]$CmsUserId,
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('job_title')]
+        [string]$JobTitle,
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [string]$Company,
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [string]$Location,
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('phone_number')]
+        [string]$PhoneNumber,
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('phone_country')]
+        [string]$PhoneCountry,
+        
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('group_id')]
+        [string]$GroupID,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -172,15 +212,21 @@ function Update-ZoomUser {
             }
 
             $KeyValuePairs = @{
-                'first_name'  = $FirstName
-                'last_name'   = $LastName
-                'timezone'    = $Timezone
-                'language'    = $Language
-                'use_pmi'     = $UsePmi
-                'dept'        = $Dept
-                'vanity_name' = $VanityName
-                'host_key'    = $HostKey
-                'cms_user_id' = $CmsUserId
+                'first_name'    = $FirstName
+                'last_name'     = $LastName
+                'timezone'      = $Timezone
+                'language'      = $Language
+                'use_pmi'       = $UsePmi
+                'dept'          = $Dept
+                'vanity_name'   = $VanityName
+                'host_key'      = $HostKey
+                'cms_user_id'   = $CmsUserId
+                'job_title'     = $JobTitle
+                'company'       = $Company
+                'location'      = $Location
+                'phone_number'  = $PhoneNumber
+                'phone_country' = $PhoneCountry
+                'group_id'      = $GroupID
             }
 
             $KeyValuePairs.Keys | ForEach-Object {

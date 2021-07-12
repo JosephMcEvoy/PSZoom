@@ -101,6 +101,18 @@ Update-ZoomMeetingRegistrantStatus
 Update-ZoomMeetingRegistrationQuestions  
 Update-ZoomMeetingStatus  
   
+## Phones ##  
+Get-ZoomPhoneCallingPlans  
+Get-ZoomPhoneSettingTemplate  
+Get-ZoomPhoneSettingTemplates  
+Get-ZoomPhoneUser  
+Get-ZoomPhoneUsers  
+Get-ZoomPhoneUserSettings  
+
+## Phone Sites ##  
+Get-ZoomPhoneSite  
+Get-ZoomPhoneSites  
+  
 ## Reports ##
 Get-ZoomActiveInactiveHostReports  
 Get-ZoomDailyUsageReport  

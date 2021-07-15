@@ -97,7 +97,7 @@ Describe 'PSZoom Core Tests' {
 	Describe 'New-ZoomHeaders' {
 		It 'Should create the correct headers' {
 			$headers = New-ZoomHeaders @ApiKeySecret
-			$headers.'content-type'  | Should -Be 'application/json'
+			$headers.'content-type'  | Should -Be 'application/json; charset=utf-8'
 			$headers.'authorization' | Should -BeLike '*bearer*'
 		}
 	}

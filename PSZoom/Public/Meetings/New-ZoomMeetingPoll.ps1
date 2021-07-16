@@ -77,11 +77,11 @@ function New-ZoomMeetingPoll {
             $RequestBody.Add('title', $Title)
         }        
 
-        
         if ($PSBoundParameters.ContainsKey('Questions')) {
             $RequestBody.Add('questions', $Questions)
         }
 
+        $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method POST -ApiKey $ApiKey -ApiSecret $ApiSecret
 
         Write-Output $response

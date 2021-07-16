@@ -98,29 +98,3 @@ function New-ZoomMeetingPoll {
         Write-Output $response
     }
 }
-
-function New-ZoomMeetingPollQuestion {
-    [OutputType([Hashtable])]
-    param (
-        [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
-        [string]$Name,
-
-        [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
-        [ValidateSet('single', 'multiple')]
-        [string]$Type,
-
-        [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
-        [Alias('answer')]
-        [string[]]$Answers
-    )
-    process {
-        $Question = @{
-            name    = $Name
-            type    = $Type
-            answers = $Answers
-        }
-
-        Write-Output $Question
-    }
-    
-}

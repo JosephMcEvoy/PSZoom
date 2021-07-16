@@ -33,7 +33,7 @@ function New-ZoomHeaders {
 
     Write-Verbose 'Generating Headers'
     $Headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
-    $Headers.Add('content-type' , 'application/json; charset=utf-8')
+    $Headers.Add('content-type' , 'application/json')
     $Headers.Add('authorization', 'bearer ' + $Token)
 
     Write-Output $Headers

@@ -6,36 +6,40 @@ Updates a Zoom meeting poll.
 Updates a Zoom meeting poll.
 .PARAMETER MeetingId
 The meeting ID.
+.PARAMETER PollId
+The poll ID.
 .PARAMETER Title
 Poll title.
 .PARAMETER Questions
-Array of questions. Requrires three values:
+Array of questions. All elements should be HashTable.
+Requires three keys:
 [string]name - Question name
 [string]type - Question type
     single - Single choice
     multiple - Multiple choice
+[string[]]answers - Answers of the question
 
 Example:
     $Questions = @(
-        @('Favorite number?', 'multiple', @('1', '2', '3')), @('Favorite letter?', 'multiple', @('a', 'b', 'c'))
+        @{name = 'Favorite number?'; type = 'multiple'; answers = @('1', '2', '3')},
+        @{name = 'Favorite letter?'; type = 'multiple'; answers = @('a', 'b', 'c')}
     )
 Can also pass New-ZoomMeetingPollQuestion as an array. Example:
 $Questions = @(
-    (New-ZoomMeetingPollQuestion -Name 'Favorite Number?' -type 'multiple' -answers '1,2,3'), 
-    (New-ZoomMeetingPollQuestion -Name 'Favorite letter??' -type 'multiple' -answers 'a,b,c))
+    (New-ZoomMeetingPollQuestion -Name 'Favorite Number?' -type 'multiple' -answers '1','2','3'), 
+    (New-ZoomMeetingPollQuestion -Name 'Favorite letter??' -type 'multiple' -answers 'a','b','c')
 )
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret
 The Api Secret.
-.OUTPUTS
-.LINK
 .EXAMPLE
 $Questions = @(
-    @('Favorite number?', 'multiple', @('1', '2', '3')), @('Favorite letter?', 'multiple', @('a', 'b', 'c'))
+    (New-ZoomMeetingPollQuestion -Name 'Favorite Number?' -type 'multiple' -answers '1','2','3'), 
+    (New-ZoomMeetingPollQuestion -Name 'Favorite letter??' -type 'multiple' -answers 'a','b','c')
 )
 
-Update-ZoomMeetingPoll 123456789 -Title 'Favorite numbers and letters' -Questions $Questions
+Update-ZoomMeetingPoll 123456789 -PollId zKbEaqMKeU3soLJ7noFBR8 -Title 'Favorite numbers and letters' -Questions $Questions
 
 
 #>
@@ -65,7 +69,7 @@ function Update-ZoomMeetingPoll {
         [string]$Title,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
-        [hashtable[]]$Questions,
+        [System.Collections.IDictionary[]]$Questions,
         
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -88,7 +92,14 @@ function Update-ZoomMeetingPoll {
         }        
         
         if ($PSBoundParameters.ContainsKey('Questions')) {
-            $requestBody.Add('questions', $Questions)
+            $Items = @($Questions.ForEach( {
+                        @{
+                            name    = [string]$_.name
+                            type    = ([string]$_.type).ToLower() # "single" or "multiple"
+                            answers = [string[]]@($_.answers)
+                        }
+                    }))
+            $RequestBody.Add('questions', $Items)
         }
 
         $requestBody = ConvertTo-Json $requestBody -Depth 10 #Uses -Depth because the questions.answers array is flattened without it.
@@ -98,28 +109,3 @@ function Update-ZoomMeetingPoll {
         Write-Output $response
     }
 }
-
-<#
-function New-ZoomMeetingPollQuestion {
-    param (
-        [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
-        [string]$Name,
-
-        [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
-        [ValidateSet('single', 'multiple')]
-        [string]$Type,
-
-        [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
-        [Alias('answer')]
-        [string[]]$Answers
-    )
-    process {
-        $Question = @(
-            $Name, $Type, $Answers
-        )
-
-        return $Question
-    }
-    
-}
-#>

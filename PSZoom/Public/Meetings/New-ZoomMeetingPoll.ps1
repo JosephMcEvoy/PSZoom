@@ -10,20 +10,23 @@ The meeting ID.
 .PARAMETER Title
 Poll title.
 .PARAMETER Questions
-Array of questions. Requrires three values:
+Array of questions. All elements should be HashTable.
+Requires three keys:
 [string]name - Question name
 [string]type - Question type
     single - Single choice
     multiple - Multiple choice
+[string[]]answers - Answers of the question
 
 Example:
     $Questions = @(
-        @('Favorite number?', 'multiple', @('1', '2', '3')), @('Favorite letter?', 'multiple', @('a', 'b', 'c'))
+        @{name = 'Favorite number?'; type = 'multiple'; answers = @('1', '2', '3')},
+        @{name = 'Favorite letter?'; type = 'multiple'; answers = @('a', 'b', 'c')}
     )
 Can also pass New-ZoomMeetingPollQuestion as an array. Example:
 $Questions = @(
-    (New-ZoomMeetingPollQuestion -Name 'Favorite Number?' -type 'multiple' -answers '1,2,3'), 
-    (New-ZoomMeetingPollQuestion -Name 'Favorite letter??' -type 'multiple' -answers 'a,b,c))
+    (New-ZoomMeetingPollQuestion -Name 'Favorite Number?' -type 'multiple' -answers '1','2','3'), 
+    (New-ZoomMeetingPollQuestion -Name 'Favorite letter??' -type 'multiple' -answers 'a','b','c')
 )
 .PARAMETER ApiKey
 The Api Key.
@@ -31,7 +34,8 @@ The Api Key.
 The Api Secret.
 .EXAMPLE
 $Questions = @(
-    @('Favorite number?', 'multiple', @('1', '2', '3')), @('Favorite letter?', 'multiple', @('a', 'b', 'c'))
+    @{name = 'Favorite number?'; type = 'multiple'; answers = @('1', '2', '3')},
+    @{name = 'Favorite letter?'; type = 'multiple'; answers = @('a', 'b', 'c')}
 )
 
 New-ZoomMeetingPoll 123456789 -Title 'Favorite numbers and letters' -Questions $Questions
@@ -55,7 +59,7 @@ function New-ZoomMeetingPoll {
         [string]$Title,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
-        [string[]]$Questions,
+        [System.Collections.IDictionary[]]$Questions,
         
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -78,7 +82,14 @@ function New-ZoomMeetingPoll {
         }        
 
         if ($PSBoundParameters.ContainsKey('Questions')) {
-            $RequestBody.Add('questions', $Questions)
+            $Items = @($Questions.ForEach( {
+                        @{
+                            name    = [string]$_.name
+                            type    = ([string]$_.type).ToLower() # "single" or "multiple"
+                            answers = [string[]]@($_.answers)
+                        }
+                    }))
+            $RequestBody.Add('questions', $Items)
         }
 
         $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
@@ -86,27 +97,4 @@ function New-ZoomMeetingPoll {
 
         Write-Output $response
     }
-}
-
-function New-ZoomMeetingPollQuestion {
-    param (
-        [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
-        [string]$Name,
-
-        [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
-        [ValidateSet('single', 'multiple')]
-        [string]$Type,
-
-        [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
-        [Alias('answer')]
-        [string[]]$Answers
-    )
-    process {
-        $Question = @(
-            $Name, $Type, $Answers
-        )
-
-        return $Question
-    }
-    
 }

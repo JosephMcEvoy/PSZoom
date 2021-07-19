@@ -89,6 +89,7 @@ Get-ZoomPastMeetingParticipants
 Get-ZoomPersonalMeetingRoomName  
 New-ZoomMeeting  
 New-ZoomMeetingPoll  
+New-ZoomMeetingPollQuestion  
 Remove-ZoomMeeting  
 Remove-ZoomMeetingPoll  
 Update-MeetingStatus  

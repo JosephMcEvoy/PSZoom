@@ -4,8 +4,7 @@
 List sub accounts.
 
 .DESCRIPTION
-List sub accounts.
-WARNING: You can only call this API if you have the approved partners permission to use a Master API.
+List sub accounts. You can only call this API if you have the approved partners permission to use a Master API.
 
 .PARAMETER ApiKey
 The Api Key.
@@ -48,12 +47,12 @@ function Get-ZoomAccounts {
         $request = [System.UriBuilder]"https://api.zoom.us/v2/accounts"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('page_size', $PageSize)
+	
         if ($NextPageToken) {
             $query.Add('next_page_token', $NextPageToken)
         }
+	
         $request.Query = $query.ToString()
-        
-        Write-Output 'WARNING: you can only call this API if you have Master API permissions.'        
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
         
         Write-Output $response        

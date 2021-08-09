@@ -48,9 +48,7 @@ function Get-ZoomAccount {
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/accounts/$id"
-        $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-        $request.Query = $query.ToString()      
+        $request = [System.UriBuilder]"https://api.zoom.us/v2/accounts/$id"    
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
         
         Write-Output $response

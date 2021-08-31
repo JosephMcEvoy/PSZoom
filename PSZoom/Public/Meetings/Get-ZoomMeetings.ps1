@@ -6,6 +6,8 @@ Get a list of all Zoom meetings in a date range.
 Get a list of all Zoom meetings in a date range.
 
 .PARAMETER Type
+Specify a value to get the response for the corresponding meeting type. The default value is 'live'.
+The value of this field can be one of the following:
 past - Meetings that already occurred in the specified date range.
 pastOne - Past meetings that were attended by only one user.
 live - Live meetings.

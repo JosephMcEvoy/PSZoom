@@ -26,11 +26,15 @@ page token is automatically passed from page to page.
 
 .PARAMETER From
 The start date for the monthly range for which you would like to retrieve recordings. The maximum range can be 
-a month. The month should fall within the past six months period from the date of query.
+a month. The month should fall within the past six months period from the date of query. 
+
+Default is the current day.
 
 .PARAMETER To
 The end date for the monthly range for which you would like to retrieve recordings. The maximum range can be a 
 month. The month should fall within the past six months period from the date of query.
+
+Default is the current day.
 
 .EXAMPLE
 Get the first page returned for all current meetings.

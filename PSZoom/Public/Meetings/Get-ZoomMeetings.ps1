@@ -108,7 +108,7 @@ function Get-ZoomMeetings {
                 $Request = [System.UriBuilder]"https://api.zoom.us/v2/metrics/meetings"
                 $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
                 $query.Add('page_size', $PageSize)
-                $query.Add('type', $Type)
+                $query.Add('type', $Type.ToLower())
 
                 [string]$From = (Get-Date $From -Format 'yyyy-MM-dd')
                 $query.Add('from', $From)

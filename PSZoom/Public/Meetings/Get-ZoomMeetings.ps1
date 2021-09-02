@@ -20,8 +20,8 @@ The next page token is used to paginate through large result sets. A next page t
 set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
 
 .PARAMETER CombineAllPages
-If a report has multiple pages this will loop through all pages automatically and place all participants found from 
-each page into the Participants field of the report generated. The page size is set automatically to 300. The next 
+If a report has multiple pages this will loop through all pages automatically and place all meetings found from 
+each page into the meetings field of the report generated. The page size is set automatically to 300. The next 
 page token is automatically passed from page to page.
 
 .PARAMETER From

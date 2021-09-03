@@ -9,6 +9,25 @@ Retrieve a user’s settings.
 .PARAMETER UserId
 The user ID or email address.
 
+.PARAMETER LoginType
+The user's login method:
+0 — FacebookOAuth
+1 — GoogleOAuth
+24 — AppleOAuth
+27 — MicrosoftOAuth
+97 — MobileDevice
+98 — RingCentralOAuth
+99 — APIuser
+100 — ZoomWorkemail
+101 — SSO
+
+The following login methods are only available in China:
+11 — PhoneNumber
+21 — WeChat
+23 — Alipay
+
+You can use the number or corresponding text (e.g. 'FacebookOauth' or '0').
+
 .PARAMETER ApiKey
 The Api Key.
 
@@ -40,7 +59,6 @@ function Get-ZoomUserSettings {
         [string]$UserId,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
-        [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
         [Alias('login_type')]
         [string]$LoginType,
 
@@ -60,21 +78,13 @@ function Get-ZoomUserSettings {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/settings"
 
         if ($PSBoundParameters.ContainsKey('LoginType')) {
-            $LoginType = switch ($LoginType) {
-                'Facebook' { 0 }
-                'Google' { 1 }
-                'API' { 99 }
-                'Zoom' { 100 }
-                'SSO' { 101 }
-                Default { $LoginType }
-            }
+            $LoginType = ConvertTo-LoginTypeCode -Code $LoginType
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
             $query.Add('login_type', $LoginType)
             $Request.Query = $query.ToString()
         }
 
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
-
 
         Write-Output $response
     }

@@ -171,6 +171,7 @@ Describe 'PSZoom Meeting Tests' {
 				'Get-ZoomRegistrationQuestions',
 				'Get-ZoomTelephoneReports',
 				'New-ZoomMeetingPoll',
+				'New-ZoomMeetingPollQuestion',
 				'Remove-ZoomMeeting',
 				'Remove-ZoomMeetingPoll',
 				'Update-MeetingStatus',
@@ -2560,6 +2561,98 @@ Describe 'Remove-ZoomMeeting' {
 			$Request.Uri.Query | Should BeLike "*$_*"
 		}
 	}
+}
+
+Describe 'New-ZoomMeetingPoll' {
+	$schema = '{
+    "type": "object",
+    "title": "Poll",
+    "description": "Poll",
+    "properties": {
+      "title": {
+        "type": "string",
+        "description": "Title for the poll."
+      },
+      "questions": {
+        "type": "array",
+        "description": "Array of Polls",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Question to be asked to the attendees."
+            },
+            "type": {
+              "type": "string",
+              "description": "Poll Question & Answer type:<br>`single` - Single choice<br>`mutliple` - Multiple choice",
+              "enum": [
+                "single",
+                "multiple"
+              ],
+              "x-enum-descriptions": [
+                "single answer",
+                "multiple answer"
+              ]
+            },
+            "answers": {
+              "type": "array",
+              "description": "Answers to the questions",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }'
+
+	$params = @{
+		MeetingId = $MeetingId
+		Title     = 'Test Poll Title'
+		Questions = @(
+			@{
+				'name'    = 'testname1'
+				'type'    = 'multiple'
+				'answers' = @('answer1', 'answer2')
+			}
+		)
+	}
+
+	$request = New-ZoomMeetingPoll @params @ApiKeySecret
+
+	It 'Uses the correct method' {
+		$request.Method | Should Be 'POST'
+	}
+
+	It 'Uses the correct URI and path parameters' {
+		$Request.Uri | Should Be "https://api.zoom.us/v2/meetings/$MeetingId/polls"
+	}
+
+	It 'Validates against the JSON schema' {
+		Test-Json -Json $request.Body -Schema $schema | Should Be $True
+	}
+}
+
+Describe 'New-ZoomMeetingPollQuestion' {
+  $params = @{
+    Name    = 'testname1'
+    Type    = 'multiple'
+    Answers = @('answer1', 'answer2')
+  }
+
+  $question = New-ZoomMeetingPollQuestion @params
+
+  It 'Correct output type' {
+    Should -ActualValue $question -BeOfType [Hashtable]
+  }
+
+  It 'Contains valid keys and type of values' {
+    Should -ActualValue $question.name -BeOfType [string]
+    Should -ActualValue $question.type -BeOfType [string]
+    Should -ActualValue $question.answers -BeOfType [string[]]
+  }
 }
 
 Describe 'Remove-ZoomMeetingPoll' {

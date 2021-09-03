@@ -4,17 +4,16 @@
 Get the details of the account.
 
 .DESCRIPTION
-Get the details of the account.
-WARNING: You can only call this API if you have the approved partners permission to use a Master APIs.
+Get the details of the account. You can only call this API if you have the approved partners permission to use a Master API.
 
 .PARAMETER AccountId
 The Account ID.
 
 .PARAMETER ApiKey
-The Api Key.
+The API Key.
 
 .PARAMETER ApiSecret
-The Api Secret.
+The API Secret.
 
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/accounts/accountsettings
@@ -35,7 +34,7 @@ function Get-ZoomAccount {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('id', 'account_id')]
-        [string]$AccountId = "me",
+        [string]$AccountId,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -49,13 +48,9 @@ function Get-ZoomAccount {
         $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/accounts/$id"
-        $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-        $request.Query = $query.ToString()
-        
-        Write-Output 'WARNING: you can only call this API if you have Master API permissions.'        
+        $request = [System.UriBuilder]"https://api.zoom.us/v2/accounts/$id"    
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
         
-        Write-Output $response        
+        Write-Output $response
     }	
 }

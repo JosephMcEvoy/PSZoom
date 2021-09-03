@@ -144,6 +144,9 @@ function Invoke-ZoomRestMethod {
         $params.Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
 
+    if ([string]::IsNullOrEmpty($params.ContentType)) {
+        $params.ContentType = 'application/json; charset=utf-8'
+    }
 
     try {
         $response = Invoke-RestMethod @params

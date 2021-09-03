@@ -89,6 +89,7 @@ Get-ZoomPastMeetingParticipants
 Get-ZoomPersonalMeetingRoomName  
 New-ZoomMeeting  
 New-ZoomMeetingPoll  
+New-ZoomMeetingPollQuestion  
 Remove-ZoomMeeting  
 Remove-ZoomMeetingPoll  
 Update-MeetingStatus  
@@ -165,6 +166,7 @@ Get-ZoomWebinarPanelists
 
 ## Utility ##
 New-ZoomApiToken  
+Invoke-ZoomRestMethod
 
 # Contributing
 

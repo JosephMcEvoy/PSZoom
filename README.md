@@ -166,6 +166,7 @@ Get-ZoomWebinarPanelists
 
 ## Utility ##
 New-ZoomApiToken  
+Invoke-ZoomRestMethod
 
 # Contributing
 

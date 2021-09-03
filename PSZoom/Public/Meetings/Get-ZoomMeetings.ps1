@@ -6,6 +6,8 @@ Get a list of all Zoom meetings in a date range.
 Get a list of all Zoom meetings in a date range.
 
 .PARAMETER Type
+Specify a value to get the response for the corresponding meeting type. The default value is 'live'.
+The value of this field can be one of the following:
 past - Meetings that already occurred in the specified date range.
 pastOne - Past meetings that were attended by only one user.
 live - Live meetings.
@@ -18,17 +20,21 @@ The next page token is used to paginate through large result sets. A next page t
 set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
 
 .PARAMETER CombineAllPages
-If a report has multiple pages this will loop through all pages automatically and place all participants found from 
-each page into the Participants field of the report generated. The page size is set automatically to 300. The next 
+If a report has multiple pages this will loop through all pages automatically and place all meetings found from 
+each page into the meetings field of the report generated. The page size is set automatically to 300. The next 
 page token is automatically passed from page to page.
 
 .PARAMETER From
 The start date for the monthly range for which you would like to retrieve recordings. The maximum range can be 
-a month. The month should fall within the past six months period from the date of query.
+a month. The month should fall within the past six months period from the date of query. 
+
+Default is the current day.
 
 .PARAMETER To
 The end date for the monthly range for which you would like to retrieve recordings. The maximum range can be a 
 month. The month should fall within the past six months period from the date of query.
+
+Default is the current day.
 
 .EXAMPLE
 Get the first page returned for all current meetings.
@@ -106,7 +112,7 @@ function Get-ZoomMeetings {
                 $Request = [System.UriBuilder]"https://api.zoom.us/v2/metrics/meetings"
                 $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
                 $query.Add('page_size', $PageSize)
-                $query.Add('type', $Type)
+                $query.Add('type', $Type.ToLower())
 
                 [string]$From = (Get-Date $From -Format 'yyyy-MM-dd')
                 $query.Add('from', $From)

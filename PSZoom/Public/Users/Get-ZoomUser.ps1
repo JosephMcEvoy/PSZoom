@@ -9,11 +9,34 @@ List specific user(s) on a Zoom account.
 .PARAMETER UserId
 The user ID or email address.
 
+.PARAMETER LoginType
+The user's login method:
+0 — FacebookOAuth
+1 — GoogleOAuth
+24 — AppleOAuth
+27 — MicrosoftOAuth
+97 — MobileDevice
+98 — RingCentralOAuth
+99 — APIuser
+100 — ZoomWorkemail
+101 — SSO
+
+The following login methods are only available in China:
+11 — PhoneNumber
+21 — WeChat
+23 — Alipay
+
+You can use the number or corresponding text (e.g. 'FacebookOauth' or '0').
+
+.PARAMETER EncryptedEmail
+Whether the email address passed for the $UserId value is an encrypted email address. 
+Add the -EncryptedEmail switch to specify this is $True.
+
 .PARAMETER ApiKey
-The Api Key.
+The API Key.
 
 .PARAMETER ApiSecret
-The Api Secret.
+The API Secret.
 
 .OUTPUTS
 An object with the Zoom API response.
@@ -44,9 +67,11 @@ function Get-ZoomUser {
         [Alias('email', 'emailaddress', 'id', 'user_id', 'ids', 'userids', 'emails', 'emailaddresses', 'host_id')]
         [string[]]$UserId,
 
-        [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 0, 1, 99, 100, 101)]
         [Alias('login_type')]
         [string]$LoginType,
+
+        [Alias('encrypted_email')]
+        [switch]$EncryptedEmail,
 
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
@@ -63,21 +88,18 @@ function Get-ZoomUser {
     process {
         foreach ($id in $UserId) {
             $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id"
+            $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
 
-            if ($PSBoundParameters.ContainsKey('LoginType')) {
-                $LoginType = switch ($LoginType) {
-                    'Facebook' { 0 }
-                    'Google' { 1 }
-                    'API' { 99 }
-                    'Zoom' { 100 }
-                    'SSO' { 101 }
-                    Default { $LoginType }
-                }
-                $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
-                $query.Add('login_type', $LoginType)
-                $Request.Query = $query.ToString()
+            if ($PSBoundParameters.ContainsKey('EncryptedEmail')) {
+                $query.Add('EncryptedEmail', $True)
             }
 
+            if ($PSBoundParameters.ContainsKey('LoginType')) {
+                $LoginType = ConvertTo-LoginTypeCode -Code $LoginType
+                $query.Add('login_type', $LoginType)
+            }
+            
+            $Request.Query = $query.ToString()
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
 
             Write-Output $response

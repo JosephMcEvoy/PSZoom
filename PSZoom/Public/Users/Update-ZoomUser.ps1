@@ -9,21 +9,23 @@ Pro (2)
 Corp (3)
 
 .PARAMETER LoginType
-The user's login method. Valid inputs are:
-Facebook
-Google
-Apple
-Microsoft
-Mobile
-RingCentra
-API
-ZoomWorkEmail
-SSO
+The user's login method:
+0 — FacebookOAuth
+1 — GoogleOAuth
+24 — AppleOAuth
+27 — MicrosoftOAuth
+97 — MobileDevice
+98 — RingCentralOAuth
+99 — APIuser
+100 — ZoomWorkemail
+101 — SSO
 
-The following are also available in China:
-Phone
-WeChat
-Alipay
+The following login methods are only available in China:
+11 — PhoneNumber
+21 — WeChat
+23 — Alipay
+
+You can use the number or corresponding text (e.g. 'FacebookOauth' or '0').
                     
 .PARAMETER FirstName
 User's first namee: cannot contain more than 5 Chinese words.
@@ -106,7 +108,6 @@ function Update-ZoomUser {
         [string[]]$UserId,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
-        [ValidateSet('Facebook', 'Google', 'API', 'Zoom', 'SSO', 'Apple', 'Microsoft', 'Mobile', 'RingCentral', 'ZoomWorkEmail', 0, 1, 11, 21, 23, 24, 27, 97, 98, 99, 100, 101)]
         [Alias('login_type')]
         [string]$LoginType,
         
@@ -200,21 +201,7 @@ function Update-ZoomUser {
             $RequestBody = @{ }   
 
             if ($PSBoundParameters.ContainsKey('LoginType')) {
-                $LoginType = switch ($LoginType) {
-                    'Facebook'      { 0 }
-                    'Google'        { 1 }
-                    'Phone'         { 11 }
-                    'WeChat'        { 21 }
-                    'Alipay'        { 22 }
-                    'Apple'         { 24 }
-                    'Microsoft'     { 27 }
-                    'Mobile'        { 97 }
-                    'RingCentra'    { 98 }
-                    'API'           { 99 }
-                    'ZoomWorkEmail' { 100 }
-                    'SSO'           { 101 }
-                    Default         { $LoginType }
-                }
+                $LoginType = ConvertTo-LoginTypeCode -Code $LoginType
                 $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
                 $query.Add('login_type', $LoginType)
                 $Request.Query = $query.ToString()

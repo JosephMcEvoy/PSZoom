@@ -51,7 +51,10 @@ function Show-ZoomMeetingRecordings {
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/recordings/status"
 
+        
+        $requestBody = @{}
         $requestBody.Add('action', 'recover')
+        $requestBody = ConvertTo-Json $requestBody -Depth 10
 
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method PUT -ApiKey $ApiKey -ApiSecret $ApiSecret
 

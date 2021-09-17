@@ -12,10 +12,6 @@ The PSZoom command you want to run
 A PSCustomObject splat of the command parameters
 
 .EXAMPLE
-Get all Zoom Meetings for today that have ended
-Get-ZoomMeetings
-
-.EXAMPLE
 Get all meetings from today that have ended.
 $ZoomCommand = "Get-ZoomMeetings"
 $ZoomCommandSplat = @{
@@ -44,14 +40,17 @@ function Join-ZoomPages {
         )]
         [Hashtable]$ZoomCommandSplat
     )
+    
     $error.clear()
     $InitialReport = &$ZoomCommand @ZoomCommandSplat
-    #find relevent member
+    
+    # Find relevent member
     foreach ($member in (Get-Member -InputObject $InitialReport -MemberType "NoteProperty").Name) {
         if ($InitialReport.$member.count -gt 1) {
             break
         }
     }
+    
     $CombinedReport = $InitialReport.$member
     $ZoomCommandSplat.remove("NextPageToken")
     $NextPageToken = $InitialReport.next_page_token
@@ -59,12 +58,12 @@ function Join-ZoomPages {
     if ($InitialReport.page_count -gt 1) {
         for ($i = 1; $i -lt $InitialReport.page_count; $i++){
             $ZoomCommandSplat.add("NextPageToken",$NextPageToken)
+	    
             try {
 		        $nextReport = &$ZoomCommand @ZoomCommandSplat -erroraction stop
-            }
-            Catch {
-                #HTTP 429 is "Too Many Requests"
-                #break
+            } catch {
+                # HTTP 429 is "Too Many Requests"
+                # break
                 if ($error[0] -match '429') {
                     $RetryPeriod = 30
                     #If header provides timer interval
@@ -80,11 +79,11 @@ function Join-ZoomPages {
                     Write-Verbose "Sleeping $RetryPeriod seconds due to HTTP 429 response"
                     Start-Sleep -Seconds $RetryPeriod
                     $nextReport = &$ZoomCommand @ZoomCommandSplat
-                }
-                else {
+                } else {
                     Write-Error -Exception $_.Exception -Message "API call failed: $error"
                 }
             }
+	    
             $CombinedReport += $nextReport.$member
             $nextPageToken = $nextReport.next_page_token
             $ZoomCommandSplat.remove("NextPageToken")

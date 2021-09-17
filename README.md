@@ -59,6 +59,7 @@ Get-ZoomAccountRecordings
 Get-ZoomMeetingCloudRecordings  
 Remove-ZoomMeetingRecordingFile  
 Remove-ZoomMeetingRecordings  
+Show-ZoomRecordings
 
 ## Groups ##
 Add-ZoomGroupMember  

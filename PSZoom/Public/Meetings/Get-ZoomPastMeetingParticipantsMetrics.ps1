@@ -9,7 +9,7 @@ The meeting UUID or meeting ID. Use the UUID if possible because it is simpler t
 .PARAMETER Type
 The meeting type (live, past or pastone).
 .PARAMETER page_size
-1-300. I default to 300 because I don't want to deal with paging at this level since this work will probably not be worth anything once we sign the HIPPA BAA with Zoom
+1-300. Default = 300
 .PARAMETER ApiKey
 The Api Key.
 .PARAMETER ApiSecret

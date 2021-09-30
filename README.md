@@ -167,9 +167,10 @@ Get-ZoomWebinarsFromUser
 Get-ZoomWebinarPanelists  
 
 ## Utility ##
+Invoke-ZoomRetMethod  
+Join-ZoomPages  
 New-ZoomApiToken  
-Invoke-ZoomRestMethod
-
+  
 # Contributing
 
 1. Fork the Project

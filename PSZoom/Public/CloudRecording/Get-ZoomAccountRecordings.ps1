@@ -37,6 +37,12 @@ a month. The month should fall within the past six months period from the date o
 The end date for the monthly range for which you would like to retrieve recordings. The maximum range can be a 
 month. The month should fall within the past six months period from the date of query.
 
+.PARAMETER Trash
+Boolean flag to get recordings from the trash. You cannot use the from an to parameters with this one.
+
+.PARAMETER TrashType
+The type of cloud recording that you would like to retrieve from the trash. Values can be meeting_recordings, recording_file and the default is meeting_recordings.
+
 .OUTPUTS
 An object with the Zoom API response.
 
@@ -50,33 +56,48 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/cloud-recording/getaccou
 #>
 
 function Get-ZoomAccountRecordings {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Default')]
+
     param (
-        [Parameter(
-            Mandatory = $True,
-            ValueFromPipeline = $True,
-            ValueFromPipelineByPropertyName = $True,
-            Position = 0
-        )]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'Trash')]
         [Alias('userids')]
         [string]$AccountId,
 
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'Trash')]
         [ValidateRange(1, 300)]
-        [string]$PageSize = 30,
+        [string]$PageSize = 300,
 
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'Trash')]
         [string]$NextPageToken,
 
+        [Parameter(ParameterSetName = 'Default')]
         [ValidatePattern("([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))")]
         [string]$From,
 
+        [Parameter(ParameterSetName = 'Default')]
         [ValidatePattern("([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))")]
         [string]$To,
 
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'Trash')]
         [ValidateNotNullOrEmpty()]
         [string]$ApiKey,
 
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'Trash')]
         [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [string]$ApiSecret,
+
+        [Parameter(ParameterSetName = 'Trash')]
+        [bool]$Trash = $false,
+
+        [Parameter(ParameterSetName = 'Trash')]
+        [ValidateSet('meeting_recordings','recording_file')]
+        [Alias('trash_type')]
+        [string]$TrashType = 'meeting_recordings'
     )
 
     begin {
@@ -102,6 +123,14 @@ function Get-ZoomAccountRecordings {
 
         if ($PSBoundParameters.ContainsKey('To')) {
             $query.Add('to', $To)
+        } 
+
+        if ($PSBoundParameters.ContainsKey('Trash')) {
+            $query.Add('Trash', $Trash)
+        } 
+                
+        if ($PSBoundParameters.ContainsKey('TrashType')) {
+            $query.Add('trash_type', $trashtype)
         } 
         
         $Request.Query = $query.ToString()

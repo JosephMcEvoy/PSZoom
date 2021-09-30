@@ -12,7 +12,7 @@ The group ID.
 .PARAMETER Email
 Emails to be added to the group.
 
-.PARAMETER Id
+.PARAMETER MemberId
 IDs to be added to the group.
 
 .PARAMETER ApiKey
@@ -32,7 +32,7 @@ function Add-ZoomIMDirectoryGroupMembers  {
             ValueFromPipelineByPropertyName = $True, 
             Position = 0
         )]
-        [Alias('group_id', 'group', 'groups', 'id', 'groupids')]
+        [Alias('group_id', 'group', 'groups', 'groupids')]
         [string[]]$GroupId,
 
         [Parameter(
@@ -65,11 +65,11 @@ function Add-ZoomIMDirectoryGroupMembers  {
 
         $members = New-Object System.Collections.Generic.List[System.Object]
 
-        if (-not $MemberEmail -and -not $MemberId) {
+        if (-not $Email -and -not $MemberId) {
             throw 'At least one email or ID is required.'
         }
 
-        if ($PSBoundParameters.ContainsKey('MemberEmail')) {
+        if ($PSBoundParameters.ContainsKey('Email')) {
             $MemberEmail | ForEach-Object {
                 $members.Add(@{email = $_})
             }

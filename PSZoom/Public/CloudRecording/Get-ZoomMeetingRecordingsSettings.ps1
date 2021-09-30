@@ -1,18 +1,26 @@
 <#
+
 .SYNOPSIS
 End a meeting by updating its status.
+
 .DESCRIPTION
 End a meeting by updating its status.
+
 .PARAMETER MeetingId
 The meeting ID.
+
 .PARAMETER ApiKey
 The Api Key.
+
 .PARAMETER ApiSecret
 The Api Secret.
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/cloud-recording/recordingsettingupdate
+
 .EXAMPLE
-Get-ZoomMeetingRecordingsSettings -MeetingId xxxxxxxx
+Get-ZoomMeetingRecordingsSettings -MeetingId 1234567890
+
 #>
 
 function Get-ZoomMeetingRecordingsSettings {

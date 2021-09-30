@@ -87,6 +87,7 @@ Get-ZoomMeetingRegistrants
 Get-ZoomMeetingsFromUser  
 Get-ZoomPastMeetingDetails  
 Get-ZoomPastMeetingParticipants  
+Get-ZoomPastMeetingParticipantsMetrics  
 Get-ZoomPersonalMeetingRoomName  
 New-ZoomMeeting  
 New-ZoomMeetingPoll  

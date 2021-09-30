@@ -168,6 +168,7 @@ Get-ZoomWebinarPanelists
 ## Utility ##
 New-ZoomApiToken  
 Invoke-ZoomRestMethod
+Join-ZoomPages
 
 # Contributing
 

@@ -39,8 +39,8 @@ function Add-ZoomIMDirectoryGroupMembers  {
             ValueFromPipelineByPropertyName = $True, 
             Position = 1
         )]
-        [Alias('email', 'emails', 'emailaddress', 'emailaddresses', 'memberemails')]
-        [string[]]$MemberEmail,
+        [Alias('MemberEmail', 'emails', 'emailaddress', 'emailaddresses', 'memberemails')]
+        [string[]]$Email,
 
         [Parameter(
             Position = 2

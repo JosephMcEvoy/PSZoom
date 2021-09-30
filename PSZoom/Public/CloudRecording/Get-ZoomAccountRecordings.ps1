@@ -37,10 +37,10 @@ a month. The month should fall within the past six months period from the date o
 The end date for the monthly range for which you would like to retrieve recordings. The maximum range can be a 
 month. The month should fall within the past six months period from the date of query.
 
-.PARAMETER trash
+.PARAMETER Trash
 Boolean flag to get recordings from the trash. You cannot use the from an to parameters with this one.
 
-.PARAMETER trash_type
+.PARAMETER TrashType
 The type of cloud recording that you would like to retrieve from the trash. Values can be meeting_recordings, recording_file and the default is meeting_recordings.
 
 .OUTPUTS
@@ -96,7 +96,8 @@ function Get-ZoomAccountRecordings {
 
         [Parameter(ParameterSetName = 'Trash')]
         [ValidateSet('meeting_recordings','recording_file')]
-        [string]$trash_type = 'meeting_recordings'
+        [Alias('trash_type')]
+        [string]$TrashType = 'meeting_recordings'
     )
 
     begin {
@@ -128,8 +129,8 @@ function Get-ZoomAccountRecordings {
             $query.Add('Trash', $Trash)
         } 
                 
-        if ($PSBoundParameters.ContainsKey('trash_type')) {
-            $query.Add('trash_type', $trash_type)
+        if ($PSBoundParameters.ContainsKey('TrashType')) {
+            $query.Add('trash_type', $trashtype)
         } 
         
         $Request.Query = $query.ToString()

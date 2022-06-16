@@ -81,7 +81,7 @@ function Get-ZoomPhoneUsers {
         $request = [System.UriBuilder]'https://api.zoom.us/v2/phone/users/'
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('page_size', $PageSize)
-        $query.Add('page_number', $PageNumber)
+        $query.Add('next_page_token', $NextPageToken)
 
         if ($PSBoundParameters.ContainsKey('SiteId')) {
             $query.Add('site_id', $SiteId)

@@ -35,7 +35,28 @@ function New-ZoomApiToken {
     )
 
     $Credentials = Get-ZoomApiCredentials -ZoomApiKey $ApiKey -ZoomApiSecret $ApiSecret
-    $Token = New-Jwt -Algorithm 'HS256' -type 'JWT' -Issuer $Credentials.ApiKey -SecretKey $Credentials.ApiSecret -ValidforSeconds $ValidforSeconds
+
+    if (-not $Global:ZoomAppType) {
+
+        Write-Verbose "Creating new JWT Token"
+        $Token = New-Jwt -Algorithm 'HS256' -type 'JWT' -Issuer $Credentials.ApiKey -SecretKey $Credentials.ApiSecret -ValidforSeconds $ValidforSeconds
+
+    }
+    elseif ($Global:ZoomAppType -eq "ServerOAuth") {
+
+        if (-not $Global:ZoomAccountID) {
+
+            throw "Global variable `"AccountID`" not defined"
+
+        }
+        else {
+
+            $Token = New-OAuth -ClientID $Credentials.ApiKey -ClientSecret $Credentials.ApiSecret -AccountID $Global:ZoomAccountID
+
+        }
+        
+    }
     
     Write-Output $Token
+
 }

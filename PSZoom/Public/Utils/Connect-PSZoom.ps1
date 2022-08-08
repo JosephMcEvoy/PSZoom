@@ -13,15 +13,24 @@ Connect-PSZoom -AccountID 'your_account_id' -ClientID 'your_client_id' -ClientSe
 function Connect-PSZoom {
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $True)]
+        [Parameter(
+            Mandatory = $True, 
+            Position = 0
+        )]
         [string]$AccountID,
 
         [Alias('APIKey')]
-        [Parameter(Mandatory = $True)]
+        [Parameter(
+            Mandatory = $True, 
+            Position = 1
+        )]
         [string]$ClientID,
 
         [Alias('APISecret')]
-        [Parameter(Mandatory = $True)]
+        [Parameter(
+            Mandatory = $True, 
+            Position = 2
+        )]
         [string]$ClientSecret
     )
 

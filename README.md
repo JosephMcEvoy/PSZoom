@@ -39,11 +39,6 @@ Import-Module PSZoom
 # Using your API key and API secret #
 All commands require a Client ID and Client Secret. As of PSZoom 2.0, PSZoom only supports Server-to-Server OAuth authorization. You can generate the Server-to-Server OAuth key/secret from https://marketplace.zoom.us/develop/create, then click on  'Create' under Server-to-Server OAuth.  
   
-For ease of use, each command looks for these variables automatically in the following order:  
-    In the global scope for ZoomApiKey and ZoomApiSecret  
-    As passed as parameters to the command  
-    As an AutomationVariable  
-    A prompt to host to enter Key/Secret manually  
 
 # Example script #
 ```

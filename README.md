@@ -43,8 +43,7 @@ For ease of use, each command looks for these variables automatically in the fol
 # Example script #
 ```
 import-module PSZoom
-Connect-PSZoom -
-
+Connect-PSZoom -AccountID 'account_id' -ClientID 'client_id' -ClientSecret 'secret'
 Get-ZoomMeeting 123456789
 ```
 

@@ -56,6 +56,7 @@ Mock -ModuleName $ModuleName Invoke-RestMethod {
 
 
 #Additional variables to use when testing
+$PSZoomToken = ConvertTo-SecureString -String 'faketoken' -AsPlainText -Force
 $AssistantId = 'TestAssistantId'
 $AssistantId2 = 'TestAssistantId2'
 $UserEmail = 'TestEmail@test.com'
@@ -73,19 +74,14 @@ $StreamKey = 'TestStreamKey'
 $PageUrl = 'http://www.pageurltest.com'
 
 Describe 'PSZoom Core Tests' {
-	It 'Should be the correct name' {
-		$Module.Name | Should Be $ModuleName
-	}
-}
-
 	Describe 'New-ZoomHeaders' {
 		It 'Should create the correct headers' {
-      $token = ConvertTo-SecureString -String 'faketoken' -AsPlainText -Force
-			$headers = New-ZoomHeaders -Token $token
+			$headers = New-ZoomHeaders -Token $PSZoomToken
 			$headers.'content-type'  | Should -Be 'application/json'
 			$headers.'authorization' | Should -BeLike '*bearer*'
 		}
 	}
+}
 
 Describe 'Get-DateRanges' {
 	$Ranges = Get-DateRanges -From '2020-01-01' -To '2020-03-03'

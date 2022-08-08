@@ -26,12 +26,6 @@ of available results exceeds the current page size. The expiration period for th
 .PARAMETER LocationID
 Parent location ID of the Zoom Room
 
-.PARAMETER ApiKey
-The API Key.
-
-.PARAMETER ApiSecret
-The API Secret.
-
 .OUTPUTS
 When using -Full switch, receives JSON Response that looks like:
     {
@@ -72,11 +66,13 @@ When not using -Full, a JSON response that looks like:
             "status":  "Available"
         }
     ]
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/rooms/listzoomrooms
 
 .EXAMPLE
 List-ZoomRooms
+
 #>
 
 function Get-ZoomRooms {
@@ -113,19 +109,8 @@ function Get-ZoomRooms {
         [Alias('location_id')]
         [string]$LocationId,
 
-        [switch]$Full = $False,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [switch]$Full = $False
+     )
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms"
@@ -147,7 +132,7 @@ function Get-ZoomRooms {
         $Request.Query = $query.ToString()
         
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
         if ($Full) {
             Write-Output $response

@@ -8,10 +8,7 @@ End a meeting by updating its status.
 The meeting ID.
 .PARAMETER Action
 The update action. Available actions: end.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/meetings/meetingstatus
 .EXAMPLE
@@ -37,19 +34,8 @@ function Update-ZoomMeetingStatus {
             Position = 1
         )]
         [ValidateSet('end')]
-        [string]$Action = 'end',
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [string]$Action = 'end'
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/status"
@@ -60,7 +46,7 @@ function Update-ZoomMeetingStatus {
 
         $requestBody = $requestBody | ConvertTo-Json
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PUT -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PUT
         
         Write-Output $response
     }

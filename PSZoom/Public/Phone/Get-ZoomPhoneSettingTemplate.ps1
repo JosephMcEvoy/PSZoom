@@ -9,12 +9,6 @@ View the details of the Zoom Phone setting template.
 .PARAMETER TemplateId
 The TemplateID.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 An object with the Zoom API response.
 
@@ -38,25 +32,14 @@ function Get-ZoomPhoneSettingTemplate {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('id', 'template_id')]
-        [string[]]$TemplateId,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string[]]$TemplateId
+     )
 
     process {
         foreach ($id in $TemplateId) {
             $request = [System.UriBuilder]"https://api.zoom.us/v2/phone/setting_templates/$id"
 
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
             Write-Output $response
         }

@@ -30,9 +30,9 @@ Import-Module PSZoom
 ```
 
 # Using your API key and API secret #
-All commands require an API key (ClientID) and API secret. Currently PSZoom uses JWT (which will deprecated on 6/1/2023) and Server-to-Server OAuth authorization.  You can generate 
-the JWT or Server-to-Server OAuth key/secret from https://marketplace.zoom.us/develop/create, then click on  'Create' under JWT or Server-to-Server OAuth.  Note that in 
-addition to the JWT key/secret, Zoom also provides an IM Chat History Token, this is not to be confused with the key/secret. 
+All commands require a Client ID and Client Secret. As of PSZoom 2.0, PSZoom only supports Server-to-Server OAuth authorization. You can generate the Server-to-Server OAuth key/secret from https://marketplace.zoom.us/develop/create, then click on  'Create' under Server-to-Server OAuth.  
+  
+JWT authorization is supported in versions prior to 2.0. If you are using JWT, you should update your code to support Server-To-Server Oauth. Zoom will be dropping support of JWT in June of 2023.  
   
 For ease of use, each command looks for these variables automatically in the following order:  
     In the global scope for ZoomApiKey and ZoomApiSecret  
@@ -43,11 +43,8 @@ For ease of use, each command looks for these variables automatically in the fol
 # Example script #
 ```
 import-module PSZoom
-$Global:ZoomApiKey    = 'API_Key_Goes_Here'  
-$Global:ZoomApiSecret = 'API_Secret_Goes_Here'  
-$Global:ZoomAccountID = 'Account_ID_Goes_Here'
-# Only if you want to use Server-to-Server OAuth 
-$Global:ZoomAppType = "ServerOAuth"
+Connect-PSZoom -
+
 Get-ZoomMeeting 123456789
 ```
 

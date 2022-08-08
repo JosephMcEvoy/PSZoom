@@ -24,12 +24,6 @@ Transfer webinar.
 .PARAMETER TransferRecording
 Transfer recording.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
 
@@ -73,19 +67,8 @@ function Remove-ZoomUser {
         [Alias('transfer_recording')]
         [switch]$TransferRecording,
 
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret,
-
         [switch]$Passthru
     )
-
-    begin {
-        #Generate Headers with JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         foreach ($user in $UserId) {
@@ -112,7 +95,7 @@ function Remove-ZoomUser {
             $request.Query = $query.ToString().ToLower()
             
             if ($PScmdlet.ShouldProcess($user, 'Remove')) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method DELETE -ApiKey $ApiKey -ApiSecret $ApiSecret
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
 
                 if ($Passthru) {
                     Write-Output $UserId

@@ -12,12 +12,6 @@ The meeting ID.
 .PARAMETER OcurrenceId
 The Occurrence ID.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 
 .LINK
@@ -48,20 +42,8 @@ function Get-ZoomMeeting {
             Position=1
         )]
         [Alias('ocurrence_id')]
-        [string]$OccurrenceId,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
- 
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$OccurrenceId
+     )
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId"
@@ -71,7 +53,7 @@ function Get-ZoomMeeting {
             $query.Add('occurrence_id', $OccurrenceId)
             $Request.Query = $query.toString()
         }        
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
         
         Write-Output $response
     }

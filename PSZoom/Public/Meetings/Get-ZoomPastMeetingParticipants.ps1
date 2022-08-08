@@ -6,10 +6,7 @@ Retrieve participants from a past meeting.
 Retrieve participants from a past meeting. Note: Please double encode your UUID when using this API.
 .PARAMETER MeetingUuid
 The meeting UUID.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .OUTPUTS
 .LINK
 .EXAMPLE
@@ -36,19 +33,8 @@ function Get-ZoomPastMeetingParticipants {
         
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('next_page_token')]
-        [string]$NextPageToken,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$NextPageToken
+     )
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/past_meetings/$MeetingUuid/participants"
@@ -61,7 +47,7 @@ function Get-ZoomPastMeetingParticipants {
 
         $Request.Query = $query.ToString()
         
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
         
         Write-Output $response
     }

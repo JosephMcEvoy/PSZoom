@@ -15,12 +15,6 @@ The ID of the assistant. If using an assistant's ID, an email is not needed.
 .PARAMETER AssistantEmail
 The email of the assistant. If using an assistant's Email, an id is not needed.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .EXAMPLE
 Add an assistant to a user.
 Add-ZoomUserAssistants -UserId 'dsidious@thesith.com' -AssistantEmail 'dmaul@thesith.com'
@@ -61,19 +55,8 @@ function Add-ZoomUserAssistants {
         [Alias('assistantids')]
         [string[]]$AssistantId,
 
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret,
-
         [switch]$Passthru
     )
-
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         foreach ($Id in $UserId) {
@@ -94,7 +77,7 @@ function Add-ZoomUserAssistants {
             }
             
             $requestBody = $requestBody | ConvertTo-Json
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method POST -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method POST
 
             
             if ($Passthru) {

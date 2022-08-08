@@ -16,12 +16,6 @@ The Occurrence ID.
 Set the value of this field to `true` if you would like to view Webinar details of all previous occurrences of a 
 recurring Webinar.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 
 .LINK
@@ -55,20 +49,8 @@ function Get-ZoomWebinar {
         [string]$OccurrenceId,
 
         [ALias('show_previous_occurences')]
-        [bool]$ShowPreviousOccurences,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [bool]$ShowPreviousOccurences
     )
-
-    begin {
- 
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/webinars/$webinarId"
@@ -84,7 +66,7 @@ function Get-ZoomWebinar {
         }      
 
         $Request.Query = $query.toString()
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
 
         Write-Output $response
     }

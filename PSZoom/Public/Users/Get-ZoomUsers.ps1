@@ -27,12 +27,6 @@ Returns all pages. The default API response returns the first page of users. Thi
 and puts them together then returns all of the results. This only returns the inputted status (ie, only active,
 inactive or pending).
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/users
 
@@ -55,6 +49,7 @@ Get-ZoomUsers -AllPages
 .EXAMPLE
 Return all inactive users.
 Get-ZoomUsers -Status Inactive -AllPages
+
 #>
 
 function Get-ZoomUsers {
@@ -131,19 +126,8 @@ function Get-ZoomUsers {
             ParameterSetName = 'All', 
             Mandatory = $True
         )]
-        [switch]$AllPages,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api key/secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [switch]$AllPages
+     )
 
     process {
         $Request = [System.UriBuilder]'https://api.zoom.us/v2/users/'
@@ -158,7 +142,7 @@ function Get-ZoomUsers {
         
         $Request.Query = $query.ToString()
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
 
         if ($FullApiResponse) {

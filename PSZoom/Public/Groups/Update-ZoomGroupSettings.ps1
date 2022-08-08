@@ -204,12 +204,6 @@ Allow users to join the meeting using the existing 3rd party audio configuration
 
 .PARAMETER AudioConferenceInfo 
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 No output.
 
@@ -433,17 +427,8 @@ function Update-ZoomGroupSettings  {
         [Alias('audio_conference_info')]
         [string]$AudioConferenceInfo,
 
-        [string]$ApiKey,
-        
-        [string]$ApiSecret,
-
         [switch]$Passthru
     )
-
-    begin {
-        #Get Zoom Api Credentials
-
-    }
 
     process {
         $scheduleMeetingParams = @{
@@ -569,16 +554,9 @@ function Update-ZoomGroupSettings  {
         $requestBody = $requestBody | ConvertTo-Json
 
         foreach ($id in $GroupId) {
-            <#
-            Generate Headers and JWT (JSON Web Token). This is typically in the begin block.
-            It has been moved within the for loop as the JWT is set to expire after 30 seconds by default. 
-            This way a new JWT is generated for each request and the JWT will not expire too soon.
-            #>
-            $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-
             $request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/settings"
 
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PATCH -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
 
             if (-not $Passthru) {
                 Write-Output $response

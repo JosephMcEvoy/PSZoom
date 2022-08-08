@@ -15,12 +15,6 @@ Default is 6 months from current day.
 .PARAMETER To
 The end date in 'yyyy-MM-dd' format. Default is the current date.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 
 .LINK

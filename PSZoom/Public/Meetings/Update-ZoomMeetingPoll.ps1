@@ -29,10 +29,7 @@ $Questions = @(
     (New-ZoomMeetingPollQuestion -Name 'Favorite Number?' -type 'multiple' -answers '1','2','3'), 
     (New-ZoomMeetingPollQuestion -Name 'Favorite letter??' -type 'multiple' -answers 'a','b','c')
 )
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .EXAMPLE
 $Questions = @(
     (New-ZoomMeetingPollQuestion -Name 'Favorite Number?' -type 'multiple' -answers '1','2','3'), 
@@ -40,7 +37,6 @@ $Questions = @(
 )
 
 Update-ZoomMeetingPoll 123456789 -PollId zKbEaqMKeU3soLJ7noFBR8 -Title 'Favorite numbers and letters' -Questions $Questions
-
 
 #>
 
@@ -69,19 +65,8 @@ function Update-ZoomMeetingPoll {
         [string]$Title,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
-        [System.Collections.IDictionary[]]$Questions,
-        
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [System.Collections.IDictionary[]]$Questions
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
@@ -104,7 +89,7 @@ function Update-ZoomMeetingPoll {
 
         $requestBody = ConvertTo-Json $requestBody -Depth 10 #Uses -Depth because the questions.answers array is flattened without it.
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PUT -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PUT
 
         Write-Output $response
     }

@@ -7,10 +7,7 @@ Delete a group under your account.
 Prerequisite: Pro, Business, or Education account.
 .PARAMETER GroupId
 The group ID.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .OUTPUTS
 No output.
 .LINK
@@ -34,25 +31,14 @@ function Remove-ZoomGroup {
             Position = 0
         )]
         [Alias('group_id', 'group', 'id', 'groupids')]
-        [string[]]$GroupId,
-        
-        [string]$ApiKey,
-        
-        [string]$ApiSecret
+        [string[]]$GroupId
     )
 
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
-
     process {
-
         foreach ($Id in $GroupID) {
-            #Need to add API rate limiting
             $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$Id"
             if ($PSCmdlet.ShouldProcess($Id, "Remove")) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method DELETE -ApiKey $ApiKey -ApiSecret $ApiSecret
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
                 Write-Verbose "Group $Id deleted."
                 Write-Output $response
             }

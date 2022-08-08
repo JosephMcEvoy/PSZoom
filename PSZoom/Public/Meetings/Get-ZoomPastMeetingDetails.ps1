@@ -6,15 +6,11 @@ Retrieve the details of a past meeting.
 Retrieve the details of a past meeting.
 .PARAMETER MeetingUuid
 The meeting UUID.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .OUTPUTS
 .LINK
 .EXAMPLE
 Get-ZoomPastMeetingDetails 123456789
-
 
 #>
 
@@ -28,24 +24,13 @@ function Get-ZoomPastMeetingDetails {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('uuid')]
-        [string]$MeetingUuid,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$MeetingUuid
+     )
 
     process {
         $Uri = "https://api.zoom.us/v2/past_meetings/$MeetingUuid"
         
-        $response = Invoke-ZoomRestMethod -Uri $Uri -Headers ([ref]$headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $Uri -Method GET
         
         Write-Output $response
     }

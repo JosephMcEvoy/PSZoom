@@ -6,10 +6,7 @@ Retrieve the meeting invitation
 Retrieve the meeting invitation
 .PARAMETER MeetingId
 The meeting ID.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .OUTPUTS
 .LINK
 .EXAMPLE
@@ -27,24 +24,13 @@ function Get-ZoomMeetingInvitation {
             Position = 0
         )]
         [Alias('meeting_id')]
-        [string]$MeetingId,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$MeetingId
+     )
 
     process {
         $Uri = "https://api.zoom.us/v2/meetings/$MeetingId/invitation"
         
-        $response = Invoke-ZoomRestMethod -Uri $Uri -Headers ([ref]$headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $Uri -Method GET
         
         Write-Output $response
     }

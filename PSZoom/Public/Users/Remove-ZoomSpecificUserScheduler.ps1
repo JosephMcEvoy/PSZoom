@@ -12,12 +12,6 @@ The user ID or email address.
 .PARAMETER SchedulerId
 The scheduler ID or email address.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
 
@@ -49,19 +43,8 @@ function Remove-ZoomSpecificUserScheduler {
         [Alias('scheduler_id')]
         [string[]]$SchedulerId,
 
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret,
-
         [switch]$Passthru
     )
-
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         foreach ($user in $UserId) {
@@ -69,7 +52,7 @@ function Remove-ZoomSpecificUserScheduler {
                 if ($PScmdlet.ShouldProcess($user, "Remove $scheduler")) {
                     $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/schedulers/$scheduler"
                     
-                    Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method DELETE -ApiKey $ApiKey -ApiSecret $ApiSecret
+                    Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
 
                     if ($Passthru) {
                             Write-Output $UserId

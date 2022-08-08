@@ -30,13 +30,7 @@ $UserExceptions = @(
 $AdGroups = 'ZoomUsers'
 $TransferAccount = 'AVAdmin@deathstar.com'
 
-Sync-ZoomUsersWithAdGroup -AdGroups $AdGroups -UserExceptions $UserExceptions -TransferAccount $TransferAccount -ApiKey $ZoomApiKey -ApiSecret $ZoomApiKey -Confirm -Verbose
-
-.PARAMETER ApiKey
-The API key.
-
-.PARAMETER ApiSecret
-The API secret.
+Sync-ZoomUsersWithAdGroup -AdGroups $AdGroups -UserExceptions $UserExceptions -TransferAccount $TransferAccount -Confirm -Verbose
 
 #>
 
@@ -63,11 +57,7 @@ function Sync-ZoomUsersWithAdGroup() {
 
         [switch]$Add = $False,
 
-        [switch]$Remove = $False,
-
-        [string]$ApiKey,
-
-        [string]$ApiSecret
+        [switch]$Remove = $False
     )
     begin {
         if ($TransferAccount) {
@@ -113,11 +103,6 @@ function Sync-ZoomUsersWithAdGroup() {
                 Write-Verbose "Found the following users are not in sync: `n $($AdZoomDiff | ForEach-Object {"$($_.EmailAddress, $_.SideIndicator)`n"})"
 
                 $AdDiff = $AdZoomDiff | Where-Object -Property SideIndicator -eq '<=' | Select-Object -Property 'EmailAddress'
-
-                $params = @{
-                    ApiKey = $ApiKey
-                    ApiSecret = $ApiSecret
-                }
 
                 #Add users to Zoom that are in the $AdGroup and not in $UserExceptions.
                 if ($Add) {

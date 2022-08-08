@@ -9,16 +9,6 @@ Use this API to list all the panelists of a Webinar.
 .PARAMETER WebinarId
 The webinar ID.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
-.OUTPUTS
-
-.LINK
-
 .EXAMPLE
 Get-ZoomWebinarPanelists 1234567890
 
@@ -44,24 +34,12 @@ function Get-ZoomWebinarPanelists {
         [string]$OccurrenceId,
 
         [ALias('show_previous_occurences')]
-        [bool]$ShowPreviousOccurences,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [bool]$ShowPreviousOccurences
     )
-
-    begin {
- 
-        #Generate Headers and JWT (JSON Web Token)
-        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $request = [System.UriBuilder]"https://api.zoom.us/v2/webinars/$webinarId/panelists"
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
 
         Write-Output $response
     }

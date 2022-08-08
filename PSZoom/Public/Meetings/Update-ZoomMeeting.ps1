@@ -146,10 +146,7 @@ authenticated.
 Authentication name set in the authentication profile.
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/meetings/meetingupdate
-.PARAMETER ApiKey
-The API key.
-.PARAMETER ApiSecret
-The API secret.
+
 #>
 
 function Update-ZoomMeeting {
@@ -343,23 +340,9 @@ function Update-ZoomMeeting {
 
     [Parameter(ValueFromPipelineByPropertyName = $True)]
     [Alias('authentication_domains')]
-    [string]$AuthenticationDomains,
-
-    [Parameter(ValueFromPipelineByPropertyName = $True)]
-    [Alias('authentication_name')]
-    [string]$AuthenticationName,
-    [ValidateNotNullOrEmpty()]
-    [string]$ApiKey,
-
-    [ValidateNotNullOrEmpty()]
-    [string]$ApiSecret
+    [string]$AuthenticationDomains
   )
-  
-  begin {
-    #Generate Headers with JWT (JSON Web Token)
-    $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-  }
-  
+    
   process {
     $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId"
 
@@ -376,12 +359,6 @@ function Update-ZoomMeeting {
             'RecurringNoFixedTime' { '3' }
             'RecurringFixedTime'   { '8' }
         }
-    }
-
-    #The following parameters are added by default and are added to the request body
-    $requestBody = @{
-        'api_key'      = $ApiKey
-        'api_secret'   = $ApiSecret
     }
 
     #These are optional meeting parameters.
@@ -543,7 +520,7 @@ function Update-ZoomMeeting {
     }
 
     $requestBody = ConvertTo-Json $requestBody -Depth 10
-    $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PATCH -ApiKey $ApiKey -ApiSecret $ApiSecret
+    $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
 
     Write-Output $response
   }

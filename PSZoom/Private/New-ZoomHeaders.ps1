@@ -10,9 +10,6 @@ The Zoom API key.
 The Zoom API secret.
 
 .EXAMPLE
-$Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-
-.EXAMPLE
 $Headers = New-ZoomHeaders -Token $Token
 
 .OUTPUTS
@@ -22,19 +19,16 @@ Generic dictionary.
 
 function New-ZoomHeaders {
     param (
-        [string]$ApiKey,
-        [string]$ApiSecret,
-        [string]$Token
+        [Parameter(Mandatory = $True)]
+        [securestring]$Token
     )
-
-    if (-not $Token) {
-        $Token = New-ZoomApiToken -ApiKey $ApiKey -ApiSecret $ApiSecret -ValidforSeconds 30
-    }
-
+    
     Write-Verbose 'Generating Headers'
+    $tokenStr = ConvertFrom-SecureString -SecureString $Token -AsPlainText
     $Headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
     $Headers.Add('content-type' , 'application/json')
-    $Headers.Add('authorization', 'bearer ' + $Token)
+    $Headers.Add('authorization', 'bearer ' + $tokenStr)
 
+    Write-Verbose $Headers
     Write-Output $Headers
 }

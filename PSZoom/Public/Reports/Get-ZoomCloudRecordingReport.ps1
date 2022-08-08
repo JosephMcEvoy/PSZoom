@@ -39,19 +39,8 @@ function Get-ZoomCloudRecordingReport {
         [string]$From,
 
         [ValidatePattern("([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))")]
-        [string]$To,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$To
+     )
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/report/cloud_recording"
@@ -66,7 +55,7 @@ function Get-ZoomCloudRecordingReport {
         }
 
         $Request.Query = $query.ToString()
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
 
         Write-Output $response
     }

@@ -9,12 +9,6 @@ View specific user Zoom Phone profile settings.
 .PARAMETER UserId
 The user ID or email address.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 An object with the Zoom API response.
 
@@ -37,25 +31,14 @@ function Get-ZoomPhoneUserSettings {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('email', 'emailaddress', 'id', 'user_id', 'ids', 'userids', 'emails', 'emailaddresses', 'host_id')]
-        [string[]]$UserId,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string[]]$UserId
+     )
 
     process {
         foreach ($id in $UserId) {
             $request = [System.UriBuilder]"https://api.zoom.us/v2/phone/users/$id/settings"
 
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
             Write-Output $response
         }

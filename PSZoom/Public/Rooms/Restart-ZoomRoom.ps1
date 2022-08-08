@@ -12,12 +12,6 @@ The ID of the room that is restarting.
 .PARAMETER JsonRPC
 A string specifying the version of the JSON-RPC protocol. Default is 2.0.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 JSON object that looks like:
 {
@@ -58,19 +52,8 @@ function Restart-ZoomRoom {
 
         [string]$JsonRPC = '2.0',
 
-        [string]$Method = 'restart',
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$Method = 'restart'
+     )
 
     process {
         foreach ($id in $RoomId) {
@@ -82,7 +65,7 @@ function Restart-ZoomRoom {
             }
             
             $requestBody = ConvertTo-Json $requestBody -Depth 2
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method POST -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method POST
     
             Write-Output $response
         }

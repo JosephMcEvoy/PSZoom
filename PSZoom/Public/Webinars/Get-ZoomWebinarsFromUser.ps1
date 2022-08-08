@@ -18,12 +18,6 @@ The number of records returned within a single API call.
 .PARAMETER PageNumber
 The current page number of returned records.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 Zoom API response.
 
@@ -59,19 +53,8 @@ function Get-ZoomWebinarsFromUser {
         [int]$PageSize = 30,
 
         [ValidateRange(1,300)]
-        [int]$PageNumber = 1,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [int]$PageNumber = 1
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         foreach ($id in $UserId) {
@@ -81,7 +64,7 @@ function Get-ZoomWebinarsFromUser {
             $query.Add('page_number', $PageNumber)
             $request.Query = $query.toString()
             $request.Query = $query.toString()
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
     
             Write-Output $response
         }

@@ -14,12 +14,6 @@ The action types:
 Activate - Set user status to active.
 Deactivate - Set user status to inactive.
 
-.PARAMETER ApiKey
-The API key.
-
-.PARAMETER ApiSecret
-THe API secret.
-
 .OUTPUTS
 No output. Can use Passthru switch to pass the UserId as an output.
 
@@ -52,19 +46,8 @@ function Update-ZoomUserStatus {
         [ValidateSet('activate', 'deactivate')]
         [string]$Action,
 
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-        
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret,
-
         [switch]$PassThru
     )
-    
-    begin {
-        # Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         foreach ($user in $UserId) {
@@ -76,7 +59,7 @@ function Update-ZoomUserStatus {
             $requestBody = $requestBody | ConvertTo-Json
     
             if ($PScmdlet.ShouldProcess($user, $Action)) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PUT -ApiKey $ApiKey -ApiSecret $ApiSecret
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PUT
 
                 if ($PassThru) {
                     Write-Output $UserId

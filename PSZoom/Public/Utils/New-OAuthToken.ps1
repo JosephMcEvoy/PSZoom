@@ -1,9 +1,7 @@
-function New-OAuth {
+function New-OAuthToken {
 
     <#
     .SYNOPSIS
-    Retrieves the Zoom OAuth API token
-    .DESCRIPTION
     Retrieves the Zoom OAuth API token
 
     .PARAMETER ClientID
@@ -39,25 +37,26 @@ function New-OAuth {
 
     .LINK
     https://marketplace.zoom.us/docs/guides/auth/oauth
+    
     #>
 
     [CmdletBinding()]
     param (
-        [Parameter(valuefrompipeline = $true, mandatory = $true, HelpMessage = "Enter Zoom App Client ID:", Position = 0)]
+        [Parameter(valuefrompipeline = $true, mandatory = $true, HelpMessage = "Enter Zoom App Account ID", Position = 0)]
+        [String]
+        $AccountID,
+
+        [Parameter(valuefrompipeline = $true, mandatory = $true, HelpMessage = "Enter Zoom App Client ID:", Position = 1)]
         [String]
         $ClientID,
 
-        [Parameter(valuefrompipeline = $true, mandatory = $true, HelpMessage = "Enter Zoom App Client Secret:", Position = 1)]
+        [Parameter(valuefrompipeline = $true, mandatory = $true, HelpMessage = "Enter Zoom App Client Secret:", Position = 2)]
         [String]
-        $ClientSecret,
+        $ClientSecret
 
-        [Parameter(valuefrompipeline = $true, mandatory = $true, HelpMessage = "Enter Zoom App Account ID", Position = 2)]
-        [String]
-        $AccountID
     )
 
-
-    $Uri = "https://zoom.us/oauth/token?grant_type=account_credentials&account_id={0}" -f $AccountID
+    $uri = "https://zoom.us/oauth/token?grant_type=account_credentials&account_id={0}" -f $AccountID
 
     #Encoding of the client data
     $IDSecret = $ClientID + ":" + $ClientSecret 
@@ -68,10 +67,18 @@ function New-OAuth {
     }
             
     # Maybe add some error handling
-    $response = Invoke-WebRequest -uri $Uri -headers $headers -Method Post 
+    try {
+        $response = Invoke-WebRequest -uri $uri -headers $headers -Method Post
+    } catch {
+        $_
+    }
 
-    $token = ($response.content | ConvertFrom-Json).access_token 
+    Write-Verbose 'Acquired token.'
+    
+    $token = ($response.content | ConvertFrom-Json).access_token
 
-    return $token
+    $token = ConvertTo-SecureString -String $token -AsPlainText -Force
 
+    
+    Write-Output $token
 }

@@ -6,15 +6,11 @@ Update a meeting registrant’s status.
 Update a meeting registrant’s status.
 .PARAMETER MeetingId
 The meeting ID.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .OUTPUTS
 .LINK
 .EXAMPLE
 Update-ZoomMeetingRegistrantStatus  123456789
-
 
 #>
 
@@ -49,19 +45,8 @@ function Update-ZoomMeetingRegistrantStatus {
             ValueFromPipelineByPropertyName = $True, 
             Position=3
         )]
-        [hashtable[]]$Registrants,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [hashtable[]]$Registrants
+     )
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/registrants/status"
@@ -82,7 +67,7 @@ function Update-ZoomMeetingRegistrantStatus {
 
         $requestBody = $requestBody | ConvertTo-Json
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PUT -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PUT
         
         Write-Output $response
     }

@@ -13,11 +13,6 @@ The month.
 .PARAMETER Year
 The year.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
 
 .EXAMPLE
 Get-ZoomDailyUsageReport -Year 2019 -Month 2
@@ -40,17 +35,8 @@ function Get-ZoomDailyUsageReport {
             Mandatory = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [int]$Month,
-
-        [string]$ApiKey,
-
-        [string]$ApiSecret
+        [int]$Month
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/report/daily"
@@ -71,7 +57,7 @@ function Get-ZoomDailyUsageReport {
             $Request.Query = $query.ToString()
         }
         
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
             
         Write-Output $response
     }

@@ -20,12 +20,6 @@ If a report has multiple pages this will loop through all pages automatically an
 each page into the Participants field of the report generated. The page size is set automatically to 300. The next 
 page token is automatically passed from page to page.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .EXAMPLE
 Tabulate through each page with NextPageToken and export participants to CSV.
 
@@ -70,17 +64,8 @@ function Get-ZoomMeetingParticipantsReport {
         [Parameter(
             ParameterSetName = 'CombineAllPages'
         )]
-        [switch]$CombineAllPages,
-
-        [string]$ApiKey,
-
-        [string]$ApiSecret
+        [switch]$CombineAllPages
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         if ($PsCmdlet.ParameterSetName -eq 'Default') {
@@ -91,7 +76,7 @@ function Get-ZoomMeetingParticipantsReport {
                 $query.Add('next_page_token', $NextPageToken)
                 $Request.Query = $query.ToString()
 
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
                 
                 Write-Output $response
             }

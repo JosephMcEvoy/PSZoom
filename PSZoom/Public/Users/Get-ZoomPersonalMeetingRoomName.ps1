@@ -9,12 +9,6 @@ Check if the user’s personal meeting room name exists.
 .PARAMETER VanityName
 Personal meeting room name.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 An object with the Zoom API response.
 
@@ -23,7 +17,6 @@ Get-ZoomPersonalMeetingRoomName 'Joes Room'
 
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/uservanityname
-
 
 #>
 
@@ -37,19 +30,8 @@ function Get-ZoomPersonalMeetingRoomName {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('vanity_name', 'vanitynames')]
-        [string[]]$VanityName,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string[]]$VanityName
+     )
 
     process {
         foreach ($name in $VanityName) {
@@ -60,7 +42,7 @@ function Get-ZoomPersonalMeetingRoomName {
             $Request.Query = $query.ToString()
         
     
-           $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+           $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
     
             Write-Output $response
         }

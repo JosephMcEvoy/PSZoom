@@ -19,7 +19,6 @@ $Questions = @(
 
 New-ZoomMeetingPoll 123456789 -Title 'Favorite numbers and letters' -Questions $Questions
 
-
 #>
 function New-ZoomMeetingPollQuestion {
     [OutputType([Hashtable])]

@@ -24,7 +24,6 @@ Join-ZoomPages -ZoomCommand $ZoomCommand -ZoomCommandSplat $ZoomCommandSplat
 
 .OUTPUTS
 API response results
-
 #>
 
 function Join-ZoomPages {

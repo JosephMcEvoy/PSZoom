@@ -16,12 +16,6 @@ Emails to be added to the group.
 .PARAMETER Id
 IDs to be added to the group.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 The Zoom response (an object). Example:
 ids                    added_at
@@ -77,18 +71,9 @@ function Add-ZoomGroupMember  {
         )]
         [Alias('memberids')]
         [string[]]$MemberId,
-        
-        [string]$ApiKey,
-        
-        [string]$ApiSecret,
 
         [switch]$Passthru
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $requestBody = @{}
@@ -122,7 +107,7 @@ function Add-ZoomGroupMember  {
         foreach ($Id in $GroupId) {
             $request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$Id/members"
             if ($PScmdlet.ShouldProcess($members, 'Add')) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method POST -ApiKey $ApiKey -ApiSecret $ApiSecret
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method POST
 
                 if (-not $passthru) {
                     Write-Output $response

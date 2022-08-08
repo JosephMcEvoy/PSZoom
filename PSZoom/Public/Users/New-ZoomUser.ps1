@@ -34,17 +34,11 @@ User password. Only used for the "autoCreate" function. The password has to have
 It must have at least one letter (a, b, c..), at least one number (1, 2, 3...) and include both uppercase and lowercase letters. 
 It should not contain only one identical character repeatedly ('11111111' or 'aaaaaaaa') and it cannot contain consecutive characters ('12345678' or 'abcdefgh').
 
-.PARAMETER ApiKey
-The API key.
-
-.PARAMETER ApiSecret
-THe API secret.
-
 .OUTPUTS
 An object with the Zoom API response. 
 
 .EXAMPLE
-New-ZoomUser -Action ssoCreate -Email jsmith@lawfirm.com -Type Pro -FirstName Joseph -LastName Smith -ApiKey $ApiKey -ApiSecret $ApiSecret
+New-ZoomUser -Action ssoCreate -Email jsmith@lawfirm.com -Type Pro -FirstName Joseph -LastName Smith
 
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/usercreate
@@ -89,20 +83,9 @@ function New-ZoomUser {
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [string]$Password,
-        
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-        
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret,
 
         [switch]$Passthru
     )
-
-    begin {
-        #Generate Headers with JWT (JSON Web Token)
-        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
     
     process {
         $request = [System.UriBuilder]'https://api.zoom.us/v2/users'
@@ -164,7 +147,7 @@ function New-ZoomUser {
         $requestBody = $requestBody | ConvertTo-Json
 
         if ($PScmdlet.ShouldProcess) {
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method POST -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method POST
 
             if ($passthru) {
                 Write-Output $Email

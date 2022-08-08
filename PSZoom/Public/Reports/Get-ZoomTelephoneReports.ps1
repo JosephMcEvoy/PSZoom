@@ -28,12 +28,6 @@ from each page into the telephony_usage field of the report generated. The page 
 Audio types: 1 - Toll-free Call-in & Call-out. The only option is 1. This defaults to 1.
 Note that Zoom documents this as a request parameter so it is included here. However it has no practical use at the moment.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .EXAMPLE
 Get-ZoomTelephoneReports -from '2019-07-01' -to '2019-07-31' -page 1 -pagesize 300
 Get-ZoomTelephoneReports -ytd
@@ -90,16 +84,10 @@ function Get-ZoomTelephoneReports {
 
         [Parameter(ParameterSetName = 'YearToDate')]
         [Alias('ytd')]
-        [switch]$YearToDate,
-
-        [string]$ApiKey,
-
-        [string]$ApiSecret
+        [switch]$YearToDate
     )
 
     begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
         if ($From) {
             [string]$From = $From.ToString('yyyy-MM-dd')
         }
@@ -139,7 +127,7 @@ function Get-ZoomTelephoneReports {
             $query.Add('page_number', $PageNumber)
             $Request.Query = $query.ToString()
 
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
             
             Write-Output $response
         }

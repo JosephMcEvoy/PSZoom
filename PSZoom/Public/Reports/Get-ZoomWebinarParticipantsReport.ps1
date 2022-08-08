@@ -13,12 +13,6 @@ The number of records returned within a single API call.
 The next page token is used to paginate through large result sets. A next page token will be returned whenever the set 
 of available results exceeds the current page size. The expiration period for this token is 15 minutes.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .EXAMPLE
 Get-ZoomWebinarParticipantsReport 1234567890
 
@@ -49,17 +43,8 @@ function Get-ZoomWebinarParticipantsReport {
         [ValidateRange(1,300)]
         [int]$PageSize = 30,
 
-        [string]$NextPageToken,
-
-        [string]$ApiKey,
-
-        [string]$ApiSecret
+        [string]$NextPageToken
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         foreach ($id in $WebinarId) {
@@ -73,7 +58,7 @@ function Get-ZoomWebinarParticipantsReport {
 
             $Request.Query = $query.ToString()
 
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
             
             Write-Output $response
         }

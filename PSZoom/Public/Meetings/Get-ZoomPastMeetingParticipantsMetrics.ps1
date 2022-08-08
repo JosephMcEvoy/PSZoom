@@ -15,12 +15,6 @@ The meeting type (live, past or pastone).
 .PARAMETER PageSize
 1-300. Default = 300
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/dashboards/dashboardmeetingparticipants
 
@@ -51,19 +45,8 @@ function Get-ZoomPastMeetingParticipantsMetrics {
         [string]$NextPageToken,
 
         [ValidateSet('past','pastOne','live')]
-        [string]$Type = 'past',
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$Type = 'past'
+     )
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/metrics/meetings/$MeetingUuid/participants"
@@ -77,7 +60,7 @@ function Get-ZoomPastMeetingParticipantsMetrics {
 
         $Request.Query = $query.ToString()
         
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
         
         Write-Output $response
     }

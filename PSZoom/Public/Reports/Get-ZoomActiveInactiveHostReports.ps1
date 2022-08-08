@@ -34,12 +34,6 @@ each page into the Users field of each report. The page size is set automaticall
 The next page token is used to paginate through large result sets. A next page token will be returned whenever the 
 set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .EXAMPLE
 Get first page of inactive users in July of 2019.
 Get-ZoomActiveInactiveHostReports -from '2019-07-01' -to '2019-07-31' -page 1 -pagesize 300
@@ -118,16 +112,10 @@ function Get-ZoomActiveInactiveHostReports {
         [Parameter(ParameterSetName = 'Default')]
         [Parameter(ParameterSetName = 'CombineAllPages')]
         [Parameter(ParameterSetName = 'LastSixMonths')]
-        [string]$NextPageToken,
-
-        [string]$ApiKey,
-
-        [string]$ApiSecret
+        [string]$NextPageToken
     )
 
     begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
         [string]$From = $From.ToString('yyyy-MM-dd')
         [string]$To = $To.ToString('yyyy-MM-dd')
     }
@@ -148,7 +136,7 @@ function Get-ZoomActiveInactiveHostReports {
 
             $Request.Query = $query.ToString()
 
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
             
             Write-Output $response
         }

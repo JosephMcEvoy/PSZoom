@@ -13,7 +13,7 @@
     
     # Version number of this module.
 
-    ModuleVersion = '1.16.0.0'
+    ModuleVersion = '2.0.0.0'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -28,7 +28,7 @@
     CompanyName = 'Unknown'
     
     # Copyright statement for this module
-    Copyright = '(c) 2020 Joseph McEvoy. All rights reserved.'
+    Copyright = '(c) 2022 Joseph McEvoy. All rights reserved.'
     
     # Description of the functionality provided by this module
     Description = 'A collection of Powershell tools to interface with the Zoom Api.'

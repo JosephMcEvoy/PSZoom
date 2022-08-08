@@ -72,18 +72,12 @@ Deprecated: Country ID of the phone number. eg. AU for Australia.
 .PARAMETER GroupID
 Unique identifier of the group that you would like to add a pending user to.
 
-.PARAMETER ApiKey
-The API key.
-
-.PARAMETER ApiSecret
-THe API secret.
-
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
 
 .EXAMPLE
 Update a user's name.
-Update-ZoomUser -UserId askywakler@thejedi.com -Type Pro -FirstName Anakin -LastName Skywalker -ApiKey $ApiKey -ApiSecret $ApiSecret
+Update-ZoomUser -UserId askywakler@thejedi.com -Type Pro -FirstName Anakin -LastName Skywalker
 
 .EXAMPLE
 Update the host key of all users that have 'jedi' in their email.
@@ -181,19 +175,10 @@ function Update-ZoomUser {
         [Alias('group_id')]
         [string]$GroupID,
 
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-        
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret,
-
         [switch]$PassThru
     )
     
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+
 
     process {
         foreach ($user in $UserId) {
@@ -249,7 +234,7 @@ function Update-ZoomUser {
             $RequestBody = $RequestBody | ConvertTo-Json
 
             if ($pscmdlet.ShouldProcess) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PATCH -ApiKey $ApiKey -ApiSecret $ApiSecret
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
         
                 if (-not $PassThru) {
                     Write-Output $response

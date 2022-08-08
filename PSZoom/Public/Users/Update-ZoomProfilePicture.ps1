@@ -8,10 +8,7 @@ Upload a user’s profile picture.
 The user ID or email address.
 .PARAMETER FileName
 The path to the file to be uploaded.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .OUTPUTS
 A hastable with the Zoom API response.
 .EXAMPLE
@@ -39,19 +36,8 @@ function Update-ZoomProfilePicture {
             Position = 1
         )]
         [ValidateScript({Test-Path -Path $_})]
-        [string]$FileName,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [string]$FileName
     )
-
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         foreach ($user in $UserId) {
@@ -76,7 +62,7 @@ function Update-ZoomProfilePicture {
                 "--$boundary--"
             ) -join $LF
     
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -ContentType "multipart/form-data; boundary=`"$boundary`"" -Headers ([ref]$headers) -Body $requestBody -Method POST -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -ContentType "multipart/form-data; boundary=`"$boundary`"" -Body $requestBody -Method POST
 
             Write-Output $response
         }

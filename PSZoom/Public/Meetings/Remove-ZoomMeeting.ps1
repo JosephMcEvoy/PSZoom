@@ -8,10 +8,7 @@ Delete a meeting.
 The meeting ID.
 .PARAMETER OcurrenceId
 The Occurrence ID.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .EXAMPLE
 Remove-ZoomMeeting 123456789
 
@@ -43,19 +40,8 @@ function Remove-ZoomMeeting {
         [Alias('schedule_for_reminder')]
         [string]$ScheduleForReminder,
 
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret,
-
         [switch]$Passthru
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId"
@@ -74,7 +60,7 @@ function Remove-ZoomMeeting {
             $Request.Query = $query.ToString()
         }
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method DELETE -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
 
         if (-not $Passthru) {
             Write-Output $response

@@ -17,12 +17,6 @@ The number of records returned within a single API call. Default value is 30. Ma
 Token to return next page of results when greater than PageSize as returned from this function.
 (Zoom is depricating use of PageNumber so not going to implement that.)
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 Zoom response as an object.
 
@@ -53,10 +47,6 @@ function Get-ZoomGroupMembers  {
         [Alias('group_id', 'group', 'id')]
         [string]$GroupId,
 
-        [string]$ApiKey,
-        
-        [string]$ApiSecret,
-
         [ValidateRange(1, 300)]
         [Alias('page_size')]
         [int]$PageSize = 30,
@@ -65,18 +55,13 @@ function Get-ZoomGroupMembers  {
         [String]$NextPageToken = ""
     )
 
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
-
     process {
         $request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/members"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('page_size', $PageSize)
         $query.Add('next_page_token', $NextPageToken)
         $request.Query = $query.ToString()
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
         Write-Output $response
     }

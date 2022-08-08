@@ -14,12 +14,6 @@ Token - Used for starting meeting with client SDK.
 ZPK - Used for generating the start meeting url. (Deprecated)
 ZAP - Used for generating the start meeting url. The expiration time is two hours. For API users, the expiration time is 90 days.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 A hastable with the Zoom API response.
 
@@ -45,19 +39,8 @@ function Get-ZoomUserToken {
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('token', 'zpk', 'zap')]
-        [string]$Type,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$Type
+     )
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/token"
@@ -68,7 +51,7 @@ function Get-ZoomUserToken {
             $Request.Query = $query.ToString()
         }
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
 
         Write-Output $response

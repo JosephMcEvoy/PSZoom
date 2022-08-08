@@ -75,12 +75,6 @@ with a single host and cannot be modified for these accounts.
 If the value is set to `true`, the meeting passcode will be encrypted and included in the join meeting link to allow 
 participants to join with just one click without having to enter the passcode.
 
-.PARAMETER ApiKey
-The API key.
-
-.PARAMETER ApiSecret
-THe API secret.
-
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
 
@@ -225,17 +219,7 @@ function New-CompanyZoomUser {
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('embed_password_in_join_link')]
-        [bool]$EmbedPasswordInJoinLink, 
-            
-        [Parameter(ParameterSetName = 'AdAccount')]
-        [Parameter(ParameterSetName = 'Manual')]
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-            
-        [Parameter(ParameterSetName = 'AdAccount')]
-        [Parameter(ParameterSetName = 'Manual')]
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [bool]$EmbedPasswordInJoinLink
     )
 
     process {
@@ -281,100 +265,88 @@ function New-CompanyZoomUser {
                     'OfficeeName3' { 'Office 3' }
                 }
 
-                $GroupID = ((Get-ZoomGroups) | where-object {$_ -match "$OfficeLocation"}).id
+                $GroupID = ((Get-ZoomGroups) | where-object { $_ -match "$OfficeLocation" }).id
 
                 $params.Add('GroupId', $GroupId)
-            }
-
-            if ($ApiKey) {
-                $params.Add('ApiKey', $ApiKey)
-            }
-
-            if ($ApiKey) {
-                $params.Add('ApiSecret', $ApiSecret)
-            }
             
-            New-CompanyZoomUser @params
-        } elseif ($PSCmdlet.ParameterSetName -eq 'Manual') {
-            $creds = @{
-                ApiKey     = 'ApiKey'
-                ApiSecret  = 'ApiSecret'
+                New-CompanyZoomUser @params
             }
-
-            if (Get-ZoomUser $Email -ErrorAction SilentlyContinue) {
-                throw "User already exists in Zoom."
-            }
-
-            #Create new user
-            $defaultNewUserParams = @{
-                Action    = $Action
-                Type      = $Type
-                Email     = $Email
-            }
-
-            function Remove-NonPsBoundParameters {
-                param (
-                    $Obj,
-                    $Parameters = $PSBoundParameters
-                )
-          
-                process {
-                    $NewObj = @{ }
-              
-                    foreach ($Key in $Obj.Keys) {
-                        if ($Parameters.ContainsKey($Obj.$Key) -or -not [string]::IsNullOrWhiteSpace($Obj.Key)) {
-                            $Newobj.Add($Key, (get-variable $Obj.$Key).value)
-                        }
-                    }
-              
-                    return $NewObj
+            elseif ($PSCmdlet.ParameterSetName -eq 'Manual') {
+                if (Get-ZoomUser $Email -ErrorAction SilentlyContinue) {
+                    throw "User already exists in Zoom."
                 }
-            }
 
-            $newUserParams = @{
-                FirstName = 'FirstName'
-                LastName  = 'LastName'
-            }
+                #Create new user
+                $defaultNewUserParams = @{
+                    Action = $Action
+                    Type   = $Type
+                    Email  = $Email
+                }
 
-            $newUserParams = Remove-NonPsBoundParameters($newUserParams)
+                function Remove-NonPsBoundParameters {
+                    param (
+                        $Obj,
+                        $Parameters = $PSBoundParameters
+                    )
+          
+                    process {
+                        $NewObj = @{ }
+              
+                        foreach ($Key in $Obj.Keys) {
+                            if ($Parameters.ContainsKey($Obj.$Key) -or -not [string]::IsNullOrWhiteSpace($Obj.Key)) {
+                                $Newobj.Add($Key, (get-variable $Obj.$Key).value)
+                            }
+                        }
+              
+                        return $NewObj
+                    }
+                }
 
-            New-ZoomUser @defaultNewUserParams @newUserParams @creds
+                $newUserParams = @{
+                    FirstName = 'FirstName'
+                    LastName  = 'LastName'
+                }
 
-            #Update parameters that cant be entered with new user
-            $updateParams = @{
-                UserId                                   = 'Email'
-                HostKey                                  = 'HostKey'
-                Pmi                                      = 'Pmi'
-                Timezone                                 = 'Timezone'
-                Language                                 = 'Language'
-                Dept                                     = 'Department'
-                VanityName                               = 'VanityName'
-                UsePmi                                   =  'UsePmi'
-            }
+                $newUserParams = Remove-NonPsBoundParameters($newUserParams)
 
-            $updateParams = Remove-NonPsBoundParameters($updateParams)
+                New-ZoomUser @defaultNewUserParams @newUserParams @creds
 
-            Update-ZoomUser @updateParams @creds
+                #Update parameters that cant be entered with new user
+                $updateParams = @{
+                    UserId     = 'Email'
+                    HostKey    = 'HostKey'
+                    Pmi        = 'Pmi'
+                    Timezone   = 'Timezone'
+                    Language   = 'Language'
+                    Dept       = 'Department'
+                    VanityName = 'VanityName'
+                    UsePmi     = 'UsePmi'
+                }
 
-            #Update Zoom User Meeting Settings
-            $updateSettingParams = @{
-                UserId                                   = 'Email'
-                RequirePasswordForSchedulingNewMeetings  = 'RequirePasswordForSchedulingNewMeetings'
-                RequirePasswordForPmiMeetings            = 'RequirePasswordForPmiMeetings'
-                EmbedPasswordInJoinLink                  = 'EmbedPasswordInJoinLink'
-            }
+                $updateParams = Remove-NonPsBoundParameters($updateParams)
 
-            $updateSettingParams = Remove-NonPsBoundParameters($updateSettingParams)
+                Update-ZoomUser @updateParams @creds
+
+                #Update Zoom User Meeting Settings
+                $updateSettingParams = @{
+                    UserId                                  = 'Email'
+                    RequirePasswordForSchedulingNewMeetings = 'RequirePasswordForSchedulingNewMeetings'
+                    RequirePasswordForPmiMeetings           = 'RequirePasswordForPmiMeetings'
+                    EmbedPasswordInJoinLink                 = 'EmbedPasswordInJoinLink'
+                }
+
+                $updateSettingParams = Remove-NonPsBoundParameters($updateSettingParams)
             
-            Update-ZoomUserSettings @updateSettingParams @creds
-            #Add user to group
-            if ($GroupId) {
-                Add-ZoomGroupMember -groupid $GroupId -MemberEmail $email @creds
-            }
+                Update-ZoomUserSettings @updateSettingParams @creds
+                #Add user to group
+                if ($GroupId) {
+                    Add-ZoomGroupMember -groupid $GroupId -MemberEmail $email @creds
+                }
 
-            #Add scheduling permission on behalf of Admin
-            if ($SchedulingAssistant) {
-                Add-ZoomUserAssistants -UserId $Email -AssistantEmail $SchedulingAssistant @creds
+                #Add scheduling permission on behalf of Admin
+                if ($SchedulingAssistant) {
+                    Add-ZoomUserAssistants -UserId $Email -AssistantEmail $SchedulingAssistant @creds
+                }
             }
         }
     }

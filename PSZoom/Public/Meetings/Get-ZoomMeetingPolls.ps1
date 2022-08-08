@@ -8,15 +8,11 @@ Host user must be in a Pro plan.
 Meeting must be a scheduled meeting. Instant meetings do not have polling features enabled.
 .PARAMETER MeetingId
 The meeting ID.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .OUTPUTS
 .LINK
 .EXAMPLE
 Get-ZoomMeetingsPolls 123456789
-
 
 #>
 
@@ -30,24 +26,13 @@ function Get-ZoomMeetingPolls {
             Position = 0
         )]
         [Alias('meeting_id')]
-        [string]$MeetingId,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$MeetingId
+     )
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/polls"
    
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
         
         Write-Output $response
     }

@@ -6,10 +6,7 @@ Update a meeting’s live stream.
 Update a meeting’s live stream.
 .PARAMETER MeetingId
 The meeting ID.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .OUTPUTS
 .LINK
 .EXAMPLE
@@ -48,19 +45,8 @@ function Update-ZoomMeetingLiveStream {
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateLength(0, 1024)]
         [Alias('page_url')]
-        [string]$PageUrl,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$PageUrl
+     )
 
     process {
         $uri = "https://api.zoom.us/v2/meetings/$MeetingId/livestream"
@@ -75,7 +61,7 @@ function Update-ZoomMeetingLiveStream {
 
         $requestBody = ConvertTo-Json $requestBody
                 
-        $response = Invoke-ZoomRestMethod -Uri $uri -Headers ([ref]$Headers) -Body $requestBody -Method PATCH -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $uri -Body $requestBody -Method PATCH
         
         Write-Output $response
     }

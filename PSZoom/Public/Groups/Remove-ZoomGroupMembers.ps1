@@ -12,10 +12,7 @@ This is the ID of the group. Not to be confused with MemberId. This also has the
 This is for better pipeline support with other functions. Other aliases include 'group_id' and 'group'.
 .PARAMETER MemberIds
 This is the ID of the member. Not to be confused with the GroupId. MemberId is an alias.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .OUTPUTS
 "Group member deleted."
 .LINK
@@ -43,17 +40,8 @@ function Remove-ZoomGroupMembers {
             Position = 1
         )]
         [Alias('memberid')]
-        [string[]]$MemberIds,
-        
-        [string]$ApiKey,
-        
-        [string]$ApiSecret
+        [string[]]$MemberIds
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         foreach ($GroupId in $GroupIDs) {
@@ -63,7 +51,7 @@ function Remove-ZoomGroupMembers {
                 
                 if ($PScmdlet.ShouldProcess) {
                     Write-Verbose "Removing $MemberId from $GroupId."
-                    $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method DELETE -ApiKey $ApiKey -ApiSecret $ApiSecret
+                    $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
 
                     Write-Output $response
                 }

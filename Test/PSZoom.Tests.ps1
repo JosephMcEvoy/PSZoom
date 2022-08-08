@@ -56,7 +56,7 @@ Mock -ModuleName $ModuleName Invoke-RestMethod {
 
 
 #Additional variables to use when testing
-$PSZoomToken = ConvertTo-SecureString -String 'faketoken' -AsPlainText -Force
+$Global:PSZoomToken = ConvertTo-SecureString -String 'faketoken' -AsPlainText -Force
 $AssistantId = 'TestAssistantId'
 $AssistantId2 = 'TestAssistantId2'
 $UserEmail = 'TestEmail@test.com'
@@ -76,7 +76,7 @@ $PageUrl = 'http://www.pageurltest.com'
 Describe 'PSZoom Core Tests' {
 	Describe 'New-ZoomHeaders' {
 		It 'Should create the correct headers' {
-			$headers = New-ZoomHeaders -Token $PSZoomToken
+			$headers = New-ZoomHeaders -Token $Global:PSZoomToken
 			$headers.'content-type'  | Should -Be 'application/json'
 			$headers.'authorization' | Should -BeLike '*bearer*'
 		}

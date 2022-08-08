@@ -80,7 +80,8 @@ Describe 'PSZoom Core Tests' {
 
 	Describe 'New-ZoomHeaders' {
 		It 'Should create the correct headers' {
-			$headers = New-ZoomHeaders -Token 'faketoken'
+      $token = ConvertTo-SecureString -String 'faketoken' -AsPlainText -Force
+			$headers = New-ZoomHeaders -Token $token
 			$headers.'content-type'  | Should -Be 'application/json'
 			$headers.'authorization' | Should -BeLike '*bearer*'
 		}

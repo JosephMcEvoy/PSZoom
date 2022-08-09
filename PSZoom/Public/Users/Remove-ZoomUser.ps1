@@ -4,13 +4,16 @@
 Delete a user on your account.
 
 .DESCRIPTION
-Delete a user on your account.
+Use this API to disassociate (unlink) a user or permanently delete a user. 
 
 .PARAMETER Action
 Delete action options:
 disassociate - Disassociate a user. This is the default.
 delete - Permanently delete a user.
 Note: To delete pending user in the account, use disassociate.
+
+.PARAMETER EncryptedEmail
+Whether the email address passed for the userId value is an encrypted email address.
 
 .PARAMETER TransferEmail
 Transfer email.
@@ -23,6 +26,9 @@ Transfer webinar.
 
 .PARAMETER TransferRecording
 Transfer recording.
+
+.PARAMETER Transferwhiteboard
+When you delete the user, whether to transfer all their Zoom Whiteboard data to another user.
 
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
@@ -50,6 +56,10 @@ function Remove-ZoomUser {
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('disassociate', 'delete')]
         [string]$Action = 'disassociate',
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('encrypted_email')]
+        [switch]$EncryptedEmail,
         
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('transfer_email')]
@@ -67,6 +77,10 @@ function Remove-ZoomUser {
         [Alias('transfer_recording')]
         [switch]$TransferRecording,
 
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('transfer_whiteboard')]
+        [switch]$TransferWhiteboard,
+
         [switch]$Passthru
     )
 
@@ -75,6 +89,10 @@ function Remove-ZoomUser {
             $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user"
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
             $query.Add('action', $Action)
+
+            if ($PSBoundParameters.ContainsKey('EncryptedEmail')) {
+                $query.Add('encrypted_email', $EncryptedEmail)
+            }
 
             if ($PSBoundParameters.ContainsKey('TransferEmail')) {
                 $query.Add('transfer_email', $TransferEmail)
@@ -90,6 +108,10 @@ function Remove-ZoomUser {
 
             if ($PSBoundParameters.ContainsKey('TransferRecording')) {
                 $query.Add('transfer_recording', $TransferRecording)
+            }
+
+            if ($PSBoundParameters.ContainsKey('TransferWhiteboard')) {
+                $query.Add('transfer_whiteboard', $Transferwhiteboard)
             }
             
             $request.Query = $query.ToString().ToLower()

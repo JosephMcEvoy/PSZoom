@@ -14,12 +14,6 @@ total_records groups
 ------------- ------
             9 {@{id=.....
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 The key 'group' of the Zoom response (an object). Example:
 id                     name                  total_members
@@ -47,23 +41,13 @@ Get-ZoomGroups -FullApiResponse
 function Get-ZoomGroups  {
     [CmdletBinding()]
     param (
-        [switch]$FullApiResponse,
-
-        [string]$ApiKey,
-        
-        [string]$ApiSecret
+        [switch]$FullApiResponse
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups"
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
-
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
         if ($FullApiResponse) {
             Write-Output $response

@@ -5,10 +5,7 @@ Get a group under your account.
 .DESCRIPTION
 Get a group under your account.
 Prerequisite: Pro, Business, or Education account
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .OUTPUTS
 Zoom response as an object.
 .LINK
@@ -26,22 +23,13 @@ function Get-ZoomGroup  {
             Position = 0
         )]
         [Alias('group_id', 'group', 'id')]
-        [string]$GroupId,
-
-        [string]$ApiKey,
-        
-        [string]$ApiSecret
+        [string]$GroupId
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId"
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
         
         Write-Output $response

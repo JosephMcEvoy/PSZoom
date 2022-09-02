@@ -45,19 +45,8 @@ function Remove-ZoomMeetingRecordings {
         [string[]]$MeetingId,
 
         [ValidateSet('trash', 'delete')]
-        [string]$Action = 'trash',
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$Action = 'trash'
+     )
 
     process {
         foreach($Id in $MeetingId) {
@@ -67,7 +56,7 @@ function Remove-ZoomMeetingRecordings {
             $Request.Query = $query.ToString()
 
             if ($PScmdlet.ShouldProcess($user, 'Remove')) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method DELETE -ApiKey $ApiKey -ApiSecret $ApiSecret
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method DELETE
 
                 Write-Output $response
             }

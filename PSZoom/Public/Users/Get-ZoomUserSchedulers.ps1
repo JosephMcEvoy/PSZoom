@@ -9,12 +9,6 @@ List user schedulers.
 .PARAMETER UserId
 The user ID or email address.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 A hastable with the Zoom API response.
 
@@ -36,25 +30,12 @@ function Get-ZoomUserSchedulers {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
-        [string]$UserId,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [string]$UserId
     )
-
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/schedulers"
-
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
-
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
         Write-Output $response
     }

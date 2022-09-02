@@ -9,12 +9,6 @@ Get the details of the account. You can only call this API if you have the appro
 .PARAMETER AccountId
 The Account ID.
 
-.PARAMETER ApiKey
-The API Key.
-
-.PARAMETER ApiSecret
-The API Secret.
-
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/accounts/accountsettings
 	
@@ -34,22 +28,12 @@ function Get-ZoomAccount {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('id', 'account_id')]
-        [string]$AccountId,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [string]$AccountId
     )
 
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api key/secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
     process {
         $request = [System.UriBuilder]"https://api.zoom.us/v2/accounts/$id"    
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
         
         Write-Output $response
     }	

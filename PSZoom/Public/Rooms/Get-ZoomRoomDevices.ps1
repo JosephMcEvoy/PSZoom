@@ -9,12 +9,6 @@ Retrieve the ID, Room Name, Device Type, App Version, App Target Version Device 
 .PARAMETER RoomID
 The Unique Identifier of the zoom room. This can be retrived from (List-ZoomRooms).id
 
-.PARAMETER ApiKey
-The API Key.
-
-.PARAMETER ApiSecret
-The API Secret.
-
 .OUTPUTS
 [
     {
@@ -41,6 +35,7 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/rooms/listzrdevices
 
 .EXAMPLE
 Get-ZoomRoomDevices -RoomID 'V5-1Nno-Sf-gtHn_k-GaRw'
+
 #>
 
 function Get-ZoomRoomDevices {
@@ -48,25 +43,14 @@ function Get-ZoomRoomDevices {
     param (
         # The status of the Zoom Room
         [Parameter(Mandatory = $True)]
-        [string]$RoomID,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$RoomID
+     )
 
     process {
         $request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$($RoomID)/devices"
 
         try {
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
         }
         catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation

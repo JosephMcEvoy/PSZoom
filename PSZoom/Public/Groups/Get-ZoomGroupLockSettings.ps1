@@ -10,12 +10,6 @@ Prerequisite: Pro, Business, or Education account
 .PARAMETER GroupId
 The group ID.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 The Zoom response (an object).
 
@@ -37,22 +31,13 @@ function Get-ZoomGroupLockSettings  {
             Position = 0
         )]
         [Alias('group_id', 'group', 'id')]
-        [string]$GroupId,
-
-        [string]$ApiKey,
-        
-        [string]$ApiSecret
+        [string]$GroupId
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/lock_settings"
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
 
         Write-Output $response   

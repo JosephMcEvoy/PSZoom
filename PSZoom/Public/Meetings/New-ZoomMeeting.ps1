@@ -119,10 +119,7 @@ Meeting authentication option id.
 If user has configured "Sign into Zoom with Specified Domains" option, this will list the doamins that are authenticated.
 .PARAMETER AuthenticationName
 Authentication name set in the authentication profile.
-.PARAMETER ApiKey
-The API key.
-.PARAMETER ApiSecret
-The API secret.
+
 .LINK
 https://github.com/JosephMcEvoy/New-ZoomMeeting
 .LINK
@@ -226,8 +223,6 @@ New-ZoomMeeting @params @mandatoryParams @scheduleParams -Topic 'Test Topic' -Us
 -StartTime '2019-10-18T15:00:00Z' -Duration 60 -MonthlyWeek 'SecondWeek'`
 -MonthlyWeekDay 'Tuesday' -EndDateTime '2019-11-25T12:00:00Z' -RepeatInterval 2
   
-    
-
 #>
 
 function New-ZoomMeeting {
@@ -610,25 +605,11 @@ function New-ZoomMeeting {
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('authentication_name')]
-        [string]$AuthenticationName,
-  
-        [string]$ApiKey,
-  
-        [string]$ApiSecret
+        [string]$AuthenticationName
     )
     
     begin {
         $Uri = "https://api.zoom.us/v2/users/$userId/meetings"
-  
-        #Get Zoom Api Credentials
-        if (-not $ApiKey -or -not $ApiSecret) {
-            $ApiCredentials = Get-ZoomApiCredentials
-            $ApiKey = $ApiCredentials.ApiKey
-            $ApiSecret = $ApiCredentials.ApiSecret
-        }
-  
-        #Generate Headers with JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
     }
     
     process {
@@ -644,8 +625,6 @@ function New-ZoomMeeting {
     
         #The following parameters are added by default as they are requierd by all parameter sets so they are automatically added to the request body
         $requestBody = @{
-            'api_key'    = $ApiKey
-            'api_secret' = $ApiSecret
             'topic'      = $Topic
             'type'       = $Type
         }
@@ -844,7 +823,7 @@ function New-ZoomMeeting {
         #### Misc Settings End #####
 
         $requestBody = ConvertTo-Json $requestBody -Depth 10
-        $response = Invoke-ZoomRestMethod -Uri $Uri -Headers ([ref]$Headers) -Body $requestBody -Method Post -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $Uri -Body $requestBody -Method Post
 
         Write-Output $response
     }

@@ -18,11 +18,6 @@ The number of records returned within a single API call (Min 30 - MAX 300).
 The next page token is used to paginate through large result sets. A next page token will be returned whenever the
 set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
 
-.PARAMETER ApiKey
-The API Key.
-
-.PARAMETER ApiSecret
-The API Secret.
 
 .OUTPUTS
 When using -Full switch, receives JSON Response that looks like:
@@ -44,6 +39,8 @@ https://marketplace.zoom.us/docs/api-reference/zoom-api/rooms-location/listzrloc
 
 .EXAMPLE
 Get-ZoomRoomLocations
+
+.EXAMPLE
 Get-ZoomRoomLocations -ParentLocationId "_AFlXw-FTwGS7BrO1QupVA"
 
 #>
@@ -69,19 +66,8 @@ function Get-ZoomRoomLocations {
         [Alias('next_page_token')]
         [string]$NextPageToken,
 
-        [switch]$Full = $False,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    ) 
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [switch]$Full = $False
+     ) 
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/locations"
@@ -98,7 +84,7 @@ function Get-ZoomRoomLocations {
 
         $Request.Query = $query.ToString()
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
         if ($Full) {
             Write-Output $response

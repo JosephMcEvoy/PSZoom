@@ -797,19 +797,8 @@ function Update-ZoomUserSettings {
         [Alias('feature_show_international_numbers_link_tsp')]
         [bool]$ShowInternationalNumbersLinkTsp,
 
-        [switch]$PassThru,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey
+        [switch]$PassThru
     )
-    
-    begin {
-        # Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         foreach ($user in $UserId) {
@@ -956,7 +945,7 @@ function Update-ZoomUserSettings {
             $requestBody = $requestBody | ConvertTo-Json
 
             if ($pscmdlet.ShouldProcess) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PATCH -ApiKey $ApiKey -ApiSecret $ApiSecret
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
 
                 if (-not $PassThru) {
                     Write-Output $response

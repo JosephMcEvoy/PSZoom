@@ -8,15 +8,11 @@ Retrieve a meeting's poll.
 The meeting ID.
 .PARAMETER PollId
 The poll ID.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .OUTPUTS
 .LINK
 .EXAMPLE
 Get-ZoomMeetingPoll 123456789 987654321
-
 
 #>
 
@@ -38,24 +34,13 @@ function Get-ZoomMeetingPoll {
             Position=1
         )]
         [Alias('poll_id')]
-        [string]$PollId,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$PollId
+     )
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
     
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
         
         Write-Output $response
     }

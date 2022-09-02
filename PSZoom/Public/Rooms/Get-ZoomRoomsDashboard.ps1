@@ -13,12 +13,6 @@ The number of records returned within a single API call (Min 30 - MAX 300)
 The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds 
 the current page size. The expiration period for this token is 15 minutes.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 {
     "page_count":  1,
@@ -87,19 +81,8 @@ function Get-ZoomRoomsDashboard {
         [Alias('next_page_token')]
         [string]$NextPageToken,
 
-        [switch]$Full = $False,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [switch]$Full = $False
+     )
 
     process {
         $request = [System.UriBuilder]"https://api.zoom.us/v2/metrics/zoomrooms"
@@ -113,7 +96,7 @@ function Get-ZoomRoomsDashboard {
         $request.Query = $query.ToString()
 
         try {
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET
         } catch {
             Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
         }

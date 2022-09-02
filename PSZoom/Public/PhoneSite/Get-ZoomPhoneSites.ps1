@@ -16,11 +16,6 @@ of available results exceeds the current page size. The expiration period for th
 .PARAMETER Full
 When using -Full switch, receive the full JSON Response to see the next_page_token.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
 
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/phone-site/listphonesites
@@ -55,7 +50,6 @@ Get-ZoomPhoneSites
 .EXAMPLE
 Return all Zoom phone sites with next page tokens.
 Get-ZoomPhoneSites -Full
-
 #>
 
 function Get-ZoomPhoneSites {
@@ -69,19 +63,9 @@ function Get-ZoomPhoneSites {
 		
         # The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
         [Alias('next_page_token')]
-        [string]$NextPageToken,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [string]$NextPageToken
     )
 
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api key/secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
     process {
         $request = [System.UriBuilder]"https://api.zoom.us/v2/phone/sites"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
@@ -91,7 +75,7 @@ function Get-ZoomPhoneSites {
         }
         $request.Query = $query.ToString()
         
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
         if ($Full) {
             Write-Output $response

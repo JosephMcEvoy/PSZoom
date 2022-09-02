@@ -13,12 +13,6 @@ The group ID.
 .PARAMETER Name
 The group name.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 No output.
 
@@ -47,17 +41,8 @@ function Update-ZoomGroup  {
             Position = 0
         )]
         [Alias('groupname')]
-        [string]$Name,
-
-        [string]$ApiKey,
-        
-        [string]$ApiSecret
+        [string]$Name
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId"
@@ -69,7 +54,7 @@ function Update-ZoomGroup  {
         $requestBody = $requestBody | ConvertTo-Json
 
         if ($PScmdlet.ShouldProcess($GroupId, 'Update')) {
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PATCH -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
 
             Write-Verbose "Changed group name to $Name."
             Write-Output $response

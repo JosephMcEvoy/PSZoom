@@ -93,19 +93,8 @@ function Get-ZoomMeetings {
         [datetime]$To = (Get-Date),
 
         [ValidateSet('past','pastOne','live')]
-        [string]$Type = 'live',
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$Type = 'live'
+     )
 
     process {
         if ($PsCmdlet.ParameterSetName -eq 'Default') {
@@ -127,7 +116,7 @@ function Get-ZoomMeetings {
                 $Request.Query = $query.ToString()
 
                 try {
-                    $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+                    $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
                 } catch {
                     Write-Error -Message "$($_.Exception.Message)" -ErrorId $_.Exception.Code -Category InvalidOperation
                 }

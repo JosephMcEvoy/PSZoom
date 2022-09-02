@@ -9,12 +9,6 @@ Delete a specific assistant. Assistants are the users to whom the current user h
 .PARAMETER UserId
 The user ID or email address.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 A hastable with the Zoom API response.
 
@@ -44,25 +38,14 @@ function Remove-ZoomSpecificUserAssistant {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('assistant_id')]
-        [string[]]$AssistantId,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string[]]$AssistantId
+     )
 
     process {
         foreach ($id in $UserId) {
             foreach ($aid in $AssistantId) {
                 $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id/assistants/$aid"
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method DELETE -ApiKey $ApiKey -ApiSecret $ApiSecret
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
 
                 Write-Output $response
             }

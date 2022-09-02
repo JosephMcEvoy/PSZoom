@@ -56,6 +56,7 @@ Mock -ModuleName $ModuleName Invoke-RestMethod {
 
 
 #Additional variables to use when testing
+$Global:PSZoomToken = ConvertTo-SecureString -String 'faketoken' -AsPlainText -Force
 $AssistantId = 'TestAssistantId'
 $AssistantId2 = 'TestAssistantId2'
 $UserEmail = 'TestEmail@test.com'
@@ -71,64 +72,13 @@ $PollId = '987654321'
 $StreamUrl = 'http://www.streamurltest.com'
 $StreamKey = 'TestStreamKey'
 $PageUrl = 'http://www.pageurltest.com'
-$ApiKeySecret = @{
-	ApiKey    = 'TestApiKey'
-	ApiSecret = 'TestApiSecret'
-}
 
 Describe 'PSZoom Core Tests' {
-	It 'Should be the correct name' {
-		$Module.Name | Should Be $ModuleName
-	}
-}
-
-
-	Describe 'New-JWT' {
-		It 'Should generate a JWT correctly' {
-			$token = (New-JWT -Algorithm 'HS256' -type 'JWT' -Issuer 123 -SecretKey 456 -ValidforSeconds 30)
-			$parsedToken = (Parse-JWTtoken -Token $token)
-			$parsedToken.'alg' | Should -Be 'HS256'
-			$parsedToken.'typ' | Should -Be 'JWT'
-			$parsedToken.'iss' | Should -Be '123'
-			$parsedToken.'exp' | Should -Not -BeNullOrEmpty
-		}
-	}
-
 	Describe 'New-ZoomHeaders' {
 		It 'Should create the correct headers' {
-			$headers = New-ZoomHeaders @ApiKeySecret
+			$headers = New-ZoomHeaders -Token $Global:PSZoomToken
 			$headers.'content-type'  | Should -Be 'application/json'
 			$headers.'authorization' | Should -BeLike '*bearer*'
-		}
-	}
-
-	Describe 'Get-ZoomApiCredentials' {}
-	
-InModuleScope $ModuleName {
-	Describe 'New-ZoomApiToken' {
-		Mock Get-ZoomApiCredentials {
-			return @{
-				ApiKey    = 'key'
-				ApiSecret = 'secret'
-			}
-		}
-
-		Mock New-Jwt {
-			return 'token.token.token'
-		}
-
-		$token = New-ZoomApiToken -ApiKey 'key' -ApiSecret 'secret'
-
-		It 'Get-ZoomApiCredentials is called' {
-			Assert-MockCalled Get-ZoomApiCredentials -Exactly 1
-		}
-
-		It 'New-Jwt is called' {
-			Assert-MockCalled New-Jwt -Exactly 1
-		}
-
-		It 'Valid token returned' {
-			$token | Should -Be 'token.token.token'
 		}
 	}
 }
@@ -283,7 +233,7 @@ Describe 'Add-ZoomUserAssistant' {
 		AssistantId    = 'testid1', 'testid2'
 	}
 
-	$request = Add-ZoomUserAssistants @params @ApiKeySecret
+	$request = Add-ZoomUserAssistants @params 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'POST'
@@ -300,7 +250,7 @@ Describe 'Add-ZoomUserAssistant' {
 
 Describe 'Get-ZoomPersonalMeetingRoomName' {
 	$VanityName = 'Test'
-	$request = Get-ZoomPersonalMeetingRoomName -VanityName $VanityName @ApiKeySecret
+	$request = Get-ZoomPersonalMeetingRoomName -VanityName $VanityName 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -318,7 +268,7 @@ Describe 'Get-ZoomPersonalMeetingRoomName' {
 }
 
 Describe 'Get-ZoomUser' {
-	$request = Get-ZoomUser -UserId $UserId @ApiKeySecret
+	$request = Get-ZoomUser -UserId $UserId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -330,7 +280,7 @@ Describe 'Get-ZoomUser' {
 }
 
 Describe 'Get-ZoomUserAssistants' {
-	$request = Get-ZoomUserAssistants -UserId $UserId @ApiKeySecret
+	$request = Get-ZoomUserAssistants -UserId $UserId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -342,7 +292,7 @@ Describe 'Get-ZoomUserAssistants' {
 }
 
 Describe 'Get-ZoomUserEmailStatus' {
-	$request = Get-ZoomUserEmailStatus -UserId $UserId @ApiKeySecret
+	$request = Get-ZoomUserEmailStatus -UserId $UserId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -354,7 +304,7 @@ Describe 'Get-ZoomUserEmailStatus' {
 }
 
 Describe 'Get-ZoomUserPermissions' {
-	$request = Get-ZoomUserPermissions -UserId $UserId @ApiKeySecret
+	$request = Get-ZoomUserPermissions -UserId $UserId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -445,7 +395,7 @@ Describe 'New-ZoomUser' {
 		Password  = 'testpassword'
 	}
 
-	$request = New-ZoomUser @params @ApiKeySecret
+	$request = New-ZoomUser @params 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'POST'
@@ -461,7 +411,7 @@ Describe 'New-ZoomUser' {
 }
 
 Describe 'Remove-ZoomSpecificUserAssistant' {
-	$request = Remove-ZoomSpecificUserAssistant -UserId $UserId -AssistantId $AssistantId @ApiKeySecret
+	$request = Remove-ZoomSpecificUserAssistant -UserId $UserId -AssistantId $AssistantId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'DELETE'
@@ -472,23 +422,23 @@ Describe 'Remove-ZoomSpecificUserAssistant' {
 	}
 
 	It 'Invokes rest method for multiple user IDs' {
-		Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId @ApiKeySecret
+		Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId 
 		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
 	}
 
 	It 'Invokes rest method for multiple user schedulers' {
-		Remove-ZoomSpecificUserAssistant -UserId $UserId-AssistantId $AssistantId, $AssistantId2 @ApiKeySecret
+		Remove-ZoomSpecificUserAssistant -UserId $UserId-AssistantId $AssistantId, $AssistantId2 
 		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
 	}
     
 	It 'Invokes rest method for multiple user IDs and schedulers at the same time' {
-		Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId, $AssistantId2 @ApiKeySecret
+		Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId, $AssistantId2 
 		Assert-MockCalled -CommandName Invoke-RestMethod -Times 4 -Scope It -ModuleName $ModuleName
 	}
 }
 
 Describe 'Remove-ZoomSpecificUserScheduler' {
-	$request = Remove-ZoomSpecificUserScheduler -UserId $UserId -SchedulerId $AssistantId @ApiKeySecret
+	$request = Remove-ZoomSpecificUserScheduler -UserId $UserId -SchedulerId $AssistantId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'DELETE'
@@ -499,23 +449,23 @@ Describe 'Remove-ZoomSpecificUserScheduler' {
 	}
 
 	It 'Invokes rest method for multiple user IDs' {
-		Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId @ApiKeySecret
+		Remove-ZoomSpecificUserAssistant -UserId $UserId, $UserId2 -AssistantId $AssistantId 
 		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
 	}
 
 	It 'Invokes rest method for multiple user schedulers' {
-		Remove-ZoomSpecificUserAssistant -UserId $UserId-AssistantId $AssistantId, $AssistantId2 @ApiKeySecret
+		Remove-ZoomSpecificUserAssistant -UserId $UserId-AssistantId $AssistantId, $AssistantId2 
 		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
 	}
     
 	It 'Invokes rest method for multiple user IDs and schedulers at the same time' {
-		Remove-ZoomSpecificUserScheduler -UserId $UserId, $UserId2 -SchedulerId $AssistantId, $AssistantId2 @ApiKeySecret
+		Remove-ZoomSpecificUserScheduler -UserId $UserId, $UserId2 -SchedulerId $AssistantId, $AssistantId2 
 		Assert-MockCalled -CommandName Invoke-RestMethod -Times 4 -Scope It -ModuleName $ModuleName
 	}
 }
 
 Describe 'Remove-ZoomUser' {
-	$request = Remove-ZoomUser -UserId $UserId -Action Delete -TransferEmail $UserId2 -TransferMeeting -TransferRecording  @ApiKeySecret
+	$request = Remove-ZoomUser -UserId $UserId -Action Delete -TransferEmail $UserId2 -TransferMeeting -TransferRecording  
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'DELETE'
@@ -535,13 +485,13 @@ Describe 'Remove-ZoomUser' {
 	}
     
 	It 'Invokes rest method for each user inputted' {
-		Remove-ZoomUser -UserId $UserId, $UserId2 @ApiKeySecret
+		Remove-ZoomUser -UserId $UserId, $UserId2 
 		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
 	}
 }
 
 Describe 'Remove-ZoomUserAssistants' {
-	$request = Remove-ZoomUserAssistants -UserId $UserId @ApiKeySecret
+	$request = Remove-ZoomUserAssistants -UserId $UserId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'DELETE'
@@ -552,13 +502,13 @@ Describe 'Remove-ZoomUserAssistants' {
 	}
     
 	It 'Invokes rest method for each user inputted' {
-		Remove-ZoomUserAssistants -UserId $UserId, $UserId2 @ApiKeySecret
+		Remove-ZoomUserAssistants -UserId $UserId, $UserId2 
 		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
 	}
 }
 
 Describe 'Remove-ZoomUserSchedulers' {
-	$request = Remove-ZoomUserSchedulers -UserId $UserId @ApiKeySecret
+	$request = Remove-ZoomUserSchedulers -UserId $UserId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'DELETE'
@@ -569,13 +519,13 @@ Describe 'Remove-ZoomUserSchedulers' {
 	}
     
 	It 'Invokes rest method for each user inputted' {
-		Remove-ZoomUserSchedulers -UserId $UserId, $UserId2 @ApiKeySecret
+		Remove-ZoomUserSchedulers -UserId $UserId, $UserId2 
 		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
 	}
 }
 
 Describe 'Revoke-ZoomUserSsoToken' {
-	$request = Revoke-ZoomUserSsoToken -UserId $UserId @ApiKeySecret
+	$request = Revoke-ZoomUserSsoToken -UserId $UserId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'DELETE'
@@ -586,7 +536,7 @@ Describe 'Revoke-ZoomUserSsoToken' {
 	}
     
 	It 'Invokes rest method for each user inputted' {
-		Revoke-ZoomUserSsoToken -UserId $UserId, $UserId2 @ApiKeySecret
+		Revoke-ZoomUserSsoToken -UserId $UserId, $UserId2 
 		Assert-MockCalled -CommandName Invoke-RestMethod -Times 2 -Scope It -ModuleName $ModuleName
 	}
 }
@@ -600,7 +550,7 @@ Describe 'Update-ZoomProfilePicture' {
 		return $True
 	}
 
-	$request = Update-ZoomProfilePicture -UserId $UserId -Filename 'testimg.jpg' @ApiKeySecret
+	$request = Update-ZoomProfilePicture -UserId $UserId -Filename 'testimg.jpg' 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'POST'
@@ -698,7 +648,7 @@ Describe 'Update-ZoomUser' {
 		CmsUserId  = '654321'
 	}
 
-	$request = Update-ZoomUser @params @ApiKeySecret
+	$request = Update-ZoomUser @params 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PATCH'
@@ -734,7 +684,7 @@ Describe 'Update-ZoomUserEmail' {
         ]
       }'
 
-	$request = Update-ZoomUserEmail -UserId $UserId -email $UserId2  @ApiKeySecret
+	$request = Update-ZoomUserEmail -UserId $UserId -email $UserId2  
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PUT'
@@ -764,7 +714,7 @@ Describe 'Update-ZoomUserPassword' {
         ]
       }'
 
-	$request = Update-ZoomUserpassword -UserId $UserId -password 'testpassword'  @ApiKeySecret
+	$request = Update-ZoomUserpassword -UserId $UserId -password 'testpassword'  
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PUT'
@@ -1229,7 +1179,7 @@ Describe 'Update-ZoomUserSettings' {
 		ZoomPhone                       = $true
 	}
 
-	$request = Update-ZoomUserSettings @params @ApiKeySecret
+	$request = Update-ZoomUserSettings @params 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PATCH'
@@ -1267,7 +1217,7 @@ Describe 'Update-ZoomUserStatus' {
         ]
       }'
 
-	$request = Update-ZoomUserStatus -UserId $UserId -action deactivate @ApiKeySecret
+	$request = Update-ZoomUserStatus -UserId $UserId -action deactivate 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PUT'
@@ -1333,7 +1283,7 @@ Describe 'Add-ZoomGroupMember' {
             }
           }'
         
-	$request = Add-ZoomGroupMember -GroupId $GroupId -MemberEmail $UserEmail @ApiKeySecret
+	$request = Add-ZoomGroupMember -GroupId $GroupId -MemberEmail $UserEmail 
         
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'POST'
@@ -1349,7 +1299,7 @@ Describe 'Add-ZoomGroupMember' {
 }
 
 Describe 'Get-ZoomGroup' {
-	$request = Get-ZoomGroup -GroupId $GroupId -ApiKey 123 -ApiSecret 456
+	$request = Get-ZoomGroup -GroupId $GroupId
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -1361,7 +1311,7 @@ Describe 'Get-ZoomGroup' {
 }
 
 Describe 'Get-ZoomGroupLockSettings' {
-	$request = Get-ZoomGroupLockSettings -GroupId $GroupId @ApiKeySecret
+	$request = Get-ZoomGroupLockSettings -GroupId $GroupId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -1373,7 +1323,7 @@ Describe 'Get-ZoomGroupLockSettings' {
 }
 
 Describe 'Get-ZoomGroups' {
-	$request = Get-ZoomGroups -FullApiResponse @ApiKeySecret
+	$request = Get-ZoomGroups -FullApiResponse 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -1385,7 +1335,7 @@ Describe 'Get-ZoomGroups' {
 }
 
 Describe 'Get-ZoomGroupSettings' {
-	$request = Get-ZoomGroupSettings -GroupId $GroupId @ApiKeySecret
+	$request = Get-ZoomGroupSettings -GroupId $GroupId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -1407,7 +1357,7 @@ Describe 'New-ZoomGroup' {
             }
         }'
         
-	$request = New-ZoomGroup -Name 'TestGroupName' @ApiKeySecret
+	$request = New-ZoomGroup -Name 'TestGroupName' 
     
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'POST'
@@ -1423,7 +1373,7 @@ Describe 'New-ZoomGroup' {
 }
 
 Describe 'Remove-ZoomGroup' {
-	$request = Remove-ZoomGroup -GroupId $GroupId @ApiKeySecret
+	$request = Remove-ZoomGroup -GroupId $GroupId 
     
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'DELETE'
@@ -1445,7 +1395,7 @@ Describe 'Update-ZoomGroup' {
             }
           }'
         
-	$request = Update-ZoomGroup -GroupId $GroupId -Name 'NewName' @ApiKeySecret
+	$request = Update-ZoomGroup -GroupId $GroupId -Name 'NewName' 
     
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PATCH'
@@ -1776,7 +1726,7 @@ Describe 'Update-ZoomGroupLockSettings' -Verbose {
             }
           }'
         
-	$request = Update-ZoomGroupLockSettings -GroupId $GroupId @updateGroupParams @ApiKeySecret
+	$request = Update-ZoomGroupLockSettings -GroupId $GroupId @updateGroupParams 
 	Write-Verbose $request.body
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PATCH'
@@ -1802,7 +1752,7 @@ Describe 'Update-ZoomGroupSettings' {
             }
           }'
         
-	$request = Update-ZoomGroupSettings -GroupId $GroupId @updateGroupParams @ApiKeySecret
+	$request = Update-ZoomGroupSettings -GroupId $GroupId @updateGroupParams 
     
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PATCH'
@@ -1864,7 +1814,7 @@ Describe 'Add-ZoomMeetingRegistrant' {
 		Zip                   = 'Zip'
 	}
 
-	$request = Add-ZoomMeetingRegistrant @params @ApiKeySecret
+	$request = Add-ZoomMeetingRegistrant @params 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'POST'
@@ -1880,7 +1830,7 @@ Describe 'Add-ZoomMeetingRegistrant' {
 }
 
 Describe 'Get-ZoomEndedMeetingInstances' {
-	$request = Get-ZoomEndedMeetingInstances -MeetingId $MeetingId @ApiKeySecret
+	$request = Get-ZoomEndedMeetingInstances -MeetingId $MeetingId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -1892,7 +1842,7 @@ Describe 'Get-ZoomEndedMeetingInstances' {
 }
 
 Describe 'Get-ZoomMeeting' {
-	$request = Get-ZoomMeeting -MeetingId $MeetingId -OccurrenceId $OccurrenceId @ApiKeySecret
+	$request = Get-ZoomMeeting -MeetingId $MeetingId -OccurrenceId $OccurrenceId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -1904,7 +1854,7 @@ Describe 'Get-ZoomMeeting' {
 }   
 
 Describe 'Get-ZoomMeetingInvitation' {
-	$request = Get-ZoomMeetingInvitation -MeetingId $MeetingId @ApiKeySecret
+	$request = Get-ZoomMeetingInvitation -MeetingId $MeetingId 
   
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -1916,7 +1866,7 @@ Describe 'Get-ZoomMeetingInvitation' {
 }
 
 Describe 'Get-ZoomMeetingPoll' {
-	$request = Get-ZoomMeetingPoll -MeetingId $MeetingId -PollId $PollId @ApiKeySecret
+	$request = Get-ZoomMeetingPoll -MeetingId $MeetingId -PollId $PollId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -1928,7 +1878,7 @@ Describe 'Get-ZoomMeetingPoll' {
 }
 
 Describe 'Get-ZoomMeetingPolls' {
-	$request = Get-ZoomMeetingPolls -MeetingId $MeetingId @ApiKeySecret
+	$request = Get-ZoomMeetingPolls -MeetingId $MeetingId 
   
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -1947,7 +1897,7 @@ Describe 'Get-ZoomMeetingRegistrants' {
 		PageNumber = $PageNumber
 	}
 
-	$request = Get-ZoomMeetingRegistrants @params @ApiKeySecret
+	$request = Get-ZoomMeetingRegistrants @params 
   
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -1969,7 +1919,7 @@ Describe 'Get-ZoomMeetingRegistrants' {
 
 Describe 'Get-ZoomMeetingsFromUser' {
 	$Type = 'scheduled'
-	$request = Get-ZoomMeetingsFromUser -UserId $UserId -type $Type -PageSize $PageSize -PageNumber $PageNumber @ApiKeySecret
+	$request = Get-ZoomMeetingsFromUser -UserId $UserId -type $Type -PageSize $PageSize -PageNumber $PageNumber 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -1990,7 +1940,7 @@ Describe 'Get-ZoomMeetingsFromUser' {
 }
 
 Describe 'Get-ZoomPastMeetingDetails' {
-	$request = Get-ZoomPastMeetingDetails -MeetingUuid $MeetingUuid @ApiKeySecret
+	$request = Get-ZoomPastMeetingDetails -MeetingUuid $MeetingUuid 
     
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -2003,7 +1953,7 @@ Describe 'Get-ZoomPastMeetingDetails' {
 
 Describe 'Get-ZoomPastMeetingParticipants' {
 	$NextPageToken = 'NextPageTokenTest'
-	$request = Get-ZoomPastMeetingParticipants -MeetingUuid $MeetingUuid -PageSize $PageSize -NextPageToken $NextPageToken @ApiKeySecret
+	$request = Get-ZoomPastMeetingParticipants -MeetingUuid $MeetingUuid -PageSize $PageSize -NextPageToken $NextPageToken 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -2024,7 +1974,7 @@ Describe 'Get-ZoomPastMeetingParticipants' {
 }
 
 Describe 'Get-ZoomRegistrationQuestions' {
-	$request = Get-ZoomRegistrationQuestions -MeetingId $MeetingId @ApiKeySecret
+	$request = Get-ZoomRegistrationQuestions -MeetingId $MeetingId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -2457,7 +2407,7 @@ Describe 'New-ZoomMeeting' {
 	}
 
 	Context 'Instant Meeting' {
-		$request = New-ZoomMeeting @mandatoryParams @optionalparams @settingsparams @ApiKeySecret
+		$request = New-ZoomMeeting @mandatoryParams @optionalparams @settingsparams 
     
 		It 'Uses the correct method' {
 			$request.Method | Should Be 'POST'
@@ -2478,7 +2428,7 @@ Describe 'New-ZoomMeeting' {
 	}
 
 	Context 'Scheduled Meeting' {
-		$request = New-ZoomMeeting @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
+		$request = New-ZoomMeeting @mandatoryParams @optionalparams @settingsparams @scheduleParams 
 
 		It 'Validates against the JSON schema' {
 			Test-Json -Json $request.Body -Schema $schema | Should Be $True
@@ -2490,7 +2440,7 @@ Describe 'New-ZoomMeeting' {
 			RecurrenceNoFixedTime = $True
 		}
   
-		$request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @ApiKeySecret
+		$request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams 
 
 		It 'Validates against the JSON schema' {
 			Test-Json -Json $request.Body -Schema $schema | Should Be $True
@@ -2504,7 +2454,7 @@ Describe 'New-ZoomMeeting' {
 			RepeatInterval = 1
 		}
   
-		$request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
+		$request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams 
 
 		It 'Validates against the JSON schema' {
 			Test-Json -Json $request.Body -Schema $schema | Should Be $True
@@ -2518,7 +2468,7 @@ Describe 'New-ZoomMeeting' {
 			RepeatInterval = 2
 		}
   
-		$request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
+		$request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams 
 
 		It 'Validates against the JSON schema' {
 			Test-Json -Json $request.Body -Schema $schema | Should Be $True
@@ -2533,7 +2483,7 @@ Describe 'New-ZoomMeeting' {
 			RepeatInterval = 2
 		}
   
-		$request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams @ApiKeySecret
+		$request = New-ZoomMeeting @params @mandatoryParams @optionalparams @settingsparams @scheduleParams 
 
 		It 'Validates against the JSON schema' {
 			Test-Json -Json $request.Body -Schema $schema | Should Be $True
@@ -2543,7 +2493,7 @@ Describe 'New-ZoomMeeting' {
 
 Describe 'Remove-ZoomMeeting' {
 	$ScheduleForReminder = 'TestReminder'
-	$request = Remove-ZoomMeeting -MeetingId $MeetingId -OccurrenceId $OccurrenceId -ScheduleForReminder $ScheduleForReminder @ApiKeySecret
+	$request = Remove-ZoomMeeting -MeetingId $MeetingId -OccurrenceId $OccurrenceId -ScheduleForReminder $ScheduleForReminder 
     
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'DELETE'
@@ -2620,7 +2570,7 @@ Describe 'New-ZoomMeetingPoll' {
 		)
 	}
 
-	$request = New-ZoomMeetingPoll @params @ApiKeySecret
+	$request = New-ZoomMeetingPoll @params 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'POST'
@@ -2657,7 +2607,7 @@ Describe 'New-ZoomMeetingPollQuestion' {
 
 Describe 'Remove-ZoomMeetingPoll' {
 	$PollId = '123'
-	$request = Remove-ZoomMeetingPoll -MeetingId $MeetingId -PollId $PollId @ApiKeySecret
+	$request = Remove-ZoomMeetingPoll -MeetingId $MeetingId -PollId $PollId 
     
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'DELETE'
@@ -3022,7 +2972,7 @@ Describe 'Update-ZoomMeeting' {
 		OccurrenceId = $OccurrenceId
 	}
   
-	$request = Update-ZoomMeeting @params @ApiKeySecret
+	$request = Update-ZoomMeeting @params 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PATCH'
@@ -3081,7 +3031,7 @@ Describe 'Update-ZoomMeetingLiveStreamStatus' {
 		PageUrl   = $PageUrl
 	}
   
-	$request = Update-ZoomMeetingLiveStreamStatus @params @ApiKeySecret
+	$request = Update-ZoomMeetingLiveStreamStatus @params 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PATCH'
@@ -3131,7 +3081,7 @@ Describe 'Update-ZoomMeetingLiveStream' {
 		PageUrl   = $PageUrl
 	}
 
-	$request = Update-ZoomMeetingLiveStream @params @ApiKeySecret
+	$request = Update-ZoomMeetingLiveStream @params 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PATCH'
@@ -3204,7 +3154,7 @@ Describe 'Update-ZoomMeetingPoll' {
 		)
 	}
 
-	$request = Update-ZoomMeetingPoll @params @ApiKeySecret
+	$request = Update-ZoomMeetingPoll @params 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PUT'
@@ -3332,7 +3282,7 @@ Describe 'Update-ZoomMeetingRegistrationQuestions' {
 		)
 	}
     
-	$request = Update-ZoomMeetingRegistrationQuestions @params @ApiKeySecret
+	$request = Update-ZoomMeetingRegistrationQuestions @params 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PATCH'
@@ -3398,7 +3348,7 @@ Describe 'Update-ZoomMeetingRegistrantStatus' {
 		)
 	}
 
-	$request = Update-ZoomMeetingRegistrantStatus @params @ApiKeySecret
+	$request = Update-ZoomMeetingRegistrantStatus @params 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PUT'
@@ -3430,7 +3380,7 @@ Describe 'Update-ZoomMeetingStatus' {
         }
       }'
 
-	$request = Update-ZoomMeetingStatus -MeetingId $MeetingId @ApiKeySecret
+	$request = Update-ZoomMeetingStatus -MeetingId $MeetingId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'PUT'
@@ -3461,7 +3411,7 @@ Describe 'Get-ZoomWebinar' {
       ]
     }'
 
-	$request = Get-ZoomWebinar -WebinarId $MeetingId @ApiKeySecret
+	$request = Get-ZoomWebinar -WebinarId $MeetingId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'
@@ -3487,7 +3437,7 @@ Describe 'Get-ZoomWebinarsFromUser' {
     ]
   }'
 
-	$request = Get-ZoomWebinarsFromUser -UserId $UserId @ApiKeySecret
+	$request = Get-ZoomWebinarsFromUser -UserId $UserId 
 
 	It 'Uses the correct method' {
 		$request.Method | Should Be 'GET'

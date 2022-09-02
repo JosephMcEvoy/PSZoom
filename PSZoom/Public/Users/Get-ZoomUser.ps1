@@ -32,12 +32,6 @@ You can use the number or corresponding text (e.g. 'FacebookOauth' or '0').
 Whether the email address passed for the $UserId value is an encrypted email address. 
 Add the -EncryptedEmail switch to specify this is $True.
 
-.PARAMETER ApiKey
-The API Key.
-
-.PARAMETER ApiSecret
-The API Secret.
-
 .OUTPUTS
 An object with the Zoom API response.
 
@@ -51,7 +45,6 @@ Get-ZoomMeeting 123456789 | Select-Object host_id | Get-ZoomUser
 
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/user
-
 
 #>
 
@@ -71,19 +64,8 @@ function Get-ZoomUser {
         [string]$LoginType,
 
         [Alias('encrypted_email')]
-        [switch]$EncryptedEmail,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
+        [switch]$EncryptedEmail
     )
-
-    begin {
-        #Generate Header with JWT (JSON Web Token) using the Api Key/Secret
-        $headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         foreach ($id in $UserId) {
@@ -100,7 +82,7 @@ function Get-ZoomUser {
             }
             
             $Request.Query = $query.ToString()
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
             Write-Output $response
         }

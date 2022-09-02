@@ -1,5 +1,12 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/e7svaoe2hmlrrnje?svg=true)](https://ci.appveyor.com/project/JosephMcEvoy/pszoom)
 
+# Update - PSZoom 2.0 #
+PSZoom is ending support for JWT. As of 2.0 only Server-to-Server OAuth is supported. JWT authorization is supported in versions prior to 2.0. If you are using JWT, you should update your code to support Server-To-Server Oauth. Zoom will be dropping support of JWT in June of 2023.
+  
+A new cmdlet, Connect-PSZoom, must be run before using any other PSZoom cmdlets. This change, along with the dropping of support for JWT, means that old scripts will not work with this version. Instead of declaring variables such as ZoomApiKey and ZoomApiSecret, you should use Connect-PSZoom. 
+
+You can read more about JWT deprecation at [https://marketplace.zoom.us/docs/guides/build/jwt-app/jwt-faq/](https://marketplace.zoom.us/docs/guides/build/jwt-app/jwt-faq/) and more about a Zoom server-to-server Oauth app at [https://marketplace.zoom.us/docs/guides/build/server-to-server-oauth-app/](https://marketplace.zoom.us/docs/guides/build/server-to-server-oauth-app/).
+
 # PSZoom #
 - - - - 
 PSZoom is a Powershell wrapper to interface with Zoom's API (Zoom Video Communications). The module wraps many API calls from Zoom's API v2 documentation. You can find Zoom's documentation at https://marketplace.zoom.us/docs/api-reference/zoom-api. PSZoom is not an official module.
@@ -7,7 +14,7 @@ PSZoom is a Powershell wrapper to interface with Zoom's API (Zoom Video Communic
 Cmdlets are named with approved Powershell verbs but keeping to as close to Zoom's API reference as possible. For example, Zoom has two API calls that they named "List User Assistants" and "Update Zoom Meeting". In PSZoom they are named Get-ZoomUserAssistants and Update-ZoomMeeting, respectively. In general, each cmdlet has associated help which includes a link (found under .LINK) to the API call that it is wrapping.  
   
 Zoom has a rate limit that varies depending on your account and the type of request. If you're making too many requests, the cmdlet will automatically retry after one second.
-  
+
 # Getting started #
 ## Using PowershellGallery ##
 ```
@@ -30,27 +37,18 @@ Import-Module PSZoom
 ```
 
 # Using your API key and API secret #
-All commands require an API key and API secret. Currently PSZoom uses only JWT for authorization.  You can generate 
-the JWT key/secret from https://marketplace.zoom.us/develop/create, then click on  'Create' under JWT.  Note that in 
-addition to the key/secret, Zoom also provides an IM Chat History Token, this is not to be confused with the key/secret.  
+All commands require a Client ID and Client Secret. As of PSZoom 2.0, PSZoom only supports Server-to-Server OAuth authorization. You can generate the Server-to-Server OAuth key/secret from https://marketplace.zoom.us/develop/create, then click on  'Create' under Server-to-Server OAuth.  
   
-For ease of use, each command looks for these variables automatically in the following order:  
-    In the global scope for ZoomApiKey and ZoomApiSecret  
-    As passed as parameters to the command  
-    As an AutomationVariable  
-    A prompt to host to enter Key/Secret manually  
 
 # Example script #
 ```
 import-module PSZoom
-$Global:ZoomApiKey    = 'API_Key_Goes_Here'  
-$Global:ZoomApiSecret = 'API_Secret_Goes_Here'  
+Connect-PSZoom -AccountID 'account_id' -ClientID 'client_id' -ClientSecret 'secret'
 Get-ZoomMeeting 123456789
 ```
 
 # Available functions #
 Use get-help for more information about each function.
-
 
 
 ## Cloud Recordings ##

@@ -21,7 +21,6 @@ Show-ZoomMeetingRecordings 123456789
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/cloud-recording/recordingstatusupdate
 
-
 #>
 
 function Show-ZoomMeetingRecordings {
@@ -34,19 +33,8 @@ function Show-ZoomMeetingRecordings {
             Position = 0
         )]
         [Alias('meeting_id')]
-        [string]$MeetingId,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$MeetingId
+     )
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/recordings/status"
@@ -56,7 +44,7 @@ function Show-ZoomMeetingRecordings {
         $requestBody.Add('action', 'recover')
         $requestBody = ConvertTo-Json $requestBody -Depth 10
 
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method PUT -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method PUT
 
         Write-Output $response
     }

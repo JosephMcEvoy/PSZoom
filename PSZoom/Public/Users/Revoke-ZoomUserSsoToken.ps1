@@ -9,12 +9,6 @@ Revoke a user’s SSO token.
 .PARAMETER UserId
 The user ID or email address.
 
-.PARAMETER ApiKey
-The Api Key.
-
-.PARAMETER ApiSecret
-The Api Secret.
-
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
 
@@ -37,25 +31,14 @@ function Revoke-ZoomUserSsoToken {
         )]
         [Alias('Email', 'EmailAddress', 'Id', 'user_id')]
         [string[]]$UserId,
-        
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret,
 
         [switch]$Passthru
     )
 
-    begin {
-        #Generate Header with JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
-
     process {
         foreach ($user in $UserId) {
             $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/token"
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Method DELETE -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
 
             if ($Passthru) {
                 Write-Output $UserId

@@ -27,10 +27,6 @@ Send an email to host when someone registers to view the recording. This applies
 Show social share buttons on registration page. This applies for On-Demand recordings only.
 .PARAMETER Topic
 Name of the recording.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/cloud-recording/recordingsettingsupdate
 .EXAMPLE
@@ -48,12 +44,6 @@ function Update-ZoomMeetingRecordingsSettings {
         )]
         [Alias('meeting_id')]
         [string]$MeetingId,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret,
 
         [Parameter(
             HelpMessage = 'Share the recording.',
@@ -135,11 +125,6 @@ function Update-ZoomMeetingRecordingsSettings {
         [string]$recTopic
     )
 
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
-
     process {
         #Double Encode MeetingId in case UUID needs it.
         $MeetingId = [uri]::EscapeDataString($MeetingId)
@@ -195,7 +180,7 @@ function Update-ZoomMeetingRecordingsSettings {
         $requestBody = ConvertTo-Json $requestBody
 
         if ($pscmdlet.ShouldProcess) {
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $requestBody -Method PATCH -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
 
             Write-Output $response
         }

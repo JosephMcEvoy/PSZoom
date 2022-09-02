@@ -58,10 +58,7 @@ More than 10,000
 The user's comments.
 .PARAMETER CustomQuestions
 The user's custom questions.
-.PARAMETER ApiKey
-The Api Key.
-.PARAMETER ApiSecret
-The Api Secret.
+
 .OUTPUTS
 .LINK
 .EXAMPLE
@@ -156,17 +153,8 @@ function Add-ZoomMeetingRegistrant {
         
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('custom_questions')]
-        [hashtable]$CustomQuestions,
-        
-        [string]$ApiKey,
-        
-        [string]$ApiSecret
+        [hashtable]$CustomQuestion
     )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/registrants"
@@ -222,7 +210,7 @@ function Add-ZoomMeetingRegistrant {
         }
 
         $requestBody = $requestBody | ConvertTo-Json
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method POST -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method POST
 
         Write-Output $response
    

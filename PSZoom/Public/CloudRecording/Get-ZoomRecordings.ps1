@@ -87,19 +87,8 @@ function Get-ZoomRecordings {
         [string]$To,
 
         [ValidateSet('meeting_recordings', 'recording_file')]
-        [string]$TrashType = 'meeting_recordings',
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret
-    )
-
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+        [string]$TrashType = 'meeting_recordings'
+     )
 
     process {
         foreach ($user in $Userid) {
@@ -136,7 +125,7 @@ function Get-ZoomRecordings {
             
             $Request.Query = $query.ToString()
 
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
     
             Write-Output $response
         }

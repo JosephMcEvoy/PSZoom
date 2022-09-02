@@ -15,14 +15,14 @@ within PSZoom. See below.
 Get billing information.
 $accountId = 123456789
 $request = [System.UriBuilder]"https://api.zoom.us/v2/accounts/$accountId/billing"
-Invoke-ZoomRestMethod -Uri $request.Uri -ApiKey your_api_key -ApiSecret your_api_secret -Method GET
+Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
 #>
 
 function Invoke-ZoomRestMethod {
     [CmdletBinding(DefaultParameterSetName = 'Default')]
     param (
-        [Microsoft.PowerShell.Commands.WebRequestMethod]$Method,
+        [string]$Method,
         [switch]$FollowRelLink,
         [int]$MaximumFollowRelLink,
         [string]$ResponseHeadersVariable,
@@ -39,7 +39,7 @@ function Invoke-ZoomRestMethod {
         [x509Certificate]$Certificate,
         [switch]$SkipCertificateCheck,
         $SslProtocol,
-        [secureString]$Token,
+        [secureString]$Token = $PSZoomToken,
         [string]$UserAgent,
         [switch]$DisableKeepAlive,
         [int]$TimeoutSec,
@@ -60,9 +60,7 @@ function Invoke-ZoomRestMethod {
         [switch]$Resume,
         [switch]$SkipHttpErrorCheck,
         [switch]$PreserveAuthorizationOnRedirect,
-        [switch]$SkipHeaderValidation,
-        [string]$ApiKey,
-        [string]$ApiSecret
+        [switch]$SkipHeaderValidation
     )
     
     $params = @{
@@ -127,22 +125,14 @@ function Invoke-ZoomRestMethod {
     }
 
     $params = Remove-NonPsBoundParameters($params)
-
-    if ($params.Headers -is [ref]) {
-        # Update the token if it has expired.
-        $TokenPayload = ($Headers.Value.authorization -split '\.')[1]
-        $TokenExpireTime = [int]((ConvertFrom-Json ([System.Text.Encoding]::UTF8.GetString(
-                        [Convert]::FromBase64String($TokenPayload + '=' * @(0..3)[ - ($TokenPayload.Length % 4)])))).exp)
-        $CurrentUnixTime = ((Get-Date) - (Get-Date '1970/1/1 0:0:0 GMT')).TotalSeconds
-        if ($CurrentUnixTime -ge $TokenExpireTime) {
-            $Headers.Value = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-        }
-
-        $params.Headers = $Headers.Value
+    
+    if (-not $Token) {
+        Write-Host "No token found. Use Connect-PSZoom to get a global token then try running the command again.`n"
+    } else {
+        $params.Headers = (New-ZoomHeaders -Token $Token)
+        Write-Verbose $params.Headers
     }
-    elseif ($null -eq $params.Headers) {
-        $params.Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
+
 
     if ([string]::IsNullOrEmpty($params.ContentType)) {
         $params.ContentType = 'application/json; charset=utf-8'

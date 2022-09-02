@@ -81,16 +81,6 @@ function Get-ZoomAccountRecordings {
         [ValidatePattern("([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))")]
         [string]$To,
 
-        [Parameter(ParameterSetName = 'Default')]
-        [Parameter(ParameterSetName = 'Trash')]
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiKey,
-
-        [Parameter(ParameterSetName = 'Default')]
-        [Parameter(ParameterSetName = 'Trash')]
-        [ValidateNotNullOrEmpty()]
-        [string]$ApiSecret,
-
         [Parameter(ParameterSetName = 'Trash')]
         [bool]$Trash = $false,
 
@@ -100,10 +90,6 @@ function Get-ZoomAccountRecordings {
         [string]$TrashType = 'meeting_recordings'
     )
 
-    begin {
-        #Generate Headers and JWT (JSON Web Token)
-        $Headers = New-ZoomHeaders -ApiKey $ApiKey -ApiSecret $ApiSecret
-    }
 
     process {
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/accounts/$AccountId/recordings"
@@ -134,7 +120,7 @@ function Get-ZoomAccountRecordings {
         } 
         
         $Request.Query = $query.ToString()
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers ([ref]$Headers) -Body $RequestBody -Method GET -ApiKey $ApiKey -ApiSecret $ApiSecret
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
 
         Write-Output $response
     }

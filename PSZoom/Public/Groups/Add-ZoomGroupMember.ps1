@@ -90,7 +90,7 @@ function Add-ZoomGroupMember  {
             }
         }
 
-        if ($PSBoundParameters.ContainsKey('MemberIds')) {
+        if ($PSBoundParameters.ContainsKey('MemberId')) {
             $MemberId | ForEach-Object {
                 $members.Add(@{id = $_})
             }

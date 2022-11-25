@@ -68,7 +68,7 @@ function New-OAuthToken {
             
     # Maybe add some error handling
     try {
-        $response = Invoke-WebRequest -uri $uri -headers $headers -Method Post
+        $response = Invoke-WebRequest -uri $uri -headers $headers -Method Post -UseBasicParsing
     } catch {
         $_
     }

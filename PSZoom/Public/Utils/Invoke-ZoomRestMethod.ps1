@@ -147,7 +147,7 @@ function Invoke-ZoomRestMethod {
             $errorDetails = ConvertFrom-Json ($errorStreamReader.ReadToEnd())
         }
         else {
-            $errorDetails = ConvertFrom-Json $_.errorDetails -AsHashtable
+            $errorDetails
         }
 
         $exception = $_.exception

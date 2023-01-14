@@ -19,9 +19,9 @@ number or random personal vanity URL.
 User email address.
 
 .PARAMETER Type
-Basic    (1)
-Pro      (2)
-Corp. (3)
+1 - Basic
+2 - Licensed (formerly "Pro")
+99 - None (formerly "Corp"). This can only be set with ssoCreate.
 
 .PARAMETER FirstName
 User's first namee: cannot contain more than 5 Chinese words.
@@ -38,7 +38,7 @@ It should not contain only one identical character repeatedly ('11111111' or 'aa
 An object with the Zoom API response. 
 
 .EXAMPLE
-New-ZoomUser -Action ssoCreate -Email jsmith@lawfirm.com -Type Pro -FirstName Joseph -LastName Smith
+New-ZoomUser -Action ssoCreate -Email bobafett@bountyhuntersguild.com -Type Licensed -FirstName Boba -LastName Fett
 
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/users/usercreate
@@ -68,7 +68,7 @@ function New-ZoomUser {
             Mandatory = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [ValidateSet('Basic', 'Pro', 'Corp', 1, 2, 3)]
+        [ValidateSet('Basic', 'Pro', 'Corp', 'Licensed', 'None', 1, 2, 99)]
         $Type,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
@@ -98,8 +98,12 @@ function New-ZoomUser {
         $Type = switch ($Type) {
             'Basic' { 1 }
             'Pro' { 2 }
-            'Corp' { 3 }
-            Default { $Type }
+            'Licensed' { 2 }
+            'Corp' { 99 }
+            'None' { 99 }
+            '1' { 1 }
+            '2' { 2 }
+            '99' { 99 }
         }
 
         #These parameters are mandatory and are added automatically.

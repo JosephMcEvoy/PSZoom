@@ -37,6 +37,10 @@ function Show-ZoomMeetingRecordings {
      )
 
     process {
+        #Double Encode MeetingId in case UUID needs it.
+        $MeetingId = [uri]::EscapeDataString($MeetingId)
+        $MeetingId = [uri]::EscapeDataString($MeetingId)
+        
         $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/recordings/status"
 
         

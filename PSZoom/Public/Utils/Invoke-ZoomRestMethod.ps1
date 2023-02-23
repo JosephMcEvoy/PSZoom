@@ -91,7 +91,7 @@ function Invoke-ZoomRestMethod {
         RetryIntervalSec                = 'RetryIntervalSec'
         SessionVariable                 = 'SessionVariable'
         SkipCertificateCheck            = 'SkipCertificateCheck'
-        SkipHeaderValidatio             = 'SkipHeaderValidation'
+        SkipHeaderValidation            = 'SkipHeaderValidation'
         SkipHttpErrorCheck              = 'SkipHttpErrorCheck'
         SslProtocol                     = 'SslProtocol'
         StatusCodeVariable              = 'StatusCodeVariable'

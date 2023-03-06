@@ -346,6 +346,8 @@ function Update-ZoomMeeting {
   process {
     $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId"
 
+    $requestBody=@{}
+
     if ($PSBoundParameters.ContainsKey('OccurrenceId')) {
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
         $query.Add('occurrence_id', $OccurrenceId)

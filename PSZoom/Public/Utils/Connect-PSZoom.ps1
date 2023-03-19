@@ -3,7 +3,7 @@
 Use this cmdlet to retrieve a token from Zoom.
 
 .DESCRIPTION
-Assigns a token to the variable $Global:PSZoomToken which is used by all cmdlets when making requests to Zoom.
+Assigns a token to the variable $Script:PSZoomToken which is used by all cmdlets when making requests to Zoom.
 
 .EXAMPLE
 Connect-PSZoom -AccountID 'your_account_id' -ClientID 'your_client_id' -ClientSecret 'your_client_secret'
@@ -36,7 +36,7 @@ function Connect-PSZoom {
 
     try {
         $token = New-OAuthToken -AccountID $AccountID -ClientID $ClientID -ClientSecret $ClientSecret
-        $Global:PSZoomToken = $token
+        $Script:PSZoomToken = $token
     } catch {
         if ($_.exception.Response) {
             if ($PSVersionTable.PSVersion.Major -lt 6) {

@@ -43,7 +43,7 @@ function Get-ZoomCloudRecordingReport {
      )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/report/cloud_recording"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/report/cloud_recording"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
 
         if ($PSBoundParameters.ContainsKey('From')) {

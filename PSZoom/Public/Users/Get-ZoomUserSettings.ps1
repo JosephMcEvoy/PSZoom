@@ -57,7 +57,7 @@ function Get-ZoomUserSettings {
      )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/settings"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$UserId/settings"
 
         if ($PSBoundParameters.ContainsKey('LoginType')) {
             $LoginType = ConvertTo-LoginTypeCode -Code $LoginType

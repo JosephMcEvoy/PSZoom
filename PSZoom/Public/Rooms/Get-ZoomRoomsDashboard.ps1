@@ -85,7 +85,7 @@ function Get-ZoomRoomsDashboard {
      )
 
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/metrics/zoomrooms"
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/metrics/zoomrooms"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('page_size', $PageSize)
 

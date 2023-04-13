@@ -41,7 +41,7 @@ function Show-ZoomMeetingRecordings {
         $MeetingId = [uri]::EscapeDataString($MeetingId)
         $MeetingId = [uri]::EscapeDataString($MeetingId)
         
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/recordings/status"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId/recordings/status"
 
         
         $requestBody = @{}

@@ -36,7 +36,7 @@ function Get-ZoomPhoneSite {
 
     process {
         foreach ($id in $SiteId) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/phone/sites/$id"
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/sites/$id"
 
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 

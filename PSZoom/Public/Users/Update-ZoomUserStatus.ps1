@@ -51,7 +51,7 @@ function Update-ZoomUserStatus {
 
     process {
         foreach ($user in $UserId) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/status"
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$user/status"
             $requestBody = @{
                 'action' = $Action.ToLower()
             }

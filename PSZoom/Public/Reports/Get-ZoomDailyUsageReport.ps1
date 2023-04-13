@@ -39,7 +39,7 @@ function Get-ZoomDailyUsageReport {
     )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/report/daily"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/report/daily"
 
         if ($Year -or $Query) {
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  

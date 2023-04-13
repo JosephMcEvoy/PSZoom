@@ -67,7 +67,7 @@ function Get-ZoomPhoneSites {
     )
 
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/phone/sites"
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/sites"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('page_size', $PageSize)
         if ($NextPageToken) {

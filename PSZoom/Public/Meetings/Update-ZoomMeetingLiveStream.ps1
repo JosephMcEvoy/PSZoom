@@ -49,7 +49,7 @@ function Update-ZoomMeetingLiveStream {
      )
 
     process {
-        $uri = "https://api.zoom.us/v2/meetings/$MeetingId/livestream"
+        $uri = "https://api.$ZoomURI/v2/meetings/$MeetingId/livestream"
         $requestBody = @{
             'stream_url' = $StreamUrl
             'stream_key' = $StreamKey

@@ -32,7 +32,7 @@ function Get-ZoomAccount {
     )
 
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/accounts/$id"    
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/accounts/$id"    
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
         
         Write-Output $response

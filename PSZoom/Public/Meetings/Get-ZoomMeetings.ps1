@@ -98,7 +98,7 @@ function Get-ZoomMeetings {
 
     process {
         if ($PsCmdlet.ParameterSetName -eq 'Default') {
-                $Request = [System.UriBuilder]"https://api.zoom.us/v2/metrics/meetings"
+                $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/metrics/meetings"
                 $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
                 $query.Add('page_size', $PageSize)
                 $query.Add('type', $Type.ToLower())

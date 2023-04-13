@@ -110,7 +110,7 @@ function New-ZoomRoomMeeting {
 
     process {
         foreach ($id in $RoomId) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$id/meetings"  
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/rooms/$id/meetings"  
 
             $requestBody = @{
                 'jsonrpc' = $JsonRpc

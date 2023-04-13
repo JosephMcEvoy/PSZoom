@@ -122,7 +122,7 @@ function Get-ZoomActiveInactiveHostReports {
 
     process {
         if ($PsCmdlet.ParameterSetName -eq 'Default') {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/report/users"
+            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/report/users"
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
             $query.Add('from', $From)
             $query.Add('to', $To)

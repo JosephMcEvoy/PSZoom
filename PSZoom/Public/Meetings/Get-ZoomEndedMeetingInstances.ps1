@@ -28,7 +28,7 @@ function Get-ZoomEndedMeetingInstances {
      )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/past_meetings/$MeetingId/instances"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/past_meetings/$MeetingId/instances"
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
         
         Write-Output $response

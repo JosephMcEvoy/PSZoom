@@ -70,7 +70,7 @@ function Get-ZoomMeetingParticipantsReport {
     process {
         if ($PsCmdlet.ParameterSetName -eq 'Default') {
             foreach ($id in $MeetingId) {
-                $Request = [System.UriBuilder]"https://api.zoom.us/v2/report/meetings/$MeetingId/participants"
+                $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/report/meetings/$MeetingId/participants"
                 $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
                 $query.Add('page_size', $PageSize)
                 $query.Add('next_page_token', $NextPageToken)

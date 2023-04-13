@@ -30,7 +30,7 @@ function Get-ZoomMeetingPolls {
      )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/polls"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId/polls"
    
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
         

@@ -57,7 +57,7 @@ function Restart-ZoomRoom {
 
     process {
         foreach ($id in $RoomId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$id/zrclient"  
+            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/rooms/$id/zrclient"  
 
             $requestBody = @{
                 'jsonrpc' = $JsonRpc

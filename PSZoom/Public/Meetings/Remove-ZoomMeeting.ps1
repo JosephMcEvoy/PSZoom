@@ -44,7 +44,7 @@ function Remove-ZoomMeeting {
     )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId"
 
         if ($PSBoundParameters.ContainsKey('OccurrenceId') -or $PSBoundParameters.ContainsKey('ScheduleForReminder')) {
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)

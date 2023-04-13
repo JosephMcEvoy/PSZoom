@@ -75,7 +75,7 @@ function Add-ZoomIMDirectoryGroupMembers  {
         $requestBody = $requestBody | ConvertTo-Json
 
         foreach ($Id in $GroupId) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/im/groups/$Id/members"
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/im/groups/$Id/members"
             if ($PScmdlet.ShouldProcess($members, 'Add')) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method POST
 

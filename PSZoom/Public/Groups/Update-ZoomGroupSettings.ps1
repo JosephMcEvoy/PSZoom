@@ -554,7 +554,7 @@ function Update-ZoomGroupSettings  {
         $requestBody = $requestBody | ConvertTo-Json
 
         foreach ($id in $GroupId) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/settings"
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/groups/$GroupId/settings"
 
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
 

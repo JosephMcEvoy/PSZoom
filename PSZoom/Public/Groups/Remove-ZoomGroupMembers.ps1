@@ -47,7 +47,7 @@ function Remove-ZoomGroupMembers {
         foreach ($GroupId in $GroupIDs) {
             #Need to add API rate limiting
             foreach ($MemberId in $MemberIds) {
-                $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/members/$MemberId"
+                $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/groups/$GroupId/members/$MemberId"
                 
                 if ($PScmdlet.ShouldProcess) {
                     Write-Verbose "Removing $MemberId from $GroupId."

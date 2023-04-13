@@ -130,7 +130,7 @@ function Get-ZoomUsers {
      )
 
     process {
-        $Request = [System.UriBuilder]'https://api.zoom.us/v2/users/'
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('status', $Status)
         $query.Add('page_size', $PageSize)

@@ -56,7 +56,7 @@ function New-OAuthToken {
 
     )
 
-    $uri = "https://zoom.us/oauth/token?grant_type=account_credentials&account_id={0}" -f $AccountID
+    $uri = "https://{1}/oauth/token?grant_type=account_credentials&account_id={0}" -f $AccountID, $ZoomURI
 
     #Encoding of the client data
     $IDSecret = $ClientID + ":" + $ClientSecret 

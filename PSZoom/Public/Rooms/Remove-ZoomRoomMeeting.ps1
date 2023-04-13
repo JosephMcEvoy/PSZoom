@@ -117,7 +117,7 @@ function Remove-ZoomRoomMeeting {
 
     process {
         foreach ($Number in $MeetingNumber) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$RoomId/meetings"  
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/rooms/$RoomId/meetings"  
 
             $requestBody = @{
                 'jsonrpc'        = $JsonRpc

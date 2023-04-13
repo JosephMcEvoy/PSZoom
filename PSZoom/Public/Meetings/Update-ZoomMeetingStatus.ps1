@@ -38,7 +38,7 @@ function Update-ZoomMeetingStatus {
     )
 
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/status"
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId/status"
 
         $requestBody = @{
             'action' = $Action

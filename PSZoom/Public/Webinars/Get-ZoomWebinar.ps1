@@ -53,7 +53,7 @@ function Get-ZoomWebinar {
     )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/webinars/$webinarId"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/webinars/$webinarId"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         
 

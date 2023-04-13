@@ -37,7 +37,7 @@ function Get-ZoomPhoneSettingTemplate {
 
     process {
         foreach ($id in $TemplateId) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/phone/setting_templates/$id"
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/setting_templates/$id"
 
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 

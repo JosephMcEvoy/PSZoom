@@ -344,7 +344,7 @@ function Update-ZoomMeeting {
   )
     
   process {
-    $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId"
+    $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId"
 
     $requestBody=@{}
 

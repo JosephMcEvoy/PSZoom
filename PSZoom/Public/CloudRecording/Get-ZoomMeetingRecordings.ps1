@@ -37,7 +37,7 @@ function Get-ZoomMeetingRecordings {
      )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/recordings"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId/recordings"
 
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
 

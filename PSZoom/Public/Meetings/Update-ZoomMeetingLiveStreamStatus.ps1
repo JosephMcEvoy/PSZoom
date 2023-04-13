@@ -43,7 +43,7 @@ function Update-ZoomMeetingLiveStreamStatus {
      )
 
     process {
-        $Uri = "https://api.zoom.us/v2/meetings/$MeetingId/livestream/status"
+        $Uri = "https://api.$ZoomURI/v2/meetings/$MeetingId/livestream/status"
         $requestBody = @{}
 
         if ($PSBoundParameters.ContainsKey('StreamUrl')) {

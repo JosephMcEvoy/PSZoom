@@ -157,7 +157,7 @@ function Add-ZoomMeetingRegistrant {
     )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/registrants"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId/registrants"
 
         if ($PSBoundParameters.ContainsKey('OcurrenceIds')) {
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty) 

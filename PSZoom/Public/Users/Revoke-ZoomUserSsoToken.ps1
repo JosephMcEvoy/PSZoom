@@ -37,7 +37,7 @@ function Revoke-ZoomUserSsoToken {
 
     process {
         foreach ($user in $UserId) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/token"
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$user/token"
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
 
             if ($Passthru) {

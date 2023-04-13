@@ -92,7 +92,7 @@ function Get-ZoomAccountRecordings {
 
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/accounts/$AccountId/recordings"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/accounts/$AccountId/recordings"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
 
         if ($PSBoundParameters.ContainsKey('PageSize')) {

@@ -21,7 +21,7 @@ function Get-ZoomPhoneCallingPlans {
 
     process {
         $request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/calling_plans"        
-        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
+        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET | Select-Object -ExpandProperty calling_plans
         
         Write-Output $response        
     }	

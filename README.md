@@ -103,12 +103,18 @@ Update-ZoomMeetingRegistrationQuestions
 Update-ZoomMeetingStatus  
   
 ## Phones ##  
-Get-ZoomPhoneCallingPlans  
+Add-ZoomPhoneUserCallingPlans
+Add-ZoomPhoneUserNumber
+Get-ZoomPhoneCallingPlans
+Get-ZoomPhoneNumbers  
 Get-ZoomPhoneSettingTemplate  
 Get-ZoomPhoneSettingTemplates  
 Get-ZoomPhoneUser  
 Get-ZoomPhoneUsers  
-Get-ZoomPhoneUserSettings  
+Get-ZoomPhoneUserSettings
+Remove-ZoomPhoneUserCallingPlans
+Remove-ZoomPhoneUserNumber
+Update-ZoomPhoneUserCallingPlans  
 
 ## Phone Sites ##  
 Get-ZoomPhoneSite  

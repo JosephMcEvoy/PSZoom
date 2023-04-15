@@ -58,7 +58,7 @@ function Add-ZoomPhoneUserNumber {
 
             }
 
-            $NumberInfo = Get-ZoomPhoneNumbers | Where-object Number -eq $number 
+            $NumberInfo = Get-ZoomPhoneNumbers -ErrorAction Stop | Where-object Number -eq $number 
 
             if (!($NumberInfo)) {
 

@@ -1,10 +1,10 @@
 <#
 
 .SYNOPSIS
-View site emergency address information.
+View site zoom phone user settings templates.
 
 .DESCRIPTION
-View site emergency address information.
+View site zoom phone user settings templates.
 
 .PARAMETER SiteId
 The site ID.
@@ -20,19 +20,19 @@ of available results exceeds the current page size. The expiration period for th
 An object with the Zoom API response.
 
 .EXAMPLE
-Retrieve a site's info.
-Get-ZoomPhoneSiteEmergencyAddress -SiteId ##########
+Retrieve a site's settings templates.
+Get-ZoomPhoneSettingsTemplates -SiteId ##########
 
 .EXAMPLE
 Retrieve inforation for all sites.
-Get-ZoomPhoneSiteEmergencyAddress
+Get-ZoomPhoneSettingsTemplates
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/listSettingTemplates
 
 #>
 
-function Get-ZoomPhoneSiteEmergencyAddress {
+function Get-ZoomPhoneSettingsTemplates {
     [CmdletBinding(DefaultParameterSetName="AllData")]
     param (
         [Parameter(
@@ -59,7 +59,7 @@ function Get-ZoomPhoneSiteEmergencyAddress {
 
     process {
 
-        $BASEURI = "https://api.$ZoomURI/v2/phone/emergency_addresses"
+        $BASEURI = "https://api.$ZoomURI/v2/phone/setting_templates"
 
         switch ($PSCmdlet.ParameterSetName) {
 
@@ -105,9 +105,9 @@ function Get-ZoomPhoneSiteEmergencyAddress {
                     $request.Query = $query.ToString()
                     
                     $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
-                    
+
                     if ($response.total_records -ne 0) {
-                        $AggregatedResponse += $response | Select-Object -ExpandProperty emergency_addresses
+                        $AggregatedResponse += $response | Select-Object -ExpandProperty templates
                     }
 
                 } until (!($response.next_page_token))

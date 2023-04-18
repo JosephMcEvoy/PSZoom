@@ -6,6 +6,11 @@ List all Zoom Phone numbers that are associated with account Account.
 .DESCRIPTION
 List all Zoom Phone numbers that are associated with account Account.
 
+.PARAMETER Assigned
+List all numbers that are assigned to Zoom Phone users.
+
+.PARAMETER Unassigned
+List all numbers that are unassigned.
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/listAccountPhoneNumbers
@@ -16,27 +21,60 @@ Get-ZoomPhoneNumbers
 
 function Get-ZoomPhoneNumbers {
 
-    [CmdletBinding()]
-    param ()
+    [CmdletBinding(DefaultParameterSetName="AllData")]
+    param (
+        [parameter(ParameterSetName="Assigned")]
+        [switch]$Assigned = $False,
+
+        [parameter(ParameterSetName="Unassigned")]
+        [switch]$Unassigned = $False
+
+    )
 
     process {
-        $page_size = '100'
-        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/numbers?page_size=$page_size"        
-        $QueryAmount = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop | Select-Object -ExpandProperty total_records
-        $TotalQueries = [math]::ceiling($QueryAmount/100)
+
+        $BASEURI = "https://api.$ZoomURI/v2/phone/numbers"
+        $PageSize = 30
+        $AggregatedResponse = @()
 
         do {
 
+            $request = [System.UriBuilder]$BASEURI
+            $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
+            $query.Add('page_size', $PageSize)
+            if ($response.next_page_token) {
+                $query.Add('next_page_token', $response.next_page_token)
+            }
+            $request.Query = $query.ToString()
+            
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
-            $next_page_token = $response | Select-Object -ExpandProperty next_page_token
-            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/numbers?page_size=$page_size&next_page_token=$next_page_token"
-            $TotalQueries += -1
-            $AllNumbers += $response | Select-Object -ExpandProperty phone_numbers
+            
+            if ($response.total_records -ne 0) {
+                $AggregatedResponse += $response | Select-Object -ExpandProperty phone_numbers
+            }
 
-        } until ($TotalQueries -eq 0)
+        } until (!($response.next_page_token))
 
         
-        
-        Write-Output $AllNumbers        
+
+
+        switch ($PSCmdlet.ParameterSetName) {
+
+            "Assigned" {
+
+                Write-Output $AggregatedResponse | Where-Object {$_.PSobject.Properties.name -match "assignee"}
+
+            }
+            "Unassigned" {
+                # -notmatch did not return expected results
+                Write-Output $AggregatedResponse | Where-Object {!($_.PSobject.Properties.name -match "assignee")}
+
+            }
+            "AllData" {
+
+                Write-Output $AggregatedResponse
+
+            }
+        }
     }	
 }

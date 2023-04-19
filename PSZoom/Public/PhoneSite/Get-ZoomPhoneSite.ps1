@@ -33,7 +33,7 @@ function Get-ZoomPhoneSite {
     [CmdletBinding(DefaultParameterSetName="AllData")]
     param (
         [Parameter(
-            ParameterSetName="SingleRecord",
+            ParameterSetName="SelectedRecord",
             Mandatory = $True, 
             Position = 0, 
             ValueFromPipeline = $True,
@@ -74,14 +74,14 @@ function Get-ZoomPhoneSite {
 
 
             }
-            "SingleRecord" {
+            "SelectedRecord" {
 
                 $AggregatedResponse = @()
 
                 foreach ($id in $SiteId) {
                     $request = [System.UriBuilder]$BASEURI
                     $request.path = "{0}/{1}" -f $request.path, $id 
-                    $AggregatedResponse = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
+                    $AggregatedResponse += Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
 
                 }
 

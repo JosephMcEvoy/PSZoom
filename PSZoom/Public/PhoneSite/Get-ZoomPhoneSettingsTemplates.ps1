@@ -6,7 +6,7 @@ View site zoom phone user settings templates.
 .DESCRIPTION
 View site zoom phone user settings templates.
 
-.PARAMETER SiteId
+.PARAMETER templateId
 The site ID.
 
 .PARAMETER PageSize
@@ -21,7 +21,7 @@ An object with the Zoom API response.
 
 .EXAMPLE
 Retrieve a site's settings templates.
-Get-ZoomPhoneSettingsTemplates -SiteId ##########
+Get-ZoomPhoneSettingsTemplates -templateId ##########
 
 .EXAMPLE
 Retrieve inforation for all sites.
@@ -36,14 +36,14 @@ function Get-ZoomPhoneSettingsTemplates {
     [CmdletBinding(DefaultParameterSetName="AllData")]
     param (
         [Parameter(
-            ParameterSetName="SingleRecord",
+            ParameterSetName="SelectedRecord",
             Mandatory = $True, 
             Position = 0, 
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('id', 'site_id')]
-        [string[]]$SiteId,
+        [string[]]$templateId,
 
         [parameter(ParameterSetName="NextRecords")]
         [ValidateRange(1, 100)]
@@ -77,14 +77,14 @@ function Get-ZoomPhoneSettingsTemplates {
 
 
             }
-            "SingleRecord" {
+            "SelectedRecord" {
 
                 $AggregatedResponse = @()
 
-                foreach ($id in $SiteId) {
+                foreach ($id in $templateId) {
                     $request = [System.UriBuilder]$BASEURI
                     $request.path = "{0}/{1}" -f $request.path, $id 
-                    $AggregatedResponse = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
+                    $AggregatedResponse += Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
 
                 }
 

@@ -131,38 +131,18 @@ function Get-ZoomPhoneNumbers {
 
                 $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
 
-
+                #$MyInvocation.MyCommand.Name
                  
-                if ($Full -and ($PSVersionTable.PSVersion.Major -ge 7)) {
 
-                    $TempAggregatedResponse = $AggregatedResponse
-                    $AggregatedResponse = [System.Collections.Concurrent.ConcurrentBag[psobject]]::new()
+                
 
-                    $TempAggregatedResponse | ForEach-Object -Parallel {
 
-                        $Script:PSZoomToken =  $using:PSZoomToken
-                        $Script:ZoomURI = $using:ZoomURI
-                        $localAggregatedResponse = $using:AggregatedResponse
-                        import-module PSZoom
 
-                        $localAggregatedResponse.Add($(Get-ZoomPhoneNumbers -PhoneNumberId $_.id))
+                if ($Full) {
 
-                    } -ThrottleLimit 10  #Recommended amount for Pro users.  If 429 is returned this number may need to be lowered.  See Rate limit details.
-                    
+                    $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
+                    $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
 
-                }elseif ($Full) {
-
-                    $TempAggregatedResponse = $AggregatedResponse
-                    $AggregatedResponse = @()
-
-                    $TempAggregatedResponse | ForEach-Object {
-
-                        
-                        Write-Progress -Activity "Query Zoom API" -Status "$([math]::Round(($AggregatedResponse.count/$TempAggregatedResponse.count)*100))% Complete" -PercentComplete ([math]::Round(($AggregatedResponse.count/$TempAggregatedResponse.count)*100))
-                        $AggregatedResponse += Get-ZoomPhoneNumbers -PhoneNumberId $_.Id
-                        
-
-                    }
                 }
             }
         }

@@ -11,7 +11,7 @@ Iterate through paginated pages to consolidate data or locate records.
 Name of function to pass objects into.
 
 .EXAMPLE
-Get-ZoomItemFullDetails -ObjectIds $ArrayOfObjects -CmdletToRun 'Get-ZoomPhoneNumbers'
+Get-ZoomItemFullDetails -ObjectIds $ArrayOfObjects -CmdletToRun 'Get-ZoomPhoneNumber'
 
 .OUTPUTS
 Array of objects.
@@ -36,7 +36,7 @@ function Get-ZoomItemFullDetails {
         [string[]]$ObjectIds,
         
         [Parameter(Mandatory = $True)]
-        [ValidateSet("Get-ZoomPhoneCommonArea","Get-ZoomPhoneNumbers")]
+        [ValidateSet("Get-ZoomPhoneCommonArea","Get-ZoomPhoneNumber")]
         [string]$CmdletToRun
 
     )

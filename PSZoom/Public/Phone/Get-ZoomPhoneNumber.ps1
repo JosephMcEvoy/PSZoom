@@ -29,25 +29,25 @@ List all numbers that are unassigned.
 An array of Objects
 
 .EXAMPLE
-$AllData = Get-ZoomPhoneNumbers
+$AllData = Get-ZoomPhoneNumber
 
 .EXAMPLE
-$SomeData = Get-ZoomPhoneNumbers -ObjectId $SpecificIDsToQuery
+$SomeData = Get-ZoomPhoneNumber -ObjectId $SpecificIDsToQuery
 
 .EXAMPLE
-$RawData = Get-ZoomPhoneNumbers -PageSize 50 -NextPageToken $reponse.next_page_token
+$RawData = Get-ZoomPhoneNumber -PageSize 50 -NextPageToken $reponse.next_page_token
 
 .EXAMPLE
-$RawData = Get-ZoomPhoneNumbers -PageSize 50
+$RawData = Get-ZoomPhoneNumber -PageSize 50
 
 .EXAMPLE
-$AllData = Get-ZoomPhoneNumbers -Full
+$AllData = Get-ZoomPhoneNumber -Full
 
 .EXAMPLE
-$RawData = Get-ZoomPhoneNumbers -Assigned
+$RawData = Get-ZoomPhoneNumber -Assigned
 
 .EXAMPLE
-$AllData = Get-ZoomPhoneNumbers -Unassigned
+$AllData = Get-ZoomPhoneNumber -Unassigned
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/listAccountPhoneNumbers
@@ -55,7 +55,7 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/list
 
 #>
 
-function Get-ZoomPhoneNumbers {
+function Get-ZoomPhoneNumber {
 
     [CmdletBinding(DefaultParameterSetName="AllData")]
     param ( [Parameter(

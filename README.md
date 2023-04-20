@@ -106,7 +106,7 @@ Update-ZoomMeetingStatus
 Add-ZoomPhoneUserCallingPlans
 Add-ZoomPhoneUserNumber
 Get-ZoomPhoneCallingPlans
-Get-ZoomPhoneNumbers  
+Get-ZoomPhoneNumber  
 Get-ZoomPhoneSettingTemplate  
 Get-ZoomPhoneSettingTemplates  
 Get-ZoomPhoneUser  

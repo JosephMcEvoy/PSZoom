@@ -6,7 +6,7 @@ Add an available phone number to a Zoom User.
 .PARAMETER Number
 Phone number to be assigned to zoom user.
 Use following command to get available phone numbers for Zoom instance.
-Get-ZoomPhoneNumbers
+Get-ZoomPhoneNumber
 
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
@@ -58,7 +58,7 @@ function Add-ZoomPhoneUserNumber {
 
             }
 
-            $NumberInfo = Get-ZoomPhoneNumbers -ErrorAction Stop | Where-object Number -eq $number 
+            $NumberInfo = Get-ZoomPhoneNumber -ErrorAction Stop | Where-object Number -eq $number 
 
             if (!($NumberInfo)) {
 

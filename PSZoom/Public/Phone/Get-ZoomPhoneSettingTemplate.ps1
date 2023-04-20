@@ -13,7 +13,7 @@ The TemplateID.
 An object with the Zoom API response.
 
 .LINK
-https://marketplace.zoom.us/docs/api-reference/zoom-api/phone/getsettingtemplate
+https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/listSettingTemplates
 
 .EXAMPLE
 Return the Zoom phone setting template details of.

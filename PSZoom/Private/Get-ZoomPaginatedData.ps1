@@ -92,7 +92,6 @@ function Get-ZoomPaginatedData {
                     $query.Add('next_page_token', $NextPageToken)
                 }
                 $request.Query = $query.ToString()
-                $testout = $request
                 
                 $AggregatedResponse = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
         

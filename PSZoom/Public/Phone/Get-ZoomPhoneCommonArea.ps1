@@ -95,36 +95,11 @@ function Get-ZoomPhoneCommonArea {
         
         
         
-        if ($Full -and ($PSVersionTable.PSVersion.Major -ge 7)) {
+        if ($Full) {
 
-            $TempAggregatedResponse = $AggregatedResponse
-            $AggregatedResponse = [System.Collections.Concurrent.ConcurrentBag[psobject]]::new()
+            $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
+            $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
 
-            $TempAggregatedResponse | ForEach-Object -Parallel {
-
-                $Script:PSZoomToken =  $using:PSZoomToken
-                $Script:ZoomURI = $using:ZoomURI
-                $localAggregatedResponse = $using:AggregatedResponse
-                import-module PSZoom
-
-                $localAggregatedResponse.Add($(Get-ZoomPhoneCommonArea -CommonAreaId $_.id))
-
-            } -ThrottleLimit 10  #Recommended amount for Pro users.  If 429 is returned this number may need to be lowered.  See Rate limit details.
-            
-
-        }elseif ($Full) {
-
-            $TempAggregatedResponse = $AggregatedResponse
-            $AggregatedResponse = @()
-
-            $TempAggregatedResponse | ForEach-Object {
-
-                
-                Write-Progress -Activity "Query Zoom API" -Status "$([math]::Round(($AggregatedResponse.count/$TempAggregatedResponse.count)*100))% Complete" -PercentComplete ([math]::Round(($AggregatedResponse.count/$TempAggregatedResponse.count)*100))
-                $AggregatedResponse += Get-ZoomPhoneCommonArea -CommonAreaId $_.Id
-                
-
-            }
         }
         
         Write-Output $AggregatedResponse 

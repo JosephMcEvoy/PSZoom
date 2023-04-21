@@ -24,6 +24,7 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/assi
 #>
 
 function Add-ZoomPhoneUserNumber {    
+    [alias("Add-ZoomPhoneUserNumbers")]
     [CmdletBinding(SupportsShouldProcess = $True)]
     Param(
         [Parameter(

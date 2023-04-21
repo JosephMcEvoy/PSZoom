@@ -56,7 +56,7 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/list
 #>
 
 function Get-ZoomPhoneNumber {
-
+    [alias("Get-ZoomPhoneNumbers")]
     [CmdletBinding(DefaultParameterSetName="AllData")]
     param ( [Parameter(
             ParameterSetName="SelectedRecord",

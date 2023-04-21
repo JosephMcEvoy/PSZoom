@@ -15,7 +15,8 @@ Return the list of all Calling plans.
 Get-ZoomPhoneCallingPlans
 #>
 
-function Get-ZoomPhoneCallingPlans {
+function Get-ZoomPhoneCallingPlan {
+    [alias("Get-ZoomPhoneCallingPlans")]
     [CmdletBinding()]
     param ()
 

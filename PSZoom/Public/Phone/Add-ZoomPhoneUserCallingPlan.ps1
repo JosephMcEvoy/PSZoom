@@ -22,7 +22,8 @@ https://developers.zoom.us/docs/api/rest/other-references/plans/
 
 #>
 
-function Add-ZoomPhoneUserCallingPlans {    
+function Add-ZoomPhoneUserCallingPlan {    
+    [alias("Add-ZoomPhoneUserCallingPlans")]
     [CmdletBinding(SupportsShouldProcess = $True)]
     Param(
         [Parameter(

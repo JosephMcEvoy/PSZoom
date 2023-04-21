@@ -1,48 +1,127 @@
 <#
 
 .SYNOPSIS
-View specific user Zoom Phone account.
+List users on a Zoom account who have been assigned Zoom Phone licenses.
 
 .DESCRIPTION
-View specific user Zoom Phone account.
+List users on a Zoom account who have been assigned Zoom Phone licenses. 
 
 .PARAMETER UserId
-The user ID or email address.
+Unique Identifier of the user.
 
+.PARAMETER SiteId
+Unique Identifier of the site. This can be found in the ListPhoneSites API.
 
-.OUTPUTS
-An object with the Zoom API response.
+.PARAMETER PageSize
+The number of records returned within a single API call (Min 30 - MAX 100).
 
-.EXAMPLE
-Retrieve a user's phone info.
-Get-ZoomPhoneUser jsmith@lawfirm.com
+.PARAMETER NextPageToken
+The next page token is used to paginate through large result sets. A next page token will be returned whenever the set 
+of available results exceeds the current page size. The expiration period for this token is 15 minutes.
+
+.PARAMETER Full
+When using -Full switch, receive the full JSON Response to see the next_page_token.
 
 .LINK
-https://marketplace.zoom.us/docs/api-reference/zoom-api/phone/phoneuser
+https://marketplace.zoom.us/docs/api-reference/zoom-api/phone/listphoneusers
+
+.EXAMPLE
+Return the first page of Zoom phone users.
+Get-ZoomPhoneUsers
+
+.EXAMPLE
+Return the first page of Zoom phone users in Site. To find Site ID refer to Get-ZoomPhoneSites
+Get-ZoomPhoneUsers ######
+
+.EXAMPLE
+Return Zoom phone sites including the next_page_tokens.
+Get-ZoomPhoneUsers -SiteId ###### -Full
 
 #>
 
 function Get-ZoomPhoneUser {
-    [CmdletBinding()]
+    
+    [CmdletBinding(DefaultParameterSetName="AllData")]
+    [Alias("Get-ZoomPhoneUsers")]
     param (
         [Parameter(
+            ParameterSetName="SelectedRecord",
             Mandatory = $True, 
             Position = 0, 
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('email', 'emailaddress', 'id', 'user_id', 'ids', 'userids', 'emails', 'emailaddresses')]
-        [string[]]$UserId
+        [Alias('id', 'User_Id')]
+        [string[]]$UserId,
+
+        [Parameter(
+            ParameterSetName="SpecificSite",
+            Mandatory = $False, 
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('site_id')]
+        [string[]]$SiteId,
+
+        [parameter(ParameterSetName="NextRecords")]
+        [ValidateRange(1, 100)]
+        [Alias('page_size')]
+        [int]$PageSize = 100,
+		
+        # The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
+        [parameter(ParameterSetName="NextRecords")]
+        [Alias('next_page_token')]
+        [string]$NextPageToken,
+
+        [parameter(ParameterSetName="SpecificSite")]
+        [parameter(ParameterSetName="AllData")]
+        [switch]$Full = $False
+
+
      )
 
     process {
-        foreach ($id in $UserId) {
 
-            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$id"
+        $BASEURI = "https://api.$ZoomURI/v2/phone/users"
 
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
+        switch ($PSCmdlet.ParameterSetName) {
 
-            Write-Output $response
+            "NextRecords" {
+
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize $PageSize -NextPageToken $NextPageToken
+
+            }
+            "SelectedRecord" {
+
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -ObjectId $UserId
+
+            }
+            "AllData" {
+
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize 100
+
+            }
+            "SpecificSite" {
+
+                $AggregatedResponse = @()
+                $SiteId | foreach-object {
+
+                    $QueryStatements = @{"site_id" = $_}
+                    $AggregatedResponse += Get-ZoomPaginatedData -URI $BASEURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
+
+                }
+            }
         }
-    }
+    
+    
+        if ($Full) {
+
+            $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
+            $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
+
+        }
+
+        Write-Output $AggregatedResponse 
+    
+    } 
 }

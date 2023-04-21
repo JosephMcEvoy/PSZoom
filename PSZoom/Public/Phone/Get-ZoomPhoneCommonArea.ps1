@@ -43,8 +43,9 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/list
 #>
 
 function Get-ZoomPhoneCommonArea {
-    [alias("Get-ZoomPhoneCommonAreas")]
+
     [CmdletBinding(DefaultParameterSetName="AllData")]
+    [Alias("Get-ZoomPhoneCommonAreas")]
     param (
         [Parameter(
             ParameterSetName="SelectedRecord",
@@ -94,15 +95,13 @@ function Get-ZoomPhoneCommonArea {
             }
         }
         
-        
-        
         if ($Full) {
 
             $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
             $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
 
         }
-        
+
         Write-Output $AggregatedResponse 
         
     }

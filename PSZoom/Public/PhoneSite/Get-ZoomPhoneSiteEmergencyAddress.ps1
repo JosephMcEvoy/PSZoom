@@ -1,13 +1,13 @@
 <#
 
 .SYNOPSIS
-View site zoom phone user settings templates.
+View site emergency address information.
 
 .DESCRIPTION
-View site zoom phone user settings templates.
+View site emergency address information.
 
-.PARAMETER templateId
-The site ID.
+.PARAMETER EmergencyAddressId
+The Emergency Address Id to be queried.
 
 .PARAMETER PageSize
 The number of records returned within a single API call (Min 30 - MAX 100).
@@ -23,21 +23,25 @@ The full details of each Common Area Phone.
 An object with the Zoom API response.
 
 .EXAMPLE
-Retrieve a site's settings templates.
-Get-ZoomPhoneSettingsTemplates -templateId ##########
+Retrieve a specific Emergency Address.
+Get-ZoomPhoneSiteEmergencyAddress -EmergencyAddressId ##########
 
 .EXAMPLE
-Retrieve inforation for all sites.
-Get-ZoomPhoneSettingsTemplates
+Retrieve inforation for all Emergency Addresses.
+Get-ZoomPhoneSiteEmergencyAddress
+
+.EXAMPLE
+Retrieve detailed inforation for Emergency Addresses.
+Get-ZoomPhoneSiteEmergencyAddress -Full
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/listSettingTemplates
 
 #>
 
-function Get-ZoomPhoneSettingsTemplate {
-    
-    [alias("Get-ZoomPhoneSettingsTemplates")]
+function Get-ZoomPhoneSiteEmergencyAddress {
+
+    [alias("Get-ZoomPhoneSiteEmergencyAddresses")]
     [CmdletBinding(DefaultParameterSetName="AllData")]
     param ( 
         [Parameter(
@@ -47,8 +51,17 @@ function Get-ZoomPhoneSettingsTemplate {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('id', 'site_id')]
-        [string[]]$templateId,
+        [Alias('id', 'Emergency_Address_Id')]
+        [string[]]$EmergencyAddressId,
+
+        [Parameter(
+            ParameterSetName="SpecificSite",
+            Mandatory = $False, 
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('site_id')]
+        [string[]]$SiteId,
 
         [parameter(ParameterSetName="NextRecords")]
         [ValidateRange(1, 100)]
@@ -60,6 +73,7 @@ function Get-ZoomPhoneSettingsTemplate {
         [Alias('next_page_token')]
         [string]$NextPageToken,
 
+        [parameter(ParameterSetName="SpecificSite")]
         [parameter(ParameterSetName="AllData")]
         [switch]$Full = $False
 
@@ -67,7 +81,7 @@ function Get-ZoomPhoneSettingsTemplate {
 
     process {
 
-        $BASEURI = "https://api.$ZoomURI/v2/phone/setting_templates"
+        $BASEURI = "https://api.$ZoomURI/v2/phone/emergency_addresses"
 
         switch ($PSCmdlet.ParameterSetName) {
 
@@ -78,23 +92,35 @@ function Get-ZoomPhoneSettingsTemplate {
             }
             "SelectedRecord" {
 
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -ObjectId $templateId
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -ObjectId $EmergencyAddressId
 
             }
             "AllData" {
 
                 $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize 100
 
-                if ($Full) {
+            }
+            "SpecificSite" {
 
-                    $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
-                    $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
+                $AggregatedResponse = @()
+                $SiteId | foreach-object {
+
+                    $QueryStatements = @{"site_id" = $_}
+                    $AggregatedResponse += Get-ZoomPaginatedData -URI $BASEURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
 
                 }
             }
         }
 
-        Write-Output $AggregatedResponse
+        if ($Full) {
 
-    }	
+            $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
+            $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
+
+        }
+
+        Write-Output $AggregatedResponse 
+
+    }
+
 }

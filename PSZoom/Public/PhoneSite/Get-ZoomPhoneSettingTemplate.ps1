@@ -1,13 +1,13 @@
 <#
 
 .SYNOPSIS
-View site emergency address information.
+View zoom phone user settings templates.
 
 .DESCRIPTION
-View site emergency address information.
+View zoom phone user settings templates.
 
-.PARAMETER EmergencyAddressId
-The site ID.
+.PARAMETER templateId
+The template Id to be queried.
 
 .PARAMETER PageSize
 The number of records returned within a single API call (Min 30 - MAX 100).
@@ -17,27 +17,31 @@ The next page token is used to paginate through large result sets. A next page t
 of available results exceeds the current page size. The expiration period for this token is 15 minutes.
 
 .PARAMETER Full
-The full details of each Common Area Phone.
+The full details of each settings templates.
 
 .OUTPUTS
-An object with the Zoom API response.
+An array of Objects
 
 .EXAMPLE
-Retrieve a site's info.
-Get-ZoomPhoneSiteEmergencyAddress -EmergencyAddressId ##########
+Retrieve a site's settings templates.
+Get-ZoomPhoneSettingsTemplates -templateId ##########
 
 .EXAMPLE
-Retrieve inforation for all sites.
-Get-ZoomPhoneSiteEmergencyAddress
+Retrieve inforation for all settings templates.
+Get-ZoomPhoneSettingsTemplates
+
+.EXAMPLE
+Retrieve detailed inforation for all settings templates.
+Get-ZoomPhoneSettingsTemplates -Full
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/listSettingTemplates
 
 #>
 
-function Get-ZoomPhoneSiteEmergencyAddress {
-
-    [alias("Get-ZoomPhoneSiteEmergencyAddresses")]
+function Get-ZoomPhoneSettingTemplate {
+    
+    [alias("Get-ZoomPhoneSettingsTemplates")]
     [CmdletBinding(DefaultParameterSetName="AllData")]
     param ( 
         [Parameter(
@@ -47,8 +51,17 @@ function Get-ZoomPhoneSiteEmergencyAddress {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('id', 'site_id')]
-        [string[]]$EmergencyAddressId,
+        [Alias('id', 'template_Id')]
+        [string[]]$templateId,
+
+        [Parameter(
+            ParameterSetName="SpecificSite",
+            Mandatory = $False, 
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('site_id')]
+        [string[]]$SiteId,
 
         [parameter(ParameterSetName="NextRecords")]
         [ValidateRange(1, 100)]
@@ -61,13 +74,14 @@ function Get-ZoomPhoneSiteEmergencyAddress {
         [string]$NextPageToken,
 
         [parameter(ParameterSetName="AllData")]
+        [parameter(ParameterSetName="SpecificSite")]
         [switch]$Full = $False
 
     )
 
     process {
 
-        $BASEURI = "https://api.$ZoomURI/v2/phone/emergency_addresses"
+        $BASEURI = "https://api.$ZoomURI/v2/phone/setting_templates"
 
         switch ($PSCmdlet.ParameterSetName) {
 
@@ -78,24 +92,34 @@ function Get-ZoomPhoneSiteEmergencyAddress {
             }
             "SelectedRecord" {
 
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -ObjectId $EmergencyAddressId
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -ObjectId $templateId
 
             }
             "AllData" {
 
                 $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize 100
 
-                if ($Full) {
+            }
+            "SpecificSite" {
 
-                    $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty id
-                    $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
+                $AggregatedResponse = @()
+                $SiteId | foreach-object {
+
+                    $QueryStatements = @{"site_id" = $_}
+                    $AggregatedResponse += Get-ZoomPaginatedData -URI $BASEURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
 
                 }
             }
         }
 
-        Write-Output $AggregatedResponse 
+        if ($Full) {
 
-    }
+            $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
+            $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
 
+        }
+
+        Write-Output $AggregatedResponse
+
+    }	
 }

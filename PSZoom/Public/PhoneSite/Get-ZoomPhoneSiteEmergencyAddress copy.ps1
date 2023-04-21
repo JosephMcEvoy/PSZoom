@@ -16,6 +16,9 @@ The number of records returned within a single API call (Min 30 - MAX 100).
 The next page token is used to paginate through large result sets. A next page token will be returned whenever the set 
 of available results exceeds the current page size. The expiration period for this token is 15 minutes.
 
+.PARAMETER Full
+The full details of each Common Area Phone.
+
 .OUTPUTS
 An object with the Zoom API response.
 
@@ -33,8 +36,10 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/list
 #>
 
 function Get-ZoomPhoneSiteEmergencyAddress {
+
+    [alias("Get-ZoomPhoneSiteEmergencyAddresses")]
     [CmdletBinding(DefaultParameterSetName="AllData")]
-    param (
+    param ( 
         [Parameter(
             ParameterSetName="SelectedRecord",
             Mandatory = $True, 
@@ -48,14 +53,17 @@ function Get-ZoomPhoneSiteEmergencyAddress {
         [parameter(ParameterSetName="NextRecords")]
         [ValidateRange(1, 100)]
         [Alias('page_size')]
-        [int]$PageSize = 30,
+        [int]$PageSize = 100,
 		
         # The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
         [parameter(ParameterSetName="NextRecords")]
         [Alias('next_page_token')]
-        [string]$NextPageToken
+        [string]$NextPageToken,
 
-     )
+        [parameter(ParameterSetName="AllData")]
+        [switch]$Full = $False
+
+    )
 
     process {
 
@@ -65,55 +73,25 @@ function Get-ZoomPhoneSiteEmergencyAddress {
 
             "NextRecords" {
 
-                $request = [System.UriBuilder]$BASEURI
-                $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-                $query.Add('page_size', $PageSize)
-                if ($NextPageToken) {
-                    $query.Add('next_page_token', $NextPageToken)
-                }
-                $request.Query = $query.ToString()
-                
-                $AggregatedResponse = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
-
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize $PageSize -NextPageToken $NextPageToken
 
             }
             "SelectedRecord" {
 
-                $AggregatedResponse = @()
-
-                foreach ($id in $emergencyAddressId) {
-                    $request = [System.UriBuilder]$BASEURI
-                    $request.path = "{0}/{1}" -f $request.path, $id 
-                    $AggregatedResponse += Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
-
-                }
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -ObjectId $EmergencyAddressId
 
             }
             "AllData" {
 
-                $PageSize = 30
-                $AggregatedResponse = @()
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize 100
 
-                do {
+                if ($Full) {
 
-                    $request = [System.UriBuilder]$BASEURI
-                    $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-                    $query.Add('page_size', $PageSize)
-                    if ($response.next_page_token) {
-                        $query.Add('next_page_token', $response.next_page_token)
-                    }
-                    $request.Query = $query.ToString()
-                    
-                    $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
-                    
-                    if ($response.total_records -ne 0) {
-                        $AggregatedResponse += $response | Select-Object -ExpandProperty emergency_addresses
-                    }
+                    $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty id
+                    $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
 
-                } until (!($response.next_page_token))
-
+                }
             }
-
         }
 
         Write-Output $AggregatedResponse 

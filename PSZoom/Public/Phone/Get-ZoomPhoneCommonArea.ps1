@@ -43,6 +43,7 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/list
 #>
 
 function Get-ZoomPhoneCommonArea {
+    [alias("Get-ZoomPhoneCommonAreas")]
     [CmdletBinding(DefaultParameterSetName="AllData")]
     param (
         [Parameter(

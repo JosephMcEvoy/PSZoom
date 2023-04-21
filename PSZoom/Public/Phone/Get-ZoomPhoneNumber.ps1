@@ -35,12 +35,6 @@ $AllData = Get-ZoomPhoneNumber
 $SomeData = Get-ZoomPhoneNumber -ObjectId $SpecificIDsToQuery
 
 .EXAMPLE
-$RawData = Get-ZoomPhoneNumber -PageSize 50 -NextPageToken $reponse.next_page_token
-
-.EXAMPLE
-$RawData = Get-ZoomPhoneNumber -PageSize 50
-
-.EXAMPLE
 $AllData = Get-ZoomPhoneNumber -Full
 
 .EXAMPLE
@@ -56,8 +50,9 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/list
 #>
 
 function Get-ZoomPhoneNumber {
-    [alias("Get-ZoomPhoneNumbers")]
+
     [CmdletBinding(DefaultParameterSetName="AllData")]
+    [Alias("Get-ZoomPhoneNumbers")]
     param ( [Parameter(
             ParameterSetName="SelectedRecord",
             Mandatory = $True, 
@@ -130,21 +125,15 @@ function Get-ZoomPhoneNumber {
                 }
 
                 $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
-
-                #$MyInvocation.MyCommand.Name
-                 
-
-                
-
-
-
-                if ($Full) {
-
-                    $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
-                    $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
-
-                }
+            
             }
+        }
+
+        if ($Full) {
+
+            $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
+            $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
+
         }
 
         Write-Output $AggregatedResponse

@@ -36,7 +36,14 @@ function Get-ZoomItemFullDetails {
         [string[]]$ObjectIds,
         
         [Parameter(Mandatory = $True)]
-        [ValidateSet("Get-ZoomPhoneCommonArea","Get-ZoomPhoneNumber")]
+        [ValidateSet(
+            "Get-ZoomPhoneCommonArea",
+            "Get-ZoomPhoneNumber",
+            "Get-ZoomPhoneSettingsTemplate",
+            "Get-ZoomPhoneSite",
+            "Get-ZoomPhoneSiteEmergencyAddress",
+            "Get-ZoomPhoneUser"
+        )]
         [string]$CmdletToRun
 
     )

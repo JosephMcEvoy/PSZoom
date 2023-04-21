@@ -7,7 +7,7 @@ View specific site information in the Zoom Phone account.
 View specific site information in the Zoom Phone account.
 
 .PARAMETER SiteId
-The site ID.
+The Site Id to be queried.
 
 .PARAMETER PageSize
 The number of records returned within a single API call (Min 30 - MAX 100).
@@ -20,7 +20,7 @@ of available results exceeds the current page size. The expiration period for th
 The full details of each Common Area Phone.
 
 .OUTPUTS
-An object with the Zoom API response.
+An array of Objects
 
 .EXAMPLE
 Retrieve a site's settings templates.
@@ -29,6 +29,10 @@ Get-ZoomPhoneSite -SiteId ##########
 .EXAMPLE
 Retrieve inforation for all sites.
 Get-ZoomPhoneSite
+
+.EXAMPLE
+Retrieve detailed inforation for all sites.
+Get-ZoomPhoneSite -Full
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/listPhoneSites
@@ -86,13 +90,14 @@ function Get-ZoomPhoneSite {
 
                 $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize 100
 
-                if ($Full) {
-
-                    $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty siteId
-                    $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
-
-                }
             }
+        }
+
+        if ($Full) {
+
+            $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty Id
+            $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
+
         }
 
         Write-Output $AggregatedResponse

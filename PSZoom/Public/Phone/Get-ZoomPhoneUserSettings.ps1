@@ -17,7 +17,7 @@ Retrieve a user's phone info.
 Get-ZoomPhoneUserSettings jsmith@lawfirm.com
 
 .LINK
-https://marketplace.zoom.us/docs/api-reference/zoom-api/phone/phoneusersettings
+https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/phoneUserSettings
 
 #>
 

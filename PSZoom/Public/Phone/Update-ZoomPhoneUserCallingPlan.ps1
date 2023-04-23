@@ -12,7 +12,7 @@ Get-ZoomPhoneCallingPlans
 No output. Can use Passthru switch to pass UserId to output.
 
 .EXAMPLE
-Update-ZoomPhoneUserCallingPlans -UserId askywakler@thejedi.com -Type 200
+Update-ZoomPhoneUserCallingPlan -UserId askywakler@thejedi.com -Type 200
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/updateCallingPlan
@@ -22,8 +22,9 @@ https://developers.zoom.us/docs/api/rest/other-references/plans/
 
 #>
 
-function Update-ZoomPhoneUserCallingPlans {    
+function Update-ZoomPhoneUserCallingPlan {    
     [CmdletBinding(SupportsShouldProcess = $True)]
+    [Alias("Update-ZoomPhoneUserCallingPlans")]
     Param(
         [Parameter(
             Mandatory = $True,       

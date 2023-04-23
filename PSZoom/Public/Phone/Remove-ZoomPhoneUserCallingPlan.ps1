@@ -7,15 +7,16 @@ Remove calling plan to a Zoom Phone User
 No output. Can use Passthru switch to pass UserId to output.
 
 .EXAMPLE
-Remove-ZoomPhoneUserCallingPlans -UserId askywakler@thejedi.com
+Remove-ZoomPhoneUserCallingPlan -UserId askywakler@thejedi.com
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/unassignCallingPlan
 
 #>
 
-function Remove-ZoomPhoneUserCallingPlans {    
+function Remove-ZoomPhoneUserCallingPlan {    
     [CmdletBinding(SupportsShouldProcess = $True)]
+    [Alias("Remove-ZoomPhoneUserCallingPlans")]
     Param(
         [Parameter(
             Mandatory = $True,       

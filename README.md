@@ -112,9 +112,9 @@ Get-ZoomPhoneSettingTemplates
 Get-ZoomPhoneUser  
 Get-ZoomPhoneUsers  
 Get-ZoomPhoneUserSettings
-Remove-ZoomPhoneUserCallingPlans
+Remove-ZoomPhoneUserCallingPlan
 Remove-ZoomPhoneUserNumber
-Update-ZoomPhoneUserCallingPlans  
+Update-ZoomPhoneUserCallingPlan  
 
 ## Phone Sites ##  
 Get-ZoomPhoneSite  

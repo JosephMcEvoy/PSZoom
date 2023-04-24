@@ -66,17 +66,19 @@ function Remove-ZoomPhoneDeviceAssignee {
 
                 $ExtensionId = @()
 
-                Get-ZoomPhoneDevice -DeviceId $DeviceId | Select-Object -ExpandProperty assignee | ForEach-Object {
+                $assignee = Get-ZoomPhoneDevice -DeviceId $DeviceId | Select-Object -ExpandProperty assignee
 
-                    switch($_.extension_type) {
+                ForEach ($entity in $assignee) {
+
+                    switch($entity.extension_type) {
                         "user" {
             
-                            $ExtensionId += Get-ZoomPhoneUser -UserId $_.id | Select-Object -ExpandProperty extension_id
+                            $ExtensionId += Get-ZoomPhoneUser -UserId $entity.id | Select-Object -ExpandProperty extension_id
             
                         }
                         "commonArea" {
             
-                            $ExtensionId += Get-ZoomPhoneCommonArea -CommonAreaId $_.id | Select-Object -ExpandProperty id
+                            $ExtensionId += Get-ZoomPhoneCommonArea -CommonAreaId $entity.id | Select-Object -ExpandProperty id
             
                         }
                     }

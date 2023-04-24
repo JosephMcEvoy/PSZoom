@@ -55,8 +55,20 @@ function Get-ZoomPhoneDevice {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('id', 'device_Id')]
+        [Alias(
+            'id', 'device_Id'
+        )]
         [string]$DeviceId,
+
+
+
+        [parameter(
+            ParameterSetName="SpecificQuery"
+        )]
+        [ValidateSet("assigned","unassigned")]
+        [string]$DeviceStatus,
+
+
 
         [Parameter(
             ParameterSetName="SpecificQuery",
@@ -64,27 +76,58 @@ function Get-ZoomPhoneDevice {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('site_id')]
+        [Alias(
+            'site_id'
+        )]
         [string]$SiteId,
 
-        [Parameter(ParameterSetName="SpecificQuery")]
-        [Alias('device_type')]
-        [ValidateSet("algo","audioCodes","cisco","cyberData","grandstream","poly","yealink","other")]
+
+
+        [Parameter(
+            ParameterSetName="SpecificQuery"
+        )]
+        [Alias(
+            'device_type'
+        )]
+        [ValidateSet(
+            "algo","audioCodes","cisco","cyberData","grandstream","poly","yealink","other"
+        )]
         [string]$DeviceType,
 
-        [parameter(ParameterSetName="NextRecords")]
-        [ValidateRange(1, 100)]
-        [Alias('page_size')]
+
+
+        [parameter(
+            ParameterSetName="NextRecords"
+        )]
+        [ValidateRange(
+            1, 100
+        )]
+        [Alias(
+            'page_size'
+        )]
         [int]$PageSize = 100,
 		
+
+
         # The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
-        [parameter(ParameterSetName="NextRecords")]
-        [Alias('next_page_token')]
+        [parameter(
+            ParameterSetName="NextRecords"
+        )]
+        [Alias(
+            'next_page_token'
+        )]
         [string]$NextPageToken,
 
-        [parameter(ParameterSetName="SpecificQuery")]
-        [parameter(ParameterSetName="AllData")]
+
+        
+        [parameter(
+            ParameterSetName="SpecificQuery"
+        )]
+        [parameter(
+            ParameterSetName="AllData"
+        )]
         [switch]$Full = $False
+
 
 
      )
@@ -118,15 +161,16 @@ function Get-ZoomPhoneDevice {
 
                     $AggregatedResponse += Get-ZoomPaginatedData -URI $BASEURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
 
-
                 }
-
             }
             "SpecificQuery" {
 
                 $AggregatedResponse = @()
                 $QueryStatements = @{}
 
+                if ($PSBoundParameters.ContainsKey('DeviceStatus')) {
+                    $QueryStatements.Add("type", $DeviceStatus)
+                }
                 if ($PSBoundParameters.ContainsKey('DeviceType')) {
                     $QueryStatements.Add("device_type", $DeviceType)
                 }

@@ -78,7 +78,18 @@ function Add-ZoomPhoneUserCallingPlan {
 
             $RequestBody = $RequestBody | ConvertTo-Json
 
-            if ($pscmdlet.ShouldProcess) {
+
+$Message = 
+@"
+
+URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
+Body:
+$RequestBody
+"@
+
+
+
+        if ($pscmdlet.ShouldProcess($Message, $UserId, "Update calling plan")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
         
                 if (-not $PassThru) {

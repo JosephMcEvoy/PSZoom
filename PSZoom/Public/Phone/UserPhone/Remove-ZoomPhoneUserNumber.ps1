@@ -101,7 +101,16 @@ function Remove-ZoomPhoneUserNumber {
 
                 $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$user/phone_numbers/$($_.id)"
 
-                if ($pscmdlet.ShouldProcess) {
+$Message = 
+@"
+
+URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
+Body:
+$RequestBody
+"@
+
+
+            if ($pscmdlet.ShouldProcess($Message, $User, "Remove $number")) {
                     $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
             
                     if (-not $PassThru) {

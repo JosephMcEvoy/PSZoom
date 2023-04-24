@@ -107,7 +107,19 @@ function Get-ZoomPhoneDevice {
             }
             "AllData" {
 
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize 100
+                $AggregatedResponse = @()
+                $types = "assigned","unassigned"
+
+                $types | ForEach-Object {
+
+                    $QueryStatements = @{}
+
+                    $QueryStatements.Add("type", $_)
+
+                    $AggregatedResponse += Get-ZoomPaginatedData -URI $BASEURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
+
+
+                }
 
             }
             "SpecificQuery" {

@@ -66,7 +66,7 @@ function Add-ZoomPhoneDeviceAssignee {
             $RequestBody = @{ }
             $RequestBody.Add("assignee_extension_ids", $ExtensionId)
 
-
+            $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
 
 
 $Message = 

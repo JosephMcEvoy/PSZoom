@@ -63,6 +63,7 @@ function Add-ZoomPhoneDeviceAssignee {
 
         }
 
+        
         if (-not $PassThru) {
             Write-Output $response
         }

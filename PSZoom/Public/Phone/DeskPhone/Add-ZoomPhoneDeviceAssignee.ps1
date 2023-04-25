@@ -19,12 +19,12 @@ No output. Can use Passthru switch to pass DeviceId to output.
 Add-ZoomPhoneDeviceAssignee -DeviceId "se5d7r6fcvtbyinj" -ExtensionId "4x5ecr6v7tb84zwxe5cr6"
 
 .LINK
-https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/addExtensionsToADevice
+https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/updateADevice
 
 #>
 
 function Add-ZoomPhoneDeviceAssignee {    
-    [CmdletBinding(SupportsShouldProcess = $True)]
+    [CmdletBinding()]
     Param(
         [Parameter(
             Mandatory = $True, 
@@ -52,50 +52,20 @@ function Add-ZoomPhoneDeviceAssignee {
 
     process {
 
-
-        Update-ZoomPhoneDevice -DeviceId $DeviceId -AssignedTo $UserId
-
-
-        <#
-
-        $ExtensionId = @()
-        $UserId | ForEach-Object {
-
-
-            $ExtensionId += Get-ZoomPhoneUser -UserId $_ | Select-Object -ExpandProperty extension_id
-
-        }
-
-
-        $DeviceId | ForEach-Object {
-
-            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/devices/$_/extensions"
-            $RequestBody = @{ }
-            $RequestBody.Add("assignee_extension_ids", $ExtensionId)
-
-            $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
-
-
-$Message = 
-@"
-
-URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
-Body:
-$RequestBody
-"@
-
-
-
-            if ($pscmdlet.ShouldProcess($Message, $_, "Adding $UserId association")) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method POST
         
-                if (-not $PassThru) {
-                    Write-Output $response
-                }
-            }
+        if (-not $PSBoundParameters.ContainsKey('WhatIf')) {
+
+            $response = Update-ZoomPhoneDevice -DeviceId $DeviceId -AssignedTo $UserId
+    
+        }elseif ($PSBoundParameters.ContainsKey('WhatIf')) {
+
+            $response = Update-ZoomPhoneDevice -DeviceId $DeviceId -AssignedTo $UserId -WhatIf
+
         }
 
-        #>
+        if (-not $PassThru) {
+            Write-Output $response
+        }
 
 
         if ($PassThru) {

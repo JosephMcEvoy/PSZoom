@@ -34,7 +34,7 @@ function Add-ZoomPhoneDeviceAssignee {
         )]
         [Alias('id', 'device_Id')]
         [ValidateScript({$DeviceId.count -le 3})]
-        [string[]]$DeviceId,
+        [string]$DeviceId,
 
 
         [Parameter(
@@ -42,7 +42,7 @@ function Add-ZoomPhoneDeviceAssignee {
             Position = 1
         )]
         [Alias('User_Id')]
-        [string[]]$UserId,
+        [string]$UserId,
 
 
         [switch]$PassThru
@@ -52,8 +52,15 @@ function Add-ZoomPhoneDeviceAssignee {
 
     process {
 
+
+        Update-ZoomPhoneDevice -DeviceId $DeviceId -AssignedTo $UserId
+
+
+        <#
+
         $ExtensionId = @()
         $UserId | ForEach-Object {
+
 
             $ExtensionId += Get-ZoomPhoneUser -UserId $_ | Select-Object -ExpandProperty extension_id
 
@@ -87,6 +94,9 @@ $RequestBody
                 }
             }
         }
+
+        #>
+
 
         if ($PassThru) {
             Write-Output $_

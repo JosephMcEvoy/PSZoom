@@ -43,7 +43,7 @@ function Get-ZoomUserToken {
      )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/token"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$UserId/token"
 
         if ($PSBoundParameters.ContainsKey('Type')) {
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  

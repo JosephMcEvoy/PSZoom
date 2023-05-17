@@ -37,7 +37,7 @@ function Remove-ZoomUserSchedulers {
 
     process {
         foreach ($user in $UserId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/schedulers"
+            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$user/schedulers"
     
             Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
 

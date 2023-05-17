@@ -88,7 +88,7 @@ function New-ZoomUser {
     )
     
     process {
-        $request = [System.UriBuilder]'https://api.zoom.us/v2/users'
+        $request = [System.UriBuilder]'https://api.$ZoomURI/v2/users'
 
         #Request Body
         $requestBody = @{

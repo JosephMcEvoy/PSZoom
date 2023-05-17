@@ -802,7 +802,7 @@ function Update-ZoomUserSettings {
 
     process {
         foreach ($user in $UserId) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$user/settings"
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$user/settings"
 
             $scheduleMeeting = @{
                 'host_video'                                  = 'HostVideo'

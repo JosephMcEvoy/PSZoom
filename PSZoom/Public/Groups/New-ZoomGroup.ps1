@@ -36,7 +36,7 @@ function New-ZoomGroup {
     )
 
     begin {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/groups"
     }
 
     process {

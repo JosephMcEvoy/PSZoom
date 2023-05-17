@@ -35,7 +35,7 @@ function Get-ZoomGroupSettings  {
     )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId/settings"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/groups/$GroupId/settings"
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
         Write-Output $response   

@@ -45,7 +45,7 @@ function Update-ZoomGroup  {
     )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$GroupId"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/groups/$GroupId"
 
         $requestBody = @{
             name = $Name

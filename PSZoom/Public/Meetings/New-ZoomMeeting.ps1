@@ -609,7 +609,7 @@ function New-ZoomMeeting {
     )
     
     begin {
-        $Uri = "https://api.zoom.us/v2/users/$userId/meetings"
+        $Uri = "https://api.$ZoomURI/v2/users/$userId/meetings"
     }
     
     process {

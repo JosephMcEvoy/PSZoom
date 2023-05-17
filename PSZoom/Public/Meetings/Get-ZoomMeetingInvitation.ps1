@@ -28,7 +28,7 @@ function Get-ZoomMeetingInvitation {
      )
 
     process {
-        $Uri = "https://api.zoom.us/v2/meetings/$MeetingId/invitation"
+        $Uri = "https://api.$ZoomURI/v2/meetings/$MeetingId/invitation"
         
         $response = Invoke-ZoomRestMethod -Uri $Uri -Method GET
         

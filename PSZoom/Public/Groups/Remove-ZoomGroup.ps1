@@ -36,7 +36,7 @@ function Remove-ZoomGroup {
 
     process {
         foreach ($Id in $GroupID) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/groups/$Id"
+            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/groups/$Id"
             if ($PSCmdlet.ShouldProcess($Id, "Remove")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
                 Write-Verbose "Group $Id deleted."

@@ -130,7 +130,7 @@ function Update-ZoomMeetingRecordingsSettings {
         $MeetingId = [uri]::EscapeDataString($MeetingId)
         $MeetingId = [uri]::EscapeDataString($MeetingId)
 
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/recordings/settings"
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId/recordings/settings"
         $requestBody = @{}
 
         if ($PSBoundParameters.ContainsKey('ShareRecording')) {

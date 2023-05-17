@@ -32,7 +32,7 @@ function Get-ZoomWebinarDetailsReport {
 
     process {
         foreach ($id in $WebinarId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/report/webinars/$WebinarId"
+            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/report/webinars/$WebinarId"
 
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
             

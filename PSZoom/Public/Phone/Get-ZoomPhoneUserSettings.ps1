@@ -36,7 +36,7 @@ function Get-ZoomPhoneUserSettings {
 
     process {
         foreach ($id in $UserId) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/phone/users/$id/settings"
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$id/settings"
 
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 

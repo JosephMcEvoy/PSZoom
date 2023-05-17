@@ -69,7 +69,7 @@ function Get-ZoomUser {
 
     process {
         foreach ($id in $UserId) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id"
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$id"
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
 
             if ($PSBoundParameters.ContainsKey('EncryptedEmail')) {

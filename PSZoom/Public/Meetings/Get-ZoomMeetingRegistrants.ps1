@@ -48,7 +48,7 @@ function Get-ZoomMeetingRegistrants {
     )
 
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/registrants"
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId/registrants"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
         $query.Add('status', $Status)
         $query.Add('page_size', $PageSize)

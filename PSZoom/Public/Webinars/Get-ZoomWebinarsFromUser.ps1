@@ -58,7 +58,7 @@ function Get-ZoomWebinarsFromUser {
 
     process {
         foreach ($id in $UserId) {
-            $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id/webinars"
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$id/webinars"
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
             $query.Add('page_size', $PageSize)
             $query.Add('page_number', $PageNumber)

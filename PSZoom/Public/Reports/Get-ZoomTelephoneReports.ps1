@@ -118,7 +118,7 @@ function Get-ZoomTelephoneReports {
     
                 Write-Output $CombinedReport
         } else {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/report/telephone"
+            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/report/telephone"
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)  
             $query.Add('type', $Type)
             $query.Add('from', $From)

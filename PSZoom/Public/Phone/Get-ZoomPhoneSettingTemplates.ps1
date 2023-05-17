@@ -60,7 +60,7 @@ function Get-ZoomPhoneSettingTemplates {
      )
 
     process {
-        $request = [System.UriBuilder]'https://api.zoom.us/v2/phone/setting_templates/'
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/setting_templates/"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('page_size', $PageSize)
         $query.Add('page_number', $PageNumber)

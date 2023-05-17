@@ -47,7 +47,7 @@ function Update-ZoomUserEmail {
     )
 
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/email"
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$UserId/email"
 
         $requestBody = @{
             'email' = $Email

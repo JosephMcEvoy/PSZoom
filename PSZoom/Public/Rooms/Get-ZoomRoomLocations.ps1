@@ -70,7 +70,7 @@ function Get-ZoomRoomLocations {
      ) 
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/locations"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/rooms/locations"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('page_size', $PageSize)
 

@@ -49,7 +49,7 @@ function Update-ZoomMeetingRegistrantStatus {
      )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/registrants/status"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId/registrants/status"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
 
         if ($PSBoundParameters.ContainsKey('OcurrenceId')) {

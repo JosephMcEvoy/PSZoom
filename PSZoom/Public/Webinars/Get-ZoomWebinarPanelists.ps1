@@ -38,7 +38,7 @@ function Get-ZoomWebinarPanelists {
     )
 
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/webinars/$webinarId/panelists"
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/webinars/$webinarId/panelists"
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method GET
 
         Write-Output $response

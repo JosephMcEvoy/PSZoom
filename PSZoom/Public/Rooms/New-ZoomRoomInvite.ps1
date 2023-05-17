@@ -71,7 +71,7 @@ function New-ZoomRoomInvite {
      )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$RoomId/zrclient"  
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/rooms/$RoomId/zrclient"  
 
         $requestBody = @{
             'jsonrpc' = $JsonRpc

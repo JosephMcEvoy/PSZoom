@@ -38,7 +38,7 @@ function Remove-ZoomMeetingPoll {
      )
 
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/polls/$PollId"
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId/polls/$PollId"
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method DELETE
         
         Write-Output $response

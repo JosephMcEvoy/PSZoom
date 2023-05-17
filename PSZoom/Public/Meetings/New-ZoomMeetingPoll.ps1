@@ -59,7 +59,7 @@ function New-ZoomMeetingPoll {
     )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/polls"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId/polls"
         $RequestBody = @{}
 
         if ($PSBoundParameters.ContainsKey('Title')) {

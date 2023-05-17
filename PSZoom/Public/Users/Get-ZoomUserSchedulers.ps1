@@ -34,7 +34,7 @@ function Get-ZoomUserSchedulers {
     )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$UserId/schedulers"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$UserId/schedulers"
         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 
         Write-Output $response

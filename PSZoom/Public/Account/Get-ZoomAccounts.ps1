@@ -28,7 +28,7 @@ function Get-ZoomAccounts {
      )
 
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/accounts"
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/accounts"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('page_size', $PageSize)
 	

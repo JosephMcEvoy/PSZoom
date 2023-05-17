@@ -56,7 +56,7 @@ function Remove-ZoomMeetingRecordingFile {
 
     process {
         foreach($RecId in $RecordingId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/meetings/$MeetingId/recordings/$RecId"
+            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/meetings/$MeetingId/recordings/$RecId"
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
             $query.Add('action', $Action)
             $Request.Query = $query.ToString()

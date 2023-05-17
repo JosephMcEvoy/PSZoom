@@ -47,7 +47,7 @@ function Get-ZoomRoomDevices {
      )
 
     process {
-        $request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$($RoomID)/devices"
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/rooms/$($RoomID)/devices"
 
         try {
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Headers $headers -Method GET

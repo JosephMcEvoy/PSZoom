@@ -55,7 +55,7 @@ function Stop-ZoomRoomMeeting {
 
     process {
         foreach ($id in $RoomId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/rooms/$id/meetings"  
+            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/rooms/$id/meetings"  
 
             $requestBody = @{
                 'jsonrpc' = $JsonRpc

@@ -44,7 +44,7 @@ function Remove-ZoomSpecificUserAssistant {
     process {
         foreach ($id in $UserId) {
             foreach ($aid in $AssistantId) {
-                $request = [System.UriBuilder]"https://api.zoom.us/v2/users/$id/assistants/$aid"
+                $request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$id/assistants/$aid"
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
 
                 Write-Output $response

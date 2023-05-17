@@ -32,7 +32,7 @@ function Get-ZoomUserAssistants {
 
     process {
         foreach ($id in $UserId) {
-            $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/$Id/assistants"
+            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$Id/assistants"
 
            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
     

@@ -33,7 +33,7 @@ function Get-ZoomUserEmailStatus {
      )
 
     process {
-        $Request = [System.UriBuilder]"https://api.zoom.us/v2/users/email"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/email"
         $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
         $query.Add('email', $Email)
         $Request.Query = $query.ToString()

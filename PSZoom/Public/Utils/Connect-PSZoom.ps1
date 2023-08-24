@@ -31,28 +31,38 @@ function Connect-PSZoom {
     [CmdletBinding()]
     param (
         [Parameter(
+            Mandatory = $True,
+            ParameterSetName = "Token"
+        )]
+        [string]$Token,
+
+        [Parameter(
             Mandatory = $True, 
-            Position = 0
+            Position = 0,
+            ParameterSetName = "APIKey"
         )]
         [string]$AccountID,
 
         [Alias('APIKey')]
         [Parameter(
             Mandatory = $True, 
-            Position = 1
+            Position = 1,
+            ParameterSetName = "APIKey"
         )]
         [string]$ClientID,
 
         [Alias('APISecret')]
         [Parameter(
             Mandatory = $True, 
-            Position = 2
+            Position = 2,
+            ParameterSetName = "APIKey"
         )]
         [string]$ClientSecret,
 
         [Alias('SiteConnection')]
         [Parameter(
-            Mandatory = $False
+            Mandatory = $False,
+            ParameterSetName = "APIKey"
         )]
         [ValidateSet("Zoom.Us","Zoomgov.com")]
         [string]$APIConnection = "Zoom.us"
@@ -60,8 +70,12 @@ function Connect-PSZoom {
 
     try {
         $Script:ZoomURI = $APIConnection
-        $token = New-OAuthToken -AccountID $AccountID -ClientID $ClientID -ClientSecret $ClientSecret
-        $Script:PSZoomToken = $token
+        if ($PSCmdlet.ParameterSetName -eq "Token") {
+            $Script:PSZoomToken = ConvertTo-SecureString -String $Token -AsPlainText -Force
+        } else {
+            $token = New-OAuthToken -AccountID $AccountID -ClientID $ClientID -ClientSecret $ClientSecret
+            $Script:PSZoomToken = $token
+        }
     } catch {
         if ($_.exception.Response) {
             if ($PSVersionTable.PSVersion.Major -lt 6) {

@@ -52,9 +52,17 @@ function New-OAuthToken {
 
         [Parameter(valuefrompipeline = $true, mandatory = $true, HelpMessage = "Enter Zoom App Client Secret:", Position = 2)]
         [String]
-        $ClientSecret
+        $ClientSecret,
+
+        [ValidateSet("Zoom.Us","Zoomgov.com")]
+        [string]$APIConnection = "Zoom.us"
 
     )
+
+    # Handles this cmdlet being called on its own (without being called from Connect-PSZoom)
+    if ($APIConnection){
+        $Script:ZoomURI = $APIConnection
+    }
 
     $uri = "https://{1}/oauth/token?grant_type=account_credentials&account_id={0}" -f $AccountID, $ZoomURI
 

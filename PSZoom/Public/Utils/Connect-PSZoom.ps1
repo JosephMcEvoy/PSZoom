@@ -14,6 +14,10 @@ Client Secret of the Zoom App
 .PARAMETER AccountID
 Account ID of the Zoom App
 
+.PARAMETER Token
+You can pass an existing valid token to Connect-PSZoom instead of the ClientID, ClientSecret, and AccountID. 
+String types will automatically be converted to SecureString. SecureStrings can also be passed.
+
 .PARAMETER APIConnection
 Zoom environment for specified AccountID
 - Zoom.us
@@ -25,17 +29,20 @@ Connect-PSZoom -AccountID 'your_account_id' -ClientID 'your_client_id' -ClientSe
 .EXAMPLE
 Connect-PSZoom -AccountID 'your_account_id' -ClientID 'your_client_id' -ClientSecret 'your_client_secret' -$APIConnection 'Zoom.us'
 
+.EXAMPLE
+Connect-PSZoom -Token 'lkjahsdklasjhdkasljhdas789d6891276d12khjgaskjd8as7968as796d897as6d897as6dashjkgdasjkh'
+
+.EXAMPLE
+$token = 'lkjahsdklasjhdkasljhdas789d6891276d12khjgaskjd8as7968as796d897as6d897as6dashjkgdasjkh' | ConvertTo-SecureString -AsPlainText -Force
+Connect-PSZoom -Token $token
+
 #>
 
 function Connect-PSZoom {
-    [CmdletBinding()]
+    [CmdletBinding(
+        DefaultParameterSetName = 'APIKey'
+    )]
     param (
-        [Parameter(
-            Mandatory = $True,
-            ParameterSetName = "Token"
-        )]
-        [string]$Token,
-
         [Parameter(
             Mandatory = $True, 
             Position = 0,
@@ -59,6 +66,12 @@ function Connect-PSZoom {
         )]
         [string]$ClientSecret,
 
+        [Parameter(
+            Mandatory = $True,
+            ParameterSetName = "Token"
+        )]
+        $Token,
+
         [Alias('SiteConnection')]
         [Parameter(
             Mandatory = $False,
@@ -70,12 +83,16 @@ function Connect-PSZoom {
 
     try {
         $Script:ZoomURI = $APIConnection
-        if ($PSCmdlet.ParameterSetName -eq "Token") {
-            $Script:PSZoomToken = ConvertTo-SecureString -String $Token -AsPlainText -Force
+
+        if ($PSCmdlet.ParameterSetName -eq 'Token') {
+            if ($Token.getType().name -eq 'String') {
+                $Token = ConvertTo-SecureString -String $Token -AsPlainText -Force
+            }
         } else {
-            $token = New-OAuthToken -AccountID $AccountID -ClientID $ClientID -ClientSecret $ClientSecret
-            $Script:PSZoomToken = $token
+            $Token = New-OAuthToken -AccountID $AccountID -ClientID $ClientID -ClientSecret $ClientSecret
         }
+        
+        $Script:PSZoomToken = $Token
     } catch {
         if ($_.exception.Response) {
             if ($PSVersionTable.PSVersion.Major -lt 6) {

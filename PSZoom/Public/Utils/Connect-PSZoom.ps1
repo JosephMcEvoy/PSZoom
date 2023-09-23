@@ -46,7 +46,7 @@ function Connect-PSZoom {
         [Parameter(
             Mandatory = $True, 
             Position = 0,
-            ParameterSetName = "APIKey"
+            ParameterSetName = 'APIKey'
         )]
         [string]$AccountID,
 
@@ -54,7 +54,7 @@ function Connect-PSZoom {
         [Parameter(
             Mandatory = $True, 
             Position = 1,
-            ParameterSetName = "APIKey"
+            ParameterSetName = 'APIKey'
         )]
         [string]$ClientID,
 
@@ -62,23 +62,23 @@ function Connect-PSZoom {
         [Parameter(
             Mandatory = $True, 
             Position = 2,
-            ParameterSetName = "APIKey"
+            ParameterSetName = 'APIKey'
         )]
         [string]$ClientSecret,
 
         [Parameter(
             Mandatory = $True,
-            ParameterSetName = "Token"
+            ParameterSetName = 'Token'
         )]
         $Token,
 
         [Alias('SiteConnection')]
         [Parameter(
             Mandatory = $False,
-            ParameterSetName = "APIKey"
+            ParameterSetName = 'APIKey'
         )]
-        [ValidateSet("Zoom.Us","Zoomgov.com")]
-        [string]$APIConnection = "Zoom.us"
+        [ValidateSet('Zoom.Us','Zoomgov.com')]
+        [string]$APIConnection = 'Zoom.us'
     )
 
     try {

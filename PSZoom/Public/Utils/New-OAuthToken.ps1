@@ -54,8 +54,8 @@ function New-OAuthToken {
         [String]
         $ClientSecret,
 
-        [ValidateSet("Zoom.Us","Zoomgov.com")]
-        [string]$APIConnection = "Zoom.us"
+        [ValidateSet('Zoom.Us','Zoomgov.com')]
+        [string]$APIConnection = 'Zoom.us'
 
     )
 

@@ -88,7 +88,7 @@ function New-ZoomUser {
     )
     
     process {
-        $request = [System.UriBuilder]'https://api.$ZoomURI/v2/users'
+        $request = [System.UriBuilder]"https://api.$ZoomURI/v2/users"
 
         #Request Body
         $requestBody = @{
@@ -151,7 +151,7 @@ function New-ZoomUser {
         $requestBody = $requestBody | ConvertTo-Json
 
         if ($PScmdlet.ShouldProcess) {
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $RequestBody -Method POST
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
 
             if ($passthru) {
                 Write-Output $Email

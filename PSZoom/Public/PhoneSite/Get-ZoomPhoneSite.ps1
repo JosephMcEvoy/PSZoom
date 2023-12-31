@@ -72,7 +72,7 @@ function Get-ZoomPhoneSite {
 
     process {
 
-        $BASEURI = "https://api.$ZoomURI/v2/phone/sites/"
+        $BASEURI = "https://api.$ZoomURI/v2/phone/sites"
 
         switch ($PSCmdlet.ParameterSetName) {
 

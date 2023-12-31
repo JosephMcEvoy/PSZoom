@@ -26,16 +26,20 @@ When using -Full switch, receive the full JSON Response to see the next_page_tok
 https://marketplace.zoom.us/docs/api-reference/zoom-api/phone/listphoneusers
 
 .EXAMPLE
-Return the first page of Zoom phone users.
+Return a list of all the zoom phone users.
 Get-ZoomPhoneUsers
 
 .EXAMPLE
 Return the first page of Zoom phone users in Site. To find Site ID refer to Get-ZoomPhoneSites
-Get-ZoomPhoneUsers ######
+Get-ZoomPhoneUsers -SiteId "3vt4b7wtb79q4wvb"
 
 .EXAMPLE
-Return Zoom phone sites including the next_page_tokens.
-Get-ZoomPhoneUsers -SiteId ###### -Full
+Return Zoom phone sites.
+Get-ZoomPhoneUsers -SiteId "3vt4b7wtb79q4wvb" -Full
+
+.EXAMPLE
+Get a page of zoom users with phone accounts.
+Get-ZoomPhoneUsers -PageSize 100 -NextPageToken "8w7vt487wqtb457qwt4"
 
 #>
 

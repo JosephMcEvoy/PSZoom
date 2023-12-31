@@ -9,7 +9,7 @@ Common area ID or common area extension ID.
 .PARAMETER Number
 Phone number to be assigned to zoom user.
 Use following command to get available phone numbers for Zoom instance.
-Get-ZoomPhoneNumber
+Get-ZoomPhoneNumber -Unassigned
 
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.

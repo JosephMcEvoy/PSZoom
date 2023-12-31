@@ -3,8 +3,12 @@
 .SYNOPSIS
 Remove calling plan to a Zoom Phone User
 
+.PARAMETER UserId
+Unique number used to locate Zoom Phone User account.
+
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
+
 
 .EXAMPLE
 Remove-ZoomPhoneUserCallingPlan -UserId askywakler@thejedi.com

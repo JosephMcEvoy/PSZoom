@@ -2,6 +2,9 @@
 
 .SYNOPSIS
 Remove phone numbers from a user's zoom phone account.
+
+.PARAMETER UserId
+Unique number used to locate Zoom Phone User account.
                     
 .PARAMETER Number
 Specific phone number to be unassigned from zoom user.

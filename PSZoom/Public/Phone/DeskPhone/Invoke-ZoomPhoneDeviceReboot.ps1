@@ -11,7 +11,7 @@ Outputs object
 
 .EXAMPLE
 Reboot zoom device
-New-ZoomPhoneDevice -DeviceId "e5cr6vt7by8nu9mi"
+Invoke-ZoomPhoneDeviceReboot -DeviceId "e5cr6vt7by8nu9mi"
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/rebootPhoneDevice

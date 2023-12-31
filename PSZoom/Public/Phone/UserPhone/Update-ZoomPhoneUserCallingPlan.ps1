@@ -2,6 +2,9 @@
 
 .SYNOPSIS
 Alter calling plan on a Zoom Phone User
+
+.PARAMETER UserId
+Unique number used to locate Zoom Phone User account.
                     
 .PARAMETER LicenseType
 License Type that is to applied to target phone account.

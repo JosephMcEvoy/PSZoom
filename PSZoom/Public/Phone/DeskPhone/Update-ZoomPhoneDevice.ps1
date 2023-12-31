@@ -28,6 +28,10 @@ No output. Can use Passthru switch to pass UserId to output.
 Assign device to a user.
 Update-ZoomPhoneDevice -DeviceId "5d65f7tgy8hu95edr6" -AssignedTo 'askywakler@thejedi.com' 
 
+.EXAMPLE
+Update provisiong template assigned to user's phone.
+Update-ZoomPhoneDevice -DeviceId "5d65f7tgy8hu95edr6" -ProvisionTemplateId '824v74wvtbv7wt4easG'
+
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/updateADevice
 

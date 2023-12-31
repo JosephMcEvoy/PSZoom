@@ -51,8 +51,8 @@ Assign new extension number
 Update-ZoomPhoneCommonArea -UserId askywakler@thejedi.com -ExtensionNumber 011234567
 
 .EXAMPLE
-Assign new extension number
-Update-ZoomPhoneCommonArea -UserId askywakler@thejedi.com -ExtensionNumber 011234567
+Change common area phone display name
+Update-ZoomPhoneCommonArea -UserId askywakler@thejedi.com -DisplayName "Lobby Phone"
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/updateCommonArea

@@ -7,7 +7,7 @@ List all Zoom Phone numbers that are associated with account Account.
 List all Zoom Phone numbers that are associated with account Account.
 
 .PARAMETER PhoneNumberId
-ID number[s] of common area phones to be queried.
+ID number[s] of numbers to be queried.
 
 .PARAMETER PageSize
 The number of records returned within a single API call (Min 30 - MAX 100).

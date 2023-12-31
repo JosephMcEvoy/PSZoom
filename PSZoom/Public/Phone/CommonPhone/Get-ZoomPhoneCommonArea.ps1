@@ -1,10 +1,10 @@
 <#
 
 .SYNOPSIS
-List Zoom Common Area phones that are associated with account Account.
+List Zoom Common Area phones that are associated with account.
 
 .DESCRIPTION
-List Zoom Common Area phones that are associated with account Account.
+List Zoom Common Area phones that are associated with account.
 
 .PARAMETER CommonAreaId
 ID number[s] of common area phones to be queried.

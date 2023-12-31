@@ -28,6 +28,10 @@ No output. Can use Passthru switch to pass UserId to output.
 Assign new extension number
 Update-ZoomPhoneUser -UserId askywakler@thejedi.com -ExtensionNumber 011234567
 
+.EXAMPLE
+Change hold music when user places call into hold state
+Update-ZoomPhoneUser -UserId askywakler@thejedi.com -MusicOnHoldId "w98yby73y5ntv3"
+
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/updateUserSettings
 

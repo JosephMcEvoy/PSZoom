@@ -39,7 +39,7 @@ function Get-ZoomPhoneCommonAreaSettings {
         $CommonAreaId | ForEach-Object {
             $request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$CommonAreaId/settings"
 
-            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET | select-object -expandproperty "desk_phones"
 
             Write-Output $response
         }

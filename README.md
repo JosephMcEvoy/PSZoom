@@ -95,17 +95,17 @@ Update-ZoomMeetingRegistrationQuestions
 Update-ZoomMeetingStatus  
   
 ### Phones ###  
-Add-ZoomPhoneUserCallingPlans
-Add-ZoomPhoneUserNumber
-Get-ZoomPhoneCallingPlans
+Add-ZoomPhoneUserCallingPlans  
+Add-ZoomPhoneUserNumber  
+Get-ZoomPhoneCallingPlans  
 Get-ZoomPhoneNumber  
 Get-ZoomPhoneSettingTemplate  
 Get-ZoomPhoneSettingTemplates  
 Get-ZoomPhoneUser  
 Get-ZoomPhoneUsers  
-Get-ZoomPhoneUserSettings
-Remove-ZoomPhoneUserCallingPlan
-Remove-ZoomPhoneUserNumber
+Get-ZoomPhoneUserSettings  
+Remove-ZoomPhoneUserCallingPlan  
+Remove-ZoomPhoneUserNumber  
 Update-ZoomPhoneUserCallingPlan  
 
 ### Phone Sites ###  

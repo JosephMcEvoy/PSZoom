@@ -25,7 +25,7 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/upda
 
 #>
 
-function Update-ZoomPhoneUserCallingPlan {    
+function Update-ZoomPhoneUserSettings {    
     [CmdletBinding(SupportsShouldProcess = $True)]
     Param(
         [Parameter(

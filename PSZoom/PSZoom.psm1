@@ -9,4 +9,4 @@ foreach ($ps1 in @($Public + $Private)) {
     }
 }
 
-Export-ModuleMember -Function $Public.Basename -Alias *
+Export-ModuleMember -Function $Public.Basename

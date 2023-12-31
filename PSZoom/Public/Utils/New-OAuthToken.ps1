@@ -54,6 +54,7 @@ function New-OAuthToken {
         [String]
         $ClientSecret,
 
+        [Parameter(valuefrompipeline = $true, mandatory = $true, Position = 3)]
         [ValidateSet('Zoom.Us','Zoomgov.com')]
         [string]$APIConnection = 'Zoom.us'
 

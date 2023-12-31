@@ -6,11 +6,20 @@ Update a specific user Zoom Phone account.
 .PARAMETER UserId
 Unique number used to locate Zoom Phone User account.
 
-.PARAMETER EmergencyAddressID
+.PARAMETER AreaCode
 The emergency address ID.
 
+.PARAMETER AudioPromptLanguage
+Unique number used to locate Zoom Phone User account.
 
+.PARAMETER CountryIsoCode
+The emergency address ID.
 
+.PARAMETER MusicOnHoldId
+Unique number used to locate Zoom Phone User account.
+
+.PARAMETER OutboundCallerId
+The emergency address ID.
 
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
@@ -48,7 +57,7 @@ function Update-ZoomPhoneUserSettings {
 
         [Parameter()]
         [Alias('country_iso_code')]
-        [ValidateLength(2)]
+        [ValidateLength(2,2)]
         [string]$CountryIsoCode,
 
         [Parameter()]

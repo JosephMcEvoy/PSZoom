@@ -49,6 +49,9 @@ function New-ZoomPhoneDevice {
         [ValidateScript({$_ -match "^([0-9A-Fa-f]{2}[:-]?){5}([0-9A-Fa-f]{2})$"})]
         [string]$MacAddress,
 
+        [Parameter(Mandatory = $True)]
+        [string]$Type,
+
         [Parameter()]
         [string]$AssignedTo,
 
@@ -57,9 +60,6 @@ function New-ZoomPhoneDevice {
         
         [Parameter()]
         [string]$Model,
-
-        [Parameter()]
-        [string]$Type,
 
         [Parameter()]
         [string]$ProvisionTemplateId
@@ -75,17 +75,17 @@ function New-ZoomPhoneDevice {
 
         #region body
             $RequestBody = @{ }
-            if ($PSBoundParameters.ContainsKey('DisplayName')) {
-                $RequestBody.Add("display_name", $DisplayName)
-            }
-            if ($PSBoundParameters.ContainsKey('MacAddress')) {
-                $RequestBody.Add("mac_address", $MacAddress)
-            }
             if ($PSBoundParameters.ContainsKey('AssignedTo')) {
                 $RequestBody.Add("assigned_to", $AssignedTo)
             }
             if ($PSBoundParameters.ContainsKey('AssigneeExtensionIds')) {
                 $RequestBody.Add("assignee_extension_ids", $AssigneeExtensionIds)
+            }
+            if ($PSBoundParameters.ContainsKey('DisplayName')) {
+                $RequestBody.Add("display_name", $DisplayName)
+            }
+            if ($PSBoundParameters.ContainsKey('MacAddress')) {
+                $RequestBody.Add("mac_address", $MacAddress)
             }
             if ($PSBoundParameters.ContainsKey('Model')) {
                 $RequestBody.Add("model", $Model)

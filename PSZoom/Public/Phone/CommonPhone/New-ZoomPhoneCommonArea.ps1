@@ -2,6 +2,12 @@
 
 .SYNOPSIS
 Create a Common area phone account.
+
+.PARAMETER DisplayName
+Display name of the common area. Enter at least 3 characters.
+
+.PARAMETER SiteId
+Unique identifier of the site to which the common area desk phone is assigned.
               
 .PARAMETER CallingPlansType
 Zoom Phone calling plan number.
@@ -9,14 +15,8 @@ Zoom Phone calling plan number.
 .PARAMETER CountryIsoCode
 Two-lettered country code.
 
-.PARAMETER DisplayName
-Display name of the common area. Enter at least 3 characters.
-
 .PARAMETER ExtensionNumber
-Extension number assigned to the common area. If the site code is enabled, provide the short extension number instead.
-
-.PARAMETER SiteId
-Unique identifier of the site to which the common area desk phone is assigned.
+Extension number assigned to the common area. If the site code is enabled, provide the short extension number instead. Best to leave blank if unsure.
 
 .PARAMETER Timezone
 Timezone ID for the common area.
@@ -41,6 +41,9 @@ function New-ZoomPhoneCommonArea {
         [Parameter(Mandatory = $True)]
         [string]$DisplayName,
 
+        [Parameter(Mandatory = $True)]
+        [string]$SiteId,
+
         [Parameter()]
         [int]$CallingPlansType,
 
@@ -49,9 +52,6 @@ function New-ZoomPhoneCommonArea {
 
         [Parameter()]
         [int64]$ExtensionNumber,
-
-        [Parameter()]
-        [string]$SiteId,
 
         [Parameter()]
         [string]$Timezone,
@@ -91,7 +91,7 @@ function New-ZoomPhoneCommonArea {
                 }
     
                 $KeyValuePairs.Keys | ForEach-Object {
-                    if (-not ([string]::IsNullOrEmpty($KeyValuePairs.$_))) {
+                    if (-not (([string]::IsNullOrEmpty($KeyValuePairs.$_)) -or ($KeyValuePairs.$_ -eq 0) )) {
                         $RequestBody.Add($_, $KeyValuePairs.$_)
                     }
                 }

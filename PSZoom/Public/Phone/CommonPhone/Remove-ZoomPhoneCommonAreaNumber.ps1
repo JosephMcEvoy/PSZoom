@@ -35,10 +35,15 @@ function Remove-ZoomPhoneCommonAreaNumber {
         DefaultParameterSetName="SingleNumber"
     )]
     Param(
-        # -UserID
-        [parameter(ParameterSetName="SingleNumber")]
-        [parameter(ParameterSetName="AllNumbers")]
         [Parameter(
+            ParameterSetName="AllNumbers",
+            Mandatory = $True, 
+            Position = 0, 
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Parameter(
+            ParameterSetName="SingleNumber",
             Mandatory = $True, 
             Position = 0, 
             ValueFromPipeline = $True,
@@ -72,49 +77,66 @@ function Remove-ZoomPhoneCommonAreaNumber {
 
 
     process {
+
         $CommonAreaId | ForEach-Object {
 
-            $ZoomEntityInfo = Get-ZoomPhoneCommonArea CommonAreaId $_ -ErrorAction Stop
+            # Gather data about Common Area Phone
+            $ZoomEntityInfo = Get-ZoomPhoneCommonArea -CommonAreaId $_ -ErrorAction Stop
 
-            $VerifiedNumbersToBeRemoved = $ZoomEntityInfo | Select-Object -ExpandProperty phone_numbers
-            
-            if ($number) {
+            # Grab a list of all numbers
+            $VerifiedNumbersToBeRemoved = $ZoomEntityInfo | Select-Object -ExpandProperty phone_numbers -ErrorAction SilentlyContinue
 
-                if ($number -match "^[0-9]+") {
+            # If Parameter Set Name "Single Number" was chosen then the single number will be selected out of all the common area phone's numbers.
+            switch ($PSCmdlet.ParameterSetName) {
 
-                    $number = "{0}$number" -f '+'
+                "SingleNumber"{
+
+                    # Append "+" if not provided
+                    if ($number -match "^[0-9]+") {
     
-                }
-
-                $VerifiedNumbersToBeRemoved = $ZoomEntityInfo | Select-Object -ExpandProperty phone_numbers | Where-Object number -eq $number
-
-                if ([string]::IsNullOrEmpty($VerifiedNumbersToBeRemoved)) {
-                
-                    throw "The number provided is not assigned to user! Number: $number"
+                        $number = "{0}$number" -f '+'
+        
+                    }
     
-                }
+                    # Select only matching number
+                    $VerifiedNumbersToBeRemoved = $VerifiedNumbersToBeRemoved | Where-Object number -eq $number
 
+                    # If no match an error will be written
+                    if ([string]::IsNullOrEmpty($VerifiedNumbersToBeRemoved)) {
+                    
+                        Write-Error "The number provided is not assigned to user! Number: $number"
+
+                    }
+                    
+                }
+    
             }
 
-            foreach ($NumberTBR in $VerifiedNumbersToBeRemoved) {
+
+
+
+
+            foreach ($NumberTBR in $VerifiedNumbersToBeRemoved){
 
                 $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$_/phone_numbers/$NumberTBR"
 
 $Message = 
 @"
 
+Method:  DELETE
 URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
 Body:
 $RequestBody
 "@
-
-
-            if ($pscmdlet.ShouldProcess($Message, $_, "Remove $number")) {
+        
+        
+                if ($pscmdlet.ShouldProcess($Message, $_, "Remove $NumberTBR")) {
                     $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
             
                     if (-not $PassThru) {
                         Write-Output $response
                     }
+
                 }
 
             }
@@ -124,5 +146,33 @@ $RequestBody
         if ($PassThru) {
             Write-Output $CommonAreaId
         }
+
     }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+

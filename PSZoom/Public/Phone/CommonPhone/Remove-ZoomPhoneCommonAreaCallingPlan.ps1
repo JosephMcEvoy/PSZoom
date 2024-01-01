@@ -10,7 +10,10 @@ Common area ID or common area extension ID.
 No output. Can use Passthru switch to pass UserId to output.
 
 .EXAMPLE
-Remove-ZoomPhoneCommonAreaCallingPlan -CommonAreaId "n9uyb8ytv7rc6e"
+Remove-ZoomPhoneCommonAreaCallingPlan -CommonAreaId "n9uyb8ytv7rc6e" -PlanType 200
+
+.EXAMPLE
+Remove-ZoomPhoneCommonAreaCallingPlan -CommonAreaId "n9uyb8ytv7rc6e" -RemoveAllPlans
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/unassignCallingPlansFromCommonArea
@@ -19,8 +22,17 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/unas
 
 function Remove-ZoomPhoneCommonAreaCallingPlan {    
     [CmdletBinding(SupportsShouldProcess = $True)]
+    [CmdletBinding(DefaultParameterSetName="SinglePlan")]
     Param(
         [Parameter(
+            ParameterSetName = "SinglePlan",
+            Mandatory = $True, 
+            Position = 0, 
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Parameter(
+            ParameterSetName = "AllPlans",
             Mandatory = $True, 
             Position = 0, 
             ValueFromPipeline = $True,
@@ -29,39 +41,125 @@ function Remove-ZoomPhoneCommonAreaCallingPlan {
         [Alias('id', 'common_Area_Id')]
         [string[]]$CommonAreaId,
 
+
+        [Parameter(
+            ParameterSetName = "SinglePlan",
+            Mandatory = $True, 
+            Position = 0, 
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('type')]
+        [int]$PlanType,
+
+
+        [Parameter(
+            ParameterSetName = "AllPlans",
+            Mandatory = $True
+        )]
+        [switch]$RemoveAllPlans,
+
+
         [switch]$PassThru
     )
     
-
+    
 
     process {
-        $CommonAreaId | ForEach-Object {
+        
+        switch ($PSCmdlet.ParameterSetName) {
 
-            $CurrentLicense = Get-ZoomPhoneCommonArea -CommonAreaId $_ | Select-Object -ExpandProperty "calling_plans" | Select-Object -ExpandProperty "type"
+            "SinglePlan" {
 
-            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$_/calling_plans/$CurrentLicense"
+                Foreach($CommonArea in $CommonAreaId){           
+
+                    $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$CommonArea/calling_plans/$PlanType"
 
 
 $Message = 
 @"
 
+Method:  Delete
 URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
 Body:
 $RequestBody
 "@
 
 
-            if ($pscmdlet.ShouldProcess($Message, $_, "Remove calling plan $CurrentLicense")) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete
-        
-                if (-not $PassThru) {
-                    Write-Output $response
+                    if ($pscmdlet.ShouldProcess($Message, $CommonArea, "Remove calling plan $PlanType")) {
+                        $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete
+                
+                        if (-not $PassThru) {
+
+                            Write-Output $response
+
+                        }
+
+                    }
+
                 }
+
+                if ($PassThru) {
+
+                    Write-Output $CommonAreaId
+                    
+                }
+
             }
+            "AllPlans" {
+
+                Foreach($CommonArea in $CommonAreaId){
+
+                    # Grab Common Area's info
+                    $CurrentCommonAreaInfo = Get-ZoomPhoneCommonArea -CommonAreaId $CommonArea
+
+                    # Check if there is a calling plan assigned
+                    if ([bool]($CurrentCommonAreaInfo.PSobject.Properties.name -match "calling_plans")){
+
+                        # Capture all the 
+                        $CurrentCommonAreaInfo | Select-Object -ExpandProperty "calling_plans" | Select-Object -ExpandProperty "type" | ForEach-Object {
+
+                            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$CommonArea/calling_plans/$_"
+
+
+$Message = 
+@"
+
+Method:  Delete
+URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
+Body:
+$RequestBody
+"@
+
+
+
+                            if ($pscmdlet.ShouldProcess($Message, $CommonArea, "Remove calling plan $CurrentLicense")) {
+                                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete
+
+                                if (-not $PassThru) {
+                                    Write-Output $response
+                                }
+                            }
+
+                        }
+
+                    }else {
+                                    
+                        Write-Error "Common Area Phone `"$($CurrentCommonAreaInfo.display_name)`" does not have a calling plan to remove."
+
+                    }
+
+
+                }
+
+                if ($PassThru) {
+                    Write-Output $CommonAreaId
+                }
+
+            }
+
         }
 
-        if ($PassThru) {
-            Write-Output $CommonAreaId
-        }
     }
+
 }

@@ -24,7 +24,7 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/upda
 #>
 
 function Add-ZoomPhoneDeviceAssignee {    
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     Param(
         [Parameter(
             Mandatory = $True, 
@@ -53,13 +53,17 @@ function Add-ZoomPhoneDeviceAssignee {
     process {
 
         
-        if (-not $PSBoundParameters.ContainsKey('WhatIf')) {
+        if (-not ($PSBoundParameters.ContainsKey('WhatIf') -or $PSBoundParameters.ContainsKey('Confirm'))) {
 
             $response = Update-ZoomPhoneDevice -DeviceId $DeviceId -AssignedTo $UserId
     
         }elseif ($PSBoundParameters.ContainsKey('WhatIf')) {
 
             $response = Update-ZoomPhoneDevice -DeviceId $DeviceId -AssignedTo $UserId -WhatIf
+
+        }elseif ($PSBoundParameters.ContainsKey('Confirm')) {
+
+            $response = Update-ZoomPhoneDevice -DeviceId $DeviceId -AssignedTo $UserId -Confirm
 
         }
 

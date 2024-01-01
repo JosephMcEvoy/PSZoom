@@ -6,6 +6,15 @@ Use this API to unassign a calling plan from the common area.
 .PARAMETER CommonAreaId
 Common area ID or common area extension ID.
 
+.PARAMETER PlanType
+Plan number to remove.
+
+.PARAMETER RemoveAllPlans
+Switch to remove all calling plans from device.
+
+.PARAMETER PassThru
+Switch to pass CommonAreaIds back to user.
+
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
 

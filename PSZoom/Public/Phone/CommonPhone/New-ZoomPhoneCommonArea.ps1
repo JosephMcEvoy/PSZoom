@@ -104,6 +104,7 @@ function New-ZoomPhoneCommonArea {
 $Message = 
 @"
 
+Method: POST
 URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
 Body:
 $RequestBody

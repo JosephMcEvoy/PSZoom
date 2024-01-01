@@ -178,6 +178,7 @@ function Update-ZoomPhoneCommonArea {
 $Message = 
 @"
 
+Method: PATCH
 URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
 Body:
 $RequestBody

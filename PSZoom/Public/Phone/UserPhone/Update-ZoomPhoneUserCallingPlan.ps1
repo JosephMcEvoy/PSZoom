@@ -78,6 +78,7 @@ function Update-ZoomPhoneUserCallingPlan {
 $Message = 
 @"
 
+Method: PUT
 URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
 Body:
 $RequestBody
@@ -85,7 +86,7 @@ $RequestBody
 
 
             if ($pscmdlet.ShouldProcess($Message, $User, "Update calling plan")) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
+                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PUT
         
                 if (-not $PassThru) {
                     Write-Output $response

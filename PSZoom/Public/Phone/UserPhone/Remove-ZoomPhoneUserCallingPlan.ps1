@@ -48,6 +48,7 @@ function Remove-ZoomPhoneUserCallingPlan {
 $Message = 
 @"
 
+Method: DELETE
 URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
 Body:
 $RequestBody

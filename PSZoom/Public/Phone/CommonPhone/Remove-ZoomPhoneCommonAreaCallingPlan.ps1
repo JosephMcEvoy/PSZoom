@@ -6,7 +6,7 @@ Use this API to unassign a calling plan from the common area.
 .PARAMETER CommonAreaId
 Common area ID or common area extension ID.
 
-.PARAMETER PlanType
+.PARAMETER LicenseType
 Plan number to remove.
 
 .PARAMETER RemoveAllPlans
@@ -19,7 +19,7 @@ Switch to pass CommonAreaIds back to user.
 No output. Can use Passthru switch to pass UserId to output.
 
 .EXAMPLE
-Remove-ZoomPhoneCommonAreaCallingPlan -CommonAreaId "n9uyb8ytv7rc6e" -PlanType 200
+Remove-ZoomPhoneCommonAreaCallingPlan -CommonAreaId "n9uyb8ytv7rc6e" -LicenseType 200
 
 .EXAMPLE
 Remove-ZoomPhoneCommonAreaCallingPlan -CommonAreaId "n9uyb8ytv7rc6e" -RemoveAllPlans
@@ -59,7 +59,7 @@ function Remove-ZoomPhoneCommonAreaCallingPlan {
             ValueFromPipelineByPropertyName = $True
         )]
         [Alias('type')]
-        [int]$PlanType,
+        [int]$LicenseType,
 
 
         [Parameter(
@@ -82,7 +82,7 @@ function Remove-ZoomPhoneCommonAreaCallingPlan {
 
                 Foreach($CommonArea in $CommonAreaId){           
 
-                    $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$CommonArea/calling_plans/$PlanType"
+                    $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$CommonArea/calling_plans/$LicenseType"
 
 
 $Message = 
@@ -95,7 +95,7 @@ $RequestBody
 "@
 
 
-                    if ($pscmdlet.ShouldProcess($Message, $CommonArea, "Remove calling plan $PlanType")) {
+                    if ($pscmdlet.ShouldProcess($Message, $CommonArea, "Remove calling plan $LicenseType")) {
                         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete
                 
                         if (-not $PassThru) {

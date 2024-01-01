@@ -118,7 +118,7 @@ function Remove-ZoomPhoneCommonAreaNumber {
 
             foreach ($NumberTBR in $VerifiedNumbersToBeRemoved){
 
-                $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$_/phone_numbers/$NumberTBR"
+                $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$_/phone_numbers/$($NumberTBR.id)"
 
 $Message = 
 @"

@@ -2,6 +2,9 @@
 
 .SYNOPSIS
 Remove phone numbers from a user's zoom phone account.
+
+.PARAMETER UserId
+Unique number used to locate Zoom Phone User account.
                     
 .PARAMETER Number
 Specific phone number to be unassigned from zoom user.
@@ -25,7 +28,6 @@ Remove-ZoomPhoneUserNumber -UserId askywakler@thejedi.com -AllNumbers
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/UnassignPhoneNumber
-
 
 #>
 
@@ -76,41 +78,39 @@ function Remove-ZoomPhoneUserNumber {
         foreach ($user in $UserId) {
 
             $ZoomUserInfo = Get-ZoomPhoneUser -UserId $user -ErrorAction Stop
-
             $VerifiedNumbersToBeRemoved = $ZoomUserInfo | Select-Object -ExpandProperty phone_numbers
             
-            if ($number) {
-
-                if ($number -match "^[0-9]+") {
-
-                    $number = "{0}$number" -f '+'
-    
+            if ($Number) {
+                if ($Number -match "^[0-9]+") {
+                    $Number = "{0}$Number" -f '+'
                 }
 
-                $VerifiedNumbersToBeRemoved = $ZoomUserInfo | Select-Object -ExpandProperty phone_numbers | Where-Object number -eq $number
+                $VerifiedNumbersToBeRemoved = $ZoomUserInfo | Select-Object -ExpandProperty phone_numbers | Where-Object number -eq $Number
 
                 if ([string]::IsNullOrEmpty($VerifiedNumbersToBeRemoved)) {
-                
-                    throw "The number provided is not assigned to user! Number: $number"
-    
+                    throw "The number provided is not assigned to user. Number: $Number"
                 }
-
             }
 
             $VerifiedNumbersToBeRemoved | ForEach-Object {
-
                 $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$user/phone_numbers/$($_.id)"
+                $Message = 
+@"
 
-                if ($pscmdlet.ShouldProcess) {
+Method: DELETE
+URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
+Body:
+$RequestBody
+"@
+
+            if ($pscmdlet.ShouldProcess($Message, $User, "Remove $Number")) {
                     $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
             
                     if (-not $PassThru) {
                         Write-Output $response
                     }
                 }
-
             }
-
         }
 
         if ($PassThru) {

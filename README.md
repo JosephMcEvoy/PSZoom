@@ -95,22 +95,47 @@ Update-ZoomMeetingRegistrationQuestions
 Update-ZoomMeetingStatus  
   
 ### Phones ###  
-Add-ZoomPhoneUserCallingPlans
-Add-ZoomPhoneUserNumber
-Get-ZoomPhoneCallingPlans
-Get-ZoomPhoneNumbers  
-Get-ZoomPhoneSettingTemplate  
-Get-ZoomPhoneSettingTemplates  
+Get-ZoomPhoneCallingPlan  
+Get-ZoomPhoneNumber  
+Get-ZoomPhoneProvisioingTemplate  
+  
+### Common Area Phones ###  
+Add-ZoomPhoneCommonAreaCallingPlan  
+Add-ZoomPhoneCommonAreaNumber  
+Get-ZoomPhoneCommonArea  
+Get-ZoomPhoneCommonAreaSettings  
+New-ZoomPhoneCommonArea  
+Remove-ZoomPhoneCommonArea  
+Remove-ZoomPhoneCommonAreaCallingPlan  
+Remove-ZoomPhoneCommonAreaNumber  
+Update-ZoomPhoneCommonArea  
+  
+### Desk Phones ###  
+Add-ZoomPhoneDeviceAssignee  
+Get-ZoomPhoneDevice  
+Invoke-ZoomPhoneDeviceReboot  
+New-ZoomPhoneDevice  
+Remove-ZoomPhoneDevice  
+Remove-ZoomPhoneDeviceAssignee  
+Update-ZoomPhoneDevice  
+Update-ZoomPhoneDeviceProvisioningTemplate  
+  
+### User Phones ###  
+Add-ZoomPhoneUserCallingPlan  
+Add-ZoomPhoneUserNumber  
 Get-ZoomPhoneUser  
-Get-ZoomPhoneUsers  
-Get-ZoomPhoneUserSettings
-Remove-ZoomPhoneUserCallingPlans
-Remove-ZoomPhoneUserNumber
-Update-ZoomPhoneUserCallingPlans  
-
+Get-ZoomPhoneUserSettings  
+New-ZoomPhoneUser  
+Remove-ZoomPhoneUserCallingPlan  
+Remove-ZoomPhoneUserNumber  
+Update-ZoomPhoneUser  
+Update-ZoomPhoneUserCallingPlan  
+Update-ZoomPhoneUserSettings  
+  
 ### Phone Sites ###  
 Get-ZoomPhoneSite  
-Get-ZoomPhoneSites  
+Get-ZoomPhoneSettingTemplate  
+Get-ZoomPhoneSiteEmergencyAddress  
   
 ### Reports ###  
 Get-ZoomActiveInactiveHostReports  

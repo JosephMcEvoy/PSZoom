@@ -22,7 +22,8 @@ https://developers.zoom.us/docs/api/rest/other-references/plans/
 
 #>
 
-function Add-ZoomPhoneUserCallingPlans {    
+function Add-ZoomPhoneUserCallingPlan {    
+    [alias("Add-ZoomPhoneUserCallingPlans")]
     [CmdletBinding(SupportsShouldProcess = $True)]
     Param(
         [Parameter(
@@ -45,24 +46,18 @@ function Add-ZoomPhoneUserCallingPlans {
         [switch]$PassThru
     )
     
-
-
     process {
         foreach ($user in $UserId) {
             
-            if (!(Get-ZoomUserSettings -UserId $user | Select-Object -ExpandProperty "feature" | Select-Object -ExpandProperty "zoom_phone")) {
-
+            if (-not (Get-ZoomUserSettings -UserId $user | Select-Object -ExpandProperty "feature" | Select-Object -ExpandProperty "zoom_phone")) {
                 Update-ZoomUserSettings -UserId $user -ZoomPhone $True
-
             }
 
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$user/calling_plans"
             $RequestBody = @{ }
             $ChosenLicense = @{ }
-
-
             $KeyValuePairs = @{
-                'type'    = $LicenseType
+                'type' = $LicenseType
             }
 
             $KeyValuePairs.Keys | ForEach-Object {
@@ -76,8 +71,16 @@ function Add-ZoomPhoneUserCallingPlans {
             $RequestBody.Add("calling_plans", $ChosenLicense)
 
             $RequestBody = $RequestBody | ConvertTo-Json
+            $Message = 
+@"
 
-            if ($pscmdlet.ShouldProcess) {
+Method: POST
+URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
+Body:
+$RequestBody
+"@
+
+        if ($pscmdlet.ShouldProcess($Message, $UserId, "Update calling plan")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
         
                 if (-not $PassThru) {

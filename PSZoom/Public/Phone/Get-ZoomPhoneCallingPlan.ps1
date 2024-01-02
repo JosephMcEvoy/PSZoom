@@ -8,14 +8,16 @@ List all Zoom Phone calling plans that are enabled for Account.
 
 
 .LINK
-https://marketplace.zoom.us/docs/api-reference/zoom-api/phone/listcallingplans
+https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/listCallingPlans
 	
 .EXAMPLE
 Return the list of all Calling plans.
 Get-ZoomPhoneCallingPlans
+
 #>
 
-function Get-ZoomPhoneCallingPlans {
+function Get-ZoomPhoneCallingPlan {
+    [alias("Get-ZoomPhoneCallingPlans")]
     [CmdletBinding()]
     param ()
 

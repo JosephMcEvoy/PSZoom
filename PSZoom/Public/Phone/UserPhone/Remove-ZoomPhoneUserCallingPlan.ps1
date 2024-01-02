@@ -3,19 +3,24 @@
 .SYNOPSIS
 Remove calling plan to a Zoom Phone User
 
+.PARAMETER UserId
+Unique number used to locate Zoom Phone User account.
+
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
 
+
 .EXAMPLE
-Remove-ZoomPhoneUserCallingPlans -UserId askywakler@thejedi.com
+Remove-ZoomPhoneUserCallingPlan -UserId askywakler@thejedi.com
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/unassignCallingPlan
 
 #>
 
-function Remove-ZoomPhoneUserCallingPlans {    
+function Remove-ZoomPhoneUserCallingPlan {    
     [CmdletBinding(SupportsShouldProcess = $True)]
+    [Alias("Remove-ZoomPhoneUserCallingPlans")]
     Param(
         [Parameter(
             Mandatory = $True,       
@@ -29,17 +34,21 @@ function Remove-ZoomPhoneUserCallingPlans {
 
         [switch]$PassThru
     )
-    
-
 
     process {
         foreach ($user in $UserId) {
-
             $CurrentLicense = Get-ZoomPhoneUser -UserId $user | Select-Object -ExpandProperty "calling_plans" | Select-Object -ExpandProperty "type"
-
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$user/calling_plans/$CurrentLicense"
+            $Message = 
+@"
 
-            if ($pscmdlet.ShouldProcess) {
+Method: DELETE
+URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
+Body:
+$RequestBody
+"@
+
+            if ($pscmdlet.ShouldProcess($Message, $User, "Remove calling plan")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete
         
                 if (-not $PassThru) {

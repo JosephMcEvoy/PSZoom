@@ -1,40 +1,38 @@
 <#
 
 .SYNOPSIS
-Add an available phone number to a Zoom User.
-                    
+Assign phone numbers to a common area.
+
+.PARAMETER CommonAreaId
+Common area ID or common area extension ID.
+
 .PARAMETER Number
 Phone number to be assigned to zoom user.
 Use following command to get available phone numbers for Zoom instance.
-Get-ZoomPhoneNumbers
+Get-ZoomPhoneNumber -Unassigned
 
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
 
 .EXAMPLE
-Add-ZoomPhoneUserNumber -UserId askywakler@thejedi.com -PhoneNumber +18011011101
-
-.EXAMPLE
-Add-ZoomPhoneUserNumber -UserId askywakler@thejedi.com -PhoneNumber 18011011101
+Add-ZoomPhoneCommonAreaNumber -CommonAreaId "5se6dr7ft8ybu9nub" -PhoneNumber +18011011101
 
 .LINK
-https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/assignCallingPlan
-
+https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/assignPhoneNumbersToCommonArea
 
 #>
 
-function Add-ZoomPhoneUserNumber {    
+function Add-ZoomPhoneCommonAreaNumber {    
     [CmdletBinding(SupportsShouldProcess = $True)]
     Param(
         [Parameter(
-            Mandatory = $True,       
+            Mandatory = $True, 
+            Position = 0, 
             ValueFromPipeline = $True,
-            ValueFromPipelineByPropertyName = $True,
-            Position = 0
+            ValueFromPipelineByPropertyName = $True
         )]
-        [ValidateLength(1, 128)]
-        [Alias('Email', 'Emails', 'EmailAddress', 'EmailAddresses', 'Id', 'ids', 'user_id', 'user', 'users', 'userids')]
-        [string[]]$UserId,
+        [Alias('id', 'common_Area_Id')]
+        [string]$CommonAreaId,
 
         [Parameter(
             Mandatory = $True, 
@@ -47,32 +45,24 @@ function Add-ZoomPhoneUserNumber {
         [switch]$PassThru
     )
     
-
-
     process {
-        foreach ($user in $UserId) {
+        foreach ($CommonArea in $CommonAreaId) {
 
             if ($number -match "^[0-9]+") {
-
                 $number = "{0}$number" -f '+'
-
             }
 
-            $NumberInfo = Get-ZoomPhoneNumbers -ErrorAction Stop | Where-object Number -eq $number 
+            $NumberInfo = Get-ZoomPhoneNumber -ErrorAction Stop | Where-object Number -eq $number 
 
-            if (!($NumberInfo)) {
-
+            if (-not ($NumberInfo)) {
                 Throw "Provided number was not found in the accounts's phone number list"
-
             }
 
             if ([bool]($NumberInfo.PSobject.Properties.name -match "assignee")) {
-
                 Throw "Number is already assigned to another user"
-
             }
 
-            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$user/phone_numbers"
+            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$CommonArea/phone_numbers"
             $RequestBody = @{ }
             $ChosenNumber = @{ }
 
@@ -94,7 +84,17 @@ function Add-ZoomPhoneUserNumber {
 
             $RequestBody = $RequestBody | ConvertTo-Json
 
-            if ($pscmdlet.ShouldProcess) {
+$Message = 
+@"
+
+Method: POST
+URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandProperty AbsoluteUri)
+Body:
+$RequestBody
+"@
+
+
+        if ($pscmdlet.ShouldProcess($Message, $CommonArea, "Adding $Number")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
         
                 if (-not $PassThru) {
@@ -104,7 +104,7 @@ function Add-ZoomPhoneUserNumber {
         }
 
         if ($PassThru) {
-            Write-Output $UserId
+            Write-Output $CommonAreaId
         }
     }
 }

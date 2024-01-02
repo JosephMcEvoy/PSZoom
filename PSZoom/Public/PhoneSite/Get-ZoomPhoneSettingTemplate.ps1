@@ -1,13 +1,13 @@
 <#
 
 .SYNOPSIS
-View specific site information in the Zoom Phone account.
+View zoom phone user settings templates.
 
 .DESCRIPTION
-View specific site information in the Zoom Phone account.
+View zoom phone user settings templates.
 
-.PARAMETER SiteId
-The Site Id to be queried.
+.PARAMETER templateId
+The template Id to be queried.
 
 .PARAMETER PageSize
 The number of records returned within a single API call (Min 30 - MAX 100).
@@ -17,31 +17,30 @@ The next page token is used to paginate through large result sets. A next page t
 of available results exceeds the current page size. The expiration period for this token is 15 minutes.
 
 .PARAMETER Full
-The full details of each Common Area Phone.
+The full details of each settings templates.
 
 .OUTPUTS
 An array of Objects
 
 .EXAMPLE
 Retrieve a site's settings templates.
-Get-ZoomPhoneSite -SiteId ##########
+Get-ZoomPhoneSettingsTemplates -templateId ##########
 
 .EXAMPLE
-Retrieve inforation for all sites.
-Get-ZoomPhoneSite
+Retrieve inforation for all settings templates.
+Get-ZoomPhoneSettingsTemplates
 
 .EXAMPLE
-Retrieve detailed inforation for all sites.
-Get-ZoomPhoneSite -Full
+Retrieve detailed inforation for all settings templates.
+Get-ZoomPhoneSettingsTemplates -Full
 
 .LINK
-https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/listPhoneSites
+https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/listSettingTemplates
 
 #>
 
-
-function Get-ZoomPhoneSite {
-    [alias("Get-ZoomPhoneSites")]
+function Get-ZoomPhoneSettingTemplate {
+    [alias("Get-ZoomPhoneSettingsTemplates")]
     [CmdletBinding(DefaultParameterSetName="AllData")]
     param ( 
         [Parameter(
@@ -51,7 +50,16 @@ function Get-ZoomPhoneSite {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('id', 'site_id')]
+        [Alias('id', 'template_Id')]
+        [string[]]$templateId,
+
+        [Parameter(
+            ParameterSetName="SpecificSite",
+            Mandatory = $False, 
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
+        )]
+        [Alias('site_id')]
         [string[]]$SiteId,
 
         [parameter(ParameterSetName="NextRecords")]
@@ -65,29 +73,38 @@ function Get-ZoomPhoneSite {
         [string]$NextPageToken,
 
         [parameter(ParameterSetName="AllData")]
+        [parameter(ParameterSetName="SpecificSite")]
         [switch]$Full = $False
     )
 
     process {
-        $baseURI = "https://api.$ZoomURI/v2/phone/sites"
+
+        $baseURI = "https://api.$ZoomURI/v2/phone/setting_templates"
 
         switch ($PSCmdlet.ParameterSetName) {
-
             "NextRecords" {
                 $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -PageSize $PageSize -NextPageToken $NextPageToken
             }
 
             "SelectedRecord" {
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -ObjectId $siteId
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -ObjectId $templateId
             }
 
             "AllData" {
                 $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -PageSize 100
             }
+
+            "SpecificSite" {
+                $AggregatedResponse = @()
+                $SiteId | foreach-object {
+                    $QueryStatements = @{"site_id" = $_}
+                    $AggregatedResponse += Get-ZoomPaginatedData -URI $baseURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
+                }
+            }
         }
 
         if ($Full) {
-            $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty Id
+            $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
             $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
         }
 

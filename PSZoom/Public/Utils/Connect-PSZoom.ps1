@@ -89,7 +89,8 @@ function Connect-PSZoom {
                 $Token = ConvertTo-SecureString -String $Token -AsPlainText -Force
             }
         } else {
-            $Token = New-OAuthToken -AccountID $AccountID -ClientID $ClientID -ClientSecret $ClientSecret
+
+            $Token = New-OAuthToken -AccountID $AccountID -ClientID $ClientID -ClientSecret $ClientSecret -APIConnection $APIConnection
         }
         
         $Script:PSZoomToken = $Token

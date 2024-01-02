@@ -1,28 +1,27 @@
 <#
 
 .SYNOPSIS
-View specific user Zoom Phone account.
+View specific user Zoom Phone profile settings.
 
 .DESCRIPTION
-View specific user Zoom Phone account.
+View specific user Zoom Phone profile settings.
 
 .PARAMETER UserId
 The user ID or email address.
-
 
 .OUTPUTS
 An object with the Zoom API response.
 
 .EXAMPLE
 Retrieve a user's phone info.
-Get-ZoomPhoneUser jsmith@lawfirm.com
+Get-ZoomPhoneUserSettings jsmith@lawfirm.com
 
 .LINK
-https://marketplace.zoom.us/docs/api-reference/zoom-api/phone/phoneuser
+https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/phoneUserSettings
 
 #>
 
-function Get-ZoomPhoneUser {
+function Get-ZoomPhoneUserSettings {
     [CmdletBinding()]
     param (
         [Parameter(
@@ -31,14 +30,13 @@ function Get-ZoomPhoneUser {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('email', 'emailaddress', 'id', 'user_id', 'ids', 'userids', 'emails', 'emailaddresses')]
+        [Alias('email', 'emailaddress', 'id', 'user_id', 'ids', 'userids', 'emails', 'emailaddresses', 'host_id')]
         [string[]]$UserId
      )
 
     process {
         foreach ($id in $UserId) {
-
-            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$id"
+            $request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$id/settings"
 
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET
 

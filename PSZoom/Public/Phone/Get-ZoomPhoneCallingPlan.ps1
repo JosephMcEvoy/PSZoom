@@ -13,6 +13,7 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/list
 .EXAMPLE
 Return the list of all Calling plans.
 Get-ZoomPhoneCallingPlans
+
 #>
 
 function Get-ZoomPhoneCallingPlan {

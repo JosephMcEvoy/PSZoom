@@ -25,7 +25,6 @@ Manufacturer (brand) name of the device.
 .PARAMETER ProvisionTemplateId
 Provision template id. Supported only by some devices. Empty string represents 'No value set'
 
-
 .OUTPUTS
 Outputs object
 
@@ -35,7 +34,6 @@ New-ZoomPhoneDevice -DisplayName "DeviceName" -MacAddress 001122334455
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/addPhoneDevice
-
 
 #>
 
@@ -63,15 +61,12 @@ function New-ZoomPhoneDevice {
 
         [Parameter()]
         [string]$ProvisionTemplateId
-
-
     )
     
 
 
     process {
         $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/devices"
-
 
         #region body
             $RequestBody = @{ }
@@ -98,11 +93,8 @@ function New-ZoomPhoneDevice {
             }
         #endregion body
         
-
         $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
-
-
-$Message = 
+        $Message = 
 @"
 
 Method: POST
@@ -111,12 +103,9 @@ Body:
 $RequestBody
 "@
 
-
-
         if ($pscmdlet.ShouldProcess($Message, $DisplayName, "Create device ")) {
-
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
-    
+
             Write-Output $response
         }
     }

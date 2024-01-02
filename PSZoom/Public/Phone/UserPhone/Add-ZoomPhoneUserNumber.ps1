@@ -20,7 +20,6 @@ Add-ZoomPhoneUserNumber -UserId askywakler@thejedi.com -PhoneNumber 18011011101
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/assignCallingPlan
 
-
 #>
 
 function Add-ZoomPhoneUserNumber {    
@@ -47,37 +46,27 @@ function Add-ZoomPhoneUserNumber {
 
         [switch]$PassThru
     )
-    
-
 
     process {
         foreach ($user in $UserId) {
 
             if ($number -match "^[0-9]+") {
-
                 $number = "{0}$number" -f '+'
-
             }
 
             $NumberInfo = Get-ZoomPhoneNumber -ErrorAction Stop | Where-object Number -eq $number 
 
-            if (!($NumberInfo)) {
-
+            if (-not ($NumberInfo)) {
                 Throw "Provided number was not found in the accounts's phone number list"
-
             }
 
             if ([bool]($NumberInfo.PSobject.Properties.name -match "assignee")) {
-
                 Throw "Number is already assigned to another user"
-
             }
 
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$user/phone_numbers"
             $RequestBody = @{ }
             $ChosenNumber = @{ }
-
-
             $KeyValuePairs = @{
                 'id'      = $NumberInfo.id
                 'number'  = $NumberInfo.number
@@ -94,9 +83,7 @@ function Add-ZoomPhoneUserNumber {
             $RequestBody.Add("phone_numbers", $ChosenNumber)
 
             $RequestBody = $RequestBody | ConvertTo-Json
-
-
-$Message = 
+            $Message = 
 @"
 
 Method: POST
@@ -104,7 +91,6 @@ URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandPrope
 Body:
 $RequestBody
 "@
-
 
         if ($pscmdlet.ShouldProcess($Message, $UserId, "Adding $Number")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST

@@ -26,7 +26,6 @@ Remove-ZoomPhoneCommonAreaNumber -CommonAreaId "nc6xre5x76c6r-d" -AllNumbers
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/unassignPhoneNumbersFromCommonArea
 
-
 #>
 
 function Remove-ZoomPhoneCommonAreaNumber {    
@@ -34,6 +33,7 @@ function Remove-ZoomPhoneCommonAreaNumber {
         SupportsShouldProcess = $True,
         DefaultParameterSetName="SingleNumber"
     )]
+
     Param(
         [Parameter(
             ParameterSetName="AllNumbers",
@@ -52,7 +52,6 @@ function Remove-ZoomPhoneCommonAreaNumber {
         [Alias('id', 'common_Area_Id')]
         [string[]]$CommonAreaId,
 
-
         # -Number
         [parameter(ParameterSetName="SingleNumber",
             Mandatory = $True, 
@@ -62,11 +61,9 @@ function Remove-ZoomPhoneCommonAreaNumber {
         [ValidateScript({(($_ -match "^\+[0-9]+$") -or ($_ -match "^[0-9]+$"))})]
         [string]$Number,
 
-
         # -AllNumbers
         [parameter(ParameterSetName="AllNumbers")]
         [switch]$AllNumbers,
-
 
         # -Passthru
         [parameter(ParameterSetName="SingleNumber")]
@@ -74,12 +71,8 @@ function Remove-ZoomPhoneCommonAreaNumber {
         [switch]$PassThru
     )
     
-
-
     process {
-
         $CommonAreaId | ForEach-Object {
-
             # Gather data about Common Area Phone
             $ZoomEntityInfo = Get-ZoomPhoneCommonArea -CommonAreaId $_ -ErrorAction Stop
 
@@ -88,14 +81,10 @@ function Remove-ZoomPhoneCommonAreaNumber {
 
             # If Parameter Set Name "Single Number" was chosen then the single number will be selected out of all the common area phone's numbers.
             switch ($PSCmdlet.ParameterSetName) {
-
-                "SingleNumber"{
-
+                "SingleNumber" {
                     # Append "+" if not provided
                     if ($number -match "^[0-9]+") {
-    
                         $number = "{0}$number" -f '+'
-        
                     }
     
                     # Select only matching number
@@ -103,24 +92,14 @@ function Remove-ZoomPhoneCommonAreaNumber {
 
                     # If no match an error will be written
                     if ([string]::IsNullOrEmpty($VerifiedNumbersToBeRemoved)) {
-                    
-                        Write-Error "The number provided is not assigned to user! Number: $number"
-
+                        Write-Error "The number provided is not assigned to user. Number: $number"
                     }
-                    
                 }
-    
             }
 
-
-
-
-
             foreach ($NumberTBR in $VerifiedNumbersToBeRemoved){
-
                 $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$_/phone_numbers/$($NumberTBR.id)"
-
-$Message = 
+                $Message = 
 @"
 
 Method:  DELETE
@@ -128,51 +107,19 @@ URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandPrope
 Body:
 $RequestBody
 "@
-        
-        
+
                 if ($pscmdlet.ShouldProcess($Message, $_, "Remove $NumberTBR")) {
                     $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
             
                     if (-not $PassThru) {
                         Write-Output $response
                     }
-
                 }
-
             }
-
         }
 
         if ($PassThru) {
             Write-Output $CommonAreaId
         }
-
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-

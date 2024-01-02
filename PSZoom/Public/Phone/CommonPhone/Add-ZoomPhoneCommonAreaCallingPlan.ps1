@@ -47,13 +47,8 @@ function Add-ZoomPhoneCommonAreaCallingPlan {
         [switch]$PassThru
     )
     
-
-
     process {
         $CommonAreaId | ForEach-Object {
-            
-
-
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$_/calling_plans"
             $RequestBody = @{ }
             $ChosenLicense = @{ }
@@ -75,7 +70,6 @@ function Add-ZoomPhoneCommonAreaCallingPlan {
 
             $RequestBody = $RequestBody | ConvertTo-Json
 
-
 $Message = 
 @"
 
@@ -84,8 +78,6 @@ URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandPrope
 Body:
 $RequestBody
 "@
-
-
 
             if ($pscmdlet.ShouldProcess($Message, $CommonAreaId, "Adding calling plan $LicenseType")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST

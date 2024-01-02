@@ -71,7 +71,6 @@ function Get-ZoomPaginatedData {
 
     )
     
-    
     process {
 
         switch ($PSCmdlet.ParameterSetName) {
@@ -94,30 +93,26 @@ function Get-ZoomPaginatedData {
                 $request.Query = $query.ToString()
                 
                 $AggregatedResponse = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
-        
-        
             }
+
             "SelectedRecord" {
-        
                 $AggregatedResponse = @()
         
                 foreach ($id in $ObjectId) {
                     $request = [System.UriBuilder]$URI
                     $request.path = "{0}/{1}" -f $request.path, $id
                     $AggregatedResponse += Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
-        
                 }
-        
+
             }
             "AllData" {
-        
                 $AggregatedResponse = @()
         
                 do {
-            
                     $request = [System.UriBuilder]$URI
                     $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
                     $query.Add('page_size', $PageSize)
+
                     if ($AdditionalQueryStatements) {
 
                         foreach ($Statement in $AdditionalQueryStatements.GetEnumerator() ) {
@@ -125,25 +120,24 @@ function Get-ZoomPaginatedData {
                             $query.Add($Statement.Name, $Statement.Value)
                         }
                     }
+
                     if ($response.next_page_token) {
                         $query.Add('next_page_token', $response.next_page_token)
                     }
+
                     $request.Query = $query.ToString()
                     
                     $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
             
                     if ($response.total_records -ne 0) {
-            
                         $TargetProperty =  $response.PSobject.Properties.name | Where-Object {($_ -ne "next_page_token") -and ($_ -ne "page_size") -and ($_ -ne "total_records")}
                         $AggregatedResponse += $response | Select-Object -ExpandProperty $TargetProperty
-            
                     }
             
-                } until (!($response.next_page_token))
+                } until (-not ($response.next_page_token))
             }
         }
 
         Write-Output $AggregatedResponse
- 
     }
 }

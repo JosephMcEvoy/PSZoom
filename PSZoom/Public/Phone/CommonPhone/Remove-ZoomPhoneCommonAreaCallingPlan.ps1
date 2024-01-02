@@ -61,30 +61,20 @@ function Remove-ZoomPhoneCommonAreaCallingPlan {
         [Alias('type')]
         [int]$LicenseType,
 
-
         [Parameter(
             ParameterSetName = "AllPlans",
             Mandatory = $True
         )]
         [switch]$RemoveAllPlans,
 
-
         [switch]$PassThru
     )
-    
-    
 
     process {
-        
         switch ($PSCmdlet.ParameterSetName) {
-
             "SinglePlan" {
-
                 Foreach($CommonArea in $CommonAreaId){           
-
                     $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$CommonArea/calling_plans/$LicenseType"
-
-
 $Message = 
 @"
 
@@ -94,31 +84,22 @@ Body:
 $RequestBody
 "@
 
-
                     if ($pscmdlet.ShouldProcess($Message, $CommonArea, "Remove calling plan $LicenseType")) {
                         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete
                 
                         if (-not $PassThru) {
-
                             Write-Output $response
-
                         }
-
                     }
-
                 }
 
                 if ($PassThru) {
-
                     Write-Output $CommonAreaId
-                    
                 }
 
             }
             "AllPlans" {
-
                 Foreach($CommonArea in $CommonAreaId){
-
                     # Grab Common Area's info
                     $CurrentCommonAreaInfo = Get-ZoomPhoneCommonArea -CommonAreaId $CommonArea
 
@@ -130,7 +111,6 @@ $RequestBody
 
                             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$CommonArea/calling_plans/$_"
 
-
 $Message = 
 @"
 
@@ -140,8 +120,6 @@ Body:
 $RequestBody
 "@
 
-
-
                             if ($pscmdlet.ShouldProcess($Message, $CommonArea, "Remove calling plan $CurrentLicense")) {
                                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete
 
@@ -149,26 +127,16 @@ $RequestBody
                                     Write-Output $response
                                 }
                             }
-
                         }
-
-                    }else {
-                                    
+                    } else {
                         Write-Error "Common Area Phone `"$($CurrentCommonAreaInfo.display_name)`" does not have a calling plan to remove."
-
                     }
-
-
                 }
 
                 if ($PassThru) {
                     Write-Output $CommonAreaId
                 }
-
             }
-
         }
-
     }
-
 }

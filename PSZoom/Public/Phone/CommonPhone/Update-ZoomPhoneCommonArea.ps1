@@ -42,7 +42,6 @@ Unique identifier of the site to which the common area desk phone is assigned.
 .PARAMETER Timezone
 Timezone ID for the common area.
 
-
 .OUTPUTS
 No output. Can use Passthru switch to pass UserId to output.
 
@@ -56,7 +55,6 @@ Update-ZoomPhoneCommonArea -UserId askywakler@thejedi.com -DisplayName "Lobby Ph
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/updateCommonArea
-
 
 #>
 
@@ -109,17 +107,12 @@ function Update-ZoomPhoneCommonArea {
         [Parameter()]
         [string]$Timezone,
 
-
         [switch]$PassThru
-
     )
-    
-
 
     process {
         foreach ($ID in $commonAreaId) {
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$ID"
-
 
             #region international_calling
                 $international_calling = @{ }
@@ -131,14 +124,12 @@ function Update-ZoomPhoneCommonArea {
                 }
             #endregion international_calling
 
-
             #region policy
                 $policy = @{ }
                 if ($international_calling.Count -ne 0) {
                     $policy.Add("international_calling", $international_calling)
                 }
             #endregion policy
-
 
             #region body
                 $RequestBody = @{ }
@@ -164,18 +155,12 @@ function Update-ZoomPhoneCommonArea {
                 }
             #endregion body
 
-
             if ($RequestBody.Count -eq 0) {
-
                 throw "Request must contain at least one common area account change."
-
             }
 
-
             $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
-
-
-$Message = 
+            $Message = 
 @"
 
 Method: PATCH
@@ -183,8 +168,6 @@ URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandPrope
 Body:
 $RequestBody
 "@
-
-
 
         if ($pscmdlet.ShouldProcess($Message, $CommonAreaId, "Update")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
@@ -194,7 +177,6 @@ $RequestBody
                 }
             }
         }
-
 
         if ($PassThru) {
             Write-Output $commonAreaId

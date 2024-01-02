@@ -45,7 +45,6 @@ $AllData = Get-ZoomPhoneNumber -Unassigned
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/listAccountPhoneNumbers
-	
 
 #>
 
@@ -84,56 +83,44 @@ function Get-ZoomPhoneNumber {
 
     process {
 
-        $BASEURI = "https://api.$ZoomURI/v2/phone/numbers"
+        $baseURI = "https://api.$ZoomURI/v2/phone/numbers"
 
         switch ($PSCmdlet.ParameterSetName) {
 
             "NextRecords" {
-
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize $PageSize -NextPageToken $NextPageToken
-
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -PageSize $PageSize -NextPageToken $NextPageToken
             }
+
             "SelectedRecord" {
-
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -ObjectId $PhoneNumberId
-
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -ObjectId $PhoneNumberId
             }
-            "AllData" {
 
+            "AllData" {
                 switch ($Filter) {
 
                     "Assigned" {
-        
                         $QueryStatements = @{"type" = "assigned"}
-        
                     }
-                    "Unassigned" {
 
+                    "Unassigned" {
                         $QueryStatements = @{"type" = "unassigned"}
-        
                     }
                     "All" {
-        
                         $QueryStatements = @{"type" = "all"}
-        
                     }
+
                     "BYOC" {
-        
                         $QueryStatements = @{"type" = "byoc"}
-        
                     }
                 }
 
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
-            
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
             }
         }
 
         if ($Full) {
-
             $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
             $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
-
         }
 
         Write-Output $AggregatedResponse

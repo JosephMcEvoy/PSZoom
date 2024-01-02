@@ -35,7 +35,6 @@ Update-ZoomPhoneUser -UserId askywakler@thejedi.com -MusicOnHoldId "w98yby73y5nt
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/updateUserSettings
 
-
 #>
 
 function Update-ZoomPhoneUserSettings {    
@@ -73,45 +72,43 @@ function Update-ZoomPhoneUserSettings {
         [string]$OutboundCallerId,
         
         [switch]$PassThru
-
     )
-    
-
 
     process {
         foreach ($user in $UserId) {
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$user/settings"
 
-
             #region body
                 $RequestBody = @{ }
+
                 if ($PSBoundParameters.ContainsKey('AreaCode')) {
                     $RequestBody.Add("area_code", [string]$AreaCode)
                 }
+
                 if ($PSBoundParameters.ContainsKey('AudioPromptLanguage')) {
                     $RequestBody.Add("audio_prompt_language", $AudioPromptLanguage)
                 }
+
                 if ($PSBoundParameters.ContainsKey('CountryIsoCode')) {
                     $RequestBody.Add("country_iso_code", $CountryIsoCode)
                 }
+
                 if ($PSBoundParameters.ContainsKey('MusicOnHoldId')) {
                     $RequestBody.Add("music_on_hold_id", $MusicOnHoldId)
                 }
+
                 if ($PSBoundParameters.ContainsKey('OutboundCallerId')) {
                     $RequestBody.Add("outbound_caller_id", $OutboundCallerId)
                 }
+
             #endregion body
 
             if ($RequestBody.Count -eq 0) {
-
                 throw "Request must contain at least one Zoom Phone Setting User change."
-
             }
 
             $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
-
-
-$Message = 
+            $Message = 
 @"
 
 Method: PATCH
@@ -120,8 +117,7 @@ Body:
 $RequestBody
 "@
 
-
-        if ($pscmdlet.ShouldProcess($Message, $UserId, "Update settings")) {
+        if ($pscmdlet.ShouldProcess($Message, $UserId, 'Update settings')) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
         
                 if (-not $PassThru) {
@@ -129,7 +125,6 @@ $RequestBody
                 }
             }
         }
-
 
         if ($PassThru) {
             Write-Output $UserId

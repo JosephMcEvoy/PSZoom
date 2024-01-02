@@ -55,44 +55,30 @@ function Remove-ZoomPhoneDeviceAssignee {
         [switch]$PassThru
     )
     
-
-
     process {
-
-    
 
         switch ($PSCmdlet.ParameterSetName) {
             "UnassignAll" {
-
                 $ExtensionId = @()
-
                 $assignee = Get-ZoomPhoneDevice -DeviceId $DeviceId | Select-Object -ExpandProperty assignee
 
                 ForEach ($entity in $assignee) {
-
                     switch($entity.extension_type) {
                         "user" {
-            
                             $ExtensionId += Get-ZoomPhoneUser -UserId $entity.id | Select-Object -ExpandProperty extension_id
-            
                         }
+
                         "commonArea" {
-            
                             $ExtensionId += Get-ZoomPhoneCommonArea -CommonAreaId $entity.id | Select-Object -ExpandProperty id
-            
                         }
                     }
                 }
             }
         }
 
-
         $ExtensionId | ForEach-Object {
-
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/devices/$DeviceId/extensions/$_"
-
-
-$Message = 
+            $Message = 
 @"
 
 Method: DELETE
@@ -100,7 +86,6 @@ URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandPrope
 Body:
 $RequestBody
 "@
-
 
             if ($pscmdlet.ShouldProcess($Message, $DeviceId, "Removing $_ association")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete
@@ -111,20 +96,8 @@ $RequestBody
             } 
         }
 
-
         if ($PassThru) {
             Write-Output $DeviceId
         }
     }
 }
-
-        
-
-
-        
-
-
-
-
-        
-

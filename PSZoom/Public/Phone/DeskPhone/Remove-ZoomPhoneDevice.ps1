@@ -34,16 +34,11 @@ function Remove-ZoomPhoneDevice {
 
         [switch]$PassThru
     )
-    
-
 
     process {
         $DeviceId | foreach-object {
-
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/devices/$_"
-
-
-$Message = 
+            $Message = 
 @"
 
 Method: DELETE
@@ -51,8 +46,6 @@ URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandPrope
 Body:
 $RequestBody
 "@
-
-
 
         if ($pscmdlet.ShouldProcess($Message, $_, "Delete")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete

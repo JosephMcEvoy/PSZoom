@@ -48,8 +48,6 @@ function Update-ZoomPhoneUserCallingPlan {
 
         [switch]$PassThru
     )
-    
-
 
     process {
         foreach ($user in $UserId) {
@@ -58,12 +56,9 @@ function Update-ZoomPhoneUserCallingPlan {
 
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$user/calling_plans"
             $RequestBody = @{ }
-
-
             $KeyValuePairs = @{
                 'source_type'    = $CurrentLicense
                 'target_type'    = $LicenseType
-
             }
 
             $KeyValuePairs.Keys | ForEach-Object {
@@ -73,9 +68,7 @@ function Update-ZoomPhoneUserCallingPlan {
             }
 
             $RequestBody = $RequestBody | ConvertTo-Json
-
-
-$Message = 
+            $Message = 
 @"
 
 Method: PUT
@@ -83,7 +76,6 @@ URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandPrope
 Body:
 $RequestBody
 "@
-
 
             if ($pscmdlet.ShouldProcess($Message, $User, "Update calling plan")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PUT

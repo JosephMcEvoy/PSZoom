@@ -1,11 +1,9 @@
-
 <#
 
 .SYNOPSIS
 Iterate through paginated pages to consolidate data or locate records.
 
 .PARAMETER ObjectIds
-
 
 .PARAMETER CmdletToRun
 Name of function to pass objects into.
@@ -17,11 +15,6 @@ Get-ZoomItemFullDetails -ObjectIds $ArrayOfObjects -CmdletToRun 'Get-ZoomPhoneNu
 Array of objects.
 
 #>
-
-
-
-
-
 
 function Get-ZoomItemFullDetails {
     [CmdletBinding(DefaultParameterSetName="AllData")]
@@ -37,19 +30,13 @@ function Get-ZoomItemFullDetails {
         
         [Parameter(Mandatory = $True)]
         [string]$CmdletToRun
-
     )
 
-
-
     process {
-
         if ($PSVersionTable.PSVersion.Major -ge 7) {
 
             $FullResponse = [System.Collections.Concurrent.ConcurrentBag[psobject]]::new()
-
             $ObjectIds | ForEach-Object -Parallel {
-
                 $Script:PSZoomToken =  $using:PSZoomToken
                 $Script:ZoomURI = $using:ZoomURI
                 $localFullResponse = $using:FullResponse
@@ -58,22 +45,15 @@ function Get-ZoomItemFullDetails {
                 #$using:CmdletToRun $_.Id
                 $commandtoexecute = $using:CmdletToRun + " `'" + $_ + "`'"
                 $localFullResponse.Add($(Invoke-Expression -Command $commandtoexecute))
-
             } -ThrottleLimit 10  #Recommended amount for Pro users.  If 429 is returned this number may need to be lowered.  See Rate limit details.
-
-        }else{
-
+        } else{
             $FullResponse = @()
-
             $ObjectIds | ForEach-Object {
-                
                 # Write-Progress -Activity "Query Zoom API" -Status "$([math]::Round(($FullResponse.count/$ObjectIds.count)*100))% Complete" -PercentComplete ([math]::Round(($FullResponse.count/$ObjectIds.count)*100))
                 $FullResponse += Invoke-Expression "$CmdletToRun $_"
-
             }
         }
 
-        Write-Output $FullResponse 
-
+        Write-Output $FullResponse
     }
 }

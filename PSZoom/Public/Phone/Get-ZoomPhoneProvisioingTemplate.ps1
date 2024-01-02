@@ -65,40 +65,30 @@ function Get-ZoomPhoneProvisioingTemplate {
 
         [parameter(ParameterSetName="AllData")]
         [switch]$Full = $False
-
      )
 
     process {
-
-        $BASEURI = "https://api.$ZoomURI/v2/phone/provision_templates"
+        $baseURI = "https://api.$ZoomURI/v2/phone/provision_templates"
 
         switch ($PSCmdlet.ParameterSetName) {
-
             "NextRecords" {
-
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize $PageSize -NextPageToken $NextPageToken
-
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -PageSize $PageSize -NextPageToken $NextPageToken
             }
+
             "SelectedRecord" {
-
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -ObjectId $ProvisionTemplateID
-
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -ObjectId $ProvisionTemplateID
             }
+
             "AllData" {
-
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize $PageSize
-
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -PageSize $PageSize
             }
         }
         
         if ($Full) {
-
             $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
             $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
-
         }
 
-        Write-Output $AggregatedResponse 
-        
+        Write-Output $AggregatedResponse
     }
 }

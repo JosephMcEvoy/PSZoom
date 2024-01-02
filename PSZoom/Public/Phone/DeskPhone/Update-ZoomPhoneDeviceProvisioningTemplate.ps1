@@ -26,7 +26,6 @@ Update-ZoomPhoneDeviceProvisioningTemplate -DeviceId "5d65f7tgy8hu95edr6"
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/updateProvisionTemplateToDevice
 
-
 #>
 
 function Update-ZoomPhoneDeviceProvisioningTemplate {    
@@ -45,9 +44,7 @@ function Update-ZoomPhoneDeviceProvisioningTemplate {
         [Alias('provision_template_id')]
         [string]$ProvisionTemplateId,
 
-
         [switch]$PassThru
-
     )
     
 
@@ -56,18 +53,14 @@ function Update-ZoomPhoneDeviceProvisioningTemplate {
         $DeviceId | ForEach-Object {
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/devices/$_/provision_templates"
 
-
             #region body
                 $RequestBody = @{ }
 
                 $RequestBody.Add("provision_template_id", $ProvisionTemplateId)
             #endregion body
 
-
             $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
-
-
-$Message = 
+            $Message = 
 @"
 
 Method: PATCH
@@ -75,8 +68,6 @@ URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandPrope
 Body:
 $RequestBody
 "@
-
-
 
         if ($pscmdlet.ShouldProcess($Message, $_, "Update Provisioning Template")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PUT
@@ -86,7 +77,6 @@ $RequestBody
                 }
             }
         }
-
 
         if ($PassThru) {
             Write-Output $DeviceId

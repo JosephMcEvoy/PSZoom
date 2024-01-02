@@ -37,10 +37,7 @@ function Remove-ZoomPhoneCommonArea {
 
     process {
         foreach ($CommonArea in $CommonAreaId) {
-
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$CommonArea"
-
-
 $Message = 
 @"
 
@@ -49,8 +46,6 @@ URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandPrope
 Body:
 $RequestBody
 "@
-
-
 
         if ($pscmdlet.ShouldProcess($Message, $CommonAreaId, "Delete")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete

@@ -16,7 +16,6 @@ Invoke-ZoomPhoneDeviceReboot -DeviceId "e5cr6vt7by8nu9mi"
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/rebootPhoneDevice
 
-
 #>
 
 function Invoke-ZoomPhoneDeviceReboot {    
@@ -30,17 +29,11 @@ function Invoke-ZoomPhoneDeviceReboot {
         )]
         [Alias('id', 'device_Id')]
         [string]$DeviceId
-
     )
-    
-
 
     process {
         $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/devices/$DeviceId/reboot"
-        
-
-
-$Message = 
+        $Message = 
 @"
 
 Method: POST
@@ -49,11 +42,8 @@ Body:
 $RequestBody
 "@
 
-
-
         if ($pscmdlet.ShouldProcess($Message, $DeviceId, "Reboot device")) {
             Invoke-ZoomRestMethod -Uri $request.uri -Method POST
-    
         }
     }
 }

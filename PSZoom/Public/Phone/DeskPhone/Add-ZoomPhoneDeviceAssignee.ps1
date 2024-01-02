@@ -25,6 +25,7 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/upda
 
 function Add-ZoomPhoneDeviceAssignee {    
     [CmdletBinding(SupportsShouldProcess = $True)]
+    
     Param(
         [Parameter(
             Mandatory = $True, 
@@ -36,7 +37,6 @@ function Add-ZoomPhoneDeviceAssignee {
         [ValidateScript({$DeviceId.count -le 3})]
         [string]$DeviceId,
 
-
         [Parameter(
             Mandatory = $True, 
             Position = 1
@@ -44,11 +44,8 @@ function Add-ZoomPhoneDeviceAssignee {
         [Alias('User_Id')]
         [string]$UserId,
 
-
         [switch]$PassThru
     )
-    
-
 
     process {
 

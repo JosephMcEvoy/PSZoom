@@ -41,7 +41,6 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/list
 
 
 function Get-ZoomPhoneSite {
-
     [alias("Get-ZoomPhoneSites")]
     [CmdletBinding(DefaultParameterSetName="AllData")]
     param ( 
@@ -67,40 +66,31 @@ function Get-ZoomPhoneSite {
 
         [parameter(ParameterSetName="AllData")]
         [switch]$Full = $False
-
     )
 
     process {
-
-        $BASEURI = "https://api.$ZoomURI/v2/phone/sites"
+        $baseURI = "https://api.$ZoomURI/v2/phone/sites"
 
         switch ($PSCmdlet.ParameterSetName) {
 
             "NextRecords" {
-
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize $PageSize -NextPageToken $NextPageToken
-
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -PageSize $PageSize -NextPageToken $NextPageToken
             }
+
             "SelectedRecord" {
-
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -ObjectId $siteId
-
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -ObjectId $siteId
             }
+
             "AllData" {
-
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize 100
-
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -PageSize 100
             }
         }
 
         if ($Full) {
-
             $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty Id
             $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
-
         }
 
         Write-Output $AggregatedResponse
-
     }	
 }

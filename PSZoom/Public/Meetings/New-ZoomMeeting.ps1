@@ -2,34 +2,47 @@
 
 .SYNOPSIS
 Create a meeting for a user.
+
 .DESCRIPTION
 Create a meeting for a user. The expiration time for the start_url object is two hours. For API users, the expiration time is 90 days.
+
 .PARAMETER UserId
 The user ID or email address.
+
 .PARAMETER ScheduleFor
 Email or userId if you want to schedule meeting for another user.
+
 .PARAMETER Topic
 Meeting topic.
+
 .PARAMETER StartTime
 Meeting start time. When using a format like \"yyyy-MM-dd'T'HH:mm:ss'Z'\", always use GMT time. When using a format like \"yyyy-MM-dd'T'HH:mm:ss\", 
 you should use local time and specify the time zone. This is only used for scheduled meetings and recurring meetings with a fixed time.
+
 .PARAMETER Duration
 Meeting duration (minutes). Used for scheduled meetings only.
+
 .PARAMETER Timezone
 Time zone to format start_time. For example, \"America/Los_Angeles\". For scheduled meetings only. 
 Please reference our [time zone](https://marketplace.zoom.us/docs/api-reference/other-references/abbreviation-lists#timezones) list for supported time zones and their formats.
+
 .PARAMETER Password
 Password to join the meeting. Password may only contain the following characters: [a-z A-Z 0-9 @ - _ *]. Max of 10 characters.
+
 .PARAMETER Agenda
 Meeting description.
+
 .PARAMETER TrackingFields
 Tracking fields. An array of objects where each object contains two keys (field, value). Example: @(@{field = value, value = value}, @{field = value, value = value})
+
 .PARAMETER Recurrence
 Recurrence object. Pass an entire recurrence object directly. Cannot be used with other recurrence parameters.
+
 .PARAMETER RepeatInterval
 At which interval should the meeting repeat? For a daily meeting there's a maximum of 90 days. 
 For a weekly meeting there is a maximum of 12 weeks. 
 For a monthly meeting there is a maximum of 3 months.
+
 .PARAMETER WeeklyDays
 Days of the week the meeting should repeat. Note: Multiple values should be separated by a comma. 
 Sunday (1)
@@ -39,8 +52,10 @@ Wednesday (4)
 Thursday (5)
 Friday (6)
 Saturday (7)
+
 .PARAMETER MonthlyDay
 Day in the month the meeting is to be scheduled. The value is from 1 to 31.
+
 .PARAMETER MonthlyWeek
 The week a meeting will recur each month.
 Last week (-1)
@@ -48,6 +63,7 @@ First week (1)
 Second week (2)
 Third week (3)
 Fourth week (4)
+
 .PARAMETER MonthlyWeekDay
 The weekday a meeting should recur each month.
 Sunday (1)
@@ -57,75 +73,106 @@ Wednesday (4)
 Thursday (5)
 Friday (6)
 Saturday (7)
+
 .PARAMETER EndTimes
 Select how many timse the meeting will recur before it is canceled. (Cannot be used with "EndDateTime".)
+
 .PARAMETER EndDateTime
 Select a date the meeting will recur before it is canceled. Should be in UTC time, such as 2017-11-25T12:00:00Z. (Cannot be used with "EndTimes".)
+
 .PARAMETER Settings
 Meeting settings object. Pass an entire settings object directly.
+
 .PARAMETER HostVideo
 Start video when the host joins the meeting.
+
 .PARAMETER ParticipantVideo
 Start video when participants join the meeting.
+
 .PARAMETER CNMeeting
 Host meeting in China.
+
 .PARAMETER INMeeting
 Host meeting in India.
+
 .PARAMETER JoinBeforeHost
 Allow participants to join the meeting before the host starts the meeting. Only used for scheduled or recurring meetings.
+
 .PARAMETER MuteUponEntry
 Mute participants upon entry.
+
 .PARAMETER Watermark
 Add watermark when viewing a shared screen.
+
 .PARAMETER UsePMI
 Use a personal meeting ID. Only used for scheduled meetings and recurring meetings with no fixed time.
+
 .PARAMETER ApprovalType
 Automatic - Automatically approve (0)
 Manual - Manually approve (1)
 None - No registration required (2)
+
 .PARAMETER RegistrationType
 Registration type. Used for recurring meeting with fixed time only. 
 RegisterOnceAndAttendAll' - Attendees register once and can attend any of the occurrences.(1)
 RegisterForEachOccurence' - Attendees need to register for each occurrence to attend.(2)
 RegisterOnceAndChooseOccurences' - Attendees register once and can choose one or more occurrences to attend.(3)
+
 .PARAMETER Audio
 Determine how participants can join the audio portion of the meeting.<br>`both` - Both Telephony and VoIP.<br>`telephony` - Telephony only.<br>`voip` - VoIP only.
+
 .PARAMETER AutoRecording
 Automatic recording:
 local - Record on local.
 cloud -  Record on cloud.
 none - Disabled.
 .PARAMETER EnforceLogin
-Only signed in users can join this meeting. This parameter is deprecated and will not be supported in the future. As an alternative, use the "MeetingAuthentication", "AuthenticationOption" and "AuthenticationDomains" parameters.
+Only signed in users can join this meeting. This parameter is deprecated and will not be supported in the future. 
+As an alternative, use the "MeetingAuthentication", "AuthenticationOption" and "AuthenticationDomains" parameters.
+
 .PARAMETER EnforceLoginDomains
-Only signed in users with specified domains can join meetings. This parameter is deprecated and will not be supported in the future. As an alternative, use the "MeetingAuthentication", "AuthenticationOption" and "AuthenticationDomains" parameters.
+Only signed in users with specified domains can join meetings. This parameter is deprecated and will not be supported in the future. 
+As an alternative, use the "MeetingAuthentication", "AuthenticationOption" and "AuthenticationDomains" parameters.
+
 .PARAMETER AlternativeHosts
 Alternative host's emails or IDs: multiple values separated by a comma.
+
 .PARAMETER CloseRegistration
 Close registration after event date
+
 .PARAMETER WaitingRoom
 Enable waiting room
+
 .PARAMETER GlobalDialInCountries
 List of global dial-in countries
+
 .PARAMETER ContactName
 Contact name for registration
+
 .PARAMETER ContacEmail
 Contact email for registration
+
 .PARAMETER MeetingAuthentication
 Only authenticatd users can join meetings.
+
 .PARAMETER AuthenticationOption
 Meeting authentication option id.
+
 .PARAMETER AuthenticationDomains
 If user has configured "Sign into Zoom with Specified Domains" option, this will list the doamins that are authenticated.
+
 .PARAMETER AuthenticationName
 Authentication name set in the authentication profile.
 
 .LINK
 https://github.com/JosephMcEvoy/New-ZoomMeeting
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/zoom-api/meetings/meetingcreate
+
 .LINK
 https://marketplace.zoom.us/docs/api-reference/introduction
+
 .EXAMPLE
 Start an instant meeting.
 New-ZoomMeeting -Topic 'Test Topic' -UserId 'testuserid@company.com'
@@ -172,8 +219,6 @@ New-ZoomMeeting`
 -EndTimes 2`
 -Daily`
 -RepeatInterval 1`
-  
-    
 
 .EXAMPLE
 Schedule a weekly repeating meeting that repeats every Sunday, Monday and Tuesday of every other week.

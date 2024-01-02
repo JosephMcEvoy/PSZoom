@@ -20,7 +20,6 @@ Add-ZoomPhoneCommonAreaNumber -CommonAreaId "5se6dr7ft8ybu9nub" -PhoneNumber +18
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/assignPhoneNumbersToCommonArea
 
-
 #>
 
 function Add-ZoomPhoneCommonAreaNumber {    
@@ -46,29 +45,21 @@ function Add-ZoomPhoneCommonAreaNumber {
         [switch]$PassThru
     )
     
-
-
     process {
         foreach ($CommonArea in $CommonAreaId) {
 
             if ($number -match "^[0-9]+") {
-
                 $number = "{0}$number" -f '+'
-
             }
 
             $NumberInfo = Get-ZoomPhoneNumber -ErrorAction Stop | Where-object Number -eq $number 
 
-            if (!($NumberInfo)) {
-
+            if (-not ($NumberInfo)) {
                 Throw "Provided number was not found in the accounts's phone number list"
-
             }
 
             if ([bool]($NumberInfo.PSobject.Properties.name -match "assignee")) {
-
                 Throw "Number is already assigned to another user"
-
             }
 
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$CommonArea/phone_numbers"
@@ -92,7 +83,6 @@ function Add-ZoomPhoneCommonAreaNumber {
             $RequestBody.Add("phone_numbers", $ChosenNumber)
 
             $RequestBody = $RequestBody | ConvertTo-Json
-
 
 $Message = 
 @"

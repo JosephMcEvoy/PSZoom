@@ -35,7 +35,6 @@ Update-ZoomPhoneDevice -DeviceId "5d65f7tgy8hu95edr6" -ProvisionTemplateId '824v
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/updateADevice
 
-
 #>
 
 function Update-ZoomPhoneDevice {    
@@ -64,15 +63,11 @@ function Update-ZoomPhoneDevice {
         [string]$ProvisionTemplateId,
 
         [switch]$PassThru
-
     )
-    
-
 
     process {
         $DeviceId | ForEach-Object {
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/devices/$_"
-
 
             #region body
                 $RequestBody = @{ }
@@ -91,18 +86,12 @@ function Update-ZoomPhoneDevice {
                 }
             #endregion body
 
-
             if ($RequestBody.Count -eq 0) {
-
                 throw "Request must contain at least one device setting change."
-
             }
 
-
             $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
-
-
-$Message = 
+            $Message = 
 @"
 
 Method: PATCH
@@ -121,7 +110,6 @@ $RequestBody
                 }
             }
         }
-
 
         if ($PassThru) {
             Write-Output $_

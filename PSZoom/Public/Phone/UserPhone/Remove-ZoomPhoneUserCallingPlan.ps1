@@ -34,18 +34,12 @@ function Remove-ZoomPhoneUserCallingPlan {
 
         [switch]$PassThru
     )
-    
-
 
     process {
         foreach ($user in $UserId) {
-
             $CurrentLicense = Get-ZoomPhoneUser -UserId $user | Select-Object -ExpandProperty "calling_plans" | Select-Object -ExpandProperty "type"
-
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/$user/calling_plans/$CurrentLicense"
-
-
-$Message = 
+            $Message = 
 @"
 
 Method: DELETE
@@ -53,7 +47,6 @@ URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandPrope
 Body:
 $RequestBody
 "@
-
 
             if ($pscmdlet.ShouldProcess($Message, $User, "Remove calling plan")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete

@@ -21,7 +21,6 @@ Extension number assigned to the common area. If the site code is enabled, provi
 .PARAMETER Timezone
 Timezone ID for the common area.
 
-
 .OUTPUTS
 Outputs object
 
@@ -31,7 +30,6 @@ New-ZoomPhoneCommonArea -CallingPlansType 200 -CountryIsoCode "US" -DisplayName 
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/addCommonArea
-
 
 #>
 
@@ -60,13 +58,9 @@ function New-ZoomPhoneCommonArea {
 
     )
     
-
-
     process {
         foreach ($ID in $commonAreaId) {
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas"
-
-
 
             #region calling_plans
                 $calling_plans_array = @( )
@@ -76,7 +70,6 @@ function New-ZoomPhoneCommonArea {
                     $calling_plans_array.Add($calling_plans)
                 }
             #endregion calling_plans
-
 
             #region body
                 $RequestBody = @{ }
@@ -96,10 +89,8 @@ function New-ZoomPhoneCommonArea {
                     }
                 }
             #endregion body
-
             
             $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
-
 
 $Message = 
 @"
@@ -110,8 +101,6 @@ Body:
 $RequestBody
 "@
 
-
-
         if ($pscmdlet.ShouldProcess($Message, $DisplayName, "Create common area account")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
         
@@ -120,7 +109,6 @@ $RequestBody
                 }
             }
         }
-
 
         if ($PassThru) {
             Write-Output $commonAreaId

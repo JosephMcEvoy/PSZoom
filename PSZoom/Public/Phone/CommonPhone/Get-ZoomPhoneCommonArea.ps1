@@ -43,7 +43,6 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/list
 #>
 
 function Get-ZoomPhoneCommonArea {
-
     [CmdletBinding(DefaultParameterSetName="AllData")]
     [Alias("Get-ZoomPhoneCommonAreas")]
     param (
@@ -69,28 +68,26 @@ function Get-ZoomPhoneCommonArea {
 
         [parameter(ParameterSetName="AllData")]
         [switch]$Full = $False
-
      )
 
     process {
-
-        $BASEURI = "https://api.$ZoomURI/v2/phone/common_areas"
+        $baseURI = "https://api.$ZoomURI/v2/phone/common_areas"
 
         switch ($PSCmdlet.ParameterSetName) {
 
             "NextRecords" {
 
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize $PageSize -NextPageToken $NextPageToken
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -PageSize $PageSize -NextPageToken $NextPageToken
 
             }
             "SelectedRecord" {
 
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -ObjectId $CommonAreaId
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -ObjectId $CommonAreaId
 
             }
             "AllData" {
 
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize $PageSize
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -PageSize $PageSize
 
             }
         }
@@ -103,6 +100,5 @@ function Get-ZoomPhoneCommonArea {
         }
 
         Write-Output $AggregatedResponse 
-        
     }
 }

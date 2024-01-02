@@ -84,7 +84,6 @@ New-ZoomPhoneCommonArea -Email askywakler@thejedi.com -ExtensionNumber 987654321
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/batchAddUsers
 
-
 #>
 
 function New-ZoomPhoneUser {    
@@ -142,16 +141,12 @@ function New-ZoomPhoneUser {
         [Parameter()]
         [ValidateScript({ $DeskPhoneBrand -and $DeskPhoneModel -and $DeskPhoneMac })]
         [string]$DeskPhoneTemplate
-
-
     )
     
 
 
     process {
         $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/users/batch"
-
-
 
         #region desk_phones
             $desk_phones_array = @( )
@@ -172,7 +167,6 @@ function New-ZoomPhoneUser {
                 $desk_phones_array.Add($desk_phones)
             }
         #endregion desk_phones
-
 
         #region users
             $users = @{}
@@ -203,7 +197,6 @@ function New-ZoomPhoneUser {
             }
         #endregion users
 
-
         #region body
             $RequestBody = @{ }
             if ($users_array.count -ne 0) {
@@ -211,11 +204,8 @@ function New-ZoomPhoneUser {
             }
         #endregion body
 
-        
         $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
-
-
-$Message = 
+        $Message = 
 @"
 
 Method: POST
@@ -223,7 +213,6 @@ URI: $($Request | Select-Object -ExpandProperty URI | Select-Object -ExpandPrope
 Body:
 $RequestBody
 "@
-
 
         if ($pscmdlet.ShouldProcess($Message, $Email, "Create Zoom Phone Account")) {
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST

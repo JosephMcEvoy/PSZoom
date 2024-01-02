@@ -20,8 +20,6 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/getC
 
 #>
 
-
-
 function Get-ZoomPhoneCommonAreaSettings {
     [CmdletBinding()]
     param (

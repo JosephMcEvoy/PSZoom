@@ -60,15 +60,11 @@ function Get-ZoomPhoneDevice {
         )]
         [string]$DeviceId,
 
-
-
         [parameter(
             ParameterSetName="SpecificQuery"
         )]
         [ValidateSet("assigned","unassigned")]
         [string]$DeviceStatus,
-
-
 
         [Parameter(
             ParameterSetName="SpecificQuery",
@@ -81,8 +77,6 @@ function Get-ZoomPhoneDevice {
         )]
         [string]$SiteId,
 
-
-
         [Parameter(
             ParameterSetName="SpecificQuery"
         )]
@@ -94,8 +88,6 @@ function Get-ZoomPhoneDevice {
         )]
         [string]$DeviceType,
 
-
-
         [parameter(
             ParameterSetName="NextRecords"
         )]
@@ -106,8 +98,6 @@ function Get-ZoomPhoneDevice {
             'page_size'
         )]
         [int]$PageSize = 100,
-		
-
 
         # The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds the current page size. The expiration period for this token is 15 minutes.
         [parameter(
@@ -117,8 +107,6 @@ function Get-ZoomPhoneDevice {
             'next_page_token'
         )]
         [string]$NextPageToken,
-
-
         
         [parameter(
             ParameterSetName="SpecificQuery"
@@ -127,27 +115,26 @@ function Get-ZoomPhoneDevice {
             ParameterSetName="AllData"
         )]
         [switch]$Full = $False
-
-
-
      )
 
     process {
 
-        $BASEURI = "https://api.$ZoomURI/v2/phone/devices"
+        $baseURI = "https://api.$ZoomURI/v2/phone/devices"
 
         switch ($PSCmdlet.ParameterSetName) {
 
             "NextRecords" {
 
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -PageSize $PageSize -NextPageToken $NextPageToken
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -PageSize $PageSize -NextPageToken $NextPageToken
 
             }
+
             "SelectedRecord" {
 
-                $AggregatedResponse = Get-ZoomPaginatedData -URI $BASEURI -ObjectId $DeviceId
+                $AggregatedResponse = Get-ZoomPaginatedData -URI $baseURI -ObjectId $DeviceId
 
             }
+
             "AllData" {
 
                 $AggregatedResponse = @()
@@ -159,10 +146,11 @@ function Get-ZoomPhoneDevice {
 
                     $QueryStatements.Add("type", $_)
 
-                    $AggregatedResponse += Get-ZoomPaginatedData -URI $BASEURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
+                    $AggregatedResponse += Get-ZoomPaginatedData -URI $baseURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
 
                 }
             }
+
             "SpecificQuery" {
 
                 $AggregatedResponse = @()
@@ -177,20 +165,16 @@ function Get-ZoomPhoneDevice {
                 if ($PSBoundParameters.ContainsKey('SiteId')) {
                     $QueryStatements.Add("site_id", $SiteId)
                 }
-                $AggregatedResponse += Get-ZoomPaginatedData -URI $BASEURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
+                $AggregatedResponse += Get-ZoomPaginatedData -URI $baseURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
 
             }
         }
     
-    
         if ($Full) {
-
             $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
             $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
-
         }
 
         Write-Output $AggregatedResponse 
-    
     } 
 }

@@ -150,7 +150,7 @@ function New-ZoomUser {
 
         $requestBody = $requestBody | ConvertTo-Json
 
-        if ($PScmdlet.ShouldProcess) {
+        if ($PScmdlet.ShouldProcess($Email, "Create Zoom Account")) {
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
 
             if ($passthru) {

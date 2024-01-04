@@ -35,27 +35,25 @@ function New-ZoomPhoneAutoReceptionist {
     )
     
     process {
-        foreach ($ID in $AutoReceptionistId) {
-            $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/auto_receptionists"
 
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/auto_receptionists"
 
+        #region body
+            $RequestBody = @{ }
 
-            #region body
-                $RequestBody = @{ }
+            $KeyValuePairs = @{
+                'name'           = $Name
+                'site_id'        = $SiteId
+            }
 
-                $KeyValuePairs = @{
-                    'name'           = $Name
-                    'site_id'        = $SiteId
+            $KeyValuePairs.Keys | ForEach-Object {
+                if (-not (([string]::IsNullOrEmpty($KeyValuePairs.$_)) -or ($KeyValuePairs.$_ -eq 0) )) {
+                    $RequestBody.Add($_, $KeyValuePairs.$_)
                 }
-    
-                $KeyValuePairs.Keys | ForEach-Object {
-                    if (-not (([string]::IsNullOrEmpty($KeyValuePairs.$_)) -or ($KeyValuePairs.$_ -eq 0) )) {
-                        $RequestBody.Add($_, $KeyValuePairs.$_)
-                    }
-                }
-            #endregion body
-            
-            $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
+            }
+        #endregion body
+        
+        $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
 
 $Message = 
 @"
@@ -67,13 +65,13 @@ $RequestBody
 "@
 
         if ($pscmdlet.ShouldProcess($Message, $Name, "Create Auto Receptionist account")) {
-                $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
-        
-                if (-not $PassThru) {
-                    Write-Output $response
-                }
+            $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
+    
+            if (-not $PassThru) {
+                Write-Output $response
             }
         }
+        
 
         if ($PassThru) {
             Write-Output $AutoReceptionistId

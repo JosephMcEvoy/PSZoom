@@ -16,6 +16,7 @@ Provide a comment to help you identify the blocked number or prefix
 
 .PARAMETER Country
 The country information. For example, entering US or CH.
+Must be two character country code.
 
 .PARAMETER MatchType
 Specify the match type for the blocked list:
@@ -54,74 +55,74 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/addB
 
 function New-ZoomPhoneBlockList {    
     [CmdletBinding(
-        SupportsShouldProcess = $True,
-        DefaultParameterSetName="PhoneNumberMatch"
+        SupportsShouldProcess = $True
     )]
     Param(
         [Parameter(
             Mandatory = $True,
-            ParameterSetName="PhoneNumberMatch"
-        )]
-        [Parameter(
-            Mandatory = $True,
-            ParameterSetName="PrefixMatch"
+            Position = 1
         )]
         [ValidateSet("inbound","outbound")]
         [string]$BlockType,
 
         [Parameter(
             Mandatory = $True,
-            ParameterSetName="PhoneNumberMatch"
-        )]
-        [Parameter(
-            Mandatory = $True,
-            ParameterSetName="PrefixMatch"
+            Position = 2
         )]
         [string]$Comment,
 
         [Parameter(
             Mandatory = $True,
-            ParameterSetName="PrefixMatch"
+            Position = 4
         )]
+        [ValidateLength(2, 2)]
         [string]$Country,
 
         [Parameter(
             Mandatory = $True,
-            ParameterSetName="PhoneNumberMatch"
-        )]
-        [Parameter(
-            Mandatory = $True,
-            ParameterSetName="PrefixMatch"
+            Position = 3
         )]
         [ValidateSet("phoneNumber","prefix")]
         [string]$MatchType,
 
         [Parameter(
             Mandatory = $True,
-            ParameterSetName="PhoneNumberMatch"
-        )]
-        [Parameter(
-            Mandatory = $True,
-            ParameterSetName="PrefixMatch"
+            Position = 5
         )]
         [string]$PhoneNumber,
 
         [Parameter(
             Mandatory = $True,
-            ParameterSetName="PhoneNumberMatch"
-        )]
-        [Parameter(
-            Mandatory = $True,
-            ParameterSetName="PrefixMatch"
+            Position = 6
         )]
         [ValidateSet("active","inactive")]
         [string]$Status,
+
 
         [switch]$PassThru
 
     )
     
     begin {
+
+        # Fixing case sensitivity on parameters as call will fail without it
+        if ($PSBoundParameters.ContainsKey('BlockType')) {
+            $BlockType = $BlockType.ToLower()
+        }
+        if ($PSBoundParameters.ContainsKey('Status')) {
+            $Status = $Status.ToLower()
+        }
+        if ($PSBoundParameters.ContainsKey('MatchType')) {
+            $Status = $Status.ToLower()
+
+            if ($MatchType -eq "phonenumber"){
+
+                $MatchType = "phoneNumber"
+            }elseif ($MatchType -eq "prefix") {
+    
+                $MatchType = $MatchType.ToLower()
+            }
+        }
         
         $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/blocked_list"
 

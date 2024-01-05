@@ -57,44 +57,38 @@ https://developers.zoom.us/docs/api/rest/reference/phone/methods/#operation/upda
 
 function Update-ZoomPhoneBlockList {    
     [CmdletBinding(
-        SupportsShouldProcess = $True,
-        DefaultParameterSetName="PhoneNumberMatch"
+        SupportsShouldProcess = $True
     )]
     Param(
 
         [Parameter(
             Mandatory = $True,
-            ParameterSetName="PhoneNumberMatch"
+            Position = 0, 
+            ValueFromPipeline = $True,
+            ValueFromPipelineByPropertyName = $True
         )]
-        [Parameter(
-            Mandatory = $True,
-            ParameterSetName="PrefixMatch"
-        )]
+        [Alias('id')]
         [string]$BlockedListId,
 
-        [Parameter(ParameterSetName="PhoneNumberMatch")]
-        [Parameter(ParameterSetName="PrefixMatch")]
+        [Parameter()]
         [ValidateSet("inbound","outbound")]
         [string]$BlockType,
 
-        [Parameter(ParameterSetName="PhoneNumberMatch")]
-        [Parameter(ParameterSetName="PrefixMatch")]
+        [Parameter()]
         [string]$Comment,
 
-        [Parameter(ParameterSetName="PrefixMatch")]
+        [Parameter()]
+        [ValidateLength(2, 2)]
         [string]$Country,
 
-        [Parameter(ParameterSetName="PhoneNumberMatch")]
-        [Parameter(ParameterSetName="PrefixMatch")]
+        [Parameter()]
         [ValidateSet("phoneNumber","prefix")]
         [string]$MatchType,
 
-        [Parameter(ParameterSetName="PhoneNumberMatch")]
-        [Parameter(ParameterSetName="PrefixMatch")]
+        [Parameter()]
         [string]$PhoneNumber,
 
-        [Parameter(ParameterSetName="PhoneNumberMatch")]
-        [Parameter(ParameterSetName="PrefixMatch")]
+        [Parameter()]
         [ValidateSet("active","inactive")]
         [string]$Status,
 
@@ -103,8 +97,28 @@ function Update-ZoomPhoneBlockList {
     )
     
     begin {
+
+        # Fixing case sensitivity on parameters as call will fail without it
+        if ($PSBoundParameters.ContainsKey('BlockType')) {
+            $BlockType = $BlockType.ToLower()
+        }
+        if ($PSBoundParameters.ContainsKey('Status')) {
+            $Status = $Status.ToLower()
+        }
+        if ($PSBoundParameters.ContainsKey('MatchType')) {
+            $Status = $Status.ToLower()
+
+            if ($MatchType -eq "phonenumber"){
+
+                $MatchType = "phoneNumber"
+            }elseif ($MatchType -eq "prefix") {
+    
+                $MatchType = $MatchType.ToLower()
+            }
+        }
         
         #region body
+
             $RequestBody = @{ }
 
             $KeyValuePairs = @{
@@ -122,7 +136,10 @@ function Update-ZoomPhoneBlockList {
                 }
             }
         #endregion body
-        
+
+    }
+    process {
+
         if ($RequestBody.Count -eq 0) {
             Write-Error "Request must contain at least one block list change."
             return
@@ -130,10 +147,7 @@ function Update-ZoomPhoneBlockList {
 
         $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
 
-    }
-    process {
-
-        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/blocked_list/$BlockedList"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/blocked_list/$BlockedListId"
 
 $Message = 
 @"
@@ -146,7 +160,7 @@ $RequestBody
 
 
 
-        if ($pscmdlet.ShouldProcess($Message, $Name, "Create Block List")) {
+        if ($pscmdlet.ShouldProcess($Message, $Name, "Update Block List")) {
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
     
             if (-not $PassThru) {

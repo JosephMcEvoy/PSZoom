@@ -247,6 +247,10 @@ function Update-ZoomMeeting {
     [Parameter(ValueFromPipelineByPropertyName = $True)]
     [Alias('host_video')]
     [bool]$HostVideo,
+
+    [Parameter(ValueFromPipelineByPropertyName = $True)]
+    [Alias('participant_video')]
+    [bool]$ParticipantVideo,
     
     [Parameter(ValueFromPipelineByPropertyName = $True)]
     [Alias('cn_meeting')]
@@ -482,6 +486,7 @@ function Update-ZoomMeeting {
 
     $Settings = @{
         'host_video'              = 'HostVideo'
+        'participant_video'       = 'ParticipantVideo'
         'cn_meeting'              = 'CNMeeting'
         'in_meeting'              = 'INMeeting'
         'join_before_host'        = 'JoinBeforeHost'

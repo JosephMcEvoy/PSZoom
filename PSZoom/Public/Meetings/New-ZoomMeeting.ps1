@@ -557,6 +557,10 @@ function New-ZoomMeeting {
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('host_video')]
         [bool]$HostVideo,
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('participant_video')]
+        [bool]$ParticipantVideo,
       
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('cn_meeting')]
@@ -844,6 +848,7 @@ function New-ZoomMeeting {
             'enforce_login_domains'          = 'EnforceLoginDomains'
             'global_dialin_countries'        = 'GlobalDialInCountries'
             'host_video'                     = 'HostVideo'
+            'participant_video'              = 'ParticipantVideo'
             'in_meeting'                     = 'INMeeting'
             'join_before_host'               = 'JoinBeforeHost'
             'mute_upon_entry'                = 'Mutentry'

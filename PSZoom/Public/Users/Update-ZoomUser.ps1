@@ -233,7 +233,7 @@ function Update-ZoomUser {
 
             $RequestBody = $RequestBody | ConvertTo-Json
 
-            if ($pscmdlet.ShouldProcess) {
+            if ($pscmdlet.ShouldProcess($user, 'Update')) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
         
                 if (-not $PassThru) {

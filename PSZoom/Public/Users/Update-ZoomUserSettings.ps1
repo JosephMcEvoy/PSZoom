@@ -259,7 +259,7 @@ Update-ZoomUserSettings -UserId 'dvader@thesith.com' -JoinBeforeHost $True
 #>
 
 function Update-ZoomUserSettings {    
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     Param(
         [Parameter(
             Mandatory = $True,
@@ -944,7 +944,7 @@ function Update-ZoomUserSettings {
 
             $requestBody = $requestBody | ConvertTo-Json
 
-            if ($pscmdlet.ShouldProcess) {
+            if ($pscmdlet.ShouldProcess($user,'Update')) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
 
                 if (-not $PassThru) {

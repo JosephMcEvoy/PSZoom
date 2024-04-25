@@ -179,7 +179,7 @@ function Update-ZoomMeetingRecordingsSettings {
 
         $requestBody = ConvertTo-Json $requestBody
 
-        if ($pscmdlet.ShouldProcess) {
+        if ($pscmdlet.ShouldProcess($MeetingId, 'Update')) {
             $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method PATCH
 
             Write-Output $response

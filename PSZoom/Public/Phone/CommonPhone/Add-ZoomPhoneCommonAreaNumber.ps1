@@ -53,6 +53,7 @@ function Add-ZoomPhoneCommonAreaNumber {
             }
 
             $NumberInfo = Get-ZoomPhoneNumber -ErrorAction Stop | Where-object Number -eq $number 
+            $ZoomCommonAreaInfo = Get-ZoomPhoneCommonArea -CommonAreaId $CommonArea -ErrorAction Stop
 
             if (-not ($NumberInfo)) {
                 Throw "Provided number was not found in the accounts's phone number list"
@@ -94,7 +95,7 @@ $RequestBody
 "@
 
 
-        if ($pscmdlet.ShouldProcess($Message, $CommonArea, "Adding $Number")) {
+        if ($pscmdlet.ShouldProcess($Message, $ZoomCommonAreaInfo.display_name, "Adding $ChosenNumber")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
         
                 if (-not $PassThru) {

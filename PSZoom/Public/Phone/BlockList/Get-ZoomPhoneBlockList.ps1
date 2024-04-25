@@ -84,8 +84,8 @@ function Get-ZoomPhoneBlockList {
     
         if ($Full) {
             # No additional data with full so switching to normal query
-            #$AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
-            #$AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
+            $AggregatedIDs = $AggregatedResponse | select-object -ExpandProperty ID
+            $AggregatedResponse = Get-ZoomItemFullDetails -ObjectIds $AggregatedIDs -CmdletToRun $MyInvocation.MyCommand.Name
         }
 
         Write-Output $AggregatedResponse 

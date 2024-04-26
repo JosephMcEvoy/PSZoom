@@ -164,7 +164,6 @@ Add-ZoomUserAssistants
 Get-ZoomUser  
 Get-ZoomUserEmailStatus  
 Get-ZoomUserPermissions  
-Get-ZoomUsers  
 Get-ZoomUserSchedulers  
 Get-ZoomUserSettings  
 Get-ZoomUserToken  

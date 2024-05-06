@@ -88,33 +88,39 @@ function Remove-ZoomUser {
         foreach ($user in $UserId) {
             $request = [System.UriBuilder]"https://api.$ZoomURI/v2/users/$user"
             $query = [System.Web.HttpUtility]::ParseQueryString([String]::Empty)
-            $query.Add('action', $Action)
-
-            if ($PSBoundParameters.ContainsKey('EncryptedEmail')) {
-                $query.Add('encrypted_email', $EncryptedEmail)
-            }
-
-            if ($PSBoundParameters.ContainsKey('TransferEmail')) {
-                $query.Add('transfer_email', $TransferEmail)
-            }
-
-            if ($PSBoundParameters.ContainsKey('TransferMeeting')) {
-                $query.Add('transfer_meeting', $TransferMeeting)
-            }
-
-            if ($PSBoundParameters.ContainsKey('TransferWebinar')) {
-                $query.Add('transfer_webinar', $TransferWebinar)
-            }
-
-            if ($PSBoundParameters.ContainsKey('TransferRecording')) {
-                $query.Add('transfer_recording', $TransferRecording)
-            }
-
-            if ($PSBoundParameters.ContainsKey('TransferWhiteboard')) {
-                $query.Add('transfer_whiteboard', $Transferwhiteboard)
-            }
+            $ZoomUserToBeDeletedInfo = get-zoomuser -UserId $user -ErrorAction Stop
             
-            $request.Query = $query.ToString().ToLower()
+            if ($ZoomUserToBeDeletedInfo.status -ne "pending") {
+            
+                $query.Add('action', $Action)
+
+                if ($PSBoundParameters.ContainsKey('EncryptedEmail')) {
+                    $query.Add('encrypted_email', $EncryptedEmail)
+                }
+
+                if ($PSBoundParameters.ContainsKey('TransferEmail')) {
+                    $query.Add('transfer_email', $TransferEmail)
+                }
+
+                if ($PSBoundParameters.ContainsKey('TransferMeeting')) {
+                    $query.Add('transfer_meeting', $TransferMeeting)
+                }
+
+                if ($PSBoundParameters.ContainsKey('TransferWebinar')) {
+                    $query.Add('transfer_webinar', $TransferWebinar)
+                }
+
+                if ($PSBoundParameters.ContainsKey('TransferRecording')) {
+                    $query.Add('transfer_recording', $TransferRecording)
+                }
+
+                if ($PSBoundParameters.ContainsKey('TransferWhiteboard')) {
+                    $query.Add('transfer_whiteboard', $Transferwhiteboard)
+                }
+                
+                $request.Query = $query.ToString().ToLower()
+            }
+
             
             if ($PScmdlet.ShouldProcess($user, 'Remove')) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE

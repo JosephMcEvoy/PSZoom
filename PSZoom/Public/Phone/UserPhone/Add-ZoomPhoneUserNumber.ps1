@@ -54,6 +54,7 @@ function Add-ZoomPhoneUserNumber {
                 $number = "{0}$number" -f '+'
             }
 
+            $ZoomUserInfo = Get-ZoomPhoneUser -UserId $user -ErrorAction Stop
             $NumberInfo = Get-ZoomPhoneNumber -ErrorAction Stop | Where-object Number -eq $number 
 
             if (-not ($NumberInfo)) {
@@ -92,7 +93,7 @@ Body:
 $RequestBody
 "@
 
-        if ($pscmdlet.ShouldProcess($Message, $UserId, "Adding $Number")) {
+        if ($pscmdlet.ShouldProcess($Message, $ZoomUserInfo.email, "Adding $($NumberInfo.number)")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
         
                 if (-not $PassThru) {

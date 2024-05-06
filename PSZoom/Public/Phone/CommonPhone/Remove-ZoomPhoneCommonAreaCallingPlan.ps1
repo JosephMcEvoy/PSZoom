@@ -75,6 +75,7 @@ function Remove-ZoomPhoneCommonAreaCallingPlan {
             "SinglePlan" {
                 Foreach($CommonArea in $CommonAreaId){           
                     $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/phone/common_areas/$CommonArea/calling_plans/$LicenseType"
+                    $ZoomCommonAreaInfo = Get-ZoomPhoneCommonArea -CommonAreaId $CommonArea -ErrorAction Stop
 $Message = 
 @"
 
@@ -84,7 +85,7 @@ Body:
 $RequestBody
 "@
 
-                    if ($pscmdlet.ShouldProcess($Message, $CommonArea, "Remove calling plan $LicenseType")) {
+                    if ($pscmdlet.ShouldProcess($Message, $ZoomCommonAreaInfo.display_name, "Remove calling plan $LicenseType")) {
                         $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete
                 
                         if (-not $PassThru) {
@@ -120,7 +121,7 @@ Body:
 $RequestBody
 "@
 
-                            if ($pscmdlet.ShouldProcess($Message, $CommonArea, "Remove calling plan $CurrentLicense")) {
+                            if ($pscmdlet.ShouldProcess($Message, $CommonArea, "Remove calling plan: $CurrentLicense")) {
                                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method Delete
 
                                 if (-not $PassThru) {

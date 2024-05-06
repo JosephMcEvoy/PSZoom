@@ -108,7 +108,7 @@ Body:
 $RequestBody
 "@
 
-                if ($pscmdlet.ShouldProcess($Message, $_, "Remove $NumberTBR")) {
+                if ($pscmdlet.ShouldProcess($Message, $ZoomEntityInfo.display_name, "Remove $($NumberTBR.number)")) {
                     $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method DELETE
             
                     if (-not $PassThru) {

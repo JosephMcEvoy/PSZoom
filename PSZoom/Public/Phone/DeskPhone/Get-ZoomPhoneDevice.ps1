@@ -6,11 +6,18 @@ List all the desk phone devices that are configured with Zoom Phone on an accoun
 .DESCRIPTION
 List all the desk phone devices that are configured with Zoom Phone on an account.
 
-.PARAMETER UserId
+.PARAMETER DeviceId
 Unique Identifier of the device.
 
 .PARAMETER SiteId
 Unique Identifier of the site. This can be found in the ListPhoneSites API.
+
+.PARAMETER DeviceStatus
+Whether the device is assigned or not.
+
+.PARAMETER AssigneeType
+The type of the assignee. It's available if type = assigned.
+Allowed: user ┃ commonArea
 
 .PARAMETER DeviceType
 The manufacturer name.
@@ -39,7 +46,7 @@ Get-ZoomPhoneDevice -DeviceId ######
 
 .EXAMPLE
 Return devices of a specific manufacture for a specific site.
-Get-ZoomPhoneDevice -SiteId ###### -DeviceType poly
+Get-ZoomPhoneDevice -SiteId ###### -DeviceType "poly" -DeviceStatus "assigned"
 
 #>
 
@@ -61,7 +68,8 @@ function Get-ZoomPhoneDevice {
         [string]$DeviceId,
 
         [parameter(
-            ParameterSetName="SpecificQuery"
+            ParameterSetName="SpecificQuery",
+            Mandatory = $true
         )]
         [ValidateSet("assigned","unassigned")]
         [string]$DeviceStatus,
@@ -76,6 +84,17 @@ function Get-ZoomPhoneDevice {
             'site_id'
         )]
         [string]$SiteId,
+
+        [Parameter(
+            ParameterSetName="SpecificQuery"
+        )]
+        [Alias(
+            'assignee_type'
+        )]
+        [ValidateSet(
+            "user","commonArea"
+        )]
+        [string]$AssigneeType,
 
         [Parameter(
             ParameterSetName="SpecificQuery"
@@ -164,6 +183,14 @@ function Get-ZoomPhoneDevice {
                 }
                 if ($PSBoundParameters.ContainsKey('SiteId')) {
                     $QueryStatements.Add("site_id", $SiteId)
+                }
+                if ($PSBoundParameters.ContainsKey('AssigneeType')) {
+                    if ($AssigneeType -eq "user") {
+                        $AssigneeType = "user"
+                    }elseif ($AssigneeType -eq "commonArea") {
+                        $AssigneeType = "commonArea"
+                    }
+                    $QueryStatements.Add("assignee_type", $AssigneeType)
                 }
                 $AggregatedResponse += Get-ZoomPaginatedData -URI $baseURI -PageSize 100 -AdditionalQueryStatements $QueryStatements
 

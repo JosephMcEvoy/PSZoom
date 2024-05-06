@@ -48,7 +48,7 @@ function Add-ZoomPhoneUserCallingPlan {
     
     process {
         foreach ($user in $UserId) {
-            
+
             if (-not (Get-ZoomUserSettings -UserId $user | Select-Object -ExpandProperty "feature" | Select-Object -ExpandProperty "zoom_phone")) {
                 Update-ZoomUserSettings -UserId $user -ZoomPhone $True
             }
@@ -70,6 +70,8 @@ function Add-ZoomPhoneUserCallingPlan {
 
             $RequestBody.Add("calling_plans", $ChosenLicense)
 
+            $ZoomUserInfo = Get-ZoomPhoneUser -UserId $user -ErrorAction Stop
+
             $RequestBody = $RequestBody | ConvertTo-Json
             $Message = 
 @"
@@ -80,7 +82,7 @@ Body:
 $RequestBody
 "@
 
-        if ($pscmdlet.ShouldProcess($Message, $UserId, "Update calling plan")) {
+        if ($pscmdlet.ShouldProcess($Message, $ZoomUserInfo.email, "Update calling plan: $LicenseType")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
         
                 if (-not $PassThru) {

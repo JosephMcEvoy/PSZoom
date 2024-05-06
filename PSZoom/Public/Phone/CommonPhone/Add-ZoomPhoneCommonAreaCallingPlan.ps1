@@ -53,6 +53,7 @@ function Add-ZoomPhoneCommonAreaCallingPlan {
             $RequestBody = @{ }
             $ChosenLicense = @{ }
 
+            $ZoomCommonAreaInfo = Get-ZoomPhoneCommonArea -CommonAreaId $_ -ErrorAction Stop
 
             $KeyValuePairs = @{
                 'type'    = $LicenseType
@@ -79,7 +80,7 @@ Body:
 $RequestBody
 "@
 
-            if ($pscmdlet.ShouldProcess($Message, $CommonAreaId, "Adding calling plan $LicenseType")) {
+            if ($pscmdlet.ShouldProcess($Message, $ZoomCommonAreaInfo.display_name, "Adding calling plan: $LicenseType")) {
                 $response = Invoke-ZoomRestMethod -Uri $request.Uri -Body $requestBody -Method POST
         
                 if (-not $PassThru) {

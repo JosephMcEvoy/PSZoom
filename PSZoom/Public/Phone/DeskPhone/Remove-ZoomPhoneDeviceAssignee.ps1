@@ -11,7 +11,7 @@ Extension ID of the assignee (user or common area)
 Common Area Extension ID is the same as the Common Area ID
 
 .PARAMETER UnassignAllEntities
-Unique number used to locate device.
+Unassign all attached entities.
 
 .PARAMETER PassThru
 When switched the command will pass the DeviceId back.

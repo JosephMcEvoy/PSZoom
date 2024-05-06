@@ -129,8 +129,10 @@ function Get-ZoomPaginatedData {
                     
                     $response = Invoke-ZoomRestMethod -Uri $request.Uri -Method GET -ErrorAction Stop
             
-                    if ($response.total_records -ne 0) {
-                        $TargetProperty =  $response.PSobject.Properties.name | Where-Object {($_ -ne "next_page_token") -and ($_ -ne "page_size") -and ($_ -ne "total_records")}
+                    if ($response.PSobject.Properties.name -notcontains "total_records"){
+                        $AggregatedResponse = $response
+                    }elseif ($response.total_records -ne 0) {
+                        $TargetProperty =  $response.PSobject.Properties.name | Where-Object {($_ -ne "next_page_token") -and ($_ -ne "page_size") -and ($_ -ne "total_records") -and ($_ -ne "page_count") -and ($_ -ne "page_number")}
                         $AggregatedResponse += $response | Select-Object -ExpandProperty $TargetProperty
                     }
             

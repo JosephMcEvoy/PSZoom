@@ -69,6 +69,13 @@ Deprecated: Phone number of the user, To update you must also provide the PhoneC
 .PARAMETER PhoneCountry
 Deprecated: Country ID of the phone number. eg. AU for Australia.
 
+.PARAMETER PhoneNumbers
+An array of objects about the user's assigned phone numbers.
+- code: The phone number's country code.
+- country: The phone number's country ID.
+- label: The phone number's label.  Allowed: Mobile┃Office┃Home┃Fax
+- number: The phone number.
+
 .PARAMETER GroupID
 Unique identifier of the group that you would like to add a pending user to.
 
@@ -170,6 +177,11 @@ function Update-ZoomUser {
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('phone_country')]
         [string]$PhoneCountry,
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('phone_numbers')]
+        [array]$PhoneNumbers,
+
         
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [Alias('group_id')]
@@ -222,6 +234,7 @@ function Update-ZoomUser {
                 'location'      = $Location
                 'phone_number'  = $PhoneNumber
                 'phone_country' = $PhoneCountry
+                'phone_numbers' = $PhoneNumbers
                 'group_id'      = $GroupID
             }
 

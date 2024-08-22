@@ -851,7 +851,7 @@ function New-ZoomMeeting {
             'participant_video'              = 'ParticipantVideo'
             'in_meeting'                     = 'INMeeting'
             'join_before_host'               = 'JoinBeforeHost'
-            'mute_upon_entry'                = 'Mutentry'
+            'mute_upon_entry'                = 'MuteUponEntry'
             'registration_type'              = 'RegistrationType'
             'use_pmi'                        = 'UsePMI'
             'waiting_room'                   = 'WaitingRoom'

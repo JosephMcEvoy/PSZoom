@@ -1,0 +1,20 @@
+{
+  "total_records": 3,
+  "groups": [
+    {
+      "id": "gVcjZnYYRLDbb5F3VRzxJw",
+      "name": "Engineering",
+      "total_members": 25
+    },
+    {
+      "id": "hWdkAoZZSMEcc6G4WS0yKx",
+      "name": "Sales",
+      "total_members": 15
+    },
+    {
+      "id": "iXelBpAAUNFdd7H5XT1zLy",
+      "name": "Marketing",
+      "total_members": 10
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "EABcdEFghiJKLM",
+  "owner_id": "KDcuGIm1QgePTO8WbOqwIQ",
+  "owner_email": "admin@example.com",
+  "created_at": "2018-01-15T10:00:00Z",
+  "options": {
+    "share_rc": true,
+    "room_connectors": "us01",
+    "share_mc": true,
+    "meeting_connectors": "us01",
+    "pay_mode": "master"
+  },
+  "vanity_url": "https://example.zoom.us"
+}

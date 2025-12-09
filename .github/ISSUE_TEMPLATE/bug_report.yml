@@ -1,0 +1,103 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in PSZoom
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! Please provide as much detail as possible.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Connect to Zoom API with `Connect-PSZoom -AccountID '...' -ClientID '...' -ClientSecret '...'`
+        2. Run `Get-ZoomUser -UserId '...'`
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: Describe what you expected...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Describe what actually happened...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error Messages
+      description: If applicable, paste the full error message here
+      render: powershell
+
+  - type: dropdown
+    id: powershell-version
+    attributes:
+      label: PowerShell Version
+      description: What version of PowerShell are you using?
+      options:
+        - PowerShell 7.4.x
+        - PowerShell 7.3.x
+        - PowerShell 7.2.x
+        - PowerShell 7.1.x
+        - PowerShell 7.0.x
+        - Windows PowerShell 5.1
+        - Other (specify in additional context)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      options:
+        - Windows 11
+        - Windows 10
+        - Windows Server 2022
+        - Windows Server 2019
+        - macOS
+        - Linux (Ubuntu/Debian)
+        - Linux (RHEL/CentOS)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: pszoom-version
+    attributes:
+      label: PSZoom Version
+      description: What version of PSZoom are you using? (Run `Get-Module PSZoom` to check)
+      placeholder: "e.g., 2.1"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here (screenshots, logs, etc.)

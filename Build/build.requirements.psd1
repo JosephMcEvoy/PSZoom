@@ -23,6 +23,6 @@
     
     'Pester' = @{
         DependencyType = 'PSGalleryNuget'
-        Version = '4.10.1'
+        Version = '5.6.1'
     }
 }

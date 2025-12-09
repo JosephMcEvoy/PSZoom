@@ -27,10 +27,20 @@ Task Init {
 } -description 'Initialize build environment'
 
 Task Test -Depends Init  {
-    # Gather test results. Store them in a variable and file
-    $TestResults = Invoke-Pester -Path $ProjectRoot\Test -PassThru -OutputFormat NUnitXml -OutputFile "$ProjectRoot\$TestFile"
+    # Pester 5 configuration
+    $PesterConfig = New-PesterConfiguration
+    $PesterConfig.Run.Path = "$ProjectRoot\Tests"
+    $PesterConfig.Run.Exit = $false
+    $PesterConfig.Run.PassThru = $true
+    $PesterConfig.TestResult.Enabled = $true
+    $PesterConfig.TestResult.OutputFormat = 'NUnitXml'
+    $PesterConfig.TestResult.OutputPath = "$ProjectRoot\$TestFile"
+    $PesterConfig.Output.Verbosity = 'Detailed'
 
-    # In Appveyor?  Upload our tests! #Abstract this into a function?
+    # Run tests with Pester 5 configuration
+    $TestResults = Invoke-Pester -Configuration $PesterConfig
+
+    # In Appveyor?  Upload our tests!
     if ($ENV:BHBuildSystem -eq 'AppVeyor') {
         (New-Object 'System.Net.WebClient').UploadFile(
             "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)",

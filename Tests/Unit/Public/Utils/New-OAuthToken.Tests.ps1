@@ -5,7 +5,9 @@ BeforeAll {
 
 Describe 'New-OAuthToken' {
     BeforeAll {
-        $script:ZoomURI = 'zoom.us'
+        InModuleScope PSZoom {
+            $script:ZoomURI = 'zoom.us'
+        }
     }
 
     Context 'When requesting OAuth token' {
@@ -115,7 +117,9 @@ Describe 'New-OAuthToken' {
         It 'Should set script ZoomURI variable' {
             New-OAuthToken -AccountID 'account' -ClientID 'client' -ClientSecret 'secret' -APIConnection 'Zoomgov.com'
 
-            $script:ZoomURI | Should -Be 'Zoomgov.com'
+            InModuleScope PSZoom {
+                $script:ZoomURI | Should -Be 'Zoomgov.com'
+            }
         }
     }
 

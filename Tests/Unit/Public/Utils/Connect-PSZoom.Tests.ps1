@@ -5,15 +5,27 @@ BeforeAll {
 
 Describe 'Connect-PSZoom' {
     BeforeAll {
-        # Store original values
-        $originalToken = $script:PSZoomToken
-        $originalURI = $script:ZoomURI
+        # Store original values within module scope
+        InModuleScope PSZoom {
+            $script:OriginalToken = $script:PSZoomToken
+            $script:OriginalURI = $script:ZoomURI
+        }
     }
 
     AfterAll {
-        # Restore original values
-        $script:PSZoomToken = $originalToken
-        $script:ZoomURI = $originalURI
+        # Restore original values within module scope
+        InModuleScope PSZoom {
+            $script:PSZoomToken = $script:OriginalToken
+            $script:ZoomURI = $script:OriginalURI
+        }
+    }
+
+    AfterEach {
+        # Reset after each test
+        InModuleScope PSZoom {
+            $script:PSZoomToken = $null
+            $script:ZoomURI = $null
+        }
     }
 
     Context 'When using APIKey parameter set' {
@@ -36,20 +48,26 @@ Describe 'Connect-PSZoom' {
         It 'Should set ZoomURI to default Zoom.us' {
             Connect-PSZoom -AccountID 'test-account' -ClientID 'test-client' -ClientSecret 'test-secret'
 
-            $script:ZoomURI | Should -Be 'Zoom.us'
+            InModuleScope PSZoom {
+                $script:ZoomURI | Should -Be 'Zoom.us'
+            }
         }
 
         It 'Should accept Zoomgov.com as APIConnection' {
             Connect-PSZoom -AccountID 'test-account' -ClientID 'test-client' -ClientSecret 'test-secret' -APIConnection 'Zoomgov.com'
 
-            $script:ZoomURI | Should -Be 'Zoomgov.com'
+            InModuleScope PSZoom {
+                $script:ZoomURI | Should -Be 'Zoomgov.com'
+            }
         }
 
         It 'Should set PSZoomToken after successful connection' {
             Connect-PSZoom -AccountID 'test-account' -ClientID 'test-client' -ClientSecret 'test-secret'
 
-            $script:PSZoomToken | Should -Not -BeNullOrEmpty
-            $script:PSZoomToken | Should -BeOfType [securestring]
+            InModuleScope PSZoom {
+                $script:PSZoomToken | Should -Not -BeNullOrEmpty
+                $script:PSZoomToken | Should -BeOfType [securestring]
+            }
         }
     }
 
@@ -57,14 +75,18 @@ Describe 'Connect-PSZoom' {
         It 'Should accept string token and convert to SecureString' {
             Connect-PSZoom -Token 'plain-text-token'
 
-            $script:PSZoomToken | Should -BeOfType [securestring]
+            InModuleScope PSZoom {
+                $script:PSZoomToken | Should -BeOfType [securestring]
+            }
         }
 
         It 'Should accept SecureString token directly' {
             $secureToken = ConvertTo-SecureString 'secure-token' -AsPlainText -Force
             Connect-PSZoom -Token $secureToken
 
-            $script:PSZoomToken | Should -BeOfType [securestring]
+            InModuleScope PSZoom {
+                $script:PSZoomToken | Should -BeOfType [securestring]
+            }
         }
 
         It 'Should not call New-OAuthToken when using Token parameter' {

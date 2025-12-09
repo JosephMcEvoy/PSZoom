@@ -5,21 +5,27 @@ BeforeAll {
 
 Describe 'Invoke-ZoomRestMethod' {
     BeforeAll {
-        # Set up required module state
-        $script:PSZoomToken = ConvertTo-SecureString 'test-token-12345' -AsPlainText -Force
-        $script:ZoomURI = 'zoom.us'
+        # Set up required module state within module scope
+        InModuleScope PSZoom {
+            $script:PSZoomToken = ConvertTo-SecureString 'test-token-12345' -AsPlainText -Force
+            $script:ZoomURI = 'zoom.us'
+        }
+        # Also create local variable for tests that need to pass token explicitly
+        $script:TestToken = ConvertTo-SecureString 'test-token-12345' -AsPlainText -Force
     }
 
     Context 'When token is not set' {
         It 'Should display message when no token found' {
-            $originalToken = $script:PSZoomToken
-            $script:PSZoomToken = $null
+            InModuleScope PSZoom {
+                $originalToken = $script:PSZoomToken
+                $script:PSZoomToken = $null
 
-            # Capture host output
-            $output = Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method GET 6>&1
+                # Capture host output
+                $output = Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method GET 6>&1
 
-            $script:PSZoomToken = $originalToken
-            $output | Should -Match 'No token found'
+                $script:PSZoomToken = $originalToken
+                $output | Should -Match 'No token found'
+            }
         }
     }
 
@@ -34,7 +40,7 @@ Describe 'Invoke-ZoomRestMethod' {
         }
 
         It 'Should return response from API' {
-            $result = Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users/me' -Method GET -Token $script:PSZoomToken
+            $result = Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users/me' -Method GET -Token $script:TestToken
             $result.id | Should -Be 'user123'
         }
 
@@ -45,7 +51,7 @@ Describe 'Invoke-ZoomRestMethod' {
                 return @{ success = $true }
             }
 
-            Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method GET -Token $script:PSZoomToken
+            Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method GET -Token $script:TestToken
             Should -Invoke Invoke-RestMethod -ModuleName PSZoom -Times 1
         }
 
@@ -55,7 +61,7 @@ Describe 'Invoke-ZoomRestMethod' {
                 return @{ success = $true }
             }
 
-            Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method POST -ContentType 'text/plain' -Token $script:PSZoomToken
+            Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method POST -ContentType 'text/plain' -Token $script:TestToken
             Should -Invoke Invoke-RestMethod -ModuleName PSZoom -Times 1
         }
     }
@@ -68,23 +74,23 @@ Describe 'Invoke-ZoomRestMethod' {
         }
 
         It 'Should support GET method' {
-            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method GET -Token $script:PSZoomToken } | Should -Not -Throw
+            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method GET -Token $script:TestToken } | Should -Not -Throw
         }
 
         It 'Should support POST method' {
-            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method POST -Token $script:PSZoomToken } | Should -Not -Throw
+            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method POST -Token $script:TestToken } | Should -Not -Throw
         }
 
         It 'Should support PUT method' {
-            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users/123' -Method PUT -Token $script:PSZoomToken } | Should -Not -Throw
+            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users/123' -Method PUT -Token $script:TestToken } | Should -Not -Throw
         }
 
         It 'Should support DELETE method' {
-            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users/123' -Method DELETE -Token $script:PSZoomToken } | Should -Not -Throw
+            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users/123' -Method DELETE -Token $script:TestToken } | Should -Not -Throw
         }
 
         It 'Should support PATCH method' {
-            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users/123' -Method PATCH -Token $script:PSZoomToken } | Should -Not -Throw
+            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users/123' -Method PATCH -Token $script:TestToken } | Should -Not -Throw
         }
     }
 
@@ -98,7 +104,7 @@ Describe 'Invoke-ZoomRestMethod' {
         It 'Should pass body parameter to Invoke-RestMethod' {
             $body = @{ email = 'test@test.com' } | ConvertTo-Json
 
-            Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method POST -Body $body -Token $script:PSZoomToken
+            Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method POST -Body $body -Token $script:TestToken
             Should -Invoke Invoke-RestMethod -ModuleName PSZoom -Times 1
         }
     }
@@ -110,7 +116,7 @@ Describe 'Invoke-ZoomRestMethod' {
                 throw $exception
             }
 
-            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method GET -Token $script:PSZoomToken -ErrorAction Stop } | Should -Throw
+            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Method GET -Token $script:TestToken -ErrorAction Stop } | Should -Throw
         }
 
         It 'Should handle 404 not found errors' {
@@ -119,7 +125,7 @@ Describe 'Invoke-ZoomRestMethod' {
                 throw $exception
             }
 
-            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users/nonexistent' -Method GET -Token $script:PSZoomToken -ErrorAction Stop } | Should -Throw
+            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users/nonexistent' -Method GET -Token $script:TestToken -ErrorAction Stop } | Should -Throw
         }
     }
 
@@ -127,13 +133,13 @@ Describe 'Invoke-ZoomRestMethod' {
         It 'Should accept Uri parameter' {
             Mock Invoke-RestMethod -ModuleName PSZoom { return @{} }
 
-            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Token $script:PSZoomToken } | Should -Not -Throw
+            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -Token $script:TestToken } | Should -Not -Throw
         }
 
         It 'Should accept TimeoutSec parameter' {
             Mock Invoke-RestMethod -ModuleName PSZoom { return @{} }
 
-            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -TimeoutSec 30 -Token $script:PSZoomToken } | Should -Not -Throw
+            { Invoke-ZoomRestMethod -Uri 'https://api.zoom.us/v2/users' -TimeoutSec 30 -Token $script:TestToken } | Should -Not -Throw
         }
     }
 }

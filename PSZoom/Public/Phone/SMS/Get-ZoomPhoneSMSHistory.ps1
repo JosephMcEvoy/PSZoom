@@ -91,9 +91,8 @@ function Get-ZoomPhoneSMSHistory {
             $QueryStatements.Add('to', $To)
         }
 
-        if ($PSBoundParameters.ContainsKey('MessageType')) {
-            $QueryStatements.Add('message_type', $MessageType)
-        }
+        # Always add message_type since it has a default value
+        $QueryStatements.Add('message_type', $MessageType)
 
         switch ($PSCmdlet.ParameterSetName) {
             "NextRecords" {

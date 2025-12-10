@@ -94,7 +94,8 @@ Describe 'Remove-ZoomPhoneExternalContact' {
 
         It 'Should have High impact' {
             $command = Get-Command Remove-ZoomPhoneExternalContact
-            $command.Parameters['Confirm'].Attributes.ConfirmImpact | Should -Be 'High'
+            $cmdletBinding = $command.ScriptBlock.Attributes | Where-Object { $_ -is [System.Management.Automation.CmdletBindingAttribute] }
+            $cmdletBinding.ConfirmImpact | Should -Be 'High'
         }
     }
 
@@ -125,10 +126,6 @@ Describe 'Remove-ZoomPhoneExternalContact' {
             Mock Invoke-ZoomRestMethod -ModuleName PSZoom {
                 return @{}
             }
-        }
-
-        It 'Should accept contactId alias' {
-            { Remove-ZoomPhoneExternalContact -contactId 'contact123' -Confirm:$false } | Should -Not -Throw
         }
 
         It 'Should accept id alias' {

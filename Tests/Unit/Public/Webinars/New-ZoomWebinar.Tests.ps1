@@ -48,7 +48,7 @@ Describe 'New-ZoomWebinar' {
         }
 
         It 'Should accept pipeline input for UserId' {
-            @{ UserId = 'user@company.com'; Topic = 'Test' } | New-ZoomWebinar
+            [PSCustomObject]@{ UserId = 'user@company.com'; Topic = 'Test' } | New-ZoomWebinar
 
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -Times 1
         }

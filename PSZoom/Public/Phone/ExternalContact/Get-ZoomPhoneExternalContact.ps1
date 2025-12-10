@@ -31,7 +31,7 @@ function Get-ZoomPhoneExternalContact {
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True
         )]
-        [Alias('contactId', 'id', 'contact_id')]
+        [Alias('id', 'contact_id')]
         [string[]]$ContactId
      )
 

@@ -94,7 +94,8 @@ Describe 'Remove-ZoomPhoneSharedLineGroup' {
 
         It 'Should have High impact' {
             $command = Get-Command Remove-ZoomPhoneSharedLineGroup
-            $command.Parameters['Confirm'].Attributes.ConfirmImpact | Should -Be 'High'
+            $cmdletBinding = $command.ScriptBlock.Attributes | Where-Object { $_ -is [System.Management.Automation.CmdletBindingAttribute] }
+            $cmdletBinding.ConfirmImpact | Should -Be 'High'
         }
     }
 

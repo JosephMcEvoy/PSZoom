@@ -192,10 +192,6 @@ Describe 'Update-ZoomPhoneExternalContact' {
             }
         }
 
-        It 'Should accept contactId alias' {
-            { Update-ZoomPhoneExternalContact -contactId 'contact123' -FirstName 'Jane' -Confirm:$false } | Should -Not -Throw
-        }
-
         It 'Should accept first_name alias' {
             { Update-ZoomPhoneExternalContact -ContactId 'contact123' -first_name 'Jane' -Confirm:$false } | Should -Not -Throw
         }

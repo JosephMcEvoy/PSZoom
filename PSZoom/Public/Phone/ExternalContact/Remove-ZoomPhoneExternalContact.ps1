@@ -34,7 +34,7 @@ function Remove-ZoomPhoneExternalContact {
             ValueFromPipelineByPropertyName = $True,
             Position = 0
         )]
-        [Alias('contactId', 'id', 'contact_id')]
+        [Alias('id', 'contact_id')]
         [string[]]$ContactId,
 
         [switch]$PassThru

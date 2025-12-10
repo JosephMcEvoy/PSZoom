@@ -84,8 +84,8 @@ Describe 'Get-ZoomPhoneExternalContact' {
             { $contactObject | Get-ZoomPhoneExternalContact } | Should -Not -Throw
         }
 
-        It 'Should accept object with contactId property from pipeline' {
-            $contactObject = [PSCustomObject]@{ contactId = 'contact123' }
+        It 'Should accept object with ContactId property from pipeline' {
+            $contactObject = [PSCustomObject]@{ ContactId = 'contact123' }
             { $contactObject | Get-ZoomPhoneExternalContact } | Should -Not -Throw
         }
 
@@ -100,10 +100,6 @@ Describe 'Get-ZoomPhoneExternalContact' {
             Mock Invoke-ZoomRestMethod -ModuleName PSZoom {
                 return @{ id = 'contact123' }
             }
-        }
-
-        It 'Should accept contactId alias' {
-            { Get-ZoomPhoneExternalContact -contactId 'contact123' } | Should -Not -Throw
         }
 
         It 'Should accept id alias' {

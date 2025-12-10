@@ -21,6 +21,12 @@ User's password.
 .PARAMETER Options
 Account options object.
 
+.PARAMETER AccountName
+Sub-account name.
+
+.PARAMETER VanityUrl
+Vanity URL for the sub-account.
+
 .EXAMPLE
 New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'john@company.com' -Password 'SecurePass123!'
 
@@ -59,7 +65,15 @@ function New-ZoomAccount {
         [string]$Password,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
-        [hashtable]$Options
+        [hashtable]$Options,
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('account_name')]
+        [string]$AccountName,
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('vanity_url')]
+        [string]$VanityUrl
     )
 
     process {
@@ -74,6 +88,14 @@ function New-ZoomAccount {
 
         if ($PSBoundParameters.ContainsKey('Options')) {
             $requestBody['options'] = $Options
+        }
+
+        if ($PSBoundParameters.ContainsKey('AccountName')) {
+            $requestBody['account_name'] = $AccountName
+        }
+
+        if ($PSBoundParameters.ContainsKey('VanityUrl')) {
+            $requestBody['vanity_url'] = $VanityUrl
         }
 
         $requestBody = ConvertTo-Json $requestBody -Depth 10

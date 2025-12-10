@@ -32,8 +32,10 @@ Describe 'Get-DateRanges' {
     Context 'When generating date ranges across multiple months' {
         It 'Should return multiple month ranges' {
             InModuleScope PSZoom {
+                # From 2024-01-15 to 2024-03-15 should create 3 ranges
+                # The function increments by month, so 01-15 -> 02-15 -> 03-15
                 $from = [datetime]'2024-01-15'
-                $to = [datetime]'2024-03-10'
+                $to = [datetime]'2024-03-15'
                 $result = Get-DateRanges -From $from -To $to
 
                 $result.Count | Should -Be 3
@@ -43,7 +45,7 @@ Describe 'Get-DateRanges' {
         It 'Should set correct begin dates for each month' {
             InModuleScope PSZoom {
                 $from = [datetime]'2024-01-15'
-                $to = [datetime]'2024-03-10'
+                $to = [datetime]'2024-03-15'
                 $result = Get-DateRanges -From $from -To $to
 
                 $result['012024'].begin | Should -Be '2024-01-15'

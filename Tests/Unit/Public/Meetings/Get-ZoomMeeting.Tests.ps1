@@ -217,14 +217,16 @@ Describe 'Get-ZoomMeeting' {
             $result.join_url | Should -Not -BeNullOrEmpty
         }
 
-        It 'Should return meeting type as integer' {
+        It 'Should return meeting type as numeric value' {
             $result = Get-ZoomMeeting -MeetingId '1234567890'
-            $result.type | Should -BeOfType [int]
+            # JSON deserialization may return int or long depending on PowerShell version
+            $result.type | Should -BeIn @(1, 2, 3, 4, 8)
         }
 
-        It 'Should return duration as integer' {
+        It 'Should return duration as numeric value' {
             $result = Get-ZoomMeeting -MeetingId '1234567890'
-            $result.duration | Should -BeOfType [int]
+            # JSON deserialization may return int or long depending on PowerShell version
+            $result.duration | Should -BeGreaterOrEqual 0
         }
     }
 }

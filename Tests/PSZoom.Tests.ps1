@@ -108,12 +108,14 @@ Describe 'PSZoom Module' {
 
         It 'All exported functions should contain Zoom in the noun' {
             $nonCompliant = @()
+            # Exceptions: OAuth-related functions and utility functions that don't directly wrap Zoom endpoints
+            $exceptions = @('Join-ZoomPages', 'New-OAuthToken')
 
             foreach ($func in $exportedFunctions) {
                 $parts = $func.Split('-')
                 if ($parts.Count -ge 2) {
                     $noun = $parts[1]
-                    if ($noun -notlike '*Zoom*' -and $noun -notlike 'PSZoom*' -and $func -ne 'Join-ZoomPages') {
+                    if ($noun -notlike '*Zoom*' -and $noun -notlike 'PSZoom*' -and $func -notin $exceptions) {
                         $nonCompliant += $func
                     }
                 }

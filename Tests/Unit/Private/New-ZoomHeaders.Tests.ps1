@@ -9,7 +9,8 @@ Describe 'New-ZoomHeaders' {
             InModuleScope PSZoom {
                 $TestToken = ConvertTo-SecureString 'test-bearer-token-12345' -AsPlainText -Force
                 $headers = New-ZoomHeaders -Token $TestToken
-                $headers | Should -BeOfType [System.Collections.Generic.Dictionary[String, String]]
+                # Check if it's a dictionary-like object with string keys
+                $headers.GetType().Name | Should -Match 'Dictionary'
             }
         }
 

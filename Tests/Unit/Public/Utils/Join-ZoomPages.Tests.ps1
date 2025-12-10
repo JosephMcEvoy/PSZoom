@@ -87,17 +87,17 @@ Describe 'Join-ZoomPages' {
 
         It 'Should call command correct number of times for multi-page results' {
             $script:callCount = 0
-            Mock Get-ZoomRecordings -ModuleName PSZoom {
+            Mock Get-ZoomGroups -ModuleName PSZoom {
                 $script:callCount++
                 return [PSCustomObject]@{
                     page_count = 3
                     next_page_token = if ($script:callCount -lt 3) { 'token' } else { $null }
-                    recordings = @(@{ id = "recording$script:callCount" })
+                    groups = @(@{ id = "group$script:callCount" })
                 }
             }
 
-            Join-ZoomPages -ZoomCommand 'Get-ZoomRecordings' -ZoomCommandSplat @{}
-            Should -Invoke Get-ZoomRecordings -ModuleName PSZoom -Times 3
+            Join-ZoomPages -ZoomCommand 'Get-ZoomGroups' -ZoomCommandSplat @{}
+            Should -Invoke Get-ZoomGroups -ModuleName PSZoom -Times 3
         }
     }
 

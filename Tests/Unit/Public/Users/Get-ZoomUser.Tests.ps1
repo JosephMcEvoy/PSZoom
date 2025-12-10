@@ -2,9 +2,11 @@ BeforeAll {
     $ModulePath = "$PSScriptRoot/../../../../PSZoom/PSZoom.psd1"
     Import-Module $ModulePath -Force
 
-    # Set up required module state
-    $script:PSZoomToken = ConvertTo-SecureString 'test-token' -AsPlainText -Force
-    $script:ZoomURI = 'zoom.us'
+    # Set up required module state within module scope
+    InModuleScope PSZoom {
+        $script:PSZoomToken = ConvertTo-SecureString 'test-token' -AsPlainText -Force
+        $script:ZoomURI = 'zoom.us'
+    }
 
     # Load mock response fixtures
     $script:MockUserGet = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/user-get.json" | ConvertFrom-Json

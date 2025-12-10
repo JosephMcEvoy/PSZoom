@@ -61,11 +61,12 @@ Describe 'Get-ZoomPaginatedData' {
 
         It 'Should aggregate data across multiple pages' {
             InModuleScope PSZoom {
-                $script:callCount = 0
+                # Use a script-scoped variable that persists across mock calls
+                $script:paginationCallCount = 0
                 Mock Invoke-ZoomRestMethod {
-                    $script:callCount++
-                    if ($script:callCount -eq 1) {
-                        return @{
+                    $script:paginationCallCount++
+                    if ($script:paginationCallCount -eq 1) {
+                        return [PSCustomObject]@{
                             total_records = 4
                             next_page_token = 'token123'
                             users = @(
@@ -74,8 +75,9 @@ Describe 'Get-ZoomPaginatedData' {
                             )
                         }
                     } else {
-                        return @{
+                        return [PSCustomObject]@{
                             total_records = 4
+                            next_page_token = $null
                             users = @(
                                 @{ id = 'user3' }
                                 @{ id = 'user4' }
@@ -175,16 +177,18 @@ Describe 'Get-ZoomPaginatedData' {
         It 'Should extract correct property from response with users' {
             InModuleScope PSZoom {
                 Mock Invoke-ZoomRestMethod {
-                    return @{
+                    return [PSCustomObject]@{
                         total_records = 1
                         page_size = 30
-                        users = @(@{ id = 'user1'; name = 'Test User' })
+                        users = @([PSCustomObject]@{ id = 'user1'; name = 'Test User' })
                     }
                 }
 
                 $result = Get-ZoomPaginatedData -URI 'https://api.zoom.us/v2/users'
-                $result[0].id | Should -Be 'user1'
-                $result[0].name | Should -Be 'Test User'
+                # Result could be single item or array depending on how Select-Object -ExpandProperty works
+                $firstResult = @($result)[0]
+                $firstResult.id | Should -Be 'user1'
+                $firstResult.name | Should -Be 'Test User'
             }
         }
 

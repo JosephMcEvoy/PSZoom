@@ -174,6 +174,16 @@ Describe 'Get-ZoomActiveInactiveHostReports' {
     }
 
     Context 'When validating parameters' {
+        BeforeEach {
+            Mock Invoke-ZoomRestMethod -ModuleName PSZoom {
+                return @{
+                    from = '2025-01-01'
+                    to = '2025-01-31'
+                    users = @()
+                }
+            }
+        }
+
         It 'Should accept valid Type values' {
             { Get-ZoomActiveInactiveHostReports -From '2025-01-01' -To '2025-01-31' -Type 'active' } | Should -Not -Throw
             { Get-ZoomActiveInactiveHostReports -From '2025-01-01' -To '2025-01-31' -Type 'inactive' } | Should -Not -Throw

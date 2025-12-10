@@ -96,8 +96,8 @@ Describe 'Join-ZoomPages' {
                 }
             }
 
-            # Get-ZoomUser has NextPageToken parameter, unlike Get-ZoomGroups
-            Join-ZoomPages -ZoomCommand 'Get-ZoomUser' -ZoomCommandSplat @{ Status = 'active' }
+            # Get-ZoomUser has NextPageToken parameter - use empty splat to avoid parameter set conflicts
+            Join-ZoomPages -ZoomCommand 'Get-ZoomUser' -ZoomCommandSplat @{}
             Should -Invoke Get-ZoomUser -ModuleName PSZoom -Times 3
         }
     }

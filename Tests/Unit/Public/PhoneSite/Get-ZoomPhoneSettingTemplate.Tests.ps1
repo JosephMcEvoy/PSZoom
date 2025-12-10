@@ -231,7 +231,9 @@ Describe 'Get-ZoomPhoneSettingTemplate' {
         }
 
         It 'Should accept templateId from pipeline' {
-            { 'setting-template-123' | Get-ZoomPhoneSettingTemplate } | Should -Not -Throw
+            # Note: Raw string pipeline input is ambiguous due to multiple ValueFromPipeline parameters
+            # Use PSCustomObject with templateId property for unambiguous binding
+            { [PSCustomObject]@{ templateId = 'setting-template-123' } | Get-ZoomPhoneSettingTemplate } | Should -Not -Throw
         }
 
         It 'Should accept object with id property from pipeline' {

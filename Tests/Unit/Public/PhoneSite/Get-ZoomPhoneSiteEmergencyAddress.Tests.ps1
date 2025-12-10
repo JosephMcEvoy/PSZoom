@@ -239,7 +239,9 @@ Describe 'Get-ZoomPhoneSiteEmergencyAddress' {
         }
 
         It 'Should accept EmergencyAddressId from pipeline' {
-            { 'addr-123' | Get-ZoomPhoneSiteEmergencyAddress } | Should -Not -Throw
+            # Note: Raw string pipeline input is ambiguous due to multiple ValueFromPipeline parameters
+            # Use PSCustomObject with EmergencyAddressId property for unambiguous binding
+            { [PSCustomObject]@{ EmergencyAddressId = 'addr-123' } | Get-ZoomPhoneSiteEmergencyAddress } | Should -Not -Throw
         }
 
         It 'Should accept object with id property from pipeline' {

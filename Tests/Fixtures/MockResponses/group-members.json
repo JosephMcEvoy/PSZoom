@@ -1,0 +1,29 @@
+{
+  "page_count": 1,
+  "page_number": 1,
+  "page_size": 30,
+  "total_records": 3,
+  "members": [
+    {
+      "id": "KDcuGIm1QgePTO8WbOqwIQ",
+      "email": "jane.doe@example.com",
+      "first_name": "Jane",
+      "last_name": "Doe",
+      "type": 2
+    },
+    {
+      "id": "ABCdEFghiJKLMNO",
+      "email": "john.smith@example.com",
+      "first_name": "John",
+      "last_name": "Smith",
+      "type": 2
+    },
+    {
+      "id": "XYZaBCdeFGHIJKL",
+      "email": "bob.wilson@example.com",
+      "first_name": "Bob",
+      "last_name": "Wilson",
+      "type": 1
+    }
+  ]
+}

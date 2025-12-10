@@ -1,0 +1,24 @@
+{
+  "schedule_meeting": {
+    "host_video": true,
+    "participant_video": false,
+    "audio_type": "both",
+    "join_before_host": false
+  },
+  "in_meeting": {
+    "e2e_encryption": false,
+    "chat": true,
+    "private_chat": true,
+    "feedback": true,
+    "co_host": true,
+    "polling": true,
+    "annotation": true,
+    "whiteboard": true,
+    "remote_control": true
+  },
+  "recording": {
+    "local_recording": true,
+    "cloud_recording": true,
+    "auto_recording": "none"
+  }
+}

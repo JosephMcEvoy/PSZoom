@@ -86,18 +86,19 @@ Describe 'Join-ZoomPages' {
         }
 
         It 'Should call command correct number of times for multi-page results' {
-            $script:callCount = 0
-            Mock Get-ZoomGroups -ModuleName PSZoom {
-                $script:callCount++
+            $script:multiPageCallCount = 0
+            Mock Get-ZoomUser -ModuleName PSZoom {
+                $script:multiPageCallCount++
                 return [PSCustomObject]@{
                     page_count = 3
-                    next_page_token = if ($script:callCount -lt 3) { 'token' } else { $null }
-                    groups = @(@{ id = "group$script:callCount" })
+                    next_page_token = if ($script:multiPageCallCount -lt 3) { 'token' } else { $null }
+                    users = @(@{ id = "user$script:multiPageCallCount" })
                 }
             }
 
-            Join-ZoomPages -ZoomCommand 'Get-ZoomGroups' -ZoomCommandSplat @{}
-            Should -Invoke Get-ZoomGroups -ModuleName PSZoom -Times 3
+            # Get-ZoomUser has NextPageToken parameter, unlike Get-ZoomGroups
+            Join-ZoomPages -ZoomCommand 'Get-ZoomUser' -ZoomCommandSplat @{ Status = 'active' }
+            Should -Invoke Get-ZoomUser -ModuleName PSZoom -Times 3
         }
     }
 

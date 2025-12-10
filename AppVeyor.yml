@@ -1,17 +1,47 @@
+# AppVeyor CI configuration for PSZoom
+
 environment:
   nugetapikey:
     secure: /wkBebPoOhfZSU+7O0z+jpst5N+PDX+iD02S3z37lkDYqZ6CHixD/4xCXElBpth1
 
-# Allow WMF5 (i.e. PowerShellGallery functionality)
-os: WMF 5
+# Use Windows Server with PowerShell 7
+image: Visual Studio 2022
 
-# Skip on updates to the readme.
+# Skip on updates to the readme
 # We can force this by adding [skip ci] or [ci skip] anywhere in commit message
 skip_commits:
   message: /updated readme.*|update readme.*s/
 
+# Don't use AppVeyor's automatic build
 build: false
 
-#Kick off the CI/CD pipeline
-test_script:
-  - pwsh: . .\build\Start-Build.ps1 -Task Deploy
+# IMPORTANT: Disable automatic test discovery
+# This prevents AppVeyor from reporting "Build success" after test failures
+test: off
+
+# Install dependencies
+install:
+  - pwsh: Install-Module -Name PSDepend -Force -Scope CurrentUser
+  - pwsh: Install-Module -Name BuildHelpers -Force -Scope CurrentUser
+  - pwsh: Install-Module -Name psake -Force -Scope CurrentUser
+  - pwsh: Install-Module -Name Pester -RequiredVersion 5.6.1 -Force -Scope CurrentUser -SkipPublisherCheck
+
+# Run the CI/CD pipeline using build_script (not test_script)
+# Exit code from Start-Build.ps1 will determine build success/failure
+build_script:
+  - pwsh: |
+      $ErrorActionPreference = 'Stop'
+      . .\Build\Start-Build.ps1 -Task Deploy
+
+# Only build these branches
+branches:
+  only:
+    - master
+    - main
+    - develop
+    - dev
+
+# Artifacts to preserve
+artifacts:
+  - path: '**\TestResults*.xml'
+    name: TestResults

@@ -1,18 +1,23 @@
-﻿# PSake makes variables declared here available in other scriptblocks
-# Init some things
-Properties {
-    # Find the build folder based on build system
-        $ProjectRoot = $ENV:BHProjectPath
+﻿# Load build helpers
+. "$PSScriptRoot\Private\Get-BuildEnvironment.ps1"
+. "$PSScriptRoot\Private\Set-PSZoomModuleFunctions.ps1"
 
-        if (-not $ProjectRoot) {
-            $ProjectRoot = Resolve-Path "$PSScriptRoot\.."
-        }
+# PSake makes variables declared here available in other scriptblocks
+Properties {
+    # Get build environment
+    $script:BuildEnv = Get-BuildEnvironment -ProjectRoot (Resolve-Path "$PSScriptRoot\..")
+    $ProjectRoot = $BuildEnv.ProjectPath
+    $ModulePath = $BuildEnv.ModulePath
+    $ManifestPath = $BuildEnv.PSModuleManifest
+    $BuildSystem = $BuildEnv.BuildSystem
+    $CommitMessage = $BuildEnv.CommitMessage
+    $BranchName = $BuildEnv.BranchName
 
     $Timestamp = Get-Date -UFormat "%Y%m%d-%H%M%S"
     $PSVersion = $PSVersionTable.PSVersion.Major
     $TestFile = "TestResults_PS$PSVersion`_$TimeStamp.xml"
 
-    if ($ENV:BHCommitMessage -match "!verbose") {
+    if ($CommitMessage -match "!verbose") {
         $Verbose = @{Verbose = $True}
     }
 }
@@ -23,55 +28,61 @@ Task Default -Depends Deploy
 
 Task Init {
     Set-Location $ProjectRoot
-    Get-Item ENV:BH*
+    Write-Host "Build System: $BuildSystem"
+    Write-Host "Project Root: $ProjectRoot"
+    Write-Host "Module Path: $ModulePath"
+    Write-Host "Branch: $BranchName"
 } -description 'Initialize build environment'
 
 Task Test -Depends Init  {
-    # Pester 5 configuration
-    $PesterConfig = New-PesterConfiguration
-    $PesterConfig.Run.Path = "$ProjectRoot\Tests"
-    $PesterConfig.Run.Exit = $false
-    $PesterConfig.Run.PassThru = $true
-    $PesterConfig.TestResult.Enabled = $true
-    $PesterConfig.TestResult.OutputFormat = 'NUnitXml'
-    $PesterConfig.TestResult.OutputPath = "$ProjectRoot\$TestFile"
-    $PesterConfig.Output.Verbosity = 'Detailed'
+    # Use unified test runner
+    $testScriptPath = Join-Path $ProjectRoot 'Invoke-Tests.ps1'
+    $testResults = & $testScriptPath -TestType Unit -OutputPath (Join-Path $ProjectRoot 'Tests') -PassThru
 
-    # Run tests with Pester 5 configuration
-    $TestResults = Invoke-Pester -Configuration $PesterConfig
-
-    # In Appveyor?  Upload our tests!
-    if ($ENV:BHBuildSystem -eq 'AppVeyor') {
-        (New-Object 'System.Net.WebClient').UploadFile(
-            "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)",
-            "$ProjectRoot\$TestFile" )
+    # In AppVeyor? Upload our tests!
+    if ($BuildSystem -eq 'AppVeyor') {
+        $testResultPath = Join-Path $ProjectRoot 'Tests' 'testResults.xml'
+        if (Test-Path $testResultPath) {
+            (New-Object 'System.Net.WebClient').UploadFile(
+                "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)",
+                $testResultPath
+            )
+        }
     }
-
-    Remove-Item "$ProjectRoot\$TestFile" -Force -ErrorAction SilentlyContinue
 
     # Failed tests?
     # Need to tell psake or it will proceed to the deployment. Danger!
-    if ($TestResults.FailedCount -gt 0) {
-        throw "Failed '$($TestResults.FailedCount)' tests, build failed"
+    if ($testResults.FailedCount -gt 0) {
+        throw "Failed '$($testResults.FailedCount)' tests, build failed"
     }
 } -description 'Run tests'
 
-Task Build -Depends Test {   
-    # Load the module, read the exported functions, update the psd1 FunctionsToExport
-    Set-ModuleFunctions
+Task Build -Depends Test {
+    # Update module functions in manifest
+    Set-PSZoomModuleFunctions -ManifestPath $ManifestPath
 
-    # Bump the module version if not done already
-    try {
-        [version]$GalleryVersion = Get-NextNugetPackageVersion -Name $env:BHProjectName -ErrorAction Stop
-        [version]$GithubVersion = Get-MetaData -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -ErrorAction Stop
+    # Bump the module version if deploying
+    if ($CommitMessage -match '!deploy') {
+        try {
+            # Get current gallery version
+            $galleryModule = Find-Module -Name 'PSZoom' -Repository PSGallery -ErrorAction SilentlyContinue
+            if ($galleryModule) {
+                [version]$galleryVersion = $galleryModule.Version
+                $manifest = Import-PowerShellDataFile -Path $ManifestPath
+                [version]$currentVersion = $manifest.ModuleVersion
 
-        if($GalleryVersion -ge $GithubVersion) {
-            Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value $GalleryVersion -ErrorAction stop
+                if ($galleryVersion -ge $currentVersion) {
+                    # Increment patch version
+                    $newVersion = [version]::new($galleryVersion.Major, $galleryVersion.Minor, $galleryVersion.Build + 1)
+                    Update-ModuleManifest -Path $ManifestPath -ModuleVersion $newVersion
+                    Write-Host "Updated version from $currentVersion to $newVersion"
+                }
+            }
+        } catch {
+            Write-Warning "Failed to update version: $_. Continuing with existing version."
         }
-    } catch {
-        "Failed to update version for '$env:BHProjectName': $_.`nContinuing with existing version"
     }
-} -description 'Increment version'
+} -description 'Build module and increment version'
 
 Task Deploy -Depends Build {
     $Params = @{
@@ -81,4 +92,4 @@ Task Deploy -Depends Build {
     }
 
     Invoke-PSDeploy @Verbose @Params
-} -description 'Deploy to PowerShellGallery'
+} -description 'Deploy to PowerShell Gallery'

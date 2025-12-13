@@ -1,0 +1,232 @@
+{
+  "version": "1.0",
+  "createdAt": "2025-12-12T02:24:59.1872974Z",
+  "updatedAt": "2025-12-13T03:20:11.6307686Z",
+  "statistics": {
+    "total": 14,
+    "success": 14,
+    "failed": 0,
+    "skipped": 0
+  },
+  "endpoints": [
+    {
+      "hash": "cf729277232cb922",
+      "endpoint": "/v2/webinars/{webinarId}/registrants/questions",
+      "method": "PATCH",
+      "result": "success",
+      "processedAt": "2025-12-13T00:39:03.8381147Z",
+      "cmdletName": "Update-ZoomWebinarRegistrantQuestion",
+      "attemptCount": 6,
+      "firstProcessedAt": "2025-12-12T03:55:52.0452204Z",
+      "previousResults": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ]
+    },
+    {
+      "hash": "7106ce6dfc57b4b6",
+      "endpoint": "/v2/webinars/{webinarId}/registrants/questions",
+      "method": "GET",
+      "result": "success",
+      "processedAt": "2025-12-13T00:35:41.9541413Z",
+      "cmdletName": "Get-ZoomWebinarRegistrantQuestion",
+      "attemptCount": 5,
+      "firstProcessedAt": "2025-12-12T03:49:31.0513361Z",
+      "previousResults": [
+        "success",
+        "success",
+        "success",
+        "success"
+      ]
+    },
+    {
+      "hash": "c984f331642d9482",
+      "endpoint": "/v2/webinars/{webinarId}/registrants/{registrantId}",
+      "method": "DELETE",
+      "result": "success",
+      "processedAt": "2025-12-13T00:33:13.6190577Z",
+      "cmdletName": "Remove-ZoomWebinarRegistrant",
+      "attemptCount": 6,
+      "firstProcessedAt": "2025-12-12T03:46:39.1982586Z",
+      "previousResults": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ]
+    },
+    {
+      "hash": "ac33400a18b964f3",
+      "endpoint": "/v2/webinars/{webinarId}/polls/{pollId}",
+      "method": "PUT",
+      "result": "success",
+      "processedAt": "2025-12-13T00:32:01.5820178Z",
+      "cmdletName": "Set-ZoomWebinarPoll",
+      "attemptCount": 6,
+      "firstProcessedAt": "2025-12-12T03:44:40.2631023Z",
+      "previousResults": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ]
+    },
+    {
+      "hash": "80587760965c508d",
+      "endpoint": "/v2/webinars/{webinarId}/polls/{pollId}",
+      "method": "DELETE",
+      "result": "success",
+      "processedAt": "2025-12-13T00:27:54.6547109Z",
+      "cmdletName": "Remove-ZoomWebinarPoll",
+      "attemptCount": 6,
+      "firstProcessedAt": "2025-12-12T03:39:01.7822869Z",
+      "previousResults": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ]
+    },
+    {
+      "hash": "8024af4715dcb145",
+      "endpoint": "/v2/webinars/{webinarId}/polls",
+      "method": "GET",
+      "result": "success",
+      "processedAt": "2025-12-13T00:22:53.6793211Z",
+      "cmdletName": "Get-ZoomWebinarPoll",
+      "attemptCount": 6,
+      "firstProcessedAt": "2025-12-12T03:32:55.384875Z",
+      "previousResults": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ]
+    },
+    {
+      "hash": "79eb42b37aeef156",
+      "endpoint": "/v2/archive_files",
+      "method": "GET",
+      "result": "success",
+      "processedAt": "2025-12-13T00:19:27.3574406Z",
+      "cmdletName": "Get-ZoomArchiveFile",
+      "attemptCount": 9,
+      "firstProcessedAt": "2025-12-12T02:24:59.1960486Z",
+      "previousResults": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ]
+    },
+    {
+      "hash": "58e2fda739671096",
+      "endpoint": "/v2/users/{userId}/webinars",
+      "method": "POST",
+      "result": "success",
+      "processedAt": "2025-12-13T00:07:43.8270529Z",
+      "cmdletName": "New-ZoomUserWebinar",
+      "attemptCount": 1,
+      "firstProcessedAt": "2025-12-13T00:07:43.8270529Z"
+    },
+    {
+      "hash": "cef0ee78097e6729",
+      "endpoint": "/v2/users/{userId}/webinar_templates",
+      "method": "POST",
+      "result": "success",
+      "processedAt": "2025-12-13T00:04:33.2536571Z",
+      "cmdletName": "New-ZoomUserWebinarTemplate",
+      "attemptCount": 3,
+      "firstProcessedAt": "2025-12-12T05:32:51.9672089Z",
+      "previousResults": [
+        "failed",
+        "success"
+      ]
+    },
+    {
+      "hash": "bf9b8262412b9009",
+      "endpoint": "/v2/past_webinars/{webinarId}/qa",
+      "method": "GET",
+      "result": "success",
+      "processedAt": "2025-12-13T00:01:52.585683Z",
+      "cmdletName": "Get-ZoomPastWebinarQa",
+      "attemptCount": 2,
+      "firstProcessedAt": "2025-12-12T22:52:04.653005Z",
+      "previousResults": [
+        "success"
+      ]
+    },
+    {
+      "hash": "9d2007a8539f1b62",
+      "endpoint": "/v2/webinars/{webinarId}/registrants/{registrantId}",
+      "method": "GET",
+      "result": "success",
+      "processedAt": "2025-12-12T23:21:49.0704643Z",
+      "cmdletName": "Get-ZoomWebinarRegistrant",
+      "attemptCount": 5,
+      "firstProcessedAt": "2025-12-12T03:48:16.2374194Z",
+      "previousResults": [
+        "success",
+        "success",
+        "success",
+        "success"
+      ]
+    },
+    {
+      "hash": "879399d4fdaecdb4",
+      "endpoint": "/v2/webinars/{webinarId}/polls/{pollId}",
+      "method": "GET",
+      "result": "success",
+      "processedAt": "2025-12-12T23:16:43.8518794Z",
+      "cmdletName": "Get-ZoomWebinarPoll",
+      "attemptCount": 5,
+      "firstProcessedAt": "2025-12-12T03:40:51.3472407Z",
+      "previousResults": [
+        "success",
+        "success",
+        "success",
+        "success"
+      ]
+    },
+    {
+      "hash": "3b51cc7fc2510736",
+      "endpoint": "/v2/webinars/{webinarId}/polls",
+      "method": "POST",
+      "result": "success",
+      "processedAt": "2025-12-12T23:11:37.5690851Z",
+      "cmdletName": "New-ZoomWebinarPoll",
+      "attemptCount": 5,
+      "firstProcessedAt": "2025-12-12T03:36:45.1973291Z",
+      "previousResults": [
+        "success",
+        "success",
+        "success",
+        "success"
+      ]
+    },
+    {
+      "hash": "3839261cf005b3fc",
+      "endpoint": "/v2/users/{userId}/webinar_templates",
+      "method": "GET",
+      "result": "success",
+      "processedAt": "2025-12-12T22:53:25.7660415Z",
+      "cmdletName": "Get-ZoomUserWebinarTemplate",
+      "attemptCount": 2,
+      "firstProcessedAt": "2025-12-12T05:32:41.1960447Z",
+      "previousResults": [
+        "failed"
+      ]
+    }
+  ]
+}

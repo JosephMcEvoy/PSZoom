@@ -5,6 +5,36 @@ All notable changes to PSZoom will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2025-12-12
+
+### Added
+- 90+ new cmdlets covering previously missing Zoom API endpoints
+- Automated API coverage sync system with daily endpoint discovery
+- Comprehensive unit test suite (227 test files)
+- Contract testing with OpenAPI validation
+- Integration test infrastructure with secure credential handling
+- GitHub Actions CI/CD pipeline with matrix testing
+- Alert-on-failure workflow for CI notifications
+- Claude bot integration for issue remediation
+- Wiki documentation sync workflow
+
+### Changed
+- Upgraded to Pester 5.6.1 test framework
+- Module now requires PowerShell 5.1 minimum
+- Added explicit CompatiblePSEditions for Desktop and Core
+- Improved error handling in generated cmdlets
+
+### Fixed
+- Resolved 54 failing unit tests
+- Fixed parameter set ambiguity in pipeline cmdlets
+- Corrected endpoint mappings for webinar APIs
+
+### Infrastructure
+- Added `data/` directory for API spec caching and coverage tracking
+- Added `.github/scripts/` for automation scripts
+- Added `Tests/Contract/` for contract testing
+- Added `Tests/Integration/` for integration testing
+
 ## [Unreleased]
 
 ### Added
@@ -77,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
-| 3.0.0 | TBD | Full API coverage, comprehensive tests, Wiki docs, Claude bot |
+| 3.0.0 | 2025-12-12 | Full API coverage, comprehensive tests, Wiki docs, Claude bot |
 | 2.1 | 2024 | Bug fixes and enhancements |
 | 2.0 | 2022 | OAuth 2.0 migration |
 | 1.x | 2019-2021 | Initial releases with JWT auth |

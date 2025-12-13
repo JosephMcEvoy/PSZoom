@@ -2,7 +2,7 @@ BeforeAll {
     Import-Module "$PSScriptRoot/../../../../PSZoom/PSZoom.psd1" -Force
     $script:ZoomURI = 'zoom.us'
     $script:PSZoomToken = 'mock-token'
-    $script:MockResponse = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/w-e-b-i-n-a-r-r-e-g-i-s-t-r-a-n-t-delete.json" -Raw | ConvertFrom-Json
+    $script:MockResponse = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/webinar-registrant-delete.json" -Raw | ConvertFrom-Json
 }
 
 Describe 'Remove-ZoomWebinarRegistrant' {

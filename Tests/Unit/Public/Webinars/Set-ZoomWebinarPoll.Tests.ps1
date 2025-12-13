@@ -2,7 +2,7 @@ BeforeAll {
     Import-Module "$PSScriptRoot/../../../../PSZoom/PSZoom.psd1" -Force
     $script:PSZoomToken = 'mock-token'
     $script:ZoomURI = 'https://api.zoom.us/v2'
-    $script:MockResponse = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/w-e-b-i-n-a-r-p-o-l-l-put.json" -Raw | ConvertFrom-Json
+    $script:MockResponse = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/webinar-poll-put.json" -Raw | ConvertFrom-Json
 }
 
 Describe 'Set-ZoomWebinarPoll' {

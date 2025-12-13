@@ -2,7 +2,7 @@ BeforeAll {
     Import-Module "$PSScriptRoot/../../../../PSZoom/PSZoom.psd1" -Force
     $script:ZoomURI = 'zoom.us'
     $script:PSZoomToken = 'mock-token'
-    $script:MockResponse = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/p-h-o-n-e-o-u-t-b-o-u-n-d-c-a-l-l-e-r-i-d-c-u-s-t-o-m-i-z-e-d-n-u-m-b-e-r-delete.json" -Raw | ConvertFrom-Json
+    $script:MockResponse = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/phone-outbound-caller-id-customized-number-delete.json" -Raw | ConvertFrom-Json
 }
 
 Describe 'Remove-ZoomPhoneOutboundCallerIdCustomizedNumber' {

@@ -58,7 +58,7 @@ function Get-ZoomWebinarToken {
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
         [ValidateSet('closed_caption_token')]
-        [Alias('type')]
+        [Alias('token_type')]
         [string]$Type
     )
 

@@ -2,7 +2,7 @@ BeforeAll {
     Import-Module "$PSScriptRoot/../../../../PSZoom/PSZoom.psd1" -Force
     $script:ZoomURI = 'zoom.us'
     $script:PSZoomToken = 'mock-token'
-    $script:mockResponse = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/w-e-b-i-n-a-r-s-i-p-d-i-a-l-i-n-g-post.json" -Raw | ConvertFrom-Json
+    $script:mockResponse = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/webinar-sip-dialing-post.json" -Raw | ConvertFrom-Json
 }
 
 Describe 'New-ZoomWebinarSipDialing' {

@@ -2,7 +2,7 @@ BeforeAll {
     Import-Module "$PSScriptRoot/../../../../PSZoom/PSZoom.psd1" -Force
     $script:ZoomURI = 'zoom.us'
     $script:PSZoomToken = 'mock-token'
-    $script:MockResponse = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/u-s-e-r-w-e-b-i-n-a-r-t-e-m-p-l-a-t-e-get.json" -Raw | ConvertFrom-Json
+    $script:MockResponse = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/user-webinar-template-get.json" -Raw | ConvertFrom-Json
 }
 
 Describe 'Get-ZoomUserWebinarTemplate' {

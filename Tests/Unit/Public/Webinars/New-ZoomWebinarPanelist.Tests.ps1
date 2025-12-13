@@ -2,7 +2,7 @@ BeforeAll {
     Import-Module "$PSScriptRoot/../../../../PSZoom/PSZoom.psd1" -Force
     $script:PSZoomToken = 'mock-token'
     $script:ZoomURI = 'zoom.us'
-    $script:mockResponse = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/w-e-b-i-n-a-r-p-a-n-e-l-i-s-t-post.json" -Raw | ConvertFrom-Json
+    $script:mockResponse = Get-Content "$PSScriptRoot/../../../Fixtures/MockResponses/webinar-panelist-post.json" -Raw | ConvertFrom-Json
 }
 
 Describe 'New-ZoomWebinarPanelist' {

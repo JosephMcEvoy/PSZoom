@@ -3,7 +3,7 @@ BeforeAll {
     $script:PSZoomToken = 'mock-token'
     $script:ZoomURI = 'https://api.zoom.us/v2'
     
-    $mockResponsePath = "$PSScriptRoot/../../../Fixtures/MockResponses/w-e-b-i-n-a-r-t-o-k-e-n-get.json"
+    $mockResponsePath = "$PSScriptRoot/../../../Fixtures/MockResponses/webinar-token-get.json"
     if (Test-Path $mockResponsePath) {
         $script:mockResponse = Get-Content -Path $mockResponsePath -Raw | ConvertFrom-Json
     } else {
@@ -85,6 +85,13 @@ Describe 'Get-ZoomWebinarToken' {
 
         It 'Rejects invalid Type parameter values' {
             { Get-ZoomWebinarToken -WebinarId '123456789' -Type 'invalid_type' } | Should -Throw
+        }
+
+        It 'Accepts token_type as alias for Type' {
+            Get-ZoomWebinarToken -WebinarId '123456789' -token_type 'closed_caption_token'
+            Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
+                $Uri -match 'type=closed_caption_token'
+            }
         }
     }
 

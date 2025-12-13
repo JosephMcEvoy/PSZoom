@@ -7,7 +7,7 @@ BeforeAll {
         $script:ZoomURI = 'zoom.us'
     }
 
-    $script:MockResponsePath = "$PSScriptRoot/../../../Fixtures/MockResponses/p-h-o-n-e-a-c-c-o-u-n-t-s-e-t-t-i-n-g-s-get.json"
+    $script:MockResponsePath = "$PSScriptRoot/../../../Fixtures/MockResponses/phone-account-settings-get.json"
     $script:MockResponse = Get-Content -Path $script:MockResponsePath -Raw | ConvertFrom-Json
 }
 

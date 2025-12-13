@@ -3,7 +3,7 @@ BeforeAll {
     $script:PSZoomToken = 'mock-token'
     $script:ZoomURI = 'zoom.us'
     
-    $fixtureFile = "$PSScriptRoot/../../../Fixtures/MockResponses/w-e-b-i-n-a-r-t-r-a-c-k-i-n-g-s-o-u-r-c-e-get.json"
+    $fixtureFile = "$PSScriptRoot/../../../Fixtures/MockResponses/webinar-tracking-source-get.json"
     if (Test-Path $fixtureFile) {
         $script:mockResponse = Get-Content -Path $fixtureFile -Raw | ConvertFrom-Json
     } else {

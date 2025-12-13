@@ -1,0 +1,14 @@
+{
+  "id": "cust_num_1aKm2nPqRs",
+  "phone_number": "+14155551234",
+  "phone_number_id": "pn_XYcuGIm1QgePTO8WbOqwIQ",
+  "display_name": "New Custom Number",
+  "description": "Custom outbound caller ID",
+  "site_id": "site_9xYz3mNpQr",
+  "site_name": "San Francisco HQ",
+  "country_iso_code": "US",
+  "area_code": "415",
+  "number_type": "toll",
+  "status": "active",
+  "created_at": "2024-12-12T10:30:00Z"
+}

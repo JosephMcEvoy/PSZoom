@@ -45,9 +45,13 @@ function Get-BuildEnvironment {
         # Get git info if available
         try {
             Push-Location $ProjectRoot
-            $branchName = git rev-parse --abbrev-ref HEAD 2>$null
-            $commitMessage = git log -1 --pretty=%B 2>$null
-            Pop-Location
+            try {
+                $branchName = git rev-parse --abbrev-ref HEAD 2>$null
+                $commitMessage = git log -1 --pretty=%B 2>$null
+            }
+            finally {
+                Pop-Location
+            }
         } catch {
             $branchName = 'unknown'
             $commitMessage = ''

@@ -22,6 +22,14 @@ Describe 'Get-BuildEnvironment' {
         It 'Should set ModulePath' {
             $Result.ModulePath | Should -Match 'PSZoom$'
         }
+
+        It 'Should populate BranchName from git' {
+            $Result.BranchName | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should populate CommitMessage from git' {
+            $Result.CommitMessage | Should -Not -BeNullOrEmpty
+        }
     }
 
     Context 'When running in AppVeyor' {
@@ -73,6 +81,10 @@ Describe 'Get-BuildEnvironment' {
 
         It 'Should capture branch name' {
             $Result.BranchName | Should -Be 'main'
+        }
+
+        It 'Should populate CommitMessage from git' {
+            $Result.CommitMessage | Should -Not -BeNullOrEmpty
         }
     }
 }

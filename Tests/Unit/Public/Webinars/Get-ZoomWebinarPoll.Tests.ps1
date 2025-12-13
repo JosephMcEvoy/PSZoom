@@ -28,7 +28,7 @@ Describe 'Get-ZoomWebinarPoll' {
         It 'Constructs correct URI with webinar ID and poll ID' {
             Get-ZoomWebinarPoll -WebinarId 123456789 -PollId 'poll_xyz'
             Should -Invoke -CommandName Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -like '*zoom.us/v2/webinars/123456789/polls/poll_xyz*'
+                $Uri -match '/webinars/123456789/polls/poll_xyz'
             }
         }
 

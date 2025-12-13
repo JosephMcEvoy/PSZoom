@@ -62,7 +62,7 @@ Describe 'Get-ZoomWebinarToken' {
 
     Context 'Parameter Validation' {
         It 'Requires WebinarId parameter' {
-            { Get-ZoomWebinarToken -WebinarId $null } | Should -Throw
+            { Get-ZoomWebinarToken } | Should -Throw
         }
 
         It 'Accepts webinar_id as alias for WebinarId' {

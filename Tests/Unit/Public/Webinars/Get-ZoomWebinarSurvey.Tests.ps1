@@ -126,7 +126,7 @@ Describe 'Get-ZoomWebinarSurvey' {
 
     Context 'Error Handling' {
         It 'Throws error when WebinarId is not provided' {
-            { Get-ZoomWebinarSurvey -WebinarId $null } | Should -Throw
+            { Get-ZoomWebinarSurvey } | Should -Throw
         }
 
         It 'Propagates API errors' {

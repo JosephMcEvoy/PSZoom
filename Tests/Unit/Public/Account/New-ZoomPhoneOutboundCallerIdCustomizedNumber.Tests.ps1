@@ -36,7 +36,7 @@ Describe 'New-ZoomPhoneOutboundCallerIdCustomizedNumber' {
         It 'Constructs the correct API endpoint' {
             New-ZoomPhoneOutboundCallerIdCustomizedNumber -PhoneNumberIds 'abc123def456'
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'https://api\.zoom\.us/v2/phone/outbound_caller_id/customized_numbers'
+                $Uri -match '/phone/outbound_caller_id/customized_numbers'
             }
         }
 

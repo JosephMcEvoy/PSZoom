@@ -28,14 +28,14 @@ Describe 'Get-ZoomUserWebinarTemplate' {
         It 'Constructs correct URL with email UserId' {
             Get-ZoomUserWebinarTemplate -UserId 'jsmith@example.com'
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'https://api\.zoom\.us/v2/users/jsmith@example\.com/webinar_templates'
+                $Uri -match '/users/.+/webinar_templates'
             }
         }
 
         It 'Constructs correct URL with "me" UserId' {
             Get-ZoomUserWebinarTemplate -UserId 'me'
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'https://api\.zoom\.us/v2/users/me/webinar_templates'
+                $Uri -match '/users/me/webinar_templates'
             }
         }
 

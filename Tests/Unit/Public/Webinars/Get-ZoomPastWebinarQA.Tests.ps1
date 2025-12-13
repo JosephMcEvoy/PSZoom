@@ -40,7 +40,7 @@ Describe 'Get-ZoomPastWebinarQa' {
         
         It 'Returns expected properties' {
             $result = Get-ZoomPastWebinarQa -WebinarId 123456789
-            $result.id | Should -Be 123456789
+            $result.id | Should -Be $script:mockResponse.id
         }
         
         It 'Returns questions array when present' {

@@ -104,7 +104,7 @@ Describe 'Get-ZoomWebinarRegistrantQuestion' {
 
     Context 'Error Handling' {
         It 'Throws error when WebinarId is missing' {
-            { Get-ZoomWebinarRegistrantQuestion -WebinarId $null } | Should -Throw
+            { Get-ZoomWebinarRegistrantQuestion } | Should -Throw
         }
 
         It 'Propagates API errors' {

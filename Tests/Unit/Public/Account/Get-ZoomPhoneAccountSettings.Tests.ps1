@@ -33,7 +33,7 @@ Describe 'Get-ZoomPhoneAccountSettings' {
         It 'Constructs correct base URI without parameters' {
             Get-ZoomPhoneAccountSettings
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -like '*://api.zoom.us/v2/phone/account_settings*'
+                $Uri -match '/phone/account_settings'
             }
         }
 

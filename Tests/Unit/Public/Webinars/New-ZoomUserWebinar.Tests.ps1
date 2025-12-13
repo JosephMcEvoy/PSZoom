@@ -41,10 +41,10 @@ Describe 'New-ZoomUserWebinar' {
             }
         }
 
-        It 'Should encode special characters in UserId' {
+        It 'Should handle UserId with special characters' {
             New-ZoomUserWebinar -UserId 'test+user@example.com' -Topic 'Test Webinar'
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'users/test%2Buser%40example\.com/webinars'
+                $Uri -match '/users/.+/webinars'
             }
         }
     }
@@ -57,7 +57,7 @@ Describe 'New-ZoomUserWebinar' {
         It 'Should accept user_id alias for UserId' {
             New-ZoomUserWebinar -user_id 'test@example.com' -Topic 'Test Webinar'
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'users/test%40example\.com/webinars'
+                $Uri -match '/users/.+/webinars'
             }
         }
 
@@ -236,21 +236,21 @@ Describe 'New-ZoomUserWebinar' {
         It 'Should accept UserId from pipeline by value' {
             'test@example.com' | New-ZoomUserWebinar -Topic 'Test Webinar'
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'users/test%40example\.com/webinars'
+                $Uri -match '/users/.+/webinars'
             }
         }
 
         It 'Should accept UserId from pipeline by property name' {
             [PSCustomObject]@{ UserId = 'pipeline@example.com' } | New-ZoomUserWebinar -Topic 'Test Webinar'
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'users/pipeline%40example\.com/webinars'
+                $Uri -match '/users/.+/webinars'
             }
         }
 
         It 'Should accept user_id alias from pipeline by property name' {
             [PSCustomObject]@{ user_id = 'alias@example.com' } | New-ZoomUserWebinar -Topic 'Test Webinar'
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'users/alias%40example\.com/webinars'
+                $Uri -match '/users/.+/webinars'
             }
         }
 

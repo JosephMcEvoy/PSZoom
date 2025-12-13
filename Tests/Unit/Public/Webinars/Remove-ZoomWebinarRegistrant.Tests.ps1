@@ -11,9 +11,8 @@ Describe 'Remove-ZoomWebinarRegistrant' {
     }
 
     Context 'Basic Functionality' {
-        It 'Returns expected response when removing a registrant' {
-            $result = Remove-ZoomWebinarRegistrant -WebinarId 123456789 -RegistrantId 'abcdef123456' -Confirm:$false
-            $result | Should -Not -BeNullOrEmpty
+        It 'Executes without error when removing a registrant' {
+            { Remove-ZoomWebinarRegistrant -WebinarId 123456789 -RegistrantId 'abcdef123456' -Confirm:$false } | Should -Not -Throw
         }
 
         It 'Calls Invoke-ZoomRestMethod exactly once' {

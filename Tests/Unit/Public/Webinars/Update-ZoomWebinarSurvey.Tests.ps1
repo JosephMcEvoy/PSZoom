@@ -2,12 +2,16 @@ BeforeAll {
     Import-Module $PSScriptRoot/../../../../PSZoom/PSZoom.psd1 -Force
     $script:PSZoomToken = 'mock-token'
     $script:ZoomURI = 'https://api.zoom.us/v2'
-    
+
     $fixtureFile = "$PSScriptRoot/../../../Fixtures/MockResponses/webinar-survey-patch.json"
     if (Test-Path $fixtureFile) {
         $script:MockResponse = Get-Content $fixtureFile -Raw | ConvertFrom-Json
     } else {
-        $script:MockResponse = @{}
+        $script:MockResponse = @{
+            custom_survey = @{}
+            show_in_the_browser = $true
+            third_party_survey = @{}
+        }
     }
 }
 
@@ -19,21 +23,25 @@ Describe 'Update-ZoomWebinarSurvey' {
     }
 
     Context 'Basic Functionality' {
-        It 'Should call the API and return a result' {
-            $result = Update-ZoomWebinarSurvey -WebinarId 123456789
+        It 'Should call the API and return a result when ShowInTheBrowser provided' {
+            $result = Update-ZoomWebinarSurvey -WebinarId 123456789 -ShowInTheBrowser $true
             $result | Should -Not -BeNullOrEmpty
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -Times 1
         }
 
         It 'Should return the mock response data' {
-            $result = Update-ZoomWebinarSurvey -WebinarId 123456789
+            $result = Update-ZoomWebinarSurvey -WebinarId 123456789 -ShowInTheBrowser $true
             $result | Should -Be $script:MockResponse
+        }
+
+        It 'Should write warning when no survey parameters provided' {
+            Update-ZoomWebinarSurvey -WebinarId 123456789 3>&1 | Should -Match 'No survey parameters provided'
         }
     }
 
     Context 'API Endpoint Construction' {
         It 'Should construct the correct URL for webinar survey update' {
-            Update-ZoomWebinarSurvey -WebinarId 123456789
+            Update-ZoomWebinarSurvey -WebinarId 123456789 -ShowInTheBrowser $true
 
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
                 $Uri -match '/webinars/123456789/survey'
@@ -41,27 +49,23 @@ Describe 'Update-ZoomWebinarSurvey' {
         }
 
         It 'Should use PATCH method' {
-            Update-ZoomWebinarSurvey -WebinarId 123456789
+            Update-ZoomWebinarSurvey -WebinarId 123456789 -ShowInTheBrowser $true
 
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
                 $Method -eq 'Patch'
             }
         }
 
-        It 'Should handle string webinar IDs' {
-            Update-ZoomWebinarSurvey -WebinarId 'abc123xyz'
+        It 'Should handle numeric webinar IDs' {
+            Update-ZoomWebinarSurvey -WebinarId 987654321 -ShowInTheBrowser $true
 
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match '/webinars/abc123xyz/survey'
+                $Uri -match '/webinars/987654321/survey'
             }
         }
     }
 
     Context 'Parameter Validation' {
-        It 'Should require WebinarId parameter' {
-            { Update-ZoomWebinarSurvey -WebinarId $null } | Should -Throw
-        }
-
         It 'Should accept ShowInTheBrowser parameter' {
             Update-ZoomWebinarSurvey -WebinarId 123456789 -ShowInTheBrowser $true
 
@@ -78,19 +82,11 @@ Describe 'Update-ZoomWebinarSurvey' {
             }
         }
 
-        It 'Should accept CustomSurveyUrl parameter' {
-            Update-ZoomWebinarSurvey -WebinarId 123456789 -CustomSurveyUrl 'https://example.com/custom'
+        It 'Should accept CustomSurveyLink parameter' {
+            Update-ZoomWebinarSurvey -WebinarId 123456789 -CustomSurveyLink 'https://example.com/custom'
 
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Body -match 'custom_survey' -and $Body -match '"url"\s*:\s*"https://example.com/custom"'
-            }
-        }
-
-        It 'Should accept CustomSurveyIsRequired parameter' {
-            Update-ZoomWebinarSurvey -WebinarId 123456789 -CustomSurveyIsRequired $true
-
-            Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Body -match 'custom_survey' -and $Body -match '"is_required"\s*:\s*true'
+                $Body -match 'custom_survey' -and $Body -match '"link"\s*:\s*"https://example.com/custom"'
             }
         }
 
@@ -102,19 +98,11 @@ Describe 'Update-ZoomWebinarSurvey' {
             }
         }
 
-        It 'Should accept CustomSurveyAnonymous parameter' {
-            Update-ZoomWebinarSurvey -WebinarId 123456789 -CustomSurveyAnonymous $true
+        It 'Should accept AnonymousSurvey parameter' {
+            Update-ZoomWebinarSurvey -WebinarId 123456789 -AnonymousSurvey $true
 
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Body -match 'custom_survey' -and $Body -match '"anonymous"\s*:\s*true'
-            }
-        }
-
-        It 'Should accept CustomSurveyFeedback parameter' {
-            Update-ZoomWebinarSurvey -WebinarId 123456789 -CustomSurveyFeedback 'Thank you!'
-
-            Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Body -match 'custom_survey' -and $Body -match '"feedback"\s*:\s*"Thank you!"'
+                $Body -match '"anonymous"\s*:\s*true'
             }
         }
 
@@ -135,7 +123,7 @@ Describe 'Update-ZoomWebinarSurvey' {
 
     Context 'Parameter Aliases' {
         It 'Should accept webinar_id alias' {
-            Update-ZoomWebinarSurvey -webinar_id 123456789
+            Update-ZoomWebinarSurvey -webinar_id 123456789 -ShowInTheBrowser $true
 
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
                 $Uri -match '/webinars/123456789/survey'
@@ -153,22 +141,34 @@ Describe 'Update-ZoomWebinarSurvey' {
 
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -Times 1
         }
+
+        It 'Should accept custom_survey_link alias' {
+            Update-ZoomWebinarSurvey -WebinarId 123456789 -custom_survey_link 'https://example.com'
+
+            Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -Times 1
+        }
+
+        It 'Should accept anonymous_survey alias' {
+            Update-ZoomWebinarSurvey -WebinarId 123456789 -anonymous_survey $true
+
+            Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -Times 1
+        }
     }
 
     Context 'Pipeline Support' {
         It 'Should accept WebinarId from pipeline by property name' {
-            $input = [PSCustomObject]@{ WebinarId = 123456789 }
+            $input = [PSCustomObject]@{ WebinarId = 123456789; ShowInTheBrowser = $true }
             $result = $input | Update-ZoomWebinarSurvey
-            
+
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
                 $Uri -match '/webinars/123456789/survey'
             }
         }
 
         It 'Should accept webinar_id from pipeline by property name' {
-            $input = [PSCustomObject]@{ webinar_id = 987654321 }
+            $input = [PSCustomObject]@{ webinar_id = 987654321; ShowInTheBrowser = $true }
             $result = $input | Update-ZoomWebinarSurvey
-            
+
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
                 $Uri -match '/webinars/987654321/survey'
             }
@@ -176,11 +176,11 @@ Describe 'Update-ZoomWebinarSurvey' {
 
         It 'Should process multiple pipeline objects' {
             $inputs = @(
-                [PSCustomObject]@{ WebinarId = 111111111 },
-                [PSCustomObject]@{ WebinarId = 222222222 }
+                [PSCustomObject]@{ WebinarId = 111111111; ShowInTheBrowser = $true },
+                [PSCustomObject]@{ WebinarId = 222222222; ShowInTheBrowser = $false }
             )
             $inputs | Update-ZoomWebinarSurvey
-            
+
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -Times 2
         }
     }
@@ -197,31 +197,24 @@ Describe 'Update-ZoomWebinarSurvey' {
         }
 
         It 'Should nest custom survey properties under custom_survey' {
-            Update-ZoomWebinarSurvey -WebinarId 123456789 -CustomSurveyTitle 'Test' -CustomSurveyAnonymous $false
+            Update-ZoomWebinarSurvey -WebinarId 123456789 -CustomSurveyTitle 'Test'
 
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
                 $bodyObj = $Body | ConvertFrom-Json
                 $null -ne $bodyObj.custom_survey -and
-                $bodyObj.custom_survey.title -eq 'Test' -and
-                $bodyObj.custom_survey.anonymous -eq $false
+                $bodyObj.custom_survey.title -eq 'Test'
             }
         }
 
         It 'Should combine multiple custom survey properties' {
             Update-ZoomWebinarSurvey -WebinarId 123456789 `
-                -CustomSurveyUrl 'https://example.com' `
-                -CustomSurveyTitle 'Survey' `
-                -CustomSurveyIsRequired $true `
-                -CustomSurveyAnonymous $true `
-                -CustomSurveyFeedback 'Thanks'
+                -CustomSurveyLink 'https://example.com' `
+                -CustomSurveyTitle 'Survey'
 
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
                 $bodyObj = $Body | ConvertFrom-Json
-                $bodyObj.custom_survey.url -eq 'https://example.com' -and
-                $bodyObj.custom_survey.title -eq 'Survey' -and
-                $bodyObj.custom_survey.is_required -eq $true -and
-                $bodyObj.custom_survey.anonymous -eq $true -and
-                $bodyObj.custom_survey.feedback -eq 'Thanks'
+                $bodyObj.custom_survey.link -eq 'https://example.com' -and
+                $bodyObj.custom_survey.title -eq 'Survey'
             }
         }
     }
@@ -234,7 +227,7 @@ Describe 'Update-ZoomWebinarSurvey' {
         }
 
         It 'Should propagate API errors' {
-            { Update-ZoomWebinarSurvey -WebinarId 999999999 } | Should -Throw '*API Error*'
+            { Update-ZoomWebinarSurvey -WebinarId 999999999 -ShowInTheBrowser $true } | Should -Throw '*API Error*'
         }
     }
 

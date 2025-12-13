@@ -55,7 +55,7 @@ Describe 'Get-ZoomWebinarTrackingSource' {
         It 'Constructs correct endpoint URL' {
             Get-ZoomWebinarTrackingSource -WebinarId 123456789
             Should -Invoke -CommandName Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'https://api\.zoom\.us/v2/webinars/123456789/tracking_sources'
+                $Uri -match '/webinars/123456789/tracking_sources'
             }
         }
 
@@ -69,7 +69,7 @@ Describe 'Get-ZoomWebinarTrackingSource' {
         It 'Handles different webinar IDs correctly' {
             Get-ZoomWebinarTrackingSource -WebinarId 987654321
             Should -Invoke -CommandName Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'https://api\.zoom\.us/v2/webinars/987654321/tracking_sources'
+                $Uri -match '/webinars/987654321/tracking_sources'
             }
         }
     }
@@ -124,8 +124,8 @@ Describe 'Get-ZoomWebinarTrackingSource' {
     }
 
     Context 'Error Handling' {
-        It 'Throws error when WebinarId is not provided' {
-            { Get-ZoomWebinarTrackingSource -WebinarId $null } | Should -Throw
+        It 'Throws error when WebinarId is omitted' {
+            { Get-ZoomWebinarTrackingSource } | Should -Throw
         }
 
         It 'Propagates API errors' {

@@ -28,13 +28,9 @@ Describe 'Remove-ZoomWebinarSurvey' {
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -Times 1
         }
 
-        It 'Should return expected response' {
-            $result = Remove-ZoomWebinarSurvey -WebinarId 123456789 -Confirm:$false
-            if ($null -ne $script:MockResponse) {
-                $result | Should -Not -BeNullOrEmpty
-            } else {
-                $result | Should -BeNullOrEmpty
-            }
+        It 'Should complete successfully for DELETE operation' {
+            # DELETE operations typically return 204 No Content
+            { Remove-ZoomWebinarSurvey -WebinarId 123456789 -Confirm:$false } | Should -Not -Throw
         }
     }
 

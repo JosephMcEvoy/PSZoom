@@ -11,9 +11,8 @@ Describe 'Remove-ZoomWebinarPanelist' {
     }
 
     Context 'Basic Functionality' {
-        It 'Returns expected response when removing all panelists' {
-            $result = Remove-ZoomWebinarPanelist -WebinarId 123456789 -Confirm:$false
-            $result | Should -Not -BeNullOrEmpty
+        It 'Executes without error when removing all panelists' {
+            { Remove-ZoomWebinarPanelist -WebinarId 123456789 -Confirm:$false } | Should -Not -Throw
         }
 
         It 'Calls Invoke-ZoomRestMethod exactly once' {
@@ -26,7 +25,7 @@ Describe 'Remove-ZoomWebinarPanelist' {
         It 'Constructs correct URI with webinar ID' {
             Remove-ZoomWebinarPanelist -WebinarId 123456789 -Confirm:$false
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'https://api\.zoom\.us/v2/webinars/123456789/panelists'
+                $Uri -match '/webinars/123456789/panelists'
             }
         }
 

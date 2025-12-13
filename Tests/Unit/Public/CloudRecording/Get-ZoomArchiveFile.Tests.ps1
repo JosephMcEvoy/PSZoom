@@ -3,7 +3,7 @@ BeforeAll {
     $script:PSZoomToken = 'mock-token'
     $script:ZoomURI = 'https://api.zoom.us/v2'
     
-    $mockResponsePath = "$PSScriptRoot/../../../Fixtures/MockResponses/a-r-c-h-i-v-e-f-i-l-e-get.json"
+    $mockResponsePath = "$PSScriptRoot/../../../Fixtures/MockResponses/archive-file-get.json"
     if (Test-Path $mockResponsePath) {
         $script:MockResponse = Get-Content -Path $mockResponsePath -Raw | ConvertFrom-Json
     } else {
@@ -118,9 +118,9 @@ Describe 'Get-ZoomArchiveFile' {
         }
 
         It 'Includes query_date_type when specified' {
-            Get-ZoomArchiveFile -QueryDateType 'meeting_start_time'
+            Get-ZoomArchiveFile -QueryDateType 'meeting_time'
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'query_date_type=meeting_start_time'
+                $Uri -match 'query_date_type=meeting_time'
             }
         }
 
@@ -160,12 +160,12 @@ Describe 'Get-ZoomArchiveFile' {
             { Get-ZoomArchiveFile -PageSize 301 } | Should -Throw
         }
 
-        It 'Accepts valid QueryDateType meeting_start_time' {
-            { Get-ZoomArchiveFile -QueryDateType 'meeting_start_time' } | Should -Not -Throw
+        It 'Accepts valid QueryDateType meeting_time' {
+            { Get-ZoomArchiveFile -QueryDateType 'meeting_time' } | Should -Not -Throw
         }
 
-        It 'Accepts valid QueryDateType archive_complete_time' {
-            { Get-ZoomArchiveFile -QueryDateType 'archive_complete_time' } | Should -Not -Throw
+        It 'Accepts valid QueryDateType archive_time' {
+            { Get-ZoomArchiveFile -QueryDateType 'archive_time' } | Should -Not -Throw
         }
 
         It 'Rejects invalid QueryDateType' {
@@ -183,7 +183,7 @@ Describe 'Get-ZoomArchiveFile' {
         }
 
         It 'Accepts query_date_type alias for QueryDateType' {
-            { Get-ZoomArchiveFile -query_date_type 'meeting_start_time' } | Should -Not -Throw
+            { Get-ZoomArchiveFile -query_date_type 'meeting_time' } | Should -Not -Throw
         }
 
         It 'Accepts group_id alias for GroupId' {
@@ -194,12 +194,12 @@ Describe 'Get-ZoomArchiveFile' {
             { Get-ZoomArchiveFile -group_ids 'group1,group2' } | Should -Not -Throw
         }
 
-        It 'Accepts from alias for From parameter' {
-            { Get-ZoomArchiveFile -from '2023-01-01' } | Should -Not -Throw
+        It 'Accepts from_date alias for From parameter' {
+            { Get-ZoomArchiveFile -from_date '2023-01-01' } | Should -Not -Throw
         }
 
-        It 'Accepts to alias for To parameter' {
-            { Get-ZoomArchiveFile -to '2023-01-31' } | Should -Not -Throw
+        It 'Accepts to_date alias for To parameter' {
+            { Get-ZoomArchiveFile -to_date '2023-01-31' } | Should -Not -Throw
         }
     }
 
@@ -238,11 +238,11 @@ Describe 'Get-ZoomArchiveFile' {
         }
 
         It 'Constructs URL with date range and query type' {
-            Get-ZoomArchiveFile -From '2023-01-01' -To '2023-01-31' -QueryDateType 'archive_complete_time'
+            Get-ZoomArchiveFile -From '2023-01-01' -To '2023-01-31' -QueryDateType 'archive_time'
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -match 'from=2023-01-01' -and 
-                $Uri -match 'to=2023-01-31' -and 
-                $Uri -match 'query_date_type=archive_complete_time'
+                $Uri -match 'from=2023-01-01' -and
+                $Uri -match 'to=2023-01-31' -and
+                $Uri -match 'query_date_type=archive_time'
             }
         }
     }

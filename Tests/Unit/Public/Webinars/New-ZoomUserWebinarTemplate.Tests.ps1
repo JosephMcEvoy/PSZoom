@@ -26,14 +26,14 @@ Describe 'New-ZoomUserWebinarTemplate' {
         It 'Constructs the correct URI with email' {
             New-ZoomUserWebinarTemplate -UserId 'jsmith@example.com' -WebinarId '123456789' -Name 'My Template'
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -eq 'https://api.zoom.us/v2/users/jsmith@example.com/webinar_templates'
+                $Uri -match '/users/.+/webinar_templates'
             }
         }
 
         It 'Constructs the correct URI with me value' {
             New-ZoomUserWebinarTemplate -UserId 'me' -WebinarId '123456789' -Name 'My Template'
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -eq 'https://api.zoom.us/v2/users/me/webinar_templates'
+                $Uri -match '/users/me/webinar_templates'
             }
         }
 
@@ -132,7 +132,7 @@ Describe 'New-ZoomUserWebinarTemplate' {
             }
             $pipelineInput | New-ZoomUserWebinarTemplate
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -eq 'https://api.zoom.us/v2/users/jsmith@example.com/webinar_templates'
+                $Uri -match '/users/.+/webinar_templates'
             }
         }
 

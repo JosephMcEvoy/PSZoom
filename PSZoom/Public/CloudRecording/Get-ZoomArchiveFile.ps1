@@ -87,11 +87,11 @@ function Get-ZoomArchiveFile {
         [string[]]$GroupIds,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
-        [Alias('from')]
+        [Alias('from_date')]
         [string]$From,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
-        [Alias('to')]
+        [Alias('to_date')]
         [string]$To
     )
 

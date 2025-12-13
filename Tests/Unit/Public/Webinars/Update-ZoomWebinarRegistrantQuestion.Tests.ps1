@@ -124,7 +124,7 @@ Describe 'Update-ZoomWebinarRegistrantQuestion' {
         }
 
         It 'Requires WebinarId parameter' {
-            { Update-ZoomWebinarRegistrantQuestion -WebinarId $null -Questions @(@{ field_name = 'address'; required = $true }) } | Should -Throw
+            { Update-ZoomWebinarRegistrantQuestion -Questions @(@{ field_name = 'address'; required = $true }) } | Should -Throw
         }
     }
 

@@ -46,7 +46,7 @@ Describe 'New-ZoomWebinarSipDialing' {
         It 'Uses correct base URI' {
             New-ZoomWebinarSipDialing -WebinarId 1234567890
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -like "https://api.zoom.us/v2/webinars/*"
+                $Uri -match '/webinars/\d+/sip_dialing'
             }
         }
     }

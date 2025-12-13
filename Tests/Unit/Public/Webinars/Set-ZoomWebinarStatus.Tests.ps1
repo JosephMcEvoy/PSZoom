@@ -35,7 +35,7 @@ Describe 'Set-ZoomWebinarStatus' {
         It 'Constructs the correct API endpoint URL' {
             Set-ZoomWebinarStatus -WebinarId 123456789 -Action 'end' -Confirm:$false
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $Uri -like '*zoom.us/v2/webinars/123456789/status*'
+                $Uri -match '/webinars/123456789/status'
             }
         }
 

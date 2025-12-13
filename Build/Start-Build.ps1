@@ -1,14 +1,46 @@
-﻿Get-PackageProvider -Name NuGet -ForceBootstrap | Out-Null
+<#
+.SYNOPSIS
+    Entry point for PSZoom build process.
+.DESCRIPTION
+    Installs required modules and invokes psake build tasks.
+.PARAMETER Task
+    Build task to run. Default: Default (runs all tasks)
+#>
+[CmdletBinding()]
+param(
+    [Parameter()]
+    [string]$Task = 'Default'
+)
 
-if(-not (Get-Module -ListAvailable PSDepend)) {
-    & (Resolve-Path "$PSScriptRoot\helpers\Install-PSDepend.ps1")
+$ErrorActionPreference = 'Stop'
+
+# Required modules with minimum versions
+$requiredModules = @{
+    'psake'    = '4.9.0'
+    'PSDeploy' = '1.0.5'
+    'Pester'   = '5.6.1'
 }
 
-Import-Module PSDepend
+Write-Host "=== Installing Build Dependencies ===" -ForegroundColor Cyan
 
-Invoke-PSDepend -Path "$PSScriptRoot\build.requirements.psd1" -Install -Import -Force | Out-Null
+foreach ($module in $requiredModules.GetEnumerator()) {
+    $installed = Get-Module -Name $module.Key -ListAvailable |
+        Where-Object { $_.Version -ge [version]$module.Value } |
+        Select-Object -First 1
 
-Set-BuildEnvironment -Force -Path $PSScriptRoot\..
+    if (-not $installed) {
+        Write-Host "Installing $($module.Key) v$($module.Value)..."
+        Install-Module -Name $module.Key -RequiredVersion $module.Value -Force -Scope CurrentUser -SkipPublisherCheck -AllowClobber
+    } else {
+        Write-Host "$($module.Key) v$($installed.Version) already installed"
+    }
 
-Invoke-psake $PSScriptRoot\psake.ps1
+    Import-Module -Name $module.Key -MinimumVersion $module.Value -Force
+}
+
+Write-Host "`n=== Starting Build ===" -ForegroundColor Cyan
+
+# Invoke psake
+Invoke-psake "$PSScriptRoot\psake.ps1" -taskList $Task
+
 exit ([int](-not $psake.build_success))

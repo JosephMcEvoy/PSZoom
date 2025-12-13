@@ -43,4 +43,11 @@ Write-Host "`n=== Starting Build ===" -ForegroundColor Cyan
 # Invoke psake
 Invoke-psake "$PSScriptRoot\psake.ps1" -taskList $Task
 
-exit ([int](-not $psake.build_success))
+# Check build result and exit with appropriate code
+if ($psake.build_success -eq $true) {
+    Write-Host "`n=== Build Completed Successfully ===" -ForegroundColor Green
+    exit 0
+} else {
+    Write-Host "`n=== Build Failed ===" -ForegroundColor Red
+    exit 1
+}

@@ -32,7 +32,8 @@ install:
 build_script:
   - pwsh: |
       $ErrorActionPreference = 'Stop'
-      . .\Build\Start-Build.ps1 -Task Deploy
+      & .\Build\Start-Build.ps1 -Task Deploy
+      if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 # Only build these branches
 branches:

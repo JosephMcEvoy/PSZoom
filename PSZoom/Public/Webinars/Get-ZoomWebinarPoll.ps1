@@ -1,22 +1,41 @@
 <#
 
 .SYNOPSIS
-Get a webinar's poll.
+Get a webinar poll.
 
 .DESCRIPTION
-Get a webinar's poll.
+Returns a webinar's poll details.
+
+Prerequisites:
+* A Pro or higher plan with a Webinar plan add-on.
 
 .PARAMETER WebinarId
-The webinar ID.
+The webinar's ID.
 
 .PARAMETER PollId
 The poll ID.
 
+.OUTPUTS
+PSCustomObject containing the webinar poll details.
+
+.LINK
+https://developers.zoom.us/docs/api/webinars/#tag/webinars/GET/webinars/{webinarId}/polls/{pollId}
+
 .EXAMPLE
 Get-ZoomWebinarPoll -WebinarId 123456789 -PollId 'abc123'
 
-.LINK
-https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/webinarPollGet
+Returns the poll details for the specified webinar and poll ID.
+
+.EXAMPLE
+Get-ZoomWebinarPoll 123456789 'abc123'
+
+Returns the poll details using positional parameters.
+
+.EXAMPLE
+$webinar = Get-ZoomWebinar -WebinarId 123456789
+Get-ZoomWebinarPoll -WebinarId $webinar.id -PollId 'poll_xyz'
+
+Gets a specific poll from a webinar object.
 
 #>
 
@@ -25,15 +44,15 @@ function Get-ZoomWebinarPoll {
     param (
         [Parameter(
             Mandatory = $True,
+            ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True,
             Position = 0
         )]
         [Alias('webinar_id', 'id')]
-        [string]$WebinarId,
+        [int64]$WebinarId,
 
         [Parameter(
             Mandatory = $True,
-            ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True,
             Position = 1
         )]
@@ -42,9 +61,9 @@ function Get-ZoomWebinarPoll {
     )
 
     process {
-        $Uri = "https://api.$ZoomURI/v2/webinars/$WebinarId/polls/$PollId"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/webinars/$WebinarId/polls/$PollId"
 
-        $response = Invoke-ZoomRestMethod -Uri $Uri -Method Get
+        $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Method GET
 
         Write-Output $response
     }

@@ -1,0 +1,223 @@
+{
+  "skipped": [],
+  "timestamp": "2025-12-12T23:04:54.0169368Z",
+  "generated": [
+    {
+      "cmdletName": "Get-ZoomArchiveFile",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\a-r-c-h-i-v-e-f-i-l-e-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\CloudRecording\\Get-ZoomArchiveFile.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\CloudRecording\\Get-ZoomArchiveFile.ps1",
+      "hash": "79eb42b37aeef156"
+    },
+    {
+      "cmdletName": "Get-ZoomWebinarPoll",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-p-o-l-l-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Get-ZoomWebinarPoll.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Get-ZoomWebinarPoll.ps1",
+      "hash": "8024af4715dcb145"
+    },
+    {
+      "cmdletName": "New-ZoomWebinarPoll",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-p-o-l-l-post.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\New-ZoomWebinarPoll.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\New-ZoomWebinarPoll.ps1",
+      "hash": "3b51cc7fc2510736"
+    },
+    {
+      "cmdletName": "Remove-ZoomWebinarPoll",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-p-o-l-l-delete.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Remove-ZoomWebinarPoll.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Remove-ZoomWebinarPoll.ps1",
+      "hash": "80587760965c508d"
+    },
+    {
+      "cmdletName": "Get-ZoomWebinarPoll",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-p-o-l-l-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Get-ZoomWebinarPoll.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Get-ZoomWebinarPoll.ps1",
+      "hash": "879399d4fdaecdb4"
+    },
+    {
+      "cmdletName": "Set-ZoomWebinarPoll",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-p-o-l-l-put.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Set-ZoomWebinarPoll.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Set-ZoomWebinarPoll.ps1",
+      "hash": "ac33400a18b964f3"
+    },
+    {
+      "cmdletName": "Remove-ZoomWebinarRegistrant",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-r-e-g-i-s-t-r-a-n-t-delete.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Remove-ZoomWebinarRegistrant.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Remove-ZoomWebinarRegistrant.ps1",
+      "hash": "c984f331642d9482"
+    },
+    {
+      "cmdletName": "Get-ZoomWebinarRegistrant",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-r-e-g-i-s-t-r-a-n-t-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Get-ZoomWebinarRegistrant.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Get-ZoomWebinarRegistrant.ps1",
+      "hash": "9d2007a8539f1b62"
+    },
+    {
+      "cmdletName": "Get-ZoomWebinarRegistrantQuestion",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-r-e-g-i-s-t-r-a-n-t-q-u-e-s-t-i-o-n-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Get-ZoomWebinarRegistrantQuestion.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Get-ZoomWebinarRegistrantQuestion.ps1",
+      "hash": "7106ce6dfc57b4b6"
+    },
+    {
+      "cmdletName": "Update-ZoomWebinarRegistrantQuestion",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-r-e-g-i-s-t-r-a-n-t-q-u-e-s-t-i-o-n-patch.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Update-ZoomWebinarRegistrantQuestion.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Update-ZoomWebinarRegistrantQuestion.ps1",
+      "hash": "cf729277232cb922"
+    },
+    {
+      "cmdletName": "Remove-ZoomWebinarPanelist",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-p-a-n-e-l-i-s-t-delete.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Remove-ZoomWebinarPanelist.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Remove-ZoomWebinarPanelist.ps1",
+      "hash": "5b15fb1f8acf5280"
+    },
+    {
+      "cmdletName": "New-ZoomWebinarSipDialing",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-s-i-p-d-i-a-l-i-n-g-post.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\New-ZoomWebinarSipDialing.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\New-ZoomWebinarSipDialing.ps1",
+      "hash": "2db97b2295c9ac4e"
+    },
+    {
+      "cmdletName": "Remove-ZoomWebinarSurvey",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-s-u-r-v-e-y-delete.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Remove-ZoomWebinarSurvey.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Remove-ZoomWebinarSurvey.ps1",
+      "hash": "7ced4ad029e21603"
+    },
+    {
+      "cmdletName": "Get-ZoomWebinarSurvey",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-s-u-r-v-e-y-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Get-ZoomWebinarSurvey.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Get-ZoomWebinarSurvey.ps1",
+      "hash": "b0832efcc43fb912"
+    },
+    {
+      "cmdletName": "Update-ZoomWebinarSurvey",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-s-u-r-v-e-y-patch.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Update-ZoomWebinarSurvey.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Update-ZoomWebinarSurvey.ps1",
+      "hash": "5f33877f9c06e7c6"
+    },
+    {
+      "cmdletName": "Get-ZoomWebinarToken",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-t-o-k-e-n-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Get-ZoomWebinarToken.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Get-ZoomWebinarToken.ps1",
+      "hash": "6c7ef08cbf193400"
+    },
+    {
+      "cmdletName": "Get-ZoomWebinarTrackingSource",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-t-r-a-c-k-i-n-g-s-o-u-r-c-e-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Get-ZoomWebinarTrackingSource.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Get-ZoomWebinarTrackingSource.ps1",
+      "hash": "6d80df8d5750112f"
+    },
+    {
+      "cmdletName": "Get-ZoomPhoneAccountSettings",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\p-h-o-n-e-a-c-c-o-u-n-t-s-e-t-t-i-n-g-s-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\Account\\Get-ZoomPhoneAccountSettings.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Account\\Get-ZoomPhoneAccountSettings.ps1",
+      "hash": "b7ec135cd0581fd0"
+    },
+    {
+      "cmdletName": "Remove-ZoomPhoneOutboundCallerIdCustomizedNumber",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\p-h-o-n-e-o-u-t-b-o-u-n-d-c-a-l-l-e-r-i-d-c-u-s-t-o-m-i-z-e-d-n-u-m-b-e-r-delete.json",
+      "testPath": "\\Tests\\Unit\\Public\\Account\\Remove-ZoomPhoneOutboundCallerIdCustomizedNumber.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Account\\Remove-ZoomPhoneOutboundCallerIdCustomizedNumber.ps1",
+      "hash": "0eeee23302933117"
+    },
+    {
+      "cmdletName": "Get-ZoomPhoneOutboundCallerIdCustomizedNumber",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\p-h-o-n-e-o-u-t-b-o-u-n-d-c-a-l-l-e-r-i-d-c-u-s-t-o-m-i-z-e-d-n-u-m-b-e-r-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\Account\\Get-ZoomPhoneOutboundCallerIdCustomizedNumber.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Account\\Get-ZoomPhoneOutboundCallerIdCustomizedNumber.ps1",
+      "hash": "101d3e2aa62febed"
+    },
+    {
+      "cmdletName": "New-ZoomPhoneOutboundCallerIdCustomizedNumber",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\p-h-o-n-e-o-u-t-b-o-u-n-d-c-a-l-l-e-r-i-d-c-u-s-t-o-m-i-z-e-d-n-u-m-b-e-r-post.json",
+      "testPath": "\\Tests\\Unit\\Public\\Account\\New-ZoomPhoneOutboundCallerIdCustomizedNumber.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Account\\New-ZoomPhoneOutboundCallerIdCustomizedNumber.ps1",
+      "hash": "e9619095780c9998"
+    },
+    {
+      "cmdletName": "Set-ZoomWebinarStatus",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-s-t-a-t-u-s-put.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Set-ZoomWebinarStatus.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Set-ZoomWebinarStatus.ps1",
+      "hash": "94c6c918a4d96475"
+    },
+    {
+      "cmdletName": "New-ZoomWebinarPanelist",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-p-a-n-e-l-i-s-t-post.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\New-ZoomWebinarPanelist.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\New-ZoomWebinarPanelist.ps1",
+      "hash": "ea5a187e4c052313"
+    },
+    {
+      "cmdletName": "Remove-ZoomWebinarPanelist",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-p-a-n-e-l-i-s-t-delete.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Remove-ZoomWebinarPanelist.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Remove-ZoomWebinarPanelist.ps1",
+      "hash": "8659613b7490d3a5"
+    },
+    {
+      "cmdletName": "Update-ZoomWebinarLivestreamStatus",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\w-e-b-i-n-a-r-l-i-v-e-s-t-r-e-a-m-s-t-a-t-u-s-patch.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Update-ZoomWebinarLivestreamStatus.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Update-ZoomWebinarLivestreamStatus.ps1",
+      "hash": "6e1b44fbd2d7851a"
+    },
+    {
+      "cmdletName": "Get-ZoomPastWebinarPoll",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\p-a-s-t-w-e-b-i-n-a-r-p-o-l-l-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Get-ZoomPastWebinarPoll.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Get-ZoomPastWebinarPoll.ps1",
+      "hash": "9bf8abece5a5341a"
+    },
+    {
+      "cmdletName": "Get-ZoomPastWebinarQa",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\p-a-s-t-w-e-b-i-n-a-r-q-a-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Get-ZoomPastWebinarQa.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Get-ZoomPastWebinarQa.ps1",
+      "hash": "bf9b8262412b9009"
+    },
+    {
+      "cmdletName": "Get-ZoomUserWebinarTemplate",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\u-s-e-r-w-e-b-i-n-a-r-t-e-m-p-l-a-t-e-get.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\Get-ZoomUserWebinarTemplate.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\Get-ZoomUserWebinarTemplate.ps1",
+      "hash": "3839261cf005b3fc"
+    },
+    {
+      "cmdletName": "New-ZoomUserWebinarTemplate",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\u-s-e-r-w-e-b-i-n-a-r-t-e-m-p-l-a-t-e-post.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\New-ZoomUserWebinarTemplate.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\New-ZoomUserWebinarTemplate.ps1",
+      "hash": "cef0ee78097e6729"
+    },
+    {
+      "cmdletName": "New-ZoomUserWebinar",
+      "fixturePath": "\\Tests\\Fixtures\\MockResponses\\u-s-e-r-w-e-b-i-n-a-r-post.json",
+      "testPath": "\\Tests\\Unit\\Public\\Webinars\\New-ZoomUserWebinar.Tests.ps1",
+      "cmdletPath": "\\PSZoom\\Public\\Webinars\\New-ZoomUserWebinar.ps1",
+      "hash": "58e2fda739671096"
+    }
+  ],
+  "failed": [
+    {
+      "cmdletName": "Get-ZoomUserWebinarTemplate",
+      "error": "Unable to sort because the IComparer.Compare() method returns inconsistent results. Either a value does not compare equal to itself, or one value repeatedly compared to another value yields different results. IComparer: 'Microsoft.PowerShell.Commands.OrderByPropertyComparer'.",
+      "hash": "3839261cf005b3fc"
+    }
+  ]
+}

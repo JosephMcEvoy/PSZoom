@@ -1,0 +1,106 @@
+name: Auto Merge API Sync PRs
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  check_suite:
+    types: [completed]
+  workflow_run:
+    workflows: ["Test Suite"]
+    types: [completed]
+
+jobs:
+  auto-merge:
+    name: Auto Merge
+    runs-on: ubuntu-latest
+    # Only auto-merge PRs from the API sync workflow
+    if: |
+      github.event.pull_request.user.login == 'github-actions[bot]' &&
+      contains(github.event.pull_request.labels.*.name, 'api-sync') &&
+      contains(github.event.pull_request.labels.*.name, 'automated')
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check PR Status
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+
+            // Get all check runs for the PR
+            const checks = await github.rest.checks.listForRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: pr.head.sha
+            });
+
+            // Check if all required checks passed
+            const requiredChecks = ['test', 'analyze'];
+            let allPassed = true;
+            let pendingChecks = [];
+
+            for (const checkName of requiredChecks) {
+              const check = checks.data.check_runs.find(c =>
+                c.name.toLowerCase().includes(checkName.toLowerCase())
+              );
+
+              if (!check) {
+                pendingChecks.push(checkName);
+                allPassed = false;
+              } else if (check.conclusion !== 'success') {
+                console.log(`Check ${checkName} has conclusion: ${check.conclusion}`);
+                allPassed = false;
+              }
+            }
+
+            if (pendingChecks.length > 0) {
+              console.log(`Pending checks: ${pendingChecks.join(', ')}`);
+            }
+
+            core.setOutput('all_passed', allPassed);
+            core.setOutput('can_merge', allPassed && pr.mergeable);
+
+      - name: Enable Auto-Merge
+        if: steps.check.outputs.can_merge == 'true'
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ github.event.pull_request.number }}
+          merge-method: squash
+
+      - name: Add Approval
+        if: steps.check.outputs.all_passed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              event: 'APPROVE',
+              body: 'Auto-approved: All checks passed for automated API sync PR.'
+            });
+
+      - name: Comment on PR
+        if: steps.check.outputs.all_passed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: `## Auto-Merge Enabled
+
+            All required checks have passed. This PR will be automatically merged.
+
+            **Checks Passed:**
+            - Test Suite
+            - PSScriptAnalyzer
+
+            ---
+            *This comment was automatically generated.*`
+            });

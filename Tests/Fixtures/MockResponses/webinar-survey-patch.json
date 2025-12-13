@@ -1,0 +1,39 @@
+{
+  "custom_survey": {
+    "title": "Post-Webinar Feedback Survey",
+    "anonymous": false,
+    "show_question_type": true,
+    "questions": [
+      {
+        "name": "How would you rate this webinar overall?",
+        "type": "rating_scale",
+        "answer_required": true,
+        "rating_min_value": 1,
+        "rating_max_value": 10,
+        "rating_min_label": "Poor",
+        "rating_max_label": "Excellent"
+      },
+      {
+        "name": "What topics would you like to see in future webinars?",
+        "type": "long_answer",
+        "answer_required": false,
+        "answer_min_character": 10,
+        "answer_max_character": 500
+      },
+      {
+        "name": "How did you hear about this webinar?",
+        "type": "single",
+        "answer_required": true,
+        "answers": [
+          "Email invitation",
+          "Social media",
+          "Company website",
+          "Colleague referral",
+          "Other"
+        ]
+      }
+    ]
+  },
+  "show_in_the_browser": true,
+  "third_party_survey": null
+}

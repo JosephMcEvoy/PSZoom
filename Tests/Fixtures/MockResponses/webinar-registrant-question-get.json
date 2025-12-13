@@ -1,0 +1,109 @@
+{
+  "questions": [
+    {
+      "field_name": "org",
+      "required": true
+    },
+    {
+      "field_name": "job_title",
+      "required": true
+    },
+    {
+      "field_name": "address",
+      "required": false
+    },
+    {
+      "field_name": "city",
+      "required": false
+    },
+    {
+      "field_name": "state",
+      "required": false
+    },
+    {
+      "field_name": "zip",
+      "required": false
+    },
+    {
+      "field_name": "country",
+      "required": false
+    },
+    {
+      "field_name": "phone",
+      "required": false
+    },
+    {
+      "field_name": "industry",
+      "required": false
+    },
+    {
+      "field_name": "no_of_employees",
+      "required": false
+    },
+    {
+      "field_name": "comments",
+      "required": false
+    },
+    {
+      "field_name": "purchasing_time_frame",
+      "required": false
+    },
+    {
+      "field_name": "role_in_purchase_process",
+      "required": false
+    }
+  ],
+  "custom_questions": [
+    {
+      "title": "What is your experience level with the webinar topic?",
+      "type": "single",
+      "required": true,
+      "answers": [
+        "Beginner",
+        "Intermediate",
+        "Advanced",
+        "Expert"
+      ]
+    },
+    {
+      "title": "How did you hear about this webinar?",
+      "type": "single",
+      "required": false,
+      "answers": [
+        "Email newsletter",
+        "Social media",
+        "Search engine",
+        "Colleague referral",
+        "Company website",
+        "Other"
+      ]
+    },
+    {
+      "title": "What specific topics would you like covered?",
+      "type": "short",
+      "required": false
+    },
+    {
+      "title": "Which product areas are you interested in?",
+      "type": "multiple",
+      "required": false,
+      "answers": [
+        "Zoom Meetings",
+        "Zoom Webinars",
+        "Zoom Phone",
+        "Zoom Rooms",
+        "Zoom Events",
+        "Zoom Contact Center"
+      ]
+    },
+    {
+      "title": "Do you consent to receive follow-up communications?",
+      "type": "single",
+      "required": true,
+      "answers": [
+        "Yes",
+        "No"
+      ]
+    }
+  ]
+}

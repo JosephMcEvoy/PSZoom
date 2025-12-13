@@ -1,0 +1,32 @@
+{
+  "id": "aXJ7bG9nZW50X2lkXzEyMzQ1Njc4OQ",
+  "email": "jane.doe@example.com",
+  "first_name": "Jane",
+  "last_name": "Doe",
+  "address": "123 Tech Boulevard",
+  "city": "San Francisco",
+  "country": "US",
+  "zip": "94105",
+  "state": "CA",
+  "phone": "+1-555-123-4567",
+  "industry": "Technology",
+  "org": "Acme Corporation",
+  "job_title": "Senior Product Manager",
+  "purchasing_time_frame": "Within a month",
+  "role_in_purchase_process": "Decision Maker",
+  "no_of_employees": "101-500",
+  "comments": "Looking forward to learning about the new features.",
+  "custom_questions": [
+    {
+      "title": "How did you hear about this webinar?",
+      "value": "Email newsletter"
+    },
+    {
+      "title": "What topics are you most interested in?",
+      "value": "API integrations, automation workflows"
+    }
+  ],
+  "status": "approved",
+  "create_time": "2024-03-15T14:30:00Z",
+  "join_url": "https://zoom.us/w/98765432109?tk=xYz123AbCdEfGhIjKlMnOpQrStUvWxYz456789AbCdE&uuid=WN_abc123DEF456ghiJKL789"
+}

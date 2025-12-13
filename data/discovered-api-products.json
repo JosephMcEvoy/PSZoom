@@ -1,0 +1,29 @@
+{
+  "failedSpecs": null,
+  "knownProducts": [
+    "meetings",
+    "phone",
+    "users",
+    "accounts",
+    "contact-center",
+    "rooms",
+    "team-chat",
+    "video-sdk",
+    "webinars",
+    "reports",
+    "groups",
+    "roles",
+    "dashboards",
+    "devices",
+    "pac",
+    "sip-phone",
+    "archiving",
+    "cloud-recording"
+  ],
+  "successfulSpecs": [
+    "users",
+    "phone",
+    "meetings"
+  ],
+  "lastRun": "2025-12-12T01:50:04.6710962Z"
+}

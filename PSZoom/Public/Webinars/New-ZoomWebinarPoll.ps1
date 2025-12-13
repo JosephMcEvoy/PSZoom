@@ -1,80 +1,145 @@
 <#
 
 .SYNOPSIS
-Create a poll for a webinar.
+Create a webinar's poll.
 
 .DESCRIPTION
-Create a poll for a webinar.
+Creates a poll for a webinar.
+
+Prerequisites:
+* A Pro or higher plan with a Webinar plan add-on.
+
+Scopes: webinar:write:admin, webinar:write
+Granular Scopes: webinar:write:poll, webinar:write:poll:admin
+Rate Limit Label: LIGHT
 
 .PARAMETER WebinarId
-The webinar ID.
+The webinar's ID.
 
 .PARAMETER Title
-Poll title.
+The poll's title. Maximum length is 64 characters.
 
 .PARAMETER Questions
-Array of poll questions. Each question should be a hashtable with 'name', 'type', and 'answers' keys.
+An array of question hashtables. Each hashtable should contain:
+- name: The question text (required)
+- type: The question type - 'single', 'multiple', 'short_answer', 'long_answer', 'fill_in_the_blank', 'rating_scale', 'rating_max_scale', or 'matching' (required)
+- answers: An array of answer options (required for single/multiple choice)
+- right_answers: An array of correct answers (for quiz polls)
+- answer_required: Whether the question requires an answer
 
 .PARAMETER Anonymous
-Allow anonymous responses.
+Whether to allow anonymous responses:
+* $true - Allow participants to answer poll questions anonymously.
+* $false - Do not allow anonymous responses (default).
 
-.EXAMPLE
-$questions = @(
-    @{
-        name = 'What is your favorite color?'
-        type = 'single'
-        answers = @('Red', 'Blue', 'Green')
-    }
-)
-New-ZoomWebinarPoll -WebinarId 123456789 -Title 'Color Poll' -Questions $questions
+.PARAMETER PollType
+The type of poll:
+* 1 - Poll (default)
+* 2 - Advanced Poll
+* 3 - Quiz
+
+.OUTPUTS
+An object with the Zoom API response containing the created poll details.
 
 .LINK
 https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/webinarPollCreate
 
+.EXAMPLE
+$questions = @(
+    @{
+        name = 'How would you rate this webinar?'
+        type = 'single'
+        answers = @('Excellent', 'Good', 'Average', 'Poor')
+    }
+)
+New-ZoomWebinarPoll -WebinarId 123456789 -Title 'Feedback Poll' -Questions $questions
+
+Creates a basic poll with a single-choice question.
+
+.EXAMPLE
+$questions = @(
+    @{
+        name = 'Which topics interest you?'
+        type = 'multiple'
+        answers = @('API Development', 'Security', 'Performance')
+        answer_required = $true
+    },
+    @{
+        name = 'Additional comments'
+        type = 'long_answer'
+    }
+)
+New-ZoomWebinarPoll -WebinarId 123456789 -Title 'Interest Survey' -Questions $questions -Anonymous $true -PollType 2
+
+Creates an advanced poll with anonymous responses.
+
+.EXAMPLE
+Get-ZoomWebinar -WebinarId 123456789 | New-ZoomWebinarPoll -Title 'Quick Poll' -Questions @(@{name='Ready?';type='single';answers=@('Yes','No')})
+
+Creates a poll using pipeline input for the webinar ID.
+
 #>
 
 function New-ZoomWebinarPoll {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True, ConfirmImpact = 'Low')]
     param (
         [Parameter(
             Mandatory = $True,
+            ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True,
             Position = 0
         )]
         [Alias('webinar_id', 'id')]
-        [string]$WebinarId,
+        [int64]$WebinarId,
 
         [Parameter(
             Mandatory = $True,
-            ValueFromPipelineByPropertyName = $True
+            ValueFromPipelineByPropertyName = $True,
+            Position = 1
         )]
+        [ValidateLength(1, 64)]
         [string]$Title,
 
         [Parameter(
             Mandatory = $True,
-            ValueFromPipelineByPropertyName = $True
+            ValueFromPipelineByPropertyName = $True,
+            Position = 2
         )]
-        [hashtable[]]$Questions,
+        [System.Collections.IDictionary[]]$Questions,
 
         [Parameter(ValueFromPipelineByPropertyName = $True)]
-        [bool]$Anonymous
+        [bool]$Anonymous,
+
+        [Parameter(ValueFromPipelineByPropertyName = $True)]
+        [Alias('poll_type')]
+        [ValidateSet(1, 2, 3)]
+        [int]$PollType
     )
 
     process {
-        $Uri = "https://api.$ZoomURI/v2/webinars/$WebinarId/polls"
+        $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/webinars/$WebinarId/polls"
 
-        $requestBody = @{
+        # Build request body with mandatory parameters
+        $RequestBody = @{
             'title'     = $Title
-            'questions' = $Questions
+            'questions' = @($Questions)
         }
 
+        # Add optional parameters if specified
         if ($PSBoundParameters.ContainsKey('Anonymous')) {
-            $requestBody['anonymous'] = $Anonymous
+            $RequestBody.Add('anonymous', $Anonymous)
         }
 
-        $requestBody = ConvertTo-Json $requestBody -Depth 10
-        $response = Invoke-ZoomRestMethod -Uri $Uri -Body $requestBody -Method Post
+        if ($PSBoundParameters.ContainsKey('PollType')) {
+            $RequestBody.Add('poll_type', $PollType)
+        }
 
-        Write-Output $response
+        $RequestBody = $RequestBody | ConvertTo-Json -Depth 10
+
+        if ($PSCmdlet.ShouldProcess("Webinar '$WebinarId'", "Create poll '$Title'")) {
+            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $RequestBody -Method POST
+
+            Write-Output $response
+        }
     }
 }

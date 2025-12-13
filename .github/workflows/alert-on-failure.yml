@@ -2,7 +2,7 @@ name: Alert on Failure
 
 on:
   workflow_run:
-    workflows: ["API Coverage Sync", "Test"]
+    workflows: ["API Coverage Sync", "Test Suite"]
     types: [completed]
 
 jobs:

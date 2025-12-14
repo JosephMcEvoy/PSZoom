@@ -49,5 +49,9 @@ if ($psake.build_success -eq $true) {
     exit 0
 } else {
     Write-Host "`n=== Build Failed ===" -ForegroundColor Red
-    exit 1
+    # Use both throw and exit to ensure CI systems properly detect failure
+    # throw works with $ErrorActionPreference = 'Stop'
+    # exit 1 sets the process exit code
+    $host.SetShouldExit(1)
+    throw "Build failed - check test results above"
 }

@@ -44,9 +44,9 @@ jobs:
           ref: dev
 
       - name: Setup PowerShell
-        uses: bjompen/Setup-Powershell@v1
+        uses: PSModule/Install-PowerShell@v1
         with:
-          version: '7.4'
+          Version: '7.4'
 
       - name: Download OpenAPI Specs
         shell: pwsh
@@ -107,9 +107,9 @@ jobs:
           path: data/
 
       - name: Setup PowerShell
-        uses: bjompen/Setup-Powershell@v1
+        uses: PSModule/Install-PowerShell@v1
         with:
-          version: '7.4'
+          Version: '7.4'
 
       - name: Install PSScriptAnalyzer
         shell: pwsh

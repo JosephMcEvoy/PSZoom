@@ -22,9 +22,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup PowerShell
-        uses: bjompen/Setup-Powershell@v1
+        uses: PSModule/Install-PowerShell@v1
         with:
-          version: ${{ matrix.powershell }}
+          Version: ${{ matrix.powershell }}
 
       - name: Install Pester
         shell: pwsh
@@ -80,9 +80,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup PowerShell
-        uses: bjompen/Setup-Powershell@v1
+        uses: PSModule/Install-PowerShell@v1
         with:
-          version: '7.4'
+          Version: '7.4'
 
       - name: Install Pester
         shell: pwsh

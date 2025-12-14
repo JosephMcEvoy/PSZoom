@@ -48,9 +48,12 @@ Describe 'New-ZoomHeaders' {
     }
 
     Context 'Parameter validation' {
-        It 'Should require Token parameter' {
+        It 'Should have Token as mandatory parameter' {
             InModuleScope PSZoom {
-                { New-ZoomHeaders } | Should -Throw
+                $cmd = Get-Command New-ZoomHeaders
+                $tokenParam = $cmd.Parameters['Token']
+                $tokenParam.Attributes | Where-Object { $_ -is [System.Management.Automation.ParameterAttribute] } |
+                    ForEach-Object { $_.Mandatory } | Should -Contain $true
             }
         }
 

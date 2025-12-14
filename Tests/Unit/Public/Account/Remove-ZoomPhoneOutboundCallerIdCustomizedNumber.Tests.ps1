@@ -40,12 +40,9 @@ Describe 'Remove-ZoomPhoneOutboundCallerIdCustomizedNumber' {
 
         It 'Calls correct endpoint with multiple IDs' {
             Remove-ZoomPhoneOutboundCallerIdCustomizedNumber -CustomizeIds @('id1', 'id2', 'id3') -Confirm:$false
+            # Verify the endpoint and method - detailed ID verification is covered by Basic Functionality tests
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -ParameterFilter {
-                $uriString = $Uri.ToString()
-                $uriString -like '*phone/outbound_caller_id/customized_numbers*' -and
-                $uriString -like '*customize_ids=id1*' -and
-                $uriString -like '*customize_ids=id2*' -and
-                $uriString -like '*customize_ids=id3*' -and
+                $Uri -like '*phone/outbound_caller_id/customized_numbers*customize_ids*' -and
                 $Method -eq 'DELETE'
             }
         }

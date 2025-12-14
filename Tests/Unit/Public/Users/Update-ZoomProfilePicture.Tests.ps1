@@ -7,8 +7,9 @@ BeforeAll {
         $script:ZoomURI = 'zoom.us'
     }
 
-    # Create a temporary test image file
-    $script:TestImagePath = Join-Path $env:TEMP 'test-profile-picture.jpg'
+    # Create a temporary test image file (cross-platform compatible)
+    $tempDir = if ($env:TEMP) { $env:TEMP } elseif ($env:TMPDIR) { $env:TMPDIR } else { '/tmp' }
+    $script:TestImagePath = Join-Path $tempDir 'test-profile-picture.jpg'
     if (-not (Test-Path $script:TestImagePath)) {
         # Create a simple test file with binary content
         [byte[]]$bytes = [System.Text.Encoding]::UTF8.GetBytes('fake image content')

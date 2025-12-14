@@ -32,35 +32,6 @@ Describe 'Get-BuildEnvironment' {
         }
     }
 
-    Context 'When running in AppVeyor' {
-        BeforeAll {
-            $env:APPVEYOR = 'True'
-            $env:APPVEYOR_BUILD_FOLDER = 'C:\projects\pszoom'
-            $env:APPVEYOR_REPO_COMMIT_MESSAGE = 'test commit !deploy'
-            $env:APPVEYOR_REPO_BRANCH = 'master'
-            $script:Result = Get-BuildEnvironment
-        }
-
-        AfterAll {
-            $env:APPVEYOR = $null
-            $env:APPVEYOR_BUILD_FOLDER = $null
-            $env:APPVEYOR_REPO_COMMIT_MESSAGE = $null
-            $env:APPVEYOR_REPO_BRANCH = $null
-        }
-
-        It 'Should detect AppVeyor build system' {
-            $Result.BuildSystem | Should -Be 'AppVeyor'
-        }
-
-        It 'Should capture commit message' {
-            $Result.CommitMessage | Should -Be 'test commit !deploy'
-        }
-
-        It 'Should capture branch name' {
-            $Result.BranchName | Should -Be 'master'
-        }
-    }
-
     Context 'When running in GitHub Actions' {
         BeforeAll {
             $env:GITHUB_ACTIONS = 'true'

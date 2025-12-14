@@ -39,17 +39,6 @@ Task Test -Depends Init  {
     $testScriptPath = Join-Path $ProjectRoot 'Invoke-Tests.ps1'
     $testResults = & $testScriptPath -TestType Unit -OutputPath (Join-Path $ProjectRoot 'Tests') -PassThru
 
-    # In AppVeyor? Upload our tests!
-    if ($BuildSystem -eq 'AppVeyor') {
-        $testResultPath = Join-Path $ProjectRoot 'Tests' 'testResults.xml'
-        if (Test-Path $testResultPath) {
-            (New-Object 'System.Net.WebClient').UploadFile(
-                "https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)",
-                $testResultPath
-            )
-        }
-    }
-
     # Failed tests?
     # Need to tell psake or it will proceed to the deployment. Danger!
     if ($testResults.FailedCount -gt 0) {

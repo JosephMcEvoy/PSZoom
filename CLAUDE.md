@@ -93,8 +93,9 @@ $env:ZOOM_CLIENT_SECRET = "your-client-secret"
 
 ## CI/CD
 
-- **GitHub Actions**: Primary CI - runs on push/PR to main branches
-- **AppVeyor**: Secondary CI - runs on push to main branches
+- **GitHub Actions**: CI/CD platform - runs on push/PR to main branches
+  - `test.yml` - Multi-platform tests (ubuntu/windows/macos), PS 7.2 & 7.4
+  - `publishModule.yml` - Publishes to PowerShell Gallery on release
 
 ## Dependencies
 

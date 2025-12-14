@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/e7svaoe2hmlrrnje?svg=true)](https://ci.appveyor.com/project/JosephMcEvoy/pszoom)
+[![Test Suite](https://github.com/JosephMcEvoy/PSZoom/actions/workflows/test.yml/badge.svg)](https://github.com/JosephMcEvoy/PSZoom/actions/workflows/test.yml)
 
 # PSZoom #
 PSZoom is a Powershell wrapper to interface with Zoom's API (Zoom Video Communications). The module wraps many API calls from Zoom's API v2 documentation. You can find Zoom's documentation at https://marketplace.zoom.us/docs/api-reference/zoom-api. PSZoom is not an official module.

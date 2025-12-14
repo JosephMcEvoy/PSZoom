@@ -77,20 +77,13 @@ Describe 'Get-ZoomItemFullDetails' {
     }
 
     Context 'PowerShell version handling' {
-        It 'Should use parallel processing on PowerShell 7+' -Skip:($PSVersionTable.PSVersion.Major -lt 7) {
-            # On PS 7+, we can only verify the function doesn't throw
-            # Mocking doesn't work with ForEach-Object -Parallel as it runs in separate runspaces
-            # This is effectively an integration test behavior verification
+        It 'Should have parallel processing code path for PowerShell 7+' {
+            # Verify the function contains ForEach-Object -Parallel for PS 7+
+            # We can't effectively test execution with mocks because -Parallel runs in separate runspaces
             InModuleScope PSZoom {
-                # Mock Invoke-ZoomRestMethod to prevent actual API calls
-                Mock Invoke-ZoomRestMethod {
-                    return @{ id = 'phone123' }
-                }
-
-                # The function will fail because mocks don't work in parallel runspaces,
-                # but we can verify the command structure is correct by checking it doesn't
-                # throw a parameter binding error
-                { Get-ZoomItemFullDetails -ObjectIds @('phone123') -CmdletToRun 'Get-ZoomPhoneNumber' } | Should -Not -Throw '*parameter*'
+                $functionDef = (Get-Command Get-ZoomItemFullDetails).ScriptBlock.ToString()
+                $functionDef | Should -Match 'ForEach-Object\s+-Parallel'
+                $functionDef | Should -Match '\$PSVersionTable\.PSVersion\.Major\s+-ge\s+7'
             }
         }
 

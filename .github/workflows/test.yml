@@ -40,7 +40,12 @@ jobs:
           ZOOM_CLIENT_ID: ${{ secrets.ZOOM_CLIENTID }}
           ZOOM_CLIENT_SECRET: ${{ secrets.ZOOM_CLIENTSECRET }}
         run: |
-          $config = New-PesterConfiguration -Hashtable (Import-PowerShellDataFile ./pester.config.psd1)
+          $baseConfig = Import-PowerShellDataFile ./pester.config.psd1
+          # Only enable code coverage on Ubuntu (faster tests on Windows/macOS)
+          if ('${{ matrix.os }}' -ne 'ubuntu-latest') {
+            $baseConfig.CodeCoverage.Enabled = $false
+          }
+          $config = New-PesterConfiguration -Hashtable $baseConfig
           Invoke-Pester -Configuration $config
 
       - name: Upload Test Results

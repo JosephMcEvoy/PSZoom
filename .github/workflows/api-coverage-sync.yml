@@ -43,11 +43,6 @@ jobs:
         with:
           ref: dev
 
-      - name: Setup PowerShell
-        uses: PSModule/Install-PowerShell@v1
-        with:
-          Version: '7.4'
-
       - name: Download OpenAPI Specs
         shell: pwsh
         run: |
@@ -105,11 +100,6 @@ jobs:
         with:
           name: gap-report
           path: data/
-
-      - name: Setup PowerShell
-        uses: PSModule/Install-PowerShell@v1
-        with:
-          Version: '7.4'
 
       - name: Install PSScriptAnalyzer
         shell: pwsh

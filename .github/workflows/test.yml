@@ -9,22 +9,22 @@ on:
 
 jobs:
   test:
-    name: Test PS${{ matrix.powershell }} on ${{ matrix.os }}
+    name: Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        powershell: ['7.2', '7.4']
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup PowerShell
-        uses: PSModule/Install-PowerShell@v1
-        with:
-          Version: ${{ matrix.powershell }}
+      - name: Show PowerShell Version
+        shell: pwsh
+        run: |
+          Write-Host "PowerShell Version: $($PSVersionTable.PSVersion)"
+          Write-Host "OS: $($PSVersionTable.OS)"
 
       - name: Install Pester
         shell: pwsh
@@ -47,20 +47,20 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-results-${{ matrix.os }}-ps${{ matrix.powershell }}
+          name: test-results-${{ matrix.os }}
           path: ./Tests/testResults.xml
           retention-days: 30
 
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
-        if: matrix.os == 'ubuntu-latest' && matrix.powershell == '7.4'
+        if: matrix.os == 'ubuntu-latest'
         with:
           name: coverage-report
           path: ./Tests/coverage.xml
           retention-days: 30
 
       - name: Upload Coverage to Codecov
-        if: matrix.os == 'ubuntu-latest' && matrix.powershell == '7.4'
+        if: matrix.os == 'ubuntu-latest'
         uses: codecov/codecov-action@v4
         with:
           files: ./Tests/coverage.xml
@@ -78,11 +78,6 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
-      - name: Setup PowerShell
-        uses: PSModule/Install-PowerShell@v1
-        with:
-          Version: '7.4'
 
       - name: Install Pester
         shell: pwsh

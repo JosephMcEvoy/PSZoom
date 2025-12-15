@@ -42,6 +42,26 @@ Get-ZoomMeeting 123456789
 ## Available functions ##
 Use get-help for more information about each function.
 
+### Accounts ###
+Add-ZoomAccountAddonPlan
+Get-ZoomAccount
+Get-ZoomAccountBilling
+Get-ZoomAccountManagedDomains
+Get-ZoomAccountPlans
+Get-ZoomAccounts
+Get-ZoomAccountSettings
+Get-ZoomPhoneAccountSettings
+Get-ZoomPhoneOutboundCallerIdCustomizedNumber
+New-ZoomAccount
+New-ZoomAccountPlan
+New-ZoomPhoneOutboundCallerIdCustomizedNumber
+Remove-ZoomAccount
+Remove-ZoomPhoneOutboundCallerIdCustomizedNumber
+Update-ZoomAccountAddonPlan
+Update-ZoomAccountBasePlan
+Update-ZoomAccountBilling
+Update-ZoomAccountOptions
+Update-ZoomAccountSettings
 
 ### Cloud Recordings ###
 Get-ZoomAccountRecordings  

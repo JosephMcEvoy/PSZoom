@@ -208,10 +208,3 @@ Use get-help for more information about each function.
 - Join-ZoomPages
 - New-ZoomApiToken
 
-## Contributing ##
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/FeatureName`)
-3. Commit your Changes (`git commit -m 'Add some Feature'`)
-4. Push to the Branch (`git push origin feature/FeatureName`)
-5. Open a Pull Request

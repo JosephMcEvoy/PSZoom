@@ -32,18 +32,18 @@ jobs:
               per_page: 10
             });
 
-            const issueTitle = `CI Failure: ${workflowName}`;
+            const issueTitle = 'CI Failure: ' + workflowName;
             const existingIssue = existingIssues.data.find(i => i.title === issueTitle);
 
             const body = `## Workflow Failure Alert
 
-**Workflow:** ${workflowName}
-**Branch:** ${branch}
-**Commit:** ${sha}
-**Run:** ${runUrl}
+**Workflow:** ` + workflowName + `
+**Branch:** ` + branch + `
+**Commit:** ` + sha + `
+**Run:** ` + runUrl + `
 
 ### Next Steps
-1. Check the [workflow run](${runUrl}) for error details
+1. Check the [workflow run](` + runUrl + `) for error details
 2. Fix the failing tests or code
 3. Close this issue when resolved
 
@@ -56,7 +56,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: existingIssue.number,
-                body: `## New Failure\n\n${body}`
+                body: '## New Failure\n\n' + body
               });
             } else {
               // Create new issue

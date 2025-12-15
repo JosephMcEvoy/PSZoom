@@ -80,10 +80,11 @@ function Connect-ZoomTestAccount {
 
     $accountId = $env:ZOOM_ACCOUNT_ID
     $clientId = $env:ZOOM_CLIENT_ID
-    $clientSecret = ConvertTo-SecureString $env:ZOOM_CLIENT_SECRET -AsPlainText -Force
+    $clientSecret = $env:ZOOM_CLIENT_SECRET
 
     Write-Verbose "Connecting to Zoom with account ID: $accountId"
 
+    # Note: Connect-PSZoom -ClientSecret expects a plain string, not SecureString
     Connect-PSZoom -AccountId $accountId -ClientId $clientId -ClientSecret $clientSecret
 }
 

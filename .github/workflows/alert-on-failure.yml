@@ -35,20 +35,22 @@ jobs:
             const issueTitle = 'CI Failure: ' + workflowName;
             const existingIssue = existingIssues.data.find(i => i.title === issueTitle);
 
-            const body = `## Workflow Failure Alert
-
-**Workflow:** ` + workflowName + `
-**Branch:** ` + branch + `
-**Commit:** ` + sha + `
-**Run:** ` + runUrl + `
-
-### Next Steps
-1. Check the [workflow run](` + runUrl + `) for error details
-2. Fix the failing tests or code
-3. Close this issue when resolved
-
----
-*This issue was automatically created by the alert-on-failure workflow.*`;
+            const body = [
+              '## Workflow Failure Alert',
+              '',
+              '**Workflow:** ' + workflowName,
+              '**Branch:** ' + branch,
+              '**Commit:** ' + sha,
+              '**Run:** ' + runUrl,
+              '',
+              '### Next Steps',
+              '1. Check the [workflow run](' + runUrl + ') for error details',
+              '2. Fix the failing tests or code',
+              '3. Close this issue when resolved',
+              '',
+              '---',
+              '*This issue was automatically created by the alert-on-failure workflow.*'
+            ].join('\n');
 
             if (existingIssue) {
               // Add comment to existing issue

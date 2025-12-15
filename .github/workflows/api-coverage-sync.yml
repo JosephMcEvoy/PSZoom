@@ -26,9 +26,6 @@ on:
           - medium
           - all
 
-env:
-  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-
 jobs:
   scan-api:
     name: Scan Zoom API
@@ -104,22 +101,41 @@ jobs:
       - name: Install PSScriptAnalyzer
         shell: pwsh
         run: |
-          Set-PSRepository PSGallery -InstallationPolicy Trusted
-          Install-Module -Name PSScriptAnalyzer -Force -SkipPublisherCheck
+          # Install specific module without globally trusting repository
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser -AllowClobber -ErrorAction Stop
 
       - name: Generate Cmdlets
         id: generate
         shell: pwsh
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          INPUT_MAX_CMDLETS: ${{ inputs.max_cmdlets }}
+          INPUT_PRIORITY: ${{ inputs.priority_filter }}
+          INPUT_DRY_RUN: ${{ inputs.dry_run }}
         run: |
-          $maxCmdlets = '${{ inputs.max_cmdlets }}'
-          if ([string]::IsNullOrEmpty($maxCmdlets)) { $maxCmdlets = '5' }
+          # Validate and sanitize inputs to prevent injection
+          $maxCmdletsRaw = $env:INPUT_MAX_CMDLETS
+          if ([string]::IsNullOrEmpty($maxCmdletsRaw)) {
+            $maxCmdlets = 5
+          } elseif ($maxCmdletsRaw -match '^\d+$' -and [int]$maxCmdletsRaw -ge 0 -and [int]$maxCmdletsRaw -le 100) {
+            $maxCmdlets = [int]$maxCmdletsRaw
+          } else {
+            Write-Error "Invalid max_cmdlets value: must be a number between 0 and 100"
+            exit 1
+          }
 
-          $priority = '${{ inputs.priority_filter }}'
-          if ([string]::IsNullOrEmpty($priority)) { $priority = 'high' }
+          $priorityRaw = $env:INPUT_PRIORITY
+          $validPriorities = @('high', 'medium', 'all')
+          if ([string]::IsNullOrEmpty($priorityRaw)) {
+            $priority = 'high'
+          } elseif ($validPriorities -contains $priorityRaw.ToLower()) {
+            $priority = $priorityRaw.ToLower()
+          } else {
+            Write-Error "Invalid priority value: must be 'high', 'medium', or 'all'"
+            exit 1
+          }
 
-          $dryRun = '${{ inputs.dry_run }}' -eq 'true'
+          $dryRun = $env:INPUT_DRY_RUN -eq 'true'
 
           $params = @{
             GapReportPath = 'data/coverage-gap-report.json'

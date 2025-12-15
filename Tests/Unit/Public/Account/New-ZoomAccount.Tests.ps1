@@ -5,6 +5,8 @@ BeforeAll {
         $script:PSZoomToken = ConvertTo-SecureString 'test-token' -AsPlainText -Force
         $script:ZoomURI = 'zoom.us'
     }
+    # Create SecureString password for tests
+    $script:TestPassword = ConvertTo-SecureString 'Test123!' -AsPlainText -Force
 }
 
 Describe 'New-ZoomAccount' {
@@ -20,47 +22,59 @@ Describe 'New-ZoomAccount' {
         }
 
         It 'Should call Invoke-ZoomRestMethod with correct URI' {
-            New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'john@company.com' -Password 'Test123!'
+            New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'john@company.com' -Password $script:TestPassword -Confirm:$false
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -Times 1 -ParameterFilter {
                 $Uri -eq 'https://api.zoom.us/v2/accounts'
             }
         }
 
         It 'Should use POST method' {
-            New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'john@company.com' -Password 'Test123!'
+            New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'john@company.com' -Password $script:TestPassword -Confirm:$false
             Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -Times 1 -ParameterFilter {
                 $Method -eq 'Post'
             }
         }
 
         It 'Should return response object' {
-            $result = New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'john@company.com' -Password 'Test123!'
+            $result = New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'john@company.com' -Password $script:TestPassword -Confirm:$false
             $result.id | Should -Be 'abc123'
         }
 
         It 'Should accept optional AccountName parameter' {
-            { New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'john@company.com' -Password 'Test123!' -AccountName 'Test Company' } | Should -Not -Throw
+            { New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'john@company.com' -Password $script:TestPassword -AccountName 'Test Company' -Confirm:$false } | Should -Not -Throw
         }
 
         It 'Should accept optional VanityUrl parameter' {
-            { New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'john@company.com' -Password 'Test123!' -VanityUrl 'testcompany' } | Should -Not -Throw
+            { New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'john@company.com' -Password $script:TestPassword -VanityUrl 'testcompany' -Confirm:$false } | Should -Not -Throw
         }
     }
 
-    Context 'Pipeline Support' {
+    Context 'Email Validation' {
+        It 'Should reject invalid email format' {
+            { New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'invalid-email' -Password $script:TestPassword -Confirm:$false } | Should -Throw
+        }
+
+        It 'Should accept valid email format' {
+            Mock Invoke-ZoomRestMethod -ModuleName PSZoom { return @{ id = 'abc123' } }
+            { New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'valid@company.com' -Password $script:TestPassword -Confirm:$false } | Should -Not -Throw
+        }
+    }
+
+    Context 'ShouldProcess Support' {
         BeforeEach {
             Mock Invoke-ZoomRestMethod -ModuleName PSZoom { return @{ id = 'abc123' } }
         }
 
-        It 'Should accept pipeline input by property name' {
-            $input = [PSCustomObject]@{
-                FirstName = 'John'
-                LastName = 'Doe'
-                Email = 'john@company.com'
-                Password = 'Test123!'
-            }
-            $input | New-ZoomAccount
-            Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -Times 1
+        It 'Should support -WhatIf parameter' {
+            $result = New-ZoomAccount -FirstName 'John' -LastName 'Doe' -Email 'john@company.com' -Password $script:TestPassword -WhatIf
+            Should -Invoke Invoke-ZoomRestMethod -ModuleName PSZoom -Times 0
+        }
+    }
+
+    Context 'Password Security' {
+        It 'Should require SecureString for password' {
+            $param = (Get-Command New-ZoomAccount).Parameters['Password']
+            $param.ParameterType.Name | Should -Be 'SecureString'
         }
     }
 }

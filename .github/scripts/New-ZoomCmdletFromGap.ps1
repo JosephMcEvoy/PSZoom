@@ -362,7 +362,7 @@ $Prompt
     # Use -p flag for prompt input (cleaner than piping on Windows)
     # --output-format text ensures we get just the text response
     try {
-        $result = & claude -p $fullPrompt --dangerously-skip-permissions --output-format text 2>$null
+        $result = & claude -p $fullPrompt --output-format text 2>$null
 
         if ($LASTEXITCODE -ne 0) {
             throw "Claude CLI failed with exit code $LASTEXITCODE"
@@ -411,6 +411,63 @@ function Test-JsonSyntax {
     }
     catch {
         return $false
+    }
+}
+
+function Test-PSScriptAnalyzer {
+    <#
+    .SYNOPSIS
+        Validates PowerShell code using PSScriptAnalyzer.
+    .DESCRIPTION
+        Runs PSScriptAnalyzer against code and returns results.
+        Returns $true if no errors/warnings, $false otherwise.
+    #>
+    param(
+        [Parameter(Mandatory)]
+        [string]$Code,
+
+        [string[]]$ExcludeRule = @()
+    )
+
+    # Check if PSScriptAnalyzer is available
+    if (-not (Get-Module -ListAvailable -Name PSScriptAnalyzer)) {
+        Write-Warning "PSScriptAnalyzer not installed. Skipping static analysis."
+        return @{ Passed = $true; Results = @(); Skipped = $true }
+    }
+
+    Import-Module PSScriptAnalyzer -ErrorAction SilentlyContinue
+
+    # Create temp file for analysis
+    $tempFile = [System.IO.Path]::GetTempFileName() + '.ps1'
+    try {
+        Set-Content -Path $tempFile -Value $Code -Encoding UTF8
+
+        $analyzerParams = @{
+            Path        = $tempFile
+            Severity    = @('Error', 'Warning')
+        }
+
+        if ($ExcludeRule.Count -gt 0) {
+            $analyzerParams.ExcludeRule = $ExcludeRule
+        }
+
+        $results = Invoke-ScriptAnalyzer @analyzerParams
+
+        $errors = $results | Where-Object { $_.Severity -eq 'Error' }
+        $warnings = $results | Where-Object { $_.Severity -eq 'Warning' }
+
+        return @{
+            Passed   = ($errors.Count -eq 0)
+            Errors   = $errors
+            Warnings = $warnings
+            Results  = $results
+            Skipped  = $false
+        }
+    }
+    finally {
+        if (Test-Path $tempFile) {
+            Remove-Item $tempFile -Force -ErrorAction SilentlyContinue
+        }
     }
 }
 
@@ -524,6 +581,16 @@ function New-ZoomCmdletFromGap {
             # Validate syntax
             if (-not (Test-PowerShellSyntax -Code $cmdletCode)) {
                 throw "Generated code has syntax errors"
+            }
+
+            # Validate with PSScriptAnalyzer before writing
+            $analysisResult = Test-PSScriptAnalyzer -Code $cmdletCode
+            if (-not $analysisResult.Passed) {
+                $errorMessages = ($analysisResult.Errors | ForEach-Object { "$($_.RuleName): $($_.Message)" }) -join '; '
+                throw "PSScriptAnalyzer found errors: $errorMessages"
+            }
+            if ($analysisResult.Warnings.Count -gt 0) {
+                Write-Warning "PSScriptAnalyzer warnings: $(($analysisResult.Warnings | ForEach-Object { $_.RuleName }) -join ', ')"
             }
 
             # Generate test

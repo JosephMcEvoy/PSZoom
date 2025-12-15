@@ -54,6 +54,8 @@ function New-ZoomUser {
             ValueFromPipelineByPropertyName = $True
         )]
         [ValidateLength(1, 128)]
+        [ValidatePattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+            ErrorMessage = "'{0}' is not a valid email address format.")]
         [Alias('EmailAddress', 'UserId', 'User_Id', 'Id', 'Identity')]
         [string]$Email,
         

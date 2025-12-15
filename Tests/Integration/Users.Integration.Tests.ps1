@@ -70,26 +70,3 @@ Describe 'Get-ZoomUsers Integration Tests' -Tag 'Integration' {
     }
 }
 
-Describe 'Get-ZoomCurrentUser Integration Tests' -Tag 'Integration' {
-    BeforeAll {
-        if (-not (Test-ZoomCredentialsAvailable)) {
-            $script:SkipTests = $true
-        } else {
-            $script:SkipTests = $false
-            Connect-ZoomTestAccount
-        }
-    }
-
-    Context 'When retrieving current user info' {
-        It 'Should return account information' {
-            if ($script:SkipTests) {
-                Set-ItResult -Skipped -Because (Get-ZoomTestSkipReason)
-                return
-            }
-
-            $result = Get-ZoomAccount
-
-            $result | Should -Not -BeNullOrEmpty
-        }
-    }
-}

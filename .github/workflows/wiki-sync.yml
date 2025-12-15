@@ -1,0 +1,98 @@
+name: Wiki Documentation Sync
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - 'PSZoom/Public/**/*.ps1'
+      - 'PSZoom/Private/**/*.ps1'
+      - 'Build/Export-WikiDocumentation.ps1'
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: 'Force update wiki even if no changes detected'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  update-wiki:
+    name: Update GitHub Wiki
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout Wiki
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}.wiki
+          path: wiki
+          token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Create Wiki Directory if Not Exists
+        run: |
+          if [ ! -d "wiki" ]; then
+            mkdir wiki
+            cd wiki
+            git init
+            git remote add origin https://github.com/${{ github.repository }}.wiki.git
+          fi
+
+      - name: Setup PowerShell
+        shell: pwsh
+        run: |
+          Write-Host "PowerShell Version: $($PSVersionTable.PSVersion)"
+
+      - name: Generate Wiki Documentation
+        shell: pwsh
+        run: |
+          # Run the wiki export script
+          ./Build/Export-WikiDocumentation.ps1 -OutputPath ./wiki -Verbose
+
+      - name: Check for Changes
+        id: check_changes
+        run: |
+          cd wiki
+          git add -A
+          if git diff --cached --quiet; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected in wiki documentation"
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in wiki documentation"
+          fi
+
+      - name: Commit and Push Wiki Changes
+        if: steps.check_changes.outputs.changes == 'true' || github.event.inputs.force_update == 'true'
+        run: |
+          cd wiki
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git commit -m "docs: Auto-update wiki documentation
+
+          Source commit: ${{ github.sha }}
+          Triggered by: ${{ github.event_name }}
+
+          🤖 Generated with GitHub Actions" || echo "No changes to commit"
+          git push origin HEAD:master || git push origin HEAD:main
+
+      - name: Summary
+        run: |
+          echo "## Wiki Sync Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.check_changes.outputs.changes }}" == "true" ]; then
+            echo "✅ Wiki documentation updated successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ No changes detected in wiki documentation" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: PSZoom Documentation
+    url: https://github.com/JosephMcEvoy/PSZoom/wiki
+    about: Check out the wiki for documentation and examples
+  - name: Zoom API Documentation
+    url: https://developers.zoom.us/docs/api/
+    about: Official Zoom REST API documentation
+  - name: PowerShell Gallery
+    url: https://www.powershellgallery.com/packages/PSZoom
+    about: Install PSZoom from PowerShell Gallery

@@ -1,0 +1,45 @@
+{
+  "id": "QalIoKWLTJehBJ8e1xRrbQ",
+  "title": "Customer Feedback Survey",
+  "status": "notstart",
+  "anonymous": false,
+  "poll_type": 1,
+  "questions": [
+    {
+      "name": "How satisfied are you with our product?",
+      "type": "single",
+      "answer_required": true,
+      "answers": [
+        "Very satisfied",
+        "Satisfied",
+        "Neutral",
+        "Dissatisfied",
+        "Very dissatisfied"
+      ],
+      "right_answers": [],
+      "case_sensitive": false
+    },
+    {
+      "name": "Which features do you use most frequently?",
+      "type": "multiple",
+      "answer_required": false,
+      "answers": [
+        "Video conferencing",
+        "Screen sharing",
+        "Chat",
+        "Webinars",
+        "Phone"
+      ],
+      "right_answers": [],
+      "case_sensitive": false
+    },
+    {
+      "name": "Please share any additional feedback:",
+      "type": "long_answer",
+      "answer_required": false,
+      "answers": [],
+      "right_answers": [],
+      "case_sensitive": false
+    }
+  ]
+}

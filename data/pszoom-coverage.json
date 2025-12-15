@@ -1,0 +1,6498 @@
+{
+  "analyzedAt": "2025-12-12T02:08:14.3871815Z",
+  "modulePath": "C:\\Users\\joema\\dev\\pszoom\\PSZoom\\PSZoom\\Public",
+  "cmdletCount": 239,
+  "endpointCount": 184,
+  "statistics": {
+    "byCategory": {
+      "Users": 24,
+      "Meetings": 25,
+      "Phone": 86,
+      "TrackingFields": 5,
+      "Account": 15,
+      "IMChat": 2,
+      "Reports": 7,
+      "IMGroups": 8,
+      "Utils": 4,
+      "PhoneSite": 3,
+      "H323Devices": 4,
+      "Webinars": 25,
+      "Groups": 12,
+      "Rooms": 11,
+      "CloudRecording": 8
+    },
+    "cmdletsWithEndpoints": 189,
+    "cmdletsWithoutEndpoints": 50
+  },
+  "cmdlets": [
+    {
+      "category": "Account",
+      "parameters": [
+        "AccountId",
+        "Type",
+        "Hosts"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Account\\Add-ZoomAccountAddonPlan.ps1",
+      "functionName": "Add-ZoomAccountAddonPlan",
+      "name": "Add-ZoomAccountAddonPlan",
+      "aliases": []
+    },
+    {
+      "category": "Account",
+      "parameters": [
+        "AccountId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/accounts/{id}",
+          "hash": "8fc755bb4811f316",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Account\\Get-ZoomAccount.ps1",
+      "functionName": "Get-ZoomAccount",
+      "name": "Get-ZoomAccount",
+      "aliases": []
+    },
+    {
+      "category": "Account",
+      "parameters": [
+        "AccountId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Account\\Get-ZoomAccountBilling.ps1",
+      "functionName": "Get-ZoomAccountBilling",
+      "name": "Get-ZoomAccountBilling",
+      "aliases": []
+    },
+    {
+      "category": "Account",
+      "parameters": [
+        "AccountId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Account\\Get-ZoomAccountManagedDomains.ps1",
+      "functionName": "Get-ZoomAccountManagedDomains",
+      "name": "Get-ZoomAccountManagedDomains",
+      "aliases": []
+    },
+    {
+      "category": "Account",
+      "parameters": [
+        "AccountId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Account\\Get-ZoomAccountPlans.ps1",
+      "functionName": "Get-ZoomAccountPlans",
+      "name": "Get-ZoomAccountPlans",
+      "aliases": []
+    },
+    {
+      "category": "Account",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/accounts",
+          "hash": "78d8f4d65528c795",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Account\\Get-ZoomAccounts.ps1",
+      "functionName": "Get-ZoomAccounts",
+      "name": "Get-ZoomAccounts",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Account",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/accounts/me/settings",
+          "hash": "5df5796360829a8c",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Account\\Get-ZoomAccountSettings.ps1",
+      "functionName": "Get-ZoomAccountSettings",
+      "name": "Get-ZoomAccountSettings",
+      "aliases": []
+    },
+    {
+      "category": "Account",
+      "parameters": [
+        "FirstName",
+        "LastName",
+        "Email",
+        "Password",
+        "Options",
+        "AccountName",
+        "VanityUrl"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Account\\New-ZoomAccount.ps1",
+      "functionName": "New-ZoomAccount",
+      "name": "New-ZoomAccount",
+      "aliases": [
+        "first_name",
+        "last_name",
+        "account_name",
+        "vanity_url"
+      ]
+    },
+    {
+      "category": "Account",
+      "parameters": [
+        "AccountId",
+        "Contact",
+        "PlanBase",
+        "PlanZoomRooms",
+        "PlanRoomConnector",
+        "PlanLargeMeeting",
+        "PlanWebinar",
+        "PlanZoomEvents",
+        "PlanRecording",
+        "PlanAudioConferencing",
+        "PlanPhone"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Account\\New-ZoomAccountPlan.ps1",
+      "functionName": "New-ZoomAccountPlan",
+      "name": "New-ZoomAccountPlan",
+      "aliases": [
+        "plan_base",
+        "plan_zoom_rooms",
+        "plan_room_connector",
+        "plan_large_meeting",
+        "plan_webinar",
+        "plan_zoom_events",
+        "plan_recording",
+        "plan_audio",
+        "plan_phone"
+      ]
+    },
+    {
+      "category": "Account",
+      "parameters": [
+        "AccountId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Account\\Remove-ZoomAccount.ps1",
+      "functionName": "Remove-ZoomAccount",
+      "name": "Remove-ZoomAccount",
+      "aliases": []
+    },
+    {
+      "category": "Account",
+      "parameters": [
+        "AccountId",
+        "Type",
+        "Hosts"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Account\\Update-ZoomAccountAddonPlan.ps1",
+      "functionName": "Update-ZoomAccountAddonPlan",
+      "name": "Update-ZoomAccountAddonPlan",
+      "aliases": []
+    },
+    {
+      "category": "Account",
+      "parameters": [
+        "AccountId",
+        "Type",
+        "Hosts"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Account\\Update-ZoomAccountBasePlan.ps1",
+      "functionName": "Update-ZoomAccountBasePlan",
+      "name": "Update-ZoomAccountBasePlan",
+      "aliases": []
+    },
+    {
+      "category": "Account",
+      "parameters": [
+        "AccountId",
+        "FirstName",
+        "LastName",
+        "Email",
+        "PhoneNumber",
+        "Address",
+        "City",
+        "State",
+        "Zip",
+        "Country"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Account\\Update-ZoomAccountBilling.ps1",
+      "functionName": "Update-ZoomAccountBilling",
+      "name": "Update-ZoomAccountBilling",
+      "aliases": [
+        "first_name",
+        "last_name",
+        "phone_number"
+      ]
+    },
+    {
+      "category": "Account",
+      "parameters": [
+        "AccountId",
+        "ShareRc",
+        "RoomConnectors",
+        "ShareMc",
+        "MeetingConnectors",
+        "PayMode"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Account\\Update-ZoomAccountOptions.ps1",
+      "functionName": "Update-ZoomAccountOptions",
+      "name": "Update-ZoomAccountOptions",
+      "aliases": [
+        "share_rc",
+        "room_connectors",
+        "share_mc",
+        "meeting_connectors",
+        "pay_mode"
+      ]
+    },
+    {
+      "category": "Account",
+      "parameters": [
+        "AccountId",
+        "Option",
+        "Settings"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/accounts/{accountId}/settings",
+          "hash": "0f8efb611357629a",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Account\\Update-ZoomAccountSettings.ps1",
+      "functionName": "Update-ZoomAccountSettings",
+      "name": "Update-ZoomAccountSettings",
+      "aliases": []
+    },
+    {
+      "category": "CloudRecording",
+      "parameters": [
+        "AccountId",
+        "PageSize",
+        "NextPageToken",
+        "Trash",
+        "TrashType"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/accounts/{accountId}/recordings",
+          "hash": "77098f4a51e6f7c3",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\CloudRecording\\Get-ZoomAccountRecordings.ps1",
+      "functionName": "Get-ZoomAccountRecordings",
+      "name": "Get-ZoomAccountRecordings",
+      "aliases": [
+        "userids",
+        "trash_type"
+      ]
+    },
+    {
+      "category": "CloudRecording",
+      "parameters": [
+        "MeetingId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/recordings",
+          "hash": "e64841e8110c0ab7",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\CloudRecording\\Get-ZoomMeetingRecordings.ps1",
+      "functionName": "Get-ZoomMeetingRecordings",
+      "name": "Get-ZoomMeetingRecordings",
+      "aliases": [
+        "meeting_id"
+      ]
+    },
+    {
+      "category": "CloudRecording",
+      "parameters": [
+        "MeetingId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/recordings/settings",
+          "hash": "5b11c409d284b688",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\CloudRecording\\Get-ZoomMeetingRecordingsSettings.ps1",
+      "functionName": "Get-ZoomMeetingRecordingsSettings",
+      "name": "Get-ZoomMeetingRecordingsSettings",
+      "aliases": [
+        "meeting_id"
+      ]
+    },
+    {
+      "category": "CloudRecording",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/recordings",
+          "hash": "32bad91291764120",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\CloudRecording\\Get-ZoomRecordings.ps1",
+      "functionName": "Get-ZoomRecordings",
+      "name": "Get-ZoomRecordings",
+      "aliases": [
+        "userids"
+      ]
+    },
+    {
+      "category": "CloudRecording",
+      "parameters": [
+        "MeetingId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/recordings/{id}",
+          "hash": "c6a775d65aa15d88",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\CloudRecording\\Remove-ZoomMeetingRecordingFile.ps1",
+      "functionName": "Remove-ZoomMeetingRecordingFile",
+      "name": "Remove-ZoomMeetingRecordingFile",
+      "aliases": []
+    },
+    {
+      "category": "CloudRecording",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{id}/recordings",
+          "hash": "5e347f47a803acc0",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\CloudRecording\\Remove-ZoomMeetingRecordings.ps1",
+      "functionName": "Remove-ZoomMeetingRecordings",
+      "name": "Remove-ZoomMeetingRecordings",
+      "aliases": []
+    },
+    {
+      "category": "CloudRecording",
+      "parameters": [
+        "MeetingId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/recordings/status",
+          "hash": "dd4a083a3e6d972d",
+          "method": "PUT"
+        }
+      ],
+      "file": "PSZoom\\Public\\CloudRecording\\Show-ZoomMeetingRecordings.ps1",
+      "functionName": "Show-ZoomMeetingRecordings",
+      "name": "Show-ZoomMeetingRecordings",
+      "aliases": [
+        "meeting_id"
+      ]
+    },
+    {
+      "category": "CloudRecording",
+      "parameters": [
+        "MeetingId",
+        "ShareRecording",
+        "RecordingAuthentication",
+        "AuthenticationOption",
+        "AuthenticationDomains",
+        "ViewerDownload",
+        "recPassword",
+        "OnDemand",
+        "ApprovalType",
+        "SendEmailToHost",
+        "ShowSocialShareButtons",
+        "recTopic"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/recordings/settings",
+          "hash": "a4b849185323256e",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\CloudRecording\\Update-ZoomMeetingRecordingsSettings.ps1",
+      "functionName": "Update-ZoomMeetingRecordingsSettings",
+      "name": "Update-ZoomMeetingRecordingsSettings",
+      "aliases": [
+        "meeting_id",
+        "share_recording",
+        "recording_authentication",
+        "authentication_option",
+        "authentication_domains",
+        "viewer_download",
+        "password",
+        "on_demand",
+        "approval_type",
+        "send_email_to_host",
+        "show_social_share_buttons",
+        "topic"
+      ]
+    },
+    {
+      "category": "Groups",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/groups/{id}/members",
+          "hash": "fcf72442260cf61f",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Groups\\Add-ZoomGroupMember.ps1",
+      "functionName": "Add-ZoomGroupMember",
+      "name": "Add-ZoomGroupMember",
+      "aliases": [
+        "memberids"
+      ]
+    },
+    {
+      "category": "Groups",
+      "parameters": [
+        "GroupId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/groups/{groupId}",
+          "hash": "9959505ce03d7ea8",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Groups\\Get-ZoomGroup.ps1",
+      "functionName": "Get-ZoomGroup",
+      "name": "Get-ZoomGroup",
+      "aliases": []
+    },
+    {
+      "category": "Groups",
+      "parameters": [
+        "GroupId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/groups/{groupId}/lock_settings",
+          "hash": "600e00b3c635845a",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Groups\\Get-ZoomGroupLockSettings.ps1",
+      "functionName": "Get-ZoomGroupLockSettings",
+      "name": "Get-ZoomGroupLockSettings",
+      "aliases": []
+    },
+    {
+      "category": "Groups",
+      "parameters": [
+        "GroupId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/groups/{groupId}/members",
+          "hash": "acd1c934fb9fc44c",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Groups\\Get-ZoomGroupMembers.ps1",
+      "functionName": "Get-ZoomGroupMembers",
+      "name": "Get-ZoomGroupMembers",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Groups",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/groups",
+          "hash": "72877253c5cc5872",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Groups\\Get-ZoomGroups.ps1",
+      "functionName": "Get-ZoomGroups",
+      "name": "Get-ZoomGroups",
+      "aliases": []
+    },
+    {
+      "category": "Groups",
+      "parameters": [
+        "GroupId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/groups/{groupId}/settings",
+          "hash": "52c5017432579f5b",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Groups\\Get-ZoomGroupSettings.ps1",
+      "functionName": "Get-ZoomGroupSettings",
+      "name": "Get-ZoomGroupSettings",
+      "aliases": []
+    },
+    {
+      "category": "Groups",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/groups",
+          "hash": "062af1b1e8ff1d87",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Groups\\New-ZoomGroup.ps1",
+      "functionName": "New-ZoomGroup",
+      "name": "New-ZoomGroup",
+      "aliases": [
+        "New-ZoomGroups"
+      ]
+    },
+    {
+      "category": "Groups",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/groups/{id}",
+          "hash": "85d50d17b68ee8bb",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Groups\\Remove-ZoomGroup.ps1",
+      "functionName": "Remove-ZoomGroup",
+      "name": "Remove-ZoomGroup",
+      "aliases": [
+        "Remove-ZoomGroups"
+      ]
+    },
+    {
+      "category": "Groups",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/groups/{groupId}/members/{id}",
+          "hash": "250c16dd4abe913b",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Groups\\Remove-ZoomGroupMembers.ps1",
+      "functionName": "expands",
+      "name": "Remove-ZoomGroupMembers",
+      "aliases": [
+        "memberid"
+      ]
+    },
+    {
+      "category": "Groups",
+      "parameters": [
+        "GroupId",
+        "Name"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/groups/{groupId}",
+          "hash": "7ce8b9ce28fbba0d",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Groups\\Update-ZoomGroup.ps1",
+      "functionName": "Update-ZoomGroup",
+      "name": "Update-ZoomGroup",
+      "aliases": [
+        "groupname"
+      ]
+    },
+    {
+      "category": "Groups",
+      "parameters": [
+        "GroupId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/groups/{groupId}/lock_settings",
+          "hash": "fecfe962cba1494c",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Groups\\Update-ZoomGroupLockSettings.ps1",
+      "functionName": "Update-ZoomGroupLockSettings",
+      "name": "Update-ZoomGroupLockSettings",
+      "aliases": [
+        "host_video",
+        "participant_video",
+        "audio_type",
+        "join_before_host",
+        "require_password_for_all_meetings",
+        "force_pmi_jbh_password",
+        "pstn_password_protected",
+        "mute_upon_entry",
+        "upcoming_meeting_reminder",
+        "e2e_encryption",
+        "private_chat",
+        "auto_saving_chat",
+        "entry_exit_chime",
+        "record_play_own_voice",
+        "file_transfer",
+        "post_meeting_feedback",
+        "co_host",
+        "attendee_on_hold",
+        "show_meeting_control_toolbar",
+        "allow_show_zoom_windows",
+        "remote_control",
+        "non_verbal_feedback",
+        "breakout_room",
+        "remote_support",
+        "closed_caption",
+        "far_end_camera_control",
+        "group_hd",
+        "virtual_background",
+        "alert_guest_join",
+        "auto_answer",
+        "sending_default_email_invites",
+        "use_html_format_email",
+        "stereo_audio",
+        "original_audio",
+        "show_device_list",
+        "only_host_view_device_list",
+        "screen_sharing",
+        "attention_tracking",
+        "waiting_room",
+        "show_browser_join_link",
+        "cloud_recording_available_reminder",
+        "jbh_reminder",
+        "cancel_meeting_reminder",
+        "alternative_host_reminder",
+        "schedule_for_host_reminder",
+        "local_recording",
+        "cloud_recording",
+        "record_speaker_view",
+        "record_gallery_view",
+        "record_audio_file",
+        "save_chat_text",
+        "show_timestamp",
+        "recording_audio_transcript",
+        "auto_recording",
+        "cloud_recording_download",
+        "cloud_recording_download_host",
+        "account_user_access_recording",
+        "host_delete_cloud_recording",
+        "third_party_audio",
+        "audio_conference_info"
+      ]
+    },
+    {
+      "category": "Groups",
+      "parameters": [
+        "GroupId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/groups/{groupId}/settings",
+          "hash": "070e770b8249705a",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Groups\\Update-ZoomGroupSettings.ps1",
+      "functionName": "Update-ZoomGroupSettings",
+      "name": "Update-ZoomGroupSettings",
+      "aliases": [
+        "host_video",
+        "participant_video",
+        "audio_type",
+        "join_before_host",
+        "require_password_for_all_meetings",
+        "force_pmi_jbh_password",
+        "pstn_password_protected",
+        "mute_upon_entry",
+        "upcoming_meeting_reminder",
+        "e2e_encryption",
+        "private_chat",
+        "auto_saving_chat",
+        "entry_exit_chime",
+        "record_play_own_voice",
+        "file_transfer",
+        "post_meeting_feedback",
+        "co_host",
+        "attendee_on_hold",
+        "show_meeting_control_toolbar",
+        "allow_show_zoom_windows",
+        "remote_control",
+        "non_verbal_feedback",
+        "breakout_room",
+        "remote_support",
+        "closed_caption",
+        "far_end_camera_control",
+        "group_hd",
+        "virtual_background",
+        "alert_guest_join",
+        "auto_answer",
+        "sending_default_email_invites",
+        "use_html_format_email",
+        "stereo_audio",
+        "original_audio",
+        "show_device_list",
+        "only_host_view_device_list",
+        "screen_sharing",
+        "attention_tracking",
+        "waiting_room",
+        "show_browser_join_link",
+        "cloud_recording_available_reminder",
+        "jbh_reminder",
+        "cancel_meeting_reminder",
+        "alternative_host_reminder",
+        "schedule_for_host_reminder",
+        "local_recording",
+        "cloud_recording",
+        "record_speaker_view",
+        "record_gallery_view",
+        "record_audio_file",
+        "save_chat_text",
+        "show_timestamp",
+        "recording_audio_transcript",
+        "auto_recording",
+        "cloud_recording_download",
+        "cloud_recording_download_host",
+        "account_user_access_recording",
+        "host_delete_cloud_recording",
+        "third_party_audio",
+        "audio_conference_info"
+      ]
+    },
+    {
+      "category": "H323Devices",
+      "parameters": [
+        "PageSize",
+        "NextPageToken"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/h323/devices",
+          "hash": "463acb045d231a56",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\H323Devices\\Get-ZoomH323Devices.ps1",
+      "functionName": "Get-ZoomH323Devices",
+      "name": "Get-ZoomH323Devices",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "H323Devices",
+      "parameters": [
+        "Name",
+        "Protocol",
+        "Ip",
+        "Encryption"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\H323Devices\\New-ZoomH323Device.ps1",
+      "functionName": "New-ZoomH323Device",
+      "name": "New-ZoomH323Device",
+      "aliases": []
+    },
+    {
+      "category": "H323Devices",
+      "parameters": [
+        "DeviceId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\H323Devices\\Remove-ZoomH323Device.ps1",
+      "functionName": "Remove-ZoomH323Device",
+      "name": "Remove-ZoomH323Device",
+      "aliases": []
+    },
+    {
+      "category": "H323Devices",
+      "parameters": [
+        "DeviceId",
+        "Name",
+        "Protocol",
+        "Ip",
+        "Encryption"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\H323Devices\\Update-ZoomH323Device.ps1",
+      "functionName": "Update-ZoomH323Device",
+      "name": "Update-ZoomH323Device",
+      "aliases": []
+    },
+    {
+      "category": "IMChat",
+      "parameters": [
+        "UserId",
+        "SessionId",
+        "From",
+        "To",
+        "PageSize",
+        "NextPageToken"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/im/users/{userId}/chat/sessions/{id}",
+          "hash": "dd4c3e44bd20250a",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\IMChat\\Get-ZoomIMChatMessages.ps1",
+      "functionName": "Get-ZoomIMChatMessages",
+      "name": "Get-ZoomIMChatMessages",
+      "aliases": [
+        "session_id",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "IMChat",
+      "parameters": [
+        "UserId",
+        "From",
+        "To",
+        "PageSize",
+        "NextPageToken"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/im/users/{userId}/chat/sessions",
+          "hash": "1590da6ba0fc4d27",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\IMChat\\Get-ZoomIMChatSessions.ps1",
+      "functionName": "Get-ZoomIMChatSessions",
+      "name": "Get-ZoomIMChatSessions",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "IMGroups",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/im/groups/{id}/members",
+          "hash": "705b331782906019",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\IMGroups\\Add-ZoomIMDirectoryGroupMembers.ps1",
+      "functionName": "Add-ZoomIMDirectoryGroupMembers",
+      "name": "Add-ZoomIMDirectoryGroupMembers",
+      "aliases": [
+        "memberids"
+      ]
+    },
+    {
+      "category": "IMGroups",
+      "parameters": [
+        "GroupId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\IMGroups\\Get-ZoomIMGroup.ps1",
+      "functionName": "Get-ZoomIMGroup",
+      "name": "Get-ZoomIMGroup",
+      "aliases": []
+    },
+    {
+      "category": "IMGroups",
+      "parameters": [
+        "GroupId",
+        "PageSize",
+        "NextPageToken"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/im/groups/{groupId}/members",
+          "hash": "236de9fb4d51bab3",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\IMGroups\\Get-ZoomIMGroupMembers.ps1",
+      "functionName": "Get-ZoomIMGroupMembers",
+      "name": "Get-ZoomIMGroupMembers",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "IMGroups",
+      "parameters": [
+        "PageSize",
+        "NextPageToken"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/im/groups",
+          "hash": "a0d0cbb4ccf5480f",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\IMGroups\\Get-ZoomIMGroups.ps1",
+      "functionName": "Get-ZoomIMGroups",
+      "name": "Get-ZoomIMGroups",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "IMGroups",
+      "parameters": [
+        "Name",
+        "SearchByAccount",
+        "SearchByDomain",
+        "SearchByMa"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\IMGroups\\New-ZoomIMGroup.ps1",
+      "functionName": "New-ZoomIMGroup",
+      "name": "New-ZoomIMGroup",
+      "aliases": [
+        "search_by_account",
+        "search_by_domain",
+        "search_by_ma"
+      ]
+    },
+    {
+      "category": "IMGroups",
+      "parameters": [
+        "GroupId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\IMGroups\\Remove-ZoomIMGroup.ps1",
+      "functionName": "Remove-ZoomIMGroup",
+      "name": "Remove-ZoomIMGroup",
+      "aliases": []
+    },
+    {
+      "category": "IMGroups",
+      "parameters": [
+        "GroupId",
+        "MemberId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\IMGroups\\Remove-ZoomIMGroupMember.ps1",
+      "functionName": "Remove-ZoomIMGroupMember",
+      "name": "Remove-ZoomIMGroupMember",
+      "aliases": [
+        "member_id"
+      ]
+    },
+    {
+      "category": "IMGroups",
+      "parameters": [
+        "GroupId",
+        "Name",
+        "SearchByAccount",
+        "SearchByDomain",
+        "SearchByMa"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\IMGroups\\Update-ZoomIMGroup.ps1",
+      "functionName": "Update-ZoomIMGroup",
+      "name": "Update-ZoomIMGroup",
+      "aliases": [
+        "search_by_account",
+        "search_by_domain",
+        "search_by_ma"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId",
+        "OcurrenceId",
+        "Email",
+        "FirstName",
+        "LastName",
+        "Address",
+        "City",
+        "Country",
+        "Zip",
+        "State",
+        "Phone",
+        "Industry",
+        "Org",
+        "JobTitle",
+        "PurchasingTimeFrame",
+        "RoleInPurchaseProcess",
+        "NoOfEmployees",
+        "Comments",
+        "CustomQuestion"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/registrants",
+          "hash": "811128ed8298268d",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Add-ZoomMeetingRegistrant.ps1",
+      "functionName": "Add-ZoomMeetingRegistrant",
+      "name": "Add-ZoomMeetingRegistrant",
+      "aliases": [
+        "meeting_id",
+        "first_name",
+        "last_name",
+        "job_title",
+        "purchasing_time_Frame",
+        "role_in_purchase_process",
+        "no_of_employees",
+        "custom_questions"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/past_meetings/{meetingId}/instances",
+          "hash": "7b5dbb4d7350b889",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Get-ZoomEndedMeetingInstances.ps1",
+      "functionName": "Get-ZoomEndedMeetingInstances",
+      "name": "Get-ZoomEndedMeetingInstances",
+      "aliases": [
+        "meeting_id"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId",
+        "OccurrenceId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}",
+          "hash": "584c32e560921c10",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Get-ZoomMeeting.ps1",
+      "functionName": "Get-ZoomMeeting",
+      "name": "Get-ZoomMeeting",
+      "aliases": [
+        "meeting_id",
+        "ocurrence_id"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Meetings\\Get-ZoomMeetingInvitation.ps1",
+      "functionName": "Get-ZoomMeetingInvitation",
+      "name": "Get-ZoomMeetingInvitation",
+      "aliases": [
+        "meeting_id"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId",
+        "PollId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/polls/{id}",
+          "hash": "ea6aebf8c964d7d5",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Get-ZoomMeetingPoll.ps1",
+      "functionName": "Get-ZoomMeetingPoll",
+      "name": "Get-ZoomMeetingPoll",
+      "aliases": [
+        "meeting_id",
+        "poll_id"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/polls",
+          "hash": "ba9585e7a30b4e71",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Get-ZoomMeetingPolls.ps1",
+      "functionName": "Get-ZoomMeetingPolls",
+      "name": "Get-ZoomMeetingPolls",
+      "aliases": [
+        "meeting_id"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/registrants",
+          "hash": "686aa62e731c3324",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Get-ZoomMeetingRegistrants.ps1",
+      "functionName": "Get-ZoomMeetingRegistrants",
+      "name": "Get-ZoomMeetingRegistrants",
+      "aliases": [
+        "meeting_id",
+        "page_size",
+        "page_number"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "PageSize",
+        "NextPageToken",
+        "CombineAllPages"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/metrics/meetings",
+          "hash": "86d906b0c47e3986",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Get-ZoomMeetings.ps1",
+      "functionName": "Get-ZoomMeetings",
+      "name": "Get-ZoomMeetings",
+      "aliases": []
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "Type"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/meetings",
+          "hash": "111baf97ba532e8d",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Get-ZoomMeetingsFromUser.ps1",
+      "functionName": "Get-ZoomMeetingsFromUser",
+      "name": "Get-ZoomMeetingsFromUser",
+      "aliases": [
+        "page_size",
+        "page_number"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingUuid"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Meetings\\Get-ZoomPastMeetingDetails.ps1",
+      "functionName": "Get-ZoomPastMeetingDetails",
+      "name": "Get-ZoomPastMeetingDetails",
+      "aliases": [
+        "uuid"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingUuid",
+        "PageSize",
+        "NextPageToken"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/past_meetings/{id}/participants",
+          "hash": "c1486bebdb9b6ad5",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Get-ZoomPastMeetingParticipants.ps1",
+      "functionName": "Get-ZoomPastMeetingParticipants",
+      "name": "Get-ZoomPastMeetingParticipants",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingUuid",
+        "PageSize",
+        "NextPageToken"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/metrics/meetings/{id}/participants",
+          "hash": "ee285edabfb87798",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Get-ZoomPastMeetingParticipantsMetrics.ps1",
+      "functionName": "Get-ZoomPastMeetingParticipantsMetrics",
+      "name": "Get-ZoomPastMeetingParticipantsMetrics",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/registrants/questions",
+          "hash": "42e5416548324ef1",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Get-ZoomRegistrationQuestions.ps1",
+      "functionName": "Get-ZoomRegistrationQuestions",
+      "name": "Get-ZoomRegistrationQuestions",
+      "aliases": [
+        "meeting_id"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "UserId",
+        "ScheduleFor",
+        "Topic",
+        "StartTime",
+        "Duration",
+        "RecurrenceNoFixedTime",
+        "RepeatInterval",
+        "Daily",
+        "MonthlyDay",
+        "EndTimes",
+        "EndDateTime",
+        "HostVideo",
+        "ParticipantVideo",
+        "CNMeeting",
+        "INMeeting",
+        "JoinBeforeHost",
+        "MuteUponEntry",
+        "Watermark",
+        "UsePMI",
+        "Audio",
+        "AutoRecording",
+        "EnforceLogin",
+        "EnforceLoginDomains",
+        "AlternativeHosts",
+        "CloseRegistration",
+        "WaitingRoom",
+        "ContactName",
+        "ContactEmail",
+        "RegistrantsEmailNotification",
+        "MeetingAuthentication",
+        "AuthenticationOption",
+        "AuthenticationDomains",
+        "AuthenticationName"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Meetings\\New-ZoomMeeting.ps1",
+      "functionName": "New-ZoomMeeting",
+      "name": "New-ZoomMeeting",
+      "aliases": [
+        "schedule_for",
+        "start_time",
+        "tracking_fields",
+        "recurrence_monthly_weekday",
+        "host_video",
+        "participant_video",
+        "cn_meeting",
+        "in_meeting",
+        "join_before_host",
+        "mute_before_entry",
+        "use_pmi",
+        "approval_type",
+        "registration_type",
+        "auto_recording",
+        "enforce_login",
+        "enforce_login_domains",
+        "alternative_hosts",
+        "close_registration",
+        "waiting_room",
+        "global_dialin_countries",
+        "contact_name",
+        "contact_email",
+        "registrants_email_notification",
+        "meeting_authentication",
+        "authentication_option",
+        "authentication_domains",
+        "authentication_name"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId",
+        "Title"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/polls",
+          "hash": "45d59bbb3f545a41",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\New-ZoomMeetingPoll.ps1",
+      "functionName": "New-ZoomMeetingPoll",
+      "name": "New-ZoomMeetingPoll",
+      "aliases": [
+        "meeting_id"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "Name",
+        "Type"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Meetings\\New-ZoomMeetingPollQuestion.ps1",
+      "functionName": "New-ZoomMeetingPollQuestion",
+      "name": "New-ZoomMeetingPollQuestion",
+      "aliases": [
+        "answer"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId",
+        "OccurrenceId",
+        "ScheduleForReminder"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}",
+          "hash": "a556afff46c2d089",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Remove-ZoomMeeting.ps1",
+      "functionName": "Remove-ZoomMeeting",
+      "name": "Remove-ZoomMeeting",
+      "aliases": [
+        "meeting_id",
+        "occurrence_id",
+        "schedule_for_reminder"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId",
+        "PollId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/polls/{id}",
+          "hash": "bf2f5c9ca1087d54",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Remove-ZoomMeetingPoll.ps1",
+      "functionName": "Remove-ZoomMeetingPoll",
+      "name": "Remove-ZoomMeetingPoll",
+      "aliases": [
+        "meeting_id",
+        "poll_id"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId",
+        "OccurrenceId",
+        "ScheduleFor",
+        "Topic",
+        "Type",
+        "StartTime",
+        "Duration",
+        "Timezone",
+        "Agenda",
+        "RecurrenceType",
+        "RecurrenceRepeatInterval",
+        "MonthlyDay",
+        "MonthlyWeek",
+        "MonthlyWeekDay",
+        "EndTimes",
+        "HostVideo",
+        "ParticipantVideo",
+        "CNMeeting",
+        "INMeeting",
+        "JoinBeforeHost",
+        "MuteUponEntry",
+        "Watermark",
+        "UsePMI",
+        "ApprovalType",
+        "RegistrationType",
+        "Audio",
+        "AutoRecording",
+        "EnforceLogin",
+        "EnforceLoginDomains",
+        "AlternativeHosts",
+        "CloseRegistration",
+        "WaitingRoom",
+        "ContactName",
+        "ContactEmail",
+        "RegistrantsEmailNotification",
+        "MeetingAuthentication",
+        "AuthenticationOption",
+        "AuthenticationDomains"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}",
+          "hash": "71dc9848d53b6a9e",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Update-ZoomMeeting.ps1",
+      "functionName": "Update-ZoomMeeting",
+      "name": "Update-ZoomMeeting",
+      "aliases": [
+        "meeting_id",
+        "occurrence_id",
+        "schedule_for",
+        "start_time",
+        "tracking_fields",
+        "recurrence_type",
+        "recurrence_repeat_interval",
+        "weekley_days",
+        "monthly_day",
+        "monthly_week",
+        "monthly_week_day",
+        "end_times",
+        "end_datetime",
+        "host_video",
+        "participant_video",
+        "cn_meeting",
+        "in_meeting",
+        "join_before_host",
+        "mute_upon_entry",
+        "use_pmi",
+        "approval_type",
+        "registration_type",
+        "auto_recording",
+        "enforc_elogin",
+        "enforce_login_domains",
+        "alternative_hosts",
+        "close_registration",
+        "waitin_groom",
+        "global_dial_in_countries",
+        "contact_name",
+        "contact_email",
+        "global_dial_in_numbers",
+        "Registrants_Email_Notification",
+        "meeting_authentication",
+        "authentication_option",
+        "authentication_domains"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId",
+        "StreamUrl",
+        "StreamKey",
+        "PageUrl"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Meetings\\Update-ZoomMeetingLiveStream.ps1",
+      "functionName": "Update-ZoomMeetingLiveStream",
+      "name": "Update-ZoomMeetingLiveStream",
+      "aliases": [
+        "meeting_id",
+        "stream_url",
+        "stream_key",
+        "page_url"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId",
+        "StreamUrl",
+        "StreamKey",
+        "PageUrl"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Meetings\\Update-ZoomMeetingLiveStreamStatus.ps1",
+      "functionName": "Update-ZoomMeetingLiveStreamStatus",
+      "name": "Update-ZoomMeetingLiveStreamStatus",
+      "aliases": [
+        "meeting_id",
+        "stream_url",
+        "stream_key",
+        "page_url"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId",
+        "PollId",
+        "Title"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/polls/{id}",
+          "hash": "708072fad5b466f0",
+          "method": "PUT"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Update-ZoomMeetingPoll.ps1",
+      "functionName": "Update-ZoomMeetingPoll",
+      "name": "Update-ZoomMeetingPoll",
+      "aliases": [
+        "meeting_id",
+        "poll_id"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId",
+        "OccurrenceId",
+        "Action"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/registrants/status",
+          "hash": "b847b690fb158dc4",
+          "method": "PUT"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Update-ZoomMeetingRegistrantStatus.ps1",
+      "functionName": "Update-ZoomMeetingRegistrantStatus",
+      "name": "Update-ZoomMeetingRegistrantStatus",
+      "aliases": [
+        "meeting_id",
+        "occurence_id"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/registrants/questions",
+          "hash": "c32dc439d04765a3",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Update-ZoomMeetingRegistrationQuestions.ps1",
+      "functionName": "Update-ZoomMeetingRegistrationQuestions",
+      "name": "Update-ZoomMeetingRegistrationQuestions",
+      "aliases": [
+        "question"
+      ]
+    },
+    {
+      "category": "Meetings",
+      "parameters": [
+        "MeetingId",
+        "Action"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/meetings/{meetingId}/status",
+          "hash": "29c8ecf42796ff9d",
+          "method": "PUT"
+        }
+      ],
+      "file": "PSZoom\\Public\\Meetings\\Update-ZoomMeetingStatus.ps1",
+      "functionName": "Update-ZoomMeetingStatus",
+      "name": "Update-ZoomMeetingStatus",
+      "aliases": [
+        "meeting_id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "AutoReceptionistId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists/{id}/phone_numbers",
+          "hash": "d778449e5323554a",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\Add-ZoomPhoneAutoReceptionistNumber.ps1",
+      "functionName": "Add-ZoomPhoneAutoReceptionistNumber",
+      "name": "Add-ZoomPhoneAutoReceptionistNumber",
+      "aliases": [
+        "Phone_Number"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "DelegateVMAccessUserID",
+        "DelegateUserPermitVMDelete",
+        "DelegateUserPermitVMDownload"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists/{id}/policies/{id}",
+          "hash": "8931b17033b9dcfb",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\Add-ZoomPhoneAutoReceptionistPolicySetting.ps1",
+      "functionName": "Add-ZoomPhoneAutoReceptionistPolicySetting",
+      "name": "Add-ZoomPhoneAutoReceptionistPolicySetting",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "SettingType",
+        "SubSettingType"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/extension/{id}/call_handling/settings/{id}",
+          "hash": "5b911d89d55ed539",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallHandling\\Add-ZoomPhoneCallHandlingSetting.ps1",
+      "functionName": "Add-ZoomPhoneCallHandlingSetting",
+      "name": "Add-ZoomPhoneCallHandlingSetting",
+      "aliases": [
+        "extension_id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "CallQueueId",
+        "Members"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_queues/{id}/members",
+          "hash": "439431dad466eb0a",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallQueue\\Add-ZoomPhoneCallQueueMembers.ps1",
+      "functionName": "Add-ZoomPhoneCallQueueMembers",
+      "name": "Add-ZoomPhoneCallQueueMembers",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "CallQueueId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_queues/{id}/phone_numbers",
+          "hash": "6d279017ffea61ea",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallQueue\\Add-ZoomPhoneCallQueueNumber.ps1",
+      "functionName": "Add-ZoomPhoneCallQueueNumber",
+      "name": "Add-ZoomPhoneCallQueueNumber",
+      "aliases": [
+        "Phone_Number"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "LicenseType"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/common_areas/{id}/calling_plans",
+          "hash": "01f4f5bd5abc2d37",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CommonPhone\\Add-ZoomPhoneCommonAreaCallingPlan.ps1",
+      "functionName": "Add-ZoomPhoneCommonAreaCallingPlan",
+      "name": "Add-ZoomPhoneCommonAreaCallingPlan",
+      "aliases": [
+        "License_Type"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "CommonAreaId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/common_areas/{id}/phone_numbers",
+          "hash": "2a309f9593538e5e",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CommonPhone\\Add-ZoomPhoneCommonAreaNumber.ps1",
+      "functionName": "Add-ZoomPhoneCommonAreaNumber",
+      "name": "Add-ZoomPhoneCommonAreaNumber",
+      "aliases": [
+        "Phone_Number"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "DeviceId",
+        "UserId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Phone\\DeskPhone\\Add-ZoomPhoneDeviceAssignee.ps1",
+      "functionName": "Add-ZoomPhoneDeviceAssignee",
+      "name": "Add-ZoomPhoneDeviceAssignee",
+      "aliases": [
+        "User_Id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "SharedLineGroupId",
+        "Members",
+        "MemberId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/shared_line_groups/{id}/members",
+          "hash": "6bf91fd8debd238c",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\SharedLineGroup\\Add-ZoomPhoneSharedLineGroupMembers.ps1",
+      "functionName": "Add-ZoomPhoneSharedLineGroupMembers",
+      "name": "Add-ZoomPhoneSharedLineGroupMembers",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "LicenseType"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users/{id}/calling_plans",
+          "hash": "7fcf83de362b1c76",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\UserPhone\\Add-ZoomPhoneUserCallingPlan.ps1",
+      "functionName": "Add-ZoomPhoneUserCallingPlan",
+      "name": "Add-ZoomPhoneUserCallingPlan",
+      "aliases": [
+        "License_Type"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "UserId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users/{id}/phone_numbers",
+          "hash": "4518607b4562a0f1",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\UserPhone\\Add-ZoomPhoneUserNumber.ps1",
+      "functionName": "Add-ZoomPhoneUserNumber",
+      "name": "Add-ZoomPhoneUserNumber",
+      "aliases": [
+        "Phone_Number"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists",
+          "hash": "281fc4eaf977d63b",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\Get-ZoomPhoneAutoReceptionist.ps1",
+      "functionName": "Get-ZoomPhoneAutoReceptionist",
+      "name": "Get-ZoomPhoneAutoReceptionist",
+      "aliases": [
+        "Get-ZoomPhoneAutoReceptionists",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists/{id}/ivr",
+          "hash": "ef59f11206ca4b7a",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\Get-ZoomPhoneAutoReceptionistIVR.ps1",
+      "functionName": "Get-ZoomPhoneAutoReceptionistIVR",
+      "name": "Get-ZoomPhoneAutoReceptionistIVR",
+      "aliases": [
+        "Get-ZoomPhoneAutoReceptionistIVRs"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists/{id}/policies",
+          "hash": "2120140ec4eddd9d",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\Get-ZoomPhoneAutoReceptionistPolicy.ps1",
+      "functionName": "Get-ZoomPhoneAutoReceptionistPolicy",
+      "name": "Get-ZoomPhoneAutoReceptionistPolicy",
+      "aliases": [
+        "Get-ZoomPhoneAutoReceptionistPolicys"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/blocked_list",
+          "hash": "b6cb3c3b530da07b",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\BlockList\\Get-ZoomPhoneBlockList.ps1",
+      "functionName": "Get-ZoomPhoneBlockList",
+      "name": "Get-ZoomPhoneBlockList",
+      "aliases": [
+        "Get-ZoomPhoneBlockLists",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "ExtensionId",
+        "SettingType"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/extension/{id}/call_handling/settings",
+          "hash": "d1e6b0f7e03c5d5b",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallHandling\\Get-ZoomPhoneCallHandlingSetting.ps1",
+      "functionName": "Get-ZoomPhoneCallHandlingSetting",
+      "name": "Get-ZoomPhoneCallHandlingSetting",
+      "aliases": [
+        "extension_id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/calling_plans",
+          "hash": "9c8740b5cb275aa4",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\Get-ZoomPhoneCallingPlan.ps1",
+      "functionName": "Get-ZoomPhoneCallingPlan",
+      "name": "Get-ZoomPhoneCallingPlan",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_logs/{id}",
+          "hash": "9b92e3fa20c4aa12",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallLog\\Get-ZoomPhoneCallLogDetails.ps1",
+      "functionName": "Get-ZoomPhoneCallLogDetails",
+      "name": "Get-ZoomPhoneCallLogDetails",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_logs",
+          "hash": "ad388f13a1e1920f",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallLog\\Get-ZoomPhoneCallLogs.ps1",
+      "functionName": "Get-ZoomPhoneCallLogs",
+      "name": "Get-ZoomPhoneCallLogs",
+      "aliases": [
+        "Get-ZoomPhoneCallLog",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_queues/{id}",
+          "hash": "03d9975709e62a2e",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallQueue\\Get-ZoomPhoneCallQueue.ps1",
+      "functionName": "Get-ZoomPhoneCallQueue",
+      "name": "Get-ZoomPhoneCallQueue",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "CallQueueId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_queues/{id}/members",
+          "hash": "ffa957054048cd36",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallQueue\\Get-ZoomPhoneCallQueueMembers.ps1",
+      "functionName": "Get-ZoomPhoneCallQueueMembers",
+      "name": "Get-ZoomPhoneCallQueueMembers",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_queues",
+          "hash": "4a7d45ac569343dc",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallQueue\\Get-ZoomPhoneCallQueues.ps1",
+      "functionName": "Get-ZoomPhoneCallQueues",
+      "name": "Get-ZoomPhoneCallQueues",
+      "aliases": [
+        "Get-ZoomPhoneCallQueue",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/common_areas",
+          "hash": "a2fe6af1ebe0b9e1",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CommonPhone\\Get-ZoomPhoneCommonArea.ps1",
+      "functionName": "Get-ZoomPhoneCommonArea",
+      "name": "Get-ZoomPhoneCommonArea",
+      "aliases": [
+        "Get-ZoomPhoneCommonAreas",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/common_areas/{id}/settings",
+          "hash": "12e8204d65e34754",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CommonPhone\\Get-ZoomPhoneCommonAreaSettings.ps1",
+      "functionName": "Get-ZoomPhoneCommonAreaSettings",
+      "name": "Get-ZoomPhoneCommonAreaSettings",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "DeviceId",
+        "SiteId",
+        "AssigneeType",
+        "DeviceType"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/devices",
+          "hash": "a0170a402ded9aa2",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\DeskPhone\\Get-ZoomPhoneDevice.ps1",
+      "functionName": "Get-ZoomPhoneDevice",
+      "name": "Get-ZoomPhoneDevice",
+      "aliases": [
+        "Get-ZoomPhoneUsers"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/external_contacts/{id}",
+          "hash": "537b244f127feaa9",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\ExternalContact\\Get-ZoomPhoneExternalContact.ps1",
+      "functionName": "Get-ZoomPhoneExternalContact",
+      "name": "Get-ZoomPhoneExternalContact",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/external_contacts",
+          "hash": "9e3c51484974d039",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\ExternalContact\\Get-ZoomPhoneExternalContacts.ps1",
+      "functionName": "Get-ZoomPhoneExternalContacts",
+      "name": "Get-ZoomPhoneExternalContacts",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/numbers",
+          "hash": "6cacc83bfbb3cc88",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\Get-ZoomPhoneNumber.ps1",
+      "functionName": "Get-ZoomPhoneNumber",
+      "name": "Get-ZoomPhoneNumber",
+      "aliases": [
+        "Get-ZoomPhoneNumbers",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/provision_templates",
+          "hash": "92875ff4dae5cf37",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\Get-ZoomPhoneProvisioingTemplate.ps1",
+      "functionName": "Get-ZoomPhoneProvisioingTemplate",
+      "name": "Get-ZoomPhoneProvisioingTemplate",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/recordings/{id}",
+          "hash": "7d35216a85c3b8e7",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\Recording\\Get-ZoomPhoneRecording.ps1",
+      "functionName": "Get-ZoomPhoneRecording",
+      "name": "Get-ZoomPhoneRecording",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/recordings",
+          "hash": "bb15cce32cc21538",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\Recording\\Get-ZoomPhoneRecordings.ps1",
+      "functionName": "Get-ZoomPhoneRecordings",
+      "name": "Get-ZoomPhoneRecordings",
+      "aliases": [
+        "Get-ZoomPhoneRecording",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/shared_line_groups/{id}",
+          "hash": "52a651a98ec3681e",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\SharedLineGroup\\Get-ZoomPhoneSharedLineGroup.ps1",
+      "functionName": "Get-ZoomPhoneSharedLineGroup",
+      "name": "Get-ZoomPhoneSharedLineGroup",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "SiteId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/shared_line_groups",
+          "hash": "fd0fd2bf0668747b",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\SharedLineGroup\\Get-ZoomPhoneSharedLineGroups.ps1",
+      "functionName": "Get-ZoomPhoneSharedLineGroups",
+      "name": "Get-ZoomPhoneSharedLineGroups",
+      "aliases": [
+        "site_id",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "UserId",
+        "From",
+        "To",
+        "MessageType"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/sms/history",
+          "hash": "506a2f2585083ad2",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\SMS\\Get-ZoomPhoneSMSHistory.ps1",
+      "functionName": "Get-ZoomPhoneSMSHistory",
+      "name": "Get-ZoomPhoneSMSHistory",
+      "aliases": [
+        "message_type",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/sms/sessions/{id}",
+          "hash": "9b9cf8564ec9db8a",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\SMS\\Get-ZoomPhoneSMSSession.ps1",
+      "functionName": "Get-ZoomPhoneSMSSession",
+      "name": "Get-ZoomPhoneSMSSession",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users",
+          "hash": "5707dbdfa513fad1",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\UserPhone\\Get-ZoomPhoneUser.ps1",
+      "functionName": "Get-ZoomPhoneUser",
+      "name": "Get-ZoomPhoneUser",
+      "aliases": [
+        "Get-ZoomPhoneUsers",
+        "site_id",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users/{id}/call_logs",
+          "hash": "640c29b042d14937",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallLog\\Get-ZoomPhoneUserCallLogs.ps1",
+      "functionName": "Get-ZoomPhoneUserCallLogs",
+      "name": "Get-ZoomPhoneUserCallLogs",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users/{id}/recordings",
+          "hash": "a46bf36a4f284219",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\Recording\\Get-ZoomPhoneUserRecordings.ps1",
+      "functionName": "Get-ZoomPhoneUserRecordings",
+      "name": "Get-ZoomPhoneUserRecordings",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users/{id}/settings",
+          "hash": "18376cb0e238161b",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\UserPhone\\Get-ZoomPhoneUserSettings.ps1",
+      "functionName": "Get-ZoomPhoneUserSettings",
+      "name": "Get-ZoomPhoneUserSettings",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users/{id}/voicemails",
+          "hash": "055824fc4e65f842",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\Voicemail\\Get-ZoomPhoneUserVoicemails.ps1",
+      "functionName": "Get-ZoomPhoneUserVoicemails",
+      "name": "Get-ZoomPhoneUserVoicemails",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/voicemails/{id}",
+          "hash": "4a4c4da4092da225",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\Voicemail\\Get-ZoomPhoneVoicemail.ps1",
+      "functionName": "Get-ZoomPhoneVoicemail",
+      "name": "Get-ZoomPhoneVoicemail",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/voicemails",
+          "hash": "65079e183f8a09af",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\Voicemail\\Get-ZoomPhoneVoicemails.ps1",
+      "functionName": "Get-ZoomPhoneVoicemails",
+      "name": "Get-ZoomPhoneVoicemails",
+      "aliases": [
+        "Get-ZoomPhoneVoicemail",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "DeviceId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/devices/{id}/reboot",
+          "hash": "af933c422f789737",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\DeskPhone\\Invoke-ZoomPhoneDeviceReboot.ps1",
+      "functionName": "Invoke-ZoomPhoneDeviceReboot",
+      "name": "Invoke-ZoomPhoneDeviceReboot",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "Name",
+        "SiteId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists",
+          "hash": "2e4a1891b55419ec",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\New-ZoomPhoneAutoReceptionist.ps1",
+      "functionName": "New-ZoomPhoneAutoReceptionist",
+      "name": "New-ZoomPhoneAutoReceptionist",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "BlockType",
+        "Comment",
+        "Country",
+        "MatchType",
+        "PhoneNumber",
+        "Status"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/blocked_list",
+          "hash": "258c273b2deb8f9c",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\BlockList\\New-ZoomPhoneBlockList.ps1",
+      "functionName": "New-ZoomPhoneBlockList",
+      "name": "New-ZoomPhoneBlockList",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "Name",
+        "SiteId",
+        "Description",
+        "ExtensionNumber",
+        "Timezone",
+        "MaxWaitTime",
+        "MaxQueueSize",
+        "WrapUpTime"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_queues",
+          "hash": "ed131e96979727eb",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallQueue\\New-ZoomPhoneCallQueue.ps1",
+      "functionName": "New-ZoomPhoneCallQueue",
+      "name": "New-ZoomPhoneCallQueue",
+      "aliases": [
+        "site_id",
+        "extension_number",
+        "max_wait_time",
+        "max_queue_size",
+        "wrap_up_time"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "DisplayName",
+        "SiteId",
+        "CallingPlansType",
+        "CountryIsoCode",
+        "ExtensionNumber",
+        "Timezone"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/common_areas",
+          "hash": "96813aabe03eeec1",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CommonPhone\\New-ZoomPhoneCommonArea.ps1",
+      "functionName": "New-ZoomPhoneCommonArea",
+      "name": "New-ZoomPhoneCommonArea",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "DisplayName",
+        "Type",
+        "AssignedTo",
+        "Model",
+        "ProvisionTemplateId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/devices",
+          "hash": "a12432c8b4267c34",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\DeskPhone\\New-ZoomPhoneDevice.ps1",
+      "functionName": "New-ZoomPhoneDevice",
+      "name": "New-ZoomPhoneDevice",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "FirstName",
+        "LastName",
+        "PhoneNumber",
+        "Email",
+        "Company",
+        "JobTitle"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/external_contacts",
+          "hash": "b0a25e99dbf56820",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\ExternalContact\\New-ZoomPhoneExternalContact.ps1",
+      "functionName": "New-ZoomPhoneExternalContact",
+      "name": "New-ZoomPhoneExternalContact",
+      "aliases": [
+        "first_name",
+        "last_name",
+        "phone_number",
+        "job_title"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "Name",
+        "Description",
+        "ExtensionNumber",
+        "SiteId",
+        "DisplayName"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/shared_line_groups",
+          "hash": "ce15e6406ccbd520",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\SharedLineGroup\\New-ZoomPhoneSharedLineGroup.ps1",
+      "functionName": "New-ZoomPhoneSharedLineGroup",
+      "name": "New-ZoomPhoneSharedLineGroup",
+      "aliases": [
+        "extension_number",
+        "site_id",
+        "display_name"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "Email",
+        "ExtensionNumber",
+        "CallingPlans",
+        "FirstName",
+        "LastName",
+        "SiteCode",
+        "SiteName",
+        "TemplateName",
+        "PhoneNumbers",
+        "OutboundCallerId",
+        "SelectOutboundCallerId",
+        "Sms",
+        "DeskPhoneBrand",
+        "DeskPhoneModel",
+        "DeskPhoneTemplate"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users/batch",
+          "hash": "11d39a2e70029809",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\UserPhone\\New-ZoomPhoneUser.ps1",
+      "functionName": "New-ZoomPhoneUser",
+      "name": "New-ZoomPhoneUser",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists/{id}",
+          "hash": "0d5b5d365629196a",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\Remove-ZoomPhoneAutoReceptionist.ps1",
+      "functionName": "Remove-ZoomPhoneAutoReceptionist",
+      "name": "Remove-ZoomPhoneAutoReceptionist",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists/{id}/phone_numbers/$($NumberTBR.id)",
+          "hash": "109c864db596be26",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\Remove-ZoomPhoneAutoReceptionistNumber.ps1",
+      "functionName": "Remove-ZoomPhoneAutoReceptionistNumber",
+      "name": "Remove-ZoomPhoneAutoReceptionistNumber",
+      "aliases": [
+        "Phone_Number"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "DelegateUserID",
+        "PolicyType"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists/{id}/policies/{id}",
+          "hash": "f483dd50ded834d5",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\Remove-ZoomPhoneAutoReceptionistPolicySetting.ps1",
+      "functionName": "Remove-ZoomPhoneAutoReceptionistPolicySetting",
+      "name": "Remove-ZoomPhoneAutoReceptionistPolicySetting",
+      "aliases": [
+        "UserID",
+        "type"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/blocked_list/{id}",
+          "hash": "a0e299400f55017c",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\BlockList\\Remove-ZoomPhoneBlockList.ps1",
+      "functionName": "Remove-ZoomPhoneBlockList",
+      "name": "Remove-ZoomPhoneBlockList",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "SettingType"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/extension/{id}/call_handling/settings/$($SettingType.ToLower())",
+          "hash": "6b8b22bd8cb31076",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallHandling\\Remove-ZoomPhoneCallHandlingSetting.ps1",
+      "functionName": "Remove-ZoomPhoneCallHandlingSetting",
+      "name": "Remove-ZoomPhoneCallHandlingSetting",
+      "aliases": [
+        "extension_id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_logs/{id}",
+          "hash": "a66dbccebfb9e20e",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallLog\\Remove-ZoomPhoneCallLog.ps1",
+      "functionName": "Remove-ZoomPhoneCallLog",
+      "name": "Remove-ZoomPhoneCallLog",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_queues/{id}",
+          "hash": "07563c3d1f74d21c",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallQueue\\Remove-ZoomPhoneCallQueue.ps1",
+      "functionName": "Remove-ZoomPhoneCallQueue",
+      "name": "Remove-ZoomPhoneCallQueue",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "CallQueueId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_queues/{id}/members",
+          "hash": "0b45c95c189f698d",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallQueue\\Remove-ZoomPhoneCallQueueMembers.ps1",
+      "functionName": "Remove-ZoomPhoneCallQueueMembers",
+      "name": "Remove-ZoomPhoneCallQueueMembers",
+      "aliases": [
+        "member_ids"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "CallQueueId",
+        "NumberId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_queues/{id}/phone_numbers/{id}",
+          "hash": "ae4c3daa36dd44d2",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallQueue\\Remove-ZoomPhoneCallQueueNumber.ps1",
+      "functionName": "Remove-ZoomPhoneCallQueueNumber",
+      "name": "Remove-ZoomPhoneCallQueueNumber",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/common_areas/{id}",
+          "hash": "6243a37d8210691c",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CommonPhone\\Remove-ZoomPhoneCommonArea.ps1",
+      "functionName": "Remove-ZoomPhoneCommonArea",
+      "name": "Remove-ZoomPhoneCommonArea",
+      "aliases": [
+        "Id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "LicenseType",
+        "RemoveAllPlans"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/common_areas/{id}/calling_plans/{id}",
+          "hash": "e0eada89dcff02c6",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CommonPhone\\Remove-ZoomPhoneCommonAreaCallingPlan.ps1",
+      "functionName": "Remove-ZoomPhoneCommonAreaCallingPlan",
+      "name": "Remove-ZoomPhoneCommonAreaCallingPlan",
+      "aliases": [
+        "type"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/common_areas/{id}/phone_numbers/$($NumberTBR.id)",
+          "hash": "e07d8b0fad46849a",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CommonPhone\\Remove-ZoomPhoneCommonAreaNumber.ps1",
+      "functionName": "Remove-ZoomPhoneCommonAreaNumber",
+      "name": "Remove-ZoomPhoneCommonAreaNumber",
+      "aliases": [
+        "Phone_Number"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "DeviceId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/devices/{id}",
+          "hash": "ceeec76bb74d7744",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\DeskPhone\\Remove-ZoomPhoneDevice.ps1",
+      "functionName": "Remove-ZoomPhoneDevice",
+      "name": "Remove-ZoomPhoneDevice",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "DeviceId",
+        "ExtensionId",
+        "UnassignAllEntities",
+        "PassThru"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/devices/{id}/extensions/{id}",
+          "hash": "039d76fb179d0e9d",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\DeskPhone\\Remove-ZoomPhoneDeviceAssignee.ps1",
+      "functionName": "Remove-ZoomPhoneDeviceAssignee",
+      "name": "Remove-ZoomPhoneDeviceAssignee",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/external_contacts/{id}",
+          "hash": "12814bde0b17c835",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\ExternalContact\\Remove-ZoomPhoneExternalContact.ps1",
+      "functionName": "Remove-ZoomPhoneExternalContact",
+      "name": "Remove-ZoomPhoneExternalContact",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/recordings/{id}",
+          "hash": "ea5ecf25d8931491",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\Recording\\Remove-ZoomPhoneRecording.ps1",
+      "functionName": "Remove-ZoomPhoneRecording",
+      "name": "Remove-ZoomPhoneRecording",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/shared_line_groups/{id}",
+          "hash": "7cdaecb06e375274",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\SharedLineGroup\\Remove-ZoomPhoneSharedLineGroup.ps1",
+      "functionName": "Remove-ZoomPhoneSharedLineGroup",
+      "name": "Remove-ZoomPhoneSharedLineGroup",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users/{id}/calling_plans/{id}",
+          "hash": "2c10677554b1810e",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\UserPhone\\Remove-ZoomPhoneUserCallingPlan.ps1",
+      "functionName": "Remove-ZoomPhoneUserCallingPlan",
+      "name": "Remove-ZoomPhoneUserCallingPlan",
+      "aliases": [
+        "Remove-ZoomPhoneUserCallingPlans"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users/{id}/phone_numbers/$($_.id)",
+          "hash": "999499912530d96c",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\UserPhone\\Remove-ZoomPhoneUserNumber.ps1",
+      "functionName": "Remove-ZoomPhoneUserNumber",
+      "name": "Remove-ZoomPhoneUserNumber",
+      "aliases": [
+        "Phone_Number"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/voicemails/{id}",
+          "hash": "d8c82d528abab769",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\Voicemail\\Remove-ZoomPhoneVoicemail.ps1",
+      "functionName": "Remove-ZoomPhoneVoicemail",
+      "name": "Remove-ZoomPhoneVoicemail",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "UserId",
+        "Message",
+        "ToPhoneNumber",
+        "FromPhoneNumber"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/sms",
+          "hash": "d2e9ef9d933e41df",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\SMS\\Send-ZoomPhoneSMS.ps1",
+      "functionName": "Send-ZoomPhoneSMS",
+      "name": "Send-ZoomPhoneSMS",
+      "aliases": [
+        "to_phone_numbers",
+        "to_phone_number",
+        "from_phone_number"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "AutoReceptionistId",
+        "CostCenter",
+        "Department",
+        "Name",
+        "ExtensionNumber",
+        "AudioPromptLanguage",
+        "Timezone"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists/{id}",
+          "hash": "7e9e3ac00aebd574",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\Update-ZoomPhoneAutoReceptionist.ps1",
+      "functionName": "Update-ZoomPhoneAutoReceptionist",
+      "name": "Update-ZoomPhoneAutoReceptionist",
+      "aliases": [
+        "id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "AutoReceptionistId",
+        "AudioPromptId",
+        "CallerEntersNoActionResponse",
+        "CallerEntersNoActionPromptRepeat",
+        "CallerEntersNoActionForwardToExtensionId",
+        "HolidayId",
+        "HoursType",
+        "KeyActionResponse",
+        "KeyActionKey",
+        "KeyActionTargetExtensionId",
+        "KeyActionTargetPhoneNumber",
+        "KeyActionVoicemailGreetingId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists/{id}/ivr",
+          "hash": "1b508655f629ba47",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\Update-ZoomPhoneAutoReceptionistIVR.ps1",
+      "functionName": "Update-ZoomPhoneAutoReceptionistIVR",
+      "name": "Update-ZoomPhoneAutoReceptionistIVR",
+      "aliases": [
+        "id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "AutoReceptionistId",
+        "VoicemailTranscriptionEnable",
+        "VoicemailTranscriptionReset",
+        "VoicemailEmailNotificationEnable",
+        "VoicemailEmailNotificationReset",
+        "VoicemailEmailNotificationEmailForward",
+        "VoicemailEmailNotificationIncludeFile",
+        "VoicemailEmailNotificationIncludeTranscript",
+        "SmsEnable",
+        "SmsReset",
+        "InternationalSmsEnable",
+        "InternationalSmsCountries"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists/{id}/policies",
+          "hash": "7078e85e96144c5b",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\Update-ZoomPhoneAutoReceptionistPolicy.ps1",
+      "functionName": "Update-ZoomPhoneAutoReceptionistPolicy",
+      "name": "Update-ZoomPhoneAutoReceptionistPolicy",
+      "aliases": [
+        "id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "DelegateVMAccessUserID",
+        "DelegateUserPermitVMDelete",
+        "DelegateUserPermitVMDownload"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/auto_receptionists/{id}/policies/{id}",
+          "hash": "448e66973833b595",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\AutoReceptionist\\Update-ZoomPhoneAutoReceptionistPolicySetting.ps1",
+      "functionName": "Update-ZoomPhoneAutoReceptionistPolicySetting",
+      "name": "Update-ZoomPhoneAutoReceptionistPolicySetting",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "BlockedListId",
+        "BlockType",
+        "Comment",
+        "Country",
+        "MatchType",
+        "PhoneNumber",
+        "Status"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/blocked_list/{id}",
+          "hash": "9e231fc5ff0fe2f9",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\BlockList\\Update-ZoomPhoneBlockList.ps1",
+      "functionName": "Update-ZoomPhoneBlockList",
+      "name": "Update-ZoomPhoneBlockList",
+      "aliases": [
+        "id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "CallQueueId",
+        "Name",
+        "Description",
+        "ExtensionNumber",
+        "Timezone",
+        "MaxWaitTime",
+        "MaxQueueSize",
+        "WrapUpTime",
+        "CostCenter",
+        "Department"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/call_queues/{id}",
+          "hash": "01e850c211ee721d",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CallQueue\\Update-ZoomPhoneCallQueue.ps1",
+      "functionName": "Update-ZoomPhoneCallQueue",
+      "name": "Update-ZoomPhoneCallQueue",
+      "aliases": [
+        "extension_number",
+        "max_wait_time",
+        "max_queue_size",
+        "wrap_up_time",
+        "cost_center"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "CommonAreaId",
+        "PolicyInternationalCallingEnable",
+        "PolicyInternationalCallingReset",
+        "AreaCode",
+        "CostCenter",
+        "CountryIsoCode",
+        "Department",
+        "DisplayName",
+        "EmergencyAddressId",
+        "ExtensionNumber",
+        "OutboundCallerId",
+        "SiteId",
+        "Timezone"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/common_areas/{id}",
+          "hash": "1ea4a5557a57ab4e",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\CommonPhone\\Update-ZoomPhoneCommonArea.ps1",
+      "functionName": "Update-ZoomPhoneCommonArea",
+      "name": "Update-ZoomPhoneCommonArea",
+      "aliases": [
+        "id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "DeviceId",
+        "AssignedTo",
+        "DisplayName",
+        "ProvisionTemplateId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/devices/{id}",
+          "hash": "c8208871e8a9e182",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\DeskPhone\\Update-ZoomPhoneDevice.ps1",
+      "functionName": "Update-ZoomPhoneDevice",
+      "name": "Update-ZoomPhoneDevice",
+      "aliases": []
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "ProvisionTemplateId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/devices/{id}/provision_templates",
+          "hash": "83b2e8b30449b338",
+          "method": "PUT"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\DeskPhone\\Update-ZoomPhoneDeviceProvisioningTemplate.ps1",
+      "functionName": "Update-ZoomPhoneDeviceProvisioningTemplate",
+      "name": "Update-ZoomPhoneDeviceProvisioningTemplate",
+      "aliases": [
+        "provision_template_id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "ContactId",
+        "FirstName",
+        "LastName",
+        "PhoneNumber",
+        "Email",
+        "Company",
+        "JobTitle"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/external_contacts/{contactId}",
+          "hash": "a9a76c4d5751d748",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\ExternalContact\\Update-ZoomPhoneExternalContact.ps1",
+      "functionName": "Update-ZoomPhoneExternalContact",
+      "name": "Update-ZoomPhoneExternalContact",
+      "aliases": [
+        "first_name",
+        "last_name",
+        "phone_number",
+        "job_title"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "SharedLineGroupId",
+        "Name",
+        "Description",
+        "ExtensionNumber",
+        "DisplayName"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/shared_line_groups/{id}",
+          "hash": "06c5b29db7a0a1f8",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\SharedLineGroup\\Update-ZoomPhoneSharedLineGroup.ps1",
+      "functionName": "Update-ZoomPhoneSharedLineGroup",
+      "name": "Update-ZoomPhoneSharedLineGroup",
+      "aliases": [
+        "extension_number",
+        "display_name"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "UserId",
+        "EmergencyAddressID",
+        "ExtensionNumber",
+        "SiteId",
+        "TemplateID",
+        "PolicyVmAllowDelete",
+        "PolicyVmAllowDownload",
+        "PolicyVmAllowTranscription",
+        "PolicyVmAllowVideomail",
+        "PolicyVmEnable",
+        "PolicyVmAccessAllowUserId",
+        "PolicyVmAccessAllowDelete",
+        "PolicyVmAccessAllowDownload",
+        "PolicyVmAccessAllowSharing",
+        "PolicyAllowMobileCalling",
+        "PolicyEnableMobile",
+        "PolicyAllowMusicOnHoldCustomization",
+        "PolicyAllowMessageGreetingCustomization",
+        "PolicyEnableAudioLibrary",
+        "PolicyResetAudioLibrary",
+        "PolicyEnableVmTranscript",
+        "PolicyResetVmTranscript",
+        "PolicyVmEmailIncludeAudioFile",
+        "PolicyVmEmailIncludeAudioTranscript",
+        "PolicyVmEnableEmail",
+        "PolicyVmResetEmail",
+        "PolicyVmEnableSharedEmail",
+        "PolicyVmResetSharedEmail",
+        "PolicyVmEnableCheckVmOverPhone",
+        "PolicyVmResetCheckVmOverPhone",
+        "PolicyVmEnableIntercom",
+        "PolicyVmResetIntercom",
+        "PolicyE2eEncryptionEnable",
+        "PolicyE2eEncryptionReset",
+        "PolicyInternationalCallingEnable",
+        "PolicyEnableAdHocCallRecordingBeepTone",
+        "PolicyAdHocCallRecordingBeepToneVolume",
+        "PolicyAdHocCallRecordingBeepToneInterval",
+        "PolicyAdHocCallRecordingBeepToneMember",
+        "PolicyEnableAdHocCallRecording",
+        "PolicyAdHocCallRecordingStartPrompt",
+        "PolicyAdHocCallRecordingTranscript",
+        "PolicyResetAdHocCallRecording",
+        "PolicyEnableAutoCallRecordingBeepTone",
+        "PolicyAutoCallRecordingBeepToneVolume",
+        "PolicyAutoCallRecordingBeepToneInterval",
+        "PolicyAutoCallRecordingBeepToneMember",
+        "PolicyEnableAutoCallRecording",
+        "PolicyAutoCallRecordingAllowStopResumeRecording",
+        "PolicyAutoCallRecordingDisconnectOnRecordingFailure",
+        "PolicyAutoCallRecordingType",
+        "PolicyAutoCallRecordingExplicitConsent",
+        "PolicyAutoCallRecordingStartPrompt",
+        "PolicyAutoCallRecordingTranscription",
+        "PolicyResetAutoCallRecording",
+        "PolicyCallOverflowEnable",
+        "PolicyCallOverflowReset",
+        "PolicyCallOverflowType",
+        "PolicyCallParkEnable",
+        "PolicyCallParkCallNotPickedUpAction",
+        "PolicyCallParkCallExpirationPeriod",
+        "PolicyCallParkForwardToExtensionId",
+        "PolicyCallTransferringEnable",
+        "PolicyCallTransferringReset",
+        "PolicyCallTransferringType",
+        "PolicyEmergencyAddressEnable",
+        "PolicyEmergencyAddressPromptDefault",
+        "PolicyCallHandlingForwardingToOtherUsersEnable",
+        "PolicyCallHandlingForwardingToOtherUsersReset",
+        "PolicyCallHandlingForwardingToOtherUsersType",
+        "PolicyHandOffToRoomEnable",
+        "PolicyMobileSwitchToCarrierEnable",
+        "PolicySelectOutboundCallerIdEnable",
+        "PolicyMobileSwitchToCarrierAllowHide",
+        "PolicySmsEnable",
+        "PolicySmsInternational",
+        "PolicySmsInternationalCountries",
+        "PolicyDelegationEnable",
+        "PolicyElevateToMeetingEnable",
+        "PolicyEmergencyCallsToPsapEnable"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users/{id}",
+          "hash": "fa28d837fa0ff361",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\UserPhone\\Update-ZoomPhoneUser.ps1",
+      "functionName": "Update-ZoomPhoneUser",
+      "name": "Update-ZoomPhoneUser",
+      "aliases": [
+        "emergency_address",
+        "extension_number",
+        "site_id",
+        "template_id"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "LicenseType"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users/{id}/calling_plans",
+          "hash": "bd1538ebdb7c8922",
+          "method": "PUT"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\UserPhone\\Update-ZoomPhoneUserCallingPlan.ps1",
+      "functionName": "Update-ZoomPhoneUserCallingPlan",
+      "name": "Update-ZoomPhoneUserCallingPlan",
+      "aliases": [
+        "Update-ZoomPhoneUserCallingPlans",
+        "License_Type"
+      ]
+    },
+    {
+      "category": "Phone",
+      "parameters": [
+        "UserId",
+        "AreaCode",
+        "AudioPromptLanguage",
+        "CountryIsoCode",
+        "MusicOnHoldId",
+        "OutboundCallerId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/phone/users/{id}/settings",
+          "hash": "58934e881b688a8d",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Phone\\UserPhone\\Update-ZoomPhoneUserSettings.ps1",
+      "functionName": "Update-ZoomPhoneUserSettings",
+      "name": "Update-ZoomPhoneUserSettings",
+      "aliases": [
+        "area_code",
+        "audio_prompt_language",
+        "country_iso_code",
+        "music_on_hold_id",
+        "outbound_caller_id"
+      ]
+    },
+    {
+      "category": "PhoneSite",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/setting_templates",
+          "hash": "255c9d801e35cd6f",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\PhoneSite\\Get-ZoomPhoneSettingTemplate.ps1",
+      "functionName": "Get-ZoomPhoneSettingTemplate",
+      "name": "Get-ZoomPhoneSettingTemplate",
+      "aliases": [
+        "site_id",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "PhoneSite",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/sites",
+          "hash": "8d0fb0962b0cc30f",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\PhoneSite\\Get-ZoomPhoneSite.ps1",
+      "functionName": "Get-ZoomPhoneSite",
+      "name": "Get-ZoomPhoneSite",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "PhoneSite",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/phone/emergency_addresses",
+          "hash": "06d0312a28cfdbf1",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\PhoneSite\\Get-ZoomPhoneSiteEmergencyAddress.ps1",
+      "functionName": "Get-ZoomPhoneSiteEmergencyAddress",
+      "name": "Get-ZoomPhoneSiteEmergencyAddress",
+      "aliases": [
+        "site_id",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Reports",
+      "parameters": [
+        "From",
+        "To",
+        "PageSize",
+        "PageNumber",
+        "Type",
+        "LastSixMonths",
+        "CombineAllPages",
+        "NextPageToken"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/report/users",
+          "hash": "a081ad28c2c0f8ea",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Reports\\Get-ZoomActiveInactiveHostReports.ps1",
+      "functionName": "Get-ZoomActiveInactiveHostReports",
+      "name": "Get-ZoomActiveInactiveHostReports",
+      "aliases": []
+    },
+    {
+      "category": "Reports",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/report/cloud_recording",
+          "hash": "830d70f285d8c9f6",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Reports\\Get-ZoomCloudRecordingReport.ps1",
+      "functionName": "Get-ZoomCloudRecordingReport",
+      "name": "Get-ZoomCloudRecordingReport",
+      "aliases": []
+    },
+    {
+      "category": "Reports",
+      "parameters": [
+        "Year",
+        "Month"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/report/daily",
+          "hash": "75d2781aff4c552d",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Reports\\Get-ZoomDailyUsageReport.ps1",
+      "functionName": "Get-ZoomDailyUsageReport",
+      "name": "Get-ZoomDailyUsageReport",
+      "aliases": []
+    },
+    {
+      "category": "Reports",
+      "parameters": [
+        "PageSize",
+        "NextPageToken",
+        "CombineAllPages"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/report/meetings/{meetingId}/participants",
+          "hash": "ee59fb23f2a748dd",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Reports\\Get-ZoomMeetingParticipantsReport.ps1",
+      "functionName": "Get-ZoomMeetingParticipantsReport",
+      "name": "Get-ZoomMeetingParticipantsReport",
+      "aliases": [
+        "id"
+      ]
+    },
+    {
+      "category": "Reports",
+      "parameters": [
+        "From",
+        "To",
+        "CombineAllPages",
+        "PageSize",
+        "PageNumber",
+        "Type",
+        "YearToDate"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/report/telephone",
+          "hash": "fa64f524e4a0c4ea",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Reports\\Get-ZoomTelephoneReports.ps1",
+      "functionName": "Get-ZoomTelephoneReports",
+      "name": "Get-ZoomTelephoneReports",
+      "aliases": [
+        "ytd"
+      ]
+    },
+    {
+      "category": "Reports",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/report/webinars/{webinarId}",
+          "hash": "3dd5576e7d6970bd",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Reports\\Get-ZoomWebinarDetailsReport.ps1",
+      "functionName": "Get-ZoomWebinarDetailsReport",
+      "name": "Get-ZoomWebinarDetailsReport",
+      "aliases": [
+        "id"
+      ]
+    },
+    {
+      "category": "Reports",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/report/webinars/{webinarId}/participants",
+          "hash": "3e1ab5c69dad54d4",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Reports\\Get-ZoomWebinarParticipantsReport.ps1",
+      "functionName": "Get-ZoomWebinarParticipantsReport",
+      "name": "Get-ZoomWebinarParticipantsReport",
+      "aliases": [
+        "id"
+      ]
+    },
+    {
+      "category": "Rooms",
+      "parameters": [
+        "MeetingNumber"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/rooms/{id}/meetings",
+          "hash": "c71ee216b127844f",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Rooms\\Connect-ZoomRoomMeeting.ps1",
+      "functionName": "Connect-ZoomRoomMeeting",
+      "name": "Connect-ZoomRoomMeeting",
+      "aliases": []
+    },
+    {
+      "category": "Rooms",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/rooms/{id}/meetings",
+          "hash": "c71ee216b127844f",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Rooms\\Disconnect-ZoomRoomMeeting.ps1",
+      "functionName": "Disconnect-ZoomRoomMeeting",
+      "name": "Disconnect-ZoomRoomMeeting",
+      "aliases": []
+    },
+    {
+      "category": "Rooms",
+      "parameters": [
+        "RoomID"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/rooms/$({roomId})/devices",
+          "hash": "7d7b13a6c947919b",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Rooms\\Get-ZoomRoomDevices.ps1",
+      "functionName": "Get-ZoomRoomDevices",
+      "name": "Get-ZoomRoomDevices",
+      "aliases": []
+    },
+    {
+      "category": "Rooms",
+      "parameters": [
+        "ParentLocationId",
+        "PageSize"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/rooms/locations",
+          "hash": "7c6610a06634c2c9",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Rooms\\Get-ZoomRoomLocations.ps1",
+      "functionName": "Get-ZoomRoomLocations",
+      "name": "Get-ZoomRoomLocations",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Rooms",
+      "parameters": [
+        "Status",
+        "Type",
+        "PageSize"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/rooms",
+          "hash": "8990742e2c76fdbe",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Rooms\\Get-ZoomRooms.ps1",
+      "functionName": "Get-ZoomRooms",
+      "name": "Get-ZoomRooms",
+      "aliases": [
+        "unassigned_rooms",
+        "page_size",
+        "next_page_token",
+        "location_id"
+      ]
+    },
+    {
+      "category": "Rooms",
+      "parameters": [
+        "PageSize"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/metrics/zoomrooms",
+          "hash": "e5ab4e0bb1ad5b08",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Rooms\\Get-ZoomRoomsDashboard.ps1",
+      "functionName": "Get-ZoomRoomsDashboard",
+      "name": "Get-ZoomRoomsDashboard",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Rooms",
+      "parameters": [
+        "RoomId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/rooms/{roomId}/zrclient",
+          "hash": "cd24075433ae6eb1",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Rooms\\New-ZoomRoomInvite.ps1",
+      "functionName": "New-ZoomRoomInvite",
+      "name": "New-ZoomRoomInvite",
+      "aliases": [
+        "id"
+      ]
+    },
+    {
+      "category": "Rooms",
+      "parameters": [
+        "Topic",
+        "StartTime",
+        "TimeZone",
+        "Duration"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/rooms/{id}/meetings",
+          "hash": "c71ee216b127844f",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Rooms\\New-ZoomRoomMeeting.ps1",
+      "functionName": "New-ZoomRoomMeeting",
+      "name": "New-ZoomRoomMeeting",
+      "aliases": []
+    },
+    {
+      "category": "Rooms",
+      "parameters": [
+        "RoomId",
+        "Topic",
+        "StartTime",
+        "TimeZone",
+        "Duration"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/rooms/{roomId}/meetings",
+          "hash": "86eaeb8de0de43e9",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Rooms\\Remove-ZoomRoomMeeting.ps1",
+      "functionName": "Remove-ZoomRoomMeeting",
+      "name": "Remove-ZoomRoomMeeting",
+      "aliases": [
+        "MeetingNumbers"
+      ]
+    },
+    {
+      "category": "Rooms",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/rooms/{id}/zrclient",
+          "hash": "41dc4c27236b37de",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Rooms\\Restart-ZoomRoom.ps1",
+      "functionName": "Restart-ZoomRoom",
+      "name": "Restart-ZoomRoom",
+      "aliases": []
+    },
+    {
+      "category": "Rooms",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/rooms/{id}/meetings",
+          "hash": "c71ee216b127844f",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Rooms\\Stop-ZoomRoomMeeting.ps1",
+      "functionName": "Stop-ZoomRoomMeeting",
+      "name": "Stop-ZoomRoomMeeting",
+      "aliases": []
+    },
+    {
+      "category": "TrackingFields",
+      "parameters": [
+        "FieldId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\TrackingFields\\Get-ZoomTrackingField.ps1",
+      "functionName": "Get-ZoomTrackingField",
+      "name": "Get-ZoomTrackingField",
+      "aliases": []
+    },
+    {
+      "category": "TrackingFields",
+      "parameters": [],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\TrackingFields\\Get-ZoomTrackingFields.ps1",
+      "functionName": "Get-ZoomTrackingFields",
+      "name": "Get-ZoomTrackingFields",
+      "aliases": []
+    },
+    {
+      "category": "TrackingFields",
+      "parameters": [
+        "Field",
+        "Required",
+        "Visible"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\TrackingFields\\New-ZoomTrackingField.ps1",
+      "functionName": "New-ZoomTrackingField",
+      "name": "New-ZoomTrackingField",
+      "aliases": [
+        "recommended_values"
+      ]
+    },
+    {
+      "category": "TrackingFields",
+      "parameters": [
+        "FieldId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\TrackingFields\\Remove-ZoomTrackingField.ps1",
+      "functionName": "Remove-ZoomTrackingField",
+      "name": "Remove-ZoomTrackingField",
+      "aliases": []
+    },
+    {
+      "category": "TrackingFields",
+      "parameters": [
+        "FieldId",
+        "Field",
+        "Required",
+        "Visible"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\TrackingFields\\Update-ZoomTrackingField.ps1",
+      "functionName": "Update-ZoomTrackingField",
+      "name": "Update-ZoomTrackingField",
+      "aliases": [
+        "recommended_values"
+      ]
+    },
+    {
+      "category": "Users",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/assistants",
+          "hash": "7f67559d63173bb0",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Add-ZoomUserAssistants.ps1",
+      "functionName": "Add-ZoomUserAssistants",
+      "name": "Add-ZoomUserAssistants",
+      "aliases": [
+        "assistantemails",
+        "assistantids"
+      ]
+    },
+    {
+      "category": "Users",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/users/vanity_name",
+          "hash": "7f7141d62d1fe51c",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Get-ZoomPersonalMeetingRoomName.ps1",
+      "functionName": "Get-ZoomPersonalMeetingRoomName",
+      "name": "Get-ZoomPersonalMeetingRoomName",
+      "aliases": []
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "LoginType",
+        "EncryptedEmail",
+        "SearchByUniqueId",
+        "Status",
+        "RoleId",
+        "License"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users",
+          "hash": "20d9a340f5900279",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Get-ZoomUser.ps1",
+      "functionName": "Get-ZoomUser",
+      "name": "Get-ZoomUser",
+      "aliases": [
+        "Get-ZoomUsers",
+        "login_type",
+        "encrypted_email",
+        "search_by_unique_id",
+        "role_id",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Users",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/assistants",
+          "hash": "e434135dc492b4ff",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Get-ZoomUserAssistants.ps1",
+      "functionName": "Get-ZoomUserAssistants",
+      "name": "Get-ZoomUserAssistants",
+      "aliases": []
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "Email"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/email",
+          "hash": "82fa2dadb619e6fa",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Get-ZoomUserEmailStatus.ps1",
+      "functionName": "Get-ZoomUserEmailStatus",
+      "name": "Get-ZoomUserEmailStatus",
+      "aliases": []
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "UserId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/{userId}/permissions",
+          "hash": "dbf84b69c624d790",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Get-ZoomUserPermissions.ps1",
+      "functionName": "Get-ZoomUserPermissions",
+      "name": "Get-ZoomUserPermissions",
+      "aliases": []
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "UserId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/{userId}/schedulers",
+          "hash": "3e1326828e35a01d",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Get-ZoomUserSchedulers.ps1",
+      "functionName": "Get-ZoomUserSchedulers",
+      "name": "Get-ZoomUserSchedulers",
+      "aliases": []
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "UserId",
+        "LoginType"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/{userId}/settings",
+          "hash": "cbe1937be35dbf2e",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Get-ZoomUserSettings.ps1",
+      "functionName": "Get-ZoomUserSettings",
+      "name": "Get-ZoomUserSettings",
+      "aliases": [
+        "login_type"
+      ]
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "UserId",
+        "Type"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/{userId}/token",
+          "hash": "59dfc8ef1bbe8f19",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Get-ZoomUserToken.ps1",
+      "functionName": "Get-ZoomUserToken",
+      "name": "Get-ZoomUserToken",
+      "aliases": []
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "Email",
+        "Action",
+        "FirstName",
+        "LastName",
+        "Password"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users",
+          "hash": "33276bc36e9652e6",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\New-ZoomUser.ps1",
+      "functionName": "New-ZoomUser",
+      "name": "New-ZoomUser",
+      "aliases": [
+        "first_name",
+        "last_name"
+      ]
+    },
+    {
+      "category": "Users",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/assistants/{id}",
+          "hash": "dca0ee2726ecb08b",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Remove-ZoomSpecificUserAssistant.ps1",
+      "functionName": "Remove-ZoomSpecificUserAssistant",
+      "name": "Remove-ZoomSpecificUserAssistant",
+      "aliases": [
+        "assistant_id"
+      ]
+    },
+    {
+      "category": "Users",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/schedulers/{id}",
+          "hash": "370a7133f50e6d06",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Remove-ZoomSpecificUserScheduler.ps1",
+      "functionName": "Remove-ZoomSpecificUserScheduler",
+      "name": "Remove-ZoomSpecificUserScheduler",
+      "aliases": [
+        "scheduler_id"
+      ]
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "Action",
+        "EncryptedEmail",
+        "TransferEmail",
+        "TransferMeeting",
+        "TransferWebinar",
+        "TransferRecording",
+        "TransferWhiteboard"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}",
+          "hash": "b66accaa76c21942",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Remove-ZoomUser.ps1",
+      "functionName": "Remove-ZoomUser",
+      "name": "Remove-ZoomUser",
+      "aliases": [
+        "encrypted_email",
+        "transfer_email",
+        "transfer_meeting",
+        "transfer_webinar",
+        "transfer_recording",
+        "transfer_whiteboard"
+      ]
+    },
+    {
+      "category": "Users",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/assistants",
+          "hash": "02f0ecc90eec66dd",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Remove-ZoomUserAssistants.ps1",
+      "functionName": "Remove-ZoomUserAssistants",
+      "name": "Remove-ZoomUserAssistants",
+      "aliases": []
+    },
+    {
+      "category": "Users",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/schedulers",
+          "hash": "3b80f61df10174c4",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Remove-ZoomUserSchedulers.ps1",
+      "functionName": "Remove-ZoomUserSchedulers",
+      "name": "Remove-ZoomUserSchedulers",
+      "aliases": []
+    },
+    {
+      "category": "Users",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/token",
+          "hash": "f3213e0f9e7e54ad",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Revoke-ZoomUserSsoToken.ps1",
+      "functionName": "Revoke-ZoomUserSsoToken",
+      "name": "Revoke-ZoomUserSsoToken",
+      "aliases": []
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "Email"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/email",
+          "hash": "82fa2dadb619e6fa",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Test-ZoomUserEmail.ps1",
+      "functionName": "Test-ZoomUserEmail",
+      "name": "Test-ZoomUserEmail",
+      "aliases": []
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "VanityName"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/vanity_name",
+          "hash": "7f7141d62d1fe51c",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Test-ZoomUserVanityName.ps1",
+      "functionName": "Test-ZoomUserVanityName",
+      "name": "Test-ZoomUserVanityName",
+      "aliases": [
+        "vanity_name"
+      ]
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "FileName"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/picture",
+          "hash": "91ca200e971ac970",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Update-ZoomProfilePicture.ps1",
+      "functionName": "Update-ZoomProfilePicture",
+      "name": "Update-ZoomProfilePicture",
+      "aliases": []
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "LoginType",
+        "FirstName",
+        "LastName",
+        "Pmi",
+        "UsePmi",
+        "Timezone",
+        "Language",
+        "Dept",
+        "VanityName",
+        "CmsUserId",
+        "JobTitle",
+        "Company",
+        "Location",
+        "PhoneNumber",
+        "PhoneCountry",
+        "PhoneNumbers",
+        "GroupID"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}",
+          "hash": "812e3a09b65d73bd",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Update-ZoomUser.ps1",
+      "functionName": "Update-ZoomUser",
+      "name": "Update-ZoomUser",
+      "aliases": [
+        "login_type",
+        "first_name",
+        "last_name",
+        "use_pmi",
+        "department",
+        "vanity_name",
+        "host_key",
+        "cms_user_id",
+        "job_title",
+        "phone_number",
+        "phone_country",
+        "phone_numbers",
+        "group_id"
+      ]
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "UserId",
+        "Email"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/{userId}/email",
+          "hash": "c056503be6e227cb",
+          "method": "PUT"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Update-ZoomUserEmail.ps1",
+      "functionName": "Update-ZoomUserEmail",
+      "name": "Update-ZoomUserEmail",
+      "aliases": [
+        "Id"
+      ]
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "Password"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/password",
+          "hash": "8baf98309453673c",
+          "method": "PUT"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Update-ZoomUserPassword.ps1",
+      "functionName": "Update-ZoomUserpassword",
+      "name": "Update-ZoomUserPassword",
+      "aliases": []
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "HostVideo",
+        "ParticipantsVideo",
+        "AudioType",
+        "JoinBeforeHost",
+        "ForcePmiJbhPassword",
+        "PstnPasswordProtected",
+        "UsePmiForScheduledMeetings",
+        "UsePmiForInstantMeetings",
+        "RequirePasswordForSchedulingNewMeetings",
+        "RequirePasswordForScheduledMeetings",
+        "RequirePasswordForPMIMeetings",
+        "RequirePasswordForInstantMeetings",
+        "PMIPassword",
+        "EmbedPasswordInJoinLink",
+        "MeetingPasswordRequirement",
+        "E2eEncryption",
+        "Chat",
+        "PrivateChat",
+        "AutoSavingChat",
+        "EntryExitChime",
+        "RecordPlayVoice",
+        "FileTransfer",
+        "Feedback",
+        "CoHost",
+        "Polling",
+        "AttendeeOnHold",
+        "Annotation",
+        "RemoteControl",
+        "NonVerbalFeedback",
+        "BreakoutRoom",
+        "RemoteSupport",
+        "ClosedCaption",
+        "GroupHd",
+        "VirtualBackground",
+        "FarEndCameraControl",
+        "ShareDualCamera",
+        "AttentionTracking",
+        "WaitingRoom",
+        "AllowLiveStreaming",
+        "WorkplaceByFacebook",
+        "CustomLiveStreaming",
+        "CustomServiceInstructions",
+        "JbhReminder",
+        "CancelMeetingReminder",
+        "AlternativeHostReminder",
+        "ScheduleForReminder",
+        "LocalRecording",
+        "CloudRecording",
+        "RecordSpeakerView",
+        "RecordGalleryView",
+        "RecordAudioFile",
+        "SaveChatText",
+        "ShowTimestamp",
+        "recordingAudioTranscript",
+        "AutoRecording",
+        "HostPauseStopRecording",
+        "AutoDeleteCmr",
+        "AutoDeleteCmrDays",
+        "RecordingDisclaimer",
+        "AskParticipantsToConsentDisclaimer",
+        "AskHostToConfirmDisclaimer",
+        "RecordingPasswordRequirement",
+        "ThirdPartyAudio",
+        "AudioConferenceInfo",
+        "MeetingCapacity",
+        "LargeMeeting",
+        "LargeMeetingCapacity",
+        "Webinar",
+        "WebinarCapacity",
+        "ZoomPhone",
+        "CallOut",
+        "ShowInternationalNumbersLink",
+        "ShowInternationalNumbersLinkTsp"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/settings",
+          "hash": "655a38b617f932a7",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Update-ZoomUserSettings.ps1",
+      "functionName": "Update-ZoomUserSettings",
+      "name": "Update-ZoomUserSettings",
+      "aliases": [
+        "host_video",
+        "participants_video",
+        "audio_type",
+        "join_before_host",
+        "force_pmi_jbh_password",
+        "pstn_password_protected",
+        "use_pmi_for_scheduled_meetings",
+        "use_pmi_for_instant_meetings",
+        "require_password_for_scheduling_new_meetings",
+        "require_password_for_scheduled_meetings",
+        "require_password_for_pmi_meetings",
+        "require_password_for_instant_meetings",
+        "embed_password_in_join_link",
+        "meeting_password_requirement",
+        "e2e_encryption",
+        "private_chat",
+        "auto_saving_chat",
+        "entry_exit_chime",
+        "record_play_voice",
+        "file_transfer",
+        "co_host ",
+        "attendee_on_hold",
+        "remote_control",
+        "non_verbal_feedback ",
+        "breakout_room",
+        "remote_support",
+        "closed_caption",
+        "group_hd",
+        "virtual_background",
+        "far_end_camera_control",
+        "share_dual_camera",
+        "attention_tracking",
+        "waiting_room ",
+        "allow_live_streaming",
+        "workplace_by_facebook",
+        "custom_live_streaming",
+        "custom_service_instructions",
+        "jbh_reminder",
+        "cancel_meeting_reminder",
+        "alternative_host_reminder",
+        "schedule_for_reminder",
+        "local_recording",
+        "cloud_recording",
+        "record_speaker_view",
+        "record_gallery_view",
+        "record_audio_file",
+        "save_chat_text",
+        "show_timestamp",
+        "recording_audio_transcript",
+        "auto_recording ",
+        "host_pause_stop_recording",
+        "auto_delete_cmr",
+        "auto_delete_cmr_days",
+        "recording_disclaimer",
+        "ask_participants_to_consent_disclaimer",
+        "ask_host_to_confirm_disclaimer",
+        "recording_password_requirement",
+        "third_party_audio",
+        "audio_conference_info ",
+        "meeting_capacity",
+        "large_meeting",
+        "large_meeting_capacity",
+        "webinar_capacity",
+        "zoom_phone",
+        "zoom_revenue_accelerator",
+        "ZRA",
+        "call_out",
+        "call_out_countries",
+        "feature_show_international_numbers_link",
+        "feature_show_international_numbers_link_tsp"
+      ]
+    },
+    {
+      "category": "Users",
+      "parameters": [
+        "Action"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/status",
+          "hash": "d04e7306eb81636e",
+          "method": "PUT"
+        }
+      ],
+      "file": "PSZoom\\Public\\Users\\Update-ZoomUserStatus.ps1",
+      "functionName": "Update-ZoomUserStatus",
+      "name": "Update-ZoomUserStatus",
+      "aliases": []
+    },
+    {
+      "category": "Utils",
+      "parameters": [
+        "AccountID",
+        "ClientID",
+        "ClientSecret",
+        "APIConnection"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Utils\\Connect-PSZoom.ps1",
+      "functionName": "Connect-PSZoom",
+      "name": "Connect-PSZoom",
+      "aliases": [
+        "APIKey",
+        "APISecret",
+        "SiteConnection"
+      ]
+    },
+    {
+      "category": "Utils",
+      "parameters": [],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Utils\\Invoke-ZoomRestMethod.ps1",
+      "functionName": "Invoke-ZoomRestMethod",
+      "name": "Invoke-ZoomRestMethod",
+      "aliases": []
+    },
+    {
+      "category": "Utils",
+      "parameters": [
+        "ZoomCommand",
+        "ZoomCommandSplat"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Utils\\Join-ZoomPages.ps1",
+      "functionName": "Join-ZoomPages",
+      "name": "Join-ZoomPages",
+      "aliases": []
+    },
+    {
+      "category": "Utils",
+      "parameters": [
+        "AccountID",
+        "ClientID",
+        "ClientSecret",
+        "APIConnection"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Utils\\New-OAuthToken.ps1",
+      "functionName": "New-OAuthToken",
+      "name": "New-OAuthToken",
+      "aliases": []
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "Name",
+        "Email"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Add-ZoomWebinarPanelist.ps1",
+      "functionName": "Add-ZoomWebinarPanelist",
+      "name": "Add-ZoomWebinarPanelist",
+      "aliases": []
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "OccurrenceIds",
+        "Email",
+        "FirstName",
+        "LastName",
+        "Address",
+        "City",
+        "Country",
+        "Zip",
+        "State",
+        "Phone",
+        "Industry",
+        "Org",
+        "JobTitle",
+        "Comments"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/webinars/{webinarId}/registrants",
+          "hash": "92eddad3332dda74",
+          "method": "POST"
+        }
+      ],
+      "file": "PSZoom\\Public\\Webinars\\Add-ZoomWebinarRegistrant.ps1",
+      "functionName": "Add-ZoomWebinarRegistrant",
+      "name": "Add-ZoomWebinarRegistrant",
+      "aliases": [
+        "occurrence_ids",
+        "first_name",
+        "last_name",
+        "job_title",
+        "custom_questions"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Get-ZoomPastWebinarInstances.ps1",
+      "functionName": "Get-ZoomPastWebinarInstances",
+      "name": "Get-ZoomPastWebinarInstances",
+      "aliases": []
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "PageSize",
+        "NextPageToken"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/past_webinars/{webinarId}/participants",
+          "hash": "587f22a770aaf855",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Webinars\\Get-ZoomPastWebinarParticipants.ps1",
+      "functionName": "Get-ZoomPastWebinarParticipants",
+      "name": "Get-ZoomPastWebinarParticipants",
+      "aliases": [
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Get-ZoomPastWebinarPolls.ps1",
+      "functionName": "Get-ZoomPastWebinarPolls",
+      "name": "Get-ZoomPastWebinarPolls",
+      "aliases": []
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Get-ZoomPastWebinarQA.ps1",
+      "functionName": "Get-ZoomPastWebinarQA",
+      "name": "Get-ZoomPastWebinarQA",
+      "aliases": []
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "OccurrenceId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/webinars/{webinarId}",
+          "hash": "775bea73bf53c90e",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Webinars\\Get-ZoomWebinar.ps1",
+      "functionName": "Get-ZoomWebinar",
+      "name": "Get-ZoomWebinar",
+      "aliases": [
+        "webinar_id",
+        "ocurrence_id"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "OccurrenceId",
+        "PageSize",
+        "NextPageToken"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/past_webinars/{webinarId}/absentees",
+          "hash": "c11131d3ca40ebe4",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Webinars\\Get-ZoomWebinarAbsentees.ps1",
+      "functionName": "Get-ZoomWebinarAbsentees",
+      "name": "Get-ZoomWebinarAbsentees",
+      "aliases": [
+        "occurrence_id",
+        "page_size",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "OccurrenceId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/webinars/{webinarId}/panelists",
+          "hash": "ed659fcb1b167288",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Webinars\\Get-ZoomWebinarPanelists.ps1",
+      "functionName": "Get-ZoomWebinarPanelists",
+      "name": "Get-ZoomWebinarPanelists",
+      "aliases": [
+        "webinar_id",
+        "ocurrence_id"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "PollId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Get-ZoomWebinarPoll.ps1",
+      "functionName": "Get-ZoomWebinarPoll",
+      "name": "Get-ZoomWebinarPoll",
+      "aliases": [
+        "poll_id"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Get-ZoomWebinarPolls.ps1",
+      "functionName": "Get-ZoomWebinarPolls",
+      "name": "Get-ZoomWebinarPolls",
+      "aliases": []
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "OccurrenceId",
+        "Status",
+        "PageSize",
+        "PageNumber",
+        "NextPageToken"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/webinars/{webinarId}/registrants",
+          "hash": "b6717b3c0516f69c",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Webinars\\Get-ZoomWebinarRegistrants.ps1",
+      "functionName": "Get-ZoomWebinarRegistrants",
+      "name": "Get-ZoomWebinarRegistrants",
+      "aliases": [
+        "occurrence_id",
+        "page_size",
+        "page_number",
+        "next_page_token"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Get-ZoomWebinarSettings.ps1",
+      "functionName": "Get-ZoomWebinarSettings",
+      "name": "Get-ZoomWebinarSettings",
+      "aliases": []
+    },
+    {
+      "category": "Webinars",
+      "parameters": [],
+      "endpoints": [
+        {
+          "path": "/v2/users/{id}/webinars",
+          "hash": "87895404572903ed",
+          "method": "GET"
+        }
+      ],
+      "file": "PSZoom\\Public\\Webinars\\Get-ZoomWebinarsFromUser.ps1",
+      "functionName": "Get-ZoomWebinarsFromUser",
+      "name": "Get-ZoomWebinarsFromUser",
+      "aliases": []
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "UserId",
+        "Topic",
+        "Type",
+        "StartTime",
+        "Duration",
+        "Timezone",
+        "Agenda",
+        "HostVideo",
+        "PanelistsVideo",
+        "ApprovalType",
+        "RegistrationType",
+        "Audio",
+        "AutoRecording",
+        "AlternativeHosts",
+        "CloseRegistration",
+        "ContactName",
+        "ContactEmail"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\New-ZoomWebinar.ps1",
+      "functionName": "New-ZoomWebinar",
+      "name": "New-ZoomWebinar",
+      "aliases": [
+        "start_time",
+        "tracking_fields",
+        "host_video",
+        "panelists_video",
+        "approval_type",
+        "registration_type",
+        "auto_recording",
+        "alternative_hosts",
+        "close_registration",
+        "contact_name",
+        "contact_email"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "Title",
+        "Anonymous"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\New-ZoomWebinarPoll.ps1",
+      "functionName": "New-ZoomWebinarPoll",
+      "name": "New-ZoomWebinarPoll",
+      "aliases": []
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "OccurrenceId",
+        "CancelWebinarReminder"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/webinars/{webinarId}",
+          "hash": "37b5214c27b3fc5a",
+          "method": "DELETE"
+        }
+      ],
+      "file": "PSZoom\\Public\\Webinars\\Remove-ZoomWebinar.ps1",
+      "functionName": "Remove-ZoomWebinar",
+      "name": "Remove-ZoomWebinar",
+      "aliases": [
+        "occurrence_id",
+        "cancel_webinar_reminder"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "PanelistId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Remove-ZoomWebinarPanelist.ps1",
+      "functionName": "Remove-ZoomWebinarPanelist",
+      "name": "Remove-ZoomWebinarPanelist",
+      "aliases": [
+        "panelist_id"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Remove-ZoomWebinarPanelists.ps1",
+      "functionName": "Remove-ZoomWebinarPanelists",
+      "name": "Remove-ZoomWebinarPanelists",
+      "aliases": []
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "PollId"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Remove-ZoomWebinarPoll.ps1",
+      "functionName": "Remove-ZoomWebinarPoll",
+      "name": "Remove-ZoomWebinarPoll",
+      "aliases": [
+        "poll_id"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "OccurrenceId",
+        "Topic",
+        "Type",
+        "StartTime",
+        "Duration",
+        "Timezone",
+        "Agenda",
+        "HostVideo",
+        "PanelistsVideo",
+        "ApprovalType",
+        "Audio",
+        "AutoRecording",
+        "AlternativeHosts"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/webinars/{webinarId}",
+          "hash": "4b07f09e76d801bd",
+          "method": "PATCH"
+        }
+      ],
+      "file": "PSZoom\\Public\\Webinars\\Update-ZoomWebinar.ps1",
+      "functionName": "Update-ZoomWebinar",
+      "name": "Update-ZoomWebinar",
+      "aliases": [
+        "occurrence_id",
+        "start_time",
+        "host_video",
+        "panelists_video",
+        "approval_type",
+        "auto_recording",
+        "alternative_hosts"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "StreamUrl",
+        "StreamKey",
+        "PageUrl"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Update-ZoomWebinarLiveStream.ps1",
+      "functionName": "Update-ZoomWebinarLiveStream",
+      "name": "Update-ZoomWebinarLiveStream",
+      "aliases": [
+        "stream_url",
+        "stream_key",
+        "page_url"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "PollId",
+        "Title",
+        "Anonymous"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Update-ZoomWebinarPoll.ps1",
+      "functionName": "Update-ZoomWebinarPoll",
+      "name": "Update-ZoomWebinarPoll",
+      "aliases": [
+        "poll_id"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "Action",
+        "OccurrenceId"
+      ],
+      "endpoints": [
+        {
+          "path": "/v2/webinars/{webinarId}/registrants/status",
+          "hash": "e24866905a1cc8ac",
+          "method": "PUT"
+        }
+      ],
+      "file": "PSZoom\\Public\\Webinars\\Update-ZoomWebinarRegistrantStatus.ps1",
+      "functionName": "Update-ZoomWebinarRegistrantStatus",
+      "name": "Update-ZoomWebinarRegistrantStatus",
+      "aliases": [
+        "occurrence_id"
+      ]
+    },
+    {
+      "category": "Webinars",
+      "parameters": [
+        "WebinarId",
+        "Action"
+      ],
+      "endpoints": [],
+      "file": "PSZoom\\Public\\Webinars\\Update-ZoomWebinarStatus.ps1",
+      "functionName": "Update-ZoomWebinarStatus",
+      "name": "Update-ZoomWebinarStatus",
+      "aliases": []
+    }
+  ],
+  "endpoints": [
+    {
+      "path": "/v2/groups/{groupId}/members/{id}",
+      "hash": "250c16dd4abe913b",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomGroupMembers"
+      ]
+    },
+    {
+      "path": "/v2/groups/{id}",
+      "hash": "85d50d17b68ee8bb",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomGroup"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{id}/recordings",
+      "hash": "5e347f47a803acc0",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomMeetingRecordings"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}",
+      "hash": "a556afff46c2d089",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomMeeting"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/polls/{id}",
+      "hash": "bf2f5c9ca1087d54",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomMeetingPoll"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/recordings/{id}",
+      "hash": "c6a775d65aa15d88",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomMeetingRecordingFile"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists/{id}",
+      "hash": "0d5b5d365629196a",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneAutoReceptionist"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists/{id}/phone_numbers/$($NumberTBR.id)",
+      "hash": "109c864db596be26",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneAutoReceptionistNumber"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists/{id}/policies/{id}",
+      "hash": "f483dd50ded834d5",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneAutoReceptionistPolicySetting"
+      ]
+    },
+    {
+      "path": "/v2/phone/blocked_list/{id}",
+      "hash": "a0e299400f55017c",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneBlockList"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_logs/{id}",
+      "hash": "a66dbccebfb9e20e",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneCallLog"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_queues/{id}",
+      "hash": "07563c3d1f74d21c",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneCallQueue"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_queues/{id}/members",
+      "hash": "0b45c95c189f698d",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneCallQueueMembers"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_queues/{id}/phone_numbers/{id}",
+      "hash": "ae4c3daa36dd44d2",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneCallQueueNumber"
+      ]
+    },
+    {
+      "path": "/v2/phone/common_areas/{id}",
+      "hash": "6243a37d8210691c",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneCommonArea"
+      ]
+    },
+    {
+      "path": "/v2/phone/common_areas/{id}/calling_plans/{id}",
+      "hash": "e0eada89dcff02c6",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneCommonAreaCallingPlan"
+      ]
+    },
+    {
+      "path": "/v2/phone/common_areas/{id}/phone_numbers/$($NumberTBR.id)",
+      "hash": "e07d8b0fad46849a",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneCommonAreaNumber"
+      ]
+    },
+    {
+      "path": "/v2/phone/devices/{id}",
+      "hash": "ceeec76bb74d7744",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneDevice"
+      ]
+    },
+    {
+      "path": "/v2/phone/devices/{id}/extensions/{id}",
+      "hash": "039d76fb179d0e9d",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneDeviceAssignee"
+      ]
+    },
+    {
+      "path": "/v2/phone/extension/{id}/call_handling/settings/$($SettingType.ToLower())",
+      "hash": "6b8b22bd8cb31076",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneCallHandlingSetting"
+      ]
+    },
+    {
+      "path": "/v2/phone/external_contacts/{id}",
+      "hash": "12814bde0b17c835",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneExternalContact"
+      ]
+    },
+    {
+      "path": "/v2/phone/recordings/{id}",
+      "hash": "ea5ecf25d8931491",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneRecording"
+      ]
+    },
+    {
+      "path": "/v2/phone/shared_line_groups/{id}",
+      "hash": "7cdaecb06e375274",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneSharedLineGroup"
+      ]
+    },
+    {
+      "path": "/v2/phone/users/{id}/calling_plans/{id}",
+      "hash": "2c10677554b1810e",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneUserCallingPlan"
+      ]
+    },
+    {
+      "path": "/v2/phone/users/{id}/phone_numbers/$($_.id)",
+      "hash": "999499912530d96c",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneUserNumber"
+      ]
+    },
+    {
+      "path": "/v2/phone/voicemails/{id}",
+      "hash": "d8c82d528abab769",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomPhoneVoicemail"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}",
+      "hash": "b66accaa76c21942",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomUser"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/assistants",
+      "hash": "02f0ecc90eec66dd",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomUserAssistants"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/assistants/{id}",
+      "hash": "dca0ee2726ecb08b",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomSpecificUserAssistant"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/schedulers",
+      "hash": "3b80f61df10174c4",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomUserSchedulers"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/schedulers/{id}",
+      "hash": "370a7133f50e6d06",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomSpecificUserScheduler"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/token",
+      "hash": "f3213e0f9e7e54ad",
+      "method": "DELETE",
+      "cmdlets": [
+        "Revoke-ZoomUserSsoToken"
+      ]
+    },
+    {
+      "path": "/v2/webinars/{webinarId}",
+      "hash": "37b5214c27b3fc5a",
+      "method": "DELETE",
+      "cmdlets": [
+        "Remove-ZoomWebinar"
+      ]
+    },
+    {
+      "path": "/v2/accounts",
+      "hash": "78d8f4d65528c795",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomAccounts"
+      ]
+    },
+    {
+      "path": "/v2/accounts/{accountId}/recordings",
+      "hash": "77098f4a51e6f7c3",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomAccountRecordings"
+      ]
+    },
+    {
+      "path": "/v2/accounts/{id}",
+      "hash": "8fc755bb4811f316",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomAccount"
+      ]
+    },
+    {
+      "path": "/v2/accounts/me/settings",
+      "hash": "5df5796360829a8c",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomAccountSettings"
+      ]
+    },
+    {
+      "path": "/v2/groups",
+      "hash": "72877253c5cc5872",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomGroups"
+      ]
+    },
+    {
+      "path": "/v2/groups/{groupId}",
+      "hash": "9959505ce03d7ea8",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomGroup"
+      ]
+    },
+    {
+      "path": "/v2/groups/{groupId}/lock_settings",
+      "hash": "600e00b3c635845a",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomGroupLockSettings"
+      ]
+    },
+    {
+      "path": "/v2/groups/{groupId}/members",
+      "hash": "acd1c934fb9fc44c",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomGroupMembers"
+      ]
+    },
+    {
+      "path": "/v2/groups/{groupId}/settings",
+      "hash": "52c5017432579f5b",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomGroupSettings"
+      ]
+    },
+    {
+      "path": "/v2/h323/devices",
+      "hash": "463acb045d231a56",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomH323Devices"
+      ]
+    },
+    {
+      "path": "/v2/im/groups",
+      "hash": "a0d0cbb4ccf5480f",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomIMGroups"
+      ]
+    },
+    {
+      "path": "/v2/im/groups/{groupId}/members",
+      "hash": "236de9fb4d51bab3",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomIMGroupMembers"
+      ]
+    },
+    {
+      "path": "/v2/im/users/{userId}/chat/sessions",
+      "hash": "1590da6ba0fc4d27",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomIMChatSessions"
+      ]
+    },
+    {
+      "path": "/v2/im/users/{userId}/chat/sessions/{id}",
+      "hash": "dd4c3e44bd20250a",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomIMChatMessages"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}",
+      "hash": "584c32e560921c10",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomMeeting"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/polls",
+      "hash": "ba9585e7a30b4e71",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomMeetingPolls"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/polls/{id}",
+      "hash": "ea6aebf8c964d7d5",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomMeetingPoll"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/recordings",
+      "hash": "e64841e8110c0ab7",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomMeetingRecordings"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/recordings/settings",
+      "hash": "5b11c409d284b688",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomMeetingRecordingsSettings"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/registrants",
+      "hash": "686aa62e731c3324",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomMeetingRegistrants"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/registrants/questions",
+      "hash": "42e5416548324ef1",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomRegistrationQuestions"
+      ]
+    },
+    {
+      "path": "/v2/metrics/meetings",
+      "hash": "86d906b0c47e3986",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomMeetings"
+      ]
+    },
+    {
+      "path": "/v2/metrics/meetings/{id}/participants",
+      "hash": "ee285edabfb87798",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPastMeetingParticipantsMetrics"
+      ]
+    },
+    {
+      "path": "/v2/metrics/zoomrooms",
+      "hash": "e5ab4e0bb1ad5b08",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomRoomsDashboard"
+      ]
+    },
+    {
+      "path": "/v2/past_meetings/{id}/participants",
+      "hash": "c1486bebdb9b6ad5",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPastMeetingParticipants"
+      ]
+    },
+    {
+      "path": "/v2/past_meetings/{meetingId}/instances",
+      "hash": "7b5dbb4d7350b889",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomEndedMeetingInstances"
+      ]
+    },
+    {
+      "path": "/v2/past_webinars/{webinarId}/absentees",
+      "hash": "c11131d3ca40ebe4",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomWebinarAbsentees"
+      ]
+    },
+    {
+      "path": "/v2/past_webinars/{webinarId}/participants",
+      "hash": "587f22a770aaf855",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPastWebinarParticipants"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists",
+      "hash": "281fc4eaf977d63b",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneAutoReceptionist"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists/{id}/ivr",
+      "hash": "ef59f11206ca4b7a",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneAutoReceptionistIVR"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists/{id}/policies",
+      "hash": "2120140ec4eddd9d",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneAutoReceptionistPolicy"
+      ]
+    },
+    {
+      "path": "/v2/phone/blocked_list",
+      "hash": "b6cb3c3b530da07b",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneBlockList"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_logs",
+      "hash": "ad388f13a1e1920f",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneCallLogs"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_logs/{id}",
+      "hash": "9b92e3fa20c4aa12",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneCallLogDetails"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_queues",
+      "hash": "4a7d45ac569343dc",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneCallQueues"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_queues/{id}",
+      "hash": "03d9975709e62a2e",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneCallQueue"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_queues/{id}/members",
+      "hash": "ffa957054048cd36",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneCallQueueMembers"
+      ]
+    },
+    {
+      "path": "/v2/phone/calling_plans",
+      "hash": "9c8740b5cb275aa4",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneCallingPlan"
+      ]
+    },
+    {
+      "path": "/v2/phone/common_areas",
+      "hash": "a2fe6af1ebe0b9e1",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneCommonArea"
+      ]
+    },
+    {
+      "path": "/v2/phone/common_areas/{id}/settings",
+      "hash": "12e8204d65e34754",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneCommonAreaSettings"
+      ]
+    },
+    {
+      "path": "/v2/phone/devices",
+      "hash": "a0170a402ded9aa2",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneDevice"
+      ]
+    },
+    {
+      "path": "/v2/phone/emergency_addresses",
+      "hash": "06d0312a28cfdbf1",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneSiteEmergencyAddress"
+      ]
+    },
+    {
+      "path": "/v2/phone/extension/{id}/call_handling/settings",
+      "hash": "d1e6b0f7e03c5d5b",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneCallHandlingSetting"
+      ]
+    },
+    {
+      "path": "/v2/phone/external_contacts",
+      "hash": "9e3c51484974d039",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneExternalContacts"
+      ]
+    },
+    {
+      "path": "/v2/phone/external_contacts/{id}",
+      "hash": "537b244f127feaa9",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneExternalContact"
+      ]
+    },
+    {
+      "path": "/v2/phone/numbers",
+      "hash": "6cacc83bfbb3cc88",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneNumber"
+      ]
+    },
+    {
+      "path": "/v2/phone/provision_templates",
+      "hash": "92875ff4dae5cf37",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneProvisioingTemplate"
+      ]
+    },
+    {
+      "path": "/v2/phone/recordings",
+      "hash": "bb15cce32cc21538",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneRecordings"
+      ]
+    },
+    {
+      "path": "/v2/phone/recordings/{id}",
+      "hash": "7d35216a85c3b8e7",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneRecording"
+      ]
+    },
+    {
+      "path": "/v2/phone/setting_templates",
+      "hash": "255c9d801e35cd6f",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneSettingTemplate"
+      ]
+    },
+    {
+      "path": "/v2/phone/shared_line_groups",
+      "hash": "fd0fd2bf0668747b",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneSharedLineGroups"
+      ]
+    },
+    {
+      "path": "/v2/phone/shared_line_groups/{id}",
+      "hash": "52a651a98ec3681e",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneSharedLineGroup"
+      ]
+    },
+    {
+      "path": "/v2/phone/sites",
+      "hash": "8d0fb0962b0cc30f",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneSite"
+      ]
+    },
+    {
+      "path": "/v2/phone/sms/history",
+      "hash": "506a2f2585083ad2",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneSMSHistory"
+      ]
+    },
+    {
+      "path": "/v2/phone/sms/sessions/{id}",
+      "hash": "9b9cf8564ec9db8a",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneSMSSession"
+      ]
+    },
+    {
+      "path": "/v2/phone/users",
+      "hash": "5707dbdfa513fad1",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneUser"
+      ]
+    },
+    {
+      "path": "/v2/phone/users/{id}/call_logs",
+      "hash": "640c29b042d14937",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneUserCallLogs"
+      ]
+    },
+    {
+      "path": "/v2/phone/users/{id}/recordings",
+      "hash": "a46bf36a4f284219",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneUserRecordings"
+      ]
+    },
+    {
+      "path": "/v2/phone/users/{id}/settings",
+      "hash": "18376cb0e238161b",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneUserSettings"
+      ]
+    },
+    {
+      "path": "/v2/phone/users/{id}/voicemails",
+      "hash": "055824fc4e65f842",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneUserVoicemails"
+      ]
+    },
+    {
+      "path": "/v2/phone/voicemails",
+      "hash": "65079e183f8a09af",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneVoicemails"
+      ]
+    },
+    {
+      "path": "/v2/phone/voicemails/{id}",
+      "hash": "4a4c4da4092da225",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPhoneVoicemail"
+      ]
+    },
+    {
+      "path": "/v2/report/cloud_recording",
+      "hash": "830d70f285d8c9f6",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomCloudRecordingReport"
+      ]
+    },
+    {
+      "path": "/v2/report/daily",
+      "hash": "75d2781aff4c552d",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomDailyUsageReport"
+      ]
+    },
+    {
+      "path": "/v2/report/meetings/{meetingId}/participants",
+      "hash": "ee59fb23f2a748dd",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomMeetingParticipantsReport"
+      ]
+    },
+    {
+      "path": "/v2/report/telephone",
+      "hash": "fa64f524e4a0c4ea",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomTelephoneReports"
+      ]
+    },
+    {
+      "path": "/v2/report/users",
+      "hash": "a081ad28c2c0f8ea",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomActiveInactiveHostReports"
+      ]
+    },
+    {
+      "path": "/v2/report/webinars/{webinarId}",
+      "hash": "3dd5576e7d6970bd",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomWebinarDetailsReport"
+      ]
+    },
+    {
+      "path": "/v2/report/webinars/{webinarId}/participants",
+      "hash": "3e1ab5c69dad54d4",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomWebinarParticipantsReport"
+      ]
+    },
+    {
+      "path": "/v2/rooms",
+      "hash": "8990742e2c76fdbe",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomRooms"
+      ]
+    },
+    {
+      "path": "/v2/rooms/$({roomId})/devices",
+      "hash": "7d7b13a6c947919b",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomRoomDevices"
+      ]
+    },
+    {
+      "path": "/v2/rooms/locations",
+      "hash": "7c6610a06634c2c9",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomRoomLocations"
+      ]
+    },
+    {
+      "path": "/v2/users",
+      "hash": "20d9a340f5900279",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomUser"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/assistants",
+      "hash": "e434135dc492b4ff",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomUserAssistants"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/meetings",
+      "hash": "111baf97ba532e8d",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomMeetingsFromUser"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/recordings",
+      "hash": "32bad91291764120",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomRecordings"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/webinars",
+      "hash": "87895404572903ed",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomWebinarsFromUser"
+      ]
+    },
+    {
+      "path": "/v2/users/{userId}/permissions",
+      "hash": "dbf84b69c624d790",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomUserPermissions"
+      ]
+    },
+    {
+      "path": "/v2/users/{userId}/schedulers",
+      "hash": "3e1326828e35a01d",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomUserSchedulers"
+      ]
+    },
+    {
+      "path": "/v2/users/{userId}/settings",
+      "hash": "cbe1937be35dbf2e",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomUserSettings"
+      ]
+    },
+    {
+      "path": "/v2/users/{userId}/token",
+      "hash": "59dfc8ef1bbe8f19",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomUserToken"
+      ]
+    },
+    {
+      "path": "/v2/users/email",
+      "hash": "82fa2dadb619e6fa",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomUserEmailStatus",
+        "Test-ZoomUserEmail"
+      ]
+    },
+    {
+      "path": "/v2/users/vanity_name",
+      "hash": "7f7141d62d1fe51c",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomPersonalMeetingRoomName",
+        "Test-ZoomUserVanityName"
+      ]
+    },
+    {
+      "path": "/v2/webinars/{webinarId}",
+      "hash": "775bea73bf53c90e",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomWebinar"
+      ]
+    },
+    {
+      "path": "/v2/webinars/{webinarId}/panelists",
+      "hash": "ed659fcb1b167288",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomWebinarPanelists"
+      ]
+    },
+    {
+      "path": "/v2/webinars/{webinarId}/registrants",
+      "hash": "b6717b3c0516f69c",
+      "method": "GET",
+      "cmdlets": [
+        "Get-ZoomWebinarRegistrants"
+      ]
+    },
+    {
+      "path": "/v2/accounts/{accountId}/settings",
+      "hash": "0f8efb611357629a",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomAccountSettings"
+      ]
+    },
+    {
+      "path": "/v2/groups/{groupId}",
+      "hash": "7ce8b9ce28fbba0d",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomGroup"
+      ]
+    },
+    {
+      "path": "/v2/groups/{groupId}/lock_settings",
+      "hash": "fecfe962cba1494c",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomGroupLockSettings"
+      ]
+    },
+    {
+      "path": "/v2/groups/{groupId}/settings",
+      "hash": "070e770b8249705a",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomGroupSettings"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}",
+      "hash": "71dc9848d53b6a9e",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomMeeting"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/recordings/settings",
+      "hash": "a4b849185323256e",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomMeetingRecordingsSettings"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/registrants/questions",
+      "hash": "c32dc439d04765a3",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomMeetingRegistrationQuestions"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists/{id}",
+      "hash": "7e9e3ac00aebd574",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomPhoneAutoReceptionist"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists/{id}/ivr",
+      "hash": "1b508655f629ba47",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomPhoneAutoReceptionistIVR"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists/{id}/policies",
+      "hash": "7078e85e96144c5b",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomPhoneAutoReceptionistPolicy"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists/{id}/policies/{id}",
+      "hash": "448e66973833b595",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomPhoneAutoReceptionistPolicySetting"
+      ]
+    },
+    {
+      "path": "/v2/phone/blocked_list/{id}",
+      "hash": "9e231fc5ff0fe2f9",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomPhoneBlockList"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_queues/{id}",
+      "hash": "01e850c211ee721d",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomPhoneCallQueue"
+      ]
+    },
+    {
+      "path": "/v2/phone/common_areas/{id}",
+      "hash": "1ea4a5557a57ab4e",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomPhoneCommonArea"
+      ]
+    },
+    {
+      "path": "/v2/phone/devices/{id}",
+      "hash": "c8208871e8a9e182",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomPhoneDevice"
+      ]
+    },
+    {
+      "path": "/v2/phone/external_contacts/{contactId}",
+      "hash": "a9a76c4d5751d748",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomPhoneExternalContact"
+      ]
+    },
+    {
+      "path": "/v2/phone/shared_line_groups/{id}",
+      "hash": "06c5b29db7a0a1f8",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomPhoneSharedLineGroup"
+      ]
+    },
+    {
+      "path": "/v2/phone/users/{id}",
+      "hash": "fa28d837fa0ff361",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomPhoneUser"
+      ]
+    },
+    {
+      "path": "/v2/phone/users/{id}/settings",
+      "hash": "58934e881b688a8d",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomPhoneUserSettings"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}",
+      "hash": "812e3a09b65d73bd",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomUser"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/settings",
+      "hash": "655a38b617f932a7",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomUserSettings"
+      ]
+    },
+    {
+      "path": "/v2/webinars/{webinarId}",
+      "hash": "4b07f09e76d801bd",
+      "method": "PATCH",
+      "cmdlets": [
+        "Update-ZoomWebinar"
+      ]
+    },
+    {
+      "path": "/v2/groups",
+      "hash": "062af1b1e8ff1d87",
+      "method": "POST",
+      "cmdlets": [
+        "New-ZoomGroup"
+      ]
+    },
+    {
+      "path": "/v2/groups/{id}/members",
+      "hash": "fcf72442260cf61f",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomGroupMember"
+      ]
+    },
+    {
+      "path": "/v2/im/groups/{id}/members",
+      "hash": "705b331782906019",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomIMDirectoryGroupMembers"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/polls",
+      "hash": "45d59bbb3f545a41",
+      "method": "POST",
+      "cmdlets": [
+        "New-ZoomMeetingPoll"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/registrants",
+      "hash": "811128ed8298268d",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomMeetingRegistrant"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists",
+      "hash": "2e4a1891b55419ec",
+      "method": "POST",
+      "cmdlets": [
+        "New-ZoomPhoneAutoReceptionist"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists/{id}/phone_numbers",
+      "hash": "d778449e5323554a",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomPhoneAutoReceptionistNumber"
+      ]
+    },
+    {
+      "path": "/v2/phone/auto_receptionists/{id}/policies/{id}",
+      "hash": "8931b17033b9dcfb",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomPhoneAutoReceptionistPolicySetting"
+      ]
+    },
+    {
+      "path": "/v2/phone/blocked_list",
+      "hash": "258c273b2deb8f9c",
+      "method": "POST",
+      "cmdlets": [
+        "New-ZoomPhoneBlockList"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_queues",
+      "hash": "ed131e96979727eb",
+      "method": "POST",
+      "cmdlets": [
+        "New-ZoomPhoneCallQueue"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_queues/{id}/members",
+      "hash": "439431dad466eb0a",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomPhoneCallQueueMembers"
+      ]
+    },
+    {
+      "path": "/v2/phone/call_queues/{id}/phone_numbers",
+      "hash": "6d279017ffea61ea",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomPhoneCallQueueNumber"
+      ]
+    },
+    {
+      "path": "/v2/phone/common_areas",
+      "hash": "96813aabe03eeec1",
+      "method": "POST",
+      "cmdlets": [
+        "New-ZoomPhoneCommonArea"
+      ]
+    },
+    {
+      "path": "/v2/phone/common_areas/{id}/calling_plans",
+      "hash": "01f4f5bd5abc2d37",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomPhoneCommonAreaCallingPlan"
+      ]
+    },
+    {
+      "path": "/v2/phone/common_areas/{id}/phone_numbers",
+      "hash": "2a309f9593538e5e",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomPhoneCommonAreaNumber"
+      ]
+    },
+    {
+      "path": "/v2/phone/devices",
+      "hash": "a12432c8b4267c34",
+      "method": "POST",
+      "cmdlets": [
+        "New-ZoomPhoneDevice"
+      ]
+    },
+    {
+      "path": "/v2/phone/devices/{id}/reboot",
+      "hash": "af933c422f789737",
+      "method": "POST",
+      "cmdlets": [
+        "Invoke-ZoomPhoneDeviceReboot"
+      ]
+    },
+    {
+      "path": "/v2/phone/extension/{id}/call_handling/settings/{id}",
+      "hash": "5b911d89d55ed539",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomPhoneCallHandlingSetting"
+      ]
+    },
+    {
+      "path": "/v2/phone/external_contacts",
+      "hash": "b0a25e99dbf56820",
+      "method": "POST",
+      "cmdlets": [
+        "New-ZoomPhoneExternalContact"
+      ]
+    },
+    {
+      "path": "/v2/phone/shared_line_groups",
+      "hash": "ce15e6406ccbd520",
+      "method": "POST",
+      "cmdlets": [
+        "New-ZoomPhoneSharedLineGroup"
+      ]
+    },
+    {
+      "path": "/v2/phone/shared_line_groups/{id}/members",
+      "hash": "6bf91fd8debd238c",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomPhoneSharedLineGroupMembers"
+      ]
+    },
+    {
+      "path": "/v2/phone/sms",
+      "hash": "d2e9ef9d933e41df",
+      "method": "POST",
+      "cmdlets": [
+        "Send-ZoomPhoneSMS"
+      ]
+    },
+    {
+      "path": "/v2/phone/users/{id}/calling_plans",
+      "hash": "7fcf83de362b1c76",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomPhoneUserCallingPlan"
+      ]
+    },
+    {
+      "path": "/v2/phone/users/{id}/phone_numbers",
+      "hash": "4518607b4562a0f1",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomPhoneUserNumber"
+      ]
+    },
+    {
+      "path": "/v2/phone/users/batch",
+      "hash": "11d39a2e70029809",
+      "method": "POST",
+      "cmdlets": [
+        "New-ZoomPhoneUser"
+      ]
+    },
+    {
+      "path": "/v2/rooms/{id}/meetings",
+      "hash": "c71ee216b127844f",
+      "method": "POST",
+      "cmdlets": [
+        "Connect-ZoomRoomMeeting",
+        "Disconnect-ZoomRoomMeeting",
+        "New-ZoomRoomMeeting",
+        "Stop-ZoomRoomMeeting"
+      ]
+    },
+    {
+      "path": "/v2/rooms/{id}/zrclient",
+      "hash": "41dc4c27236b37de",
+      "method": "POST",
+      "cmdlets": [
+        "Restart-ZoomRoom"
+      ]
+    },
+    {
+      "path": "/v2/rooms/{roomId}/meetings",
+      "hash": "86eaeb8de0de43e9",
+      "method": "POST",
+      "cmdlets": [
+        "Remove-ZoomRoomMeeting"
+      ]
+    },
+    {
+      "path": "/v2/rooms/{roomId}/zrclient",
+      "hash": "cd24075433ae6eb1",
+      "method": "POST",
+      "cmdlets": [
+        "New-ZoomRoomInvite"
+      ]
+    },
+    {
+      "path": "/v2/users",
+      "hash": "33276bc36e9652e6",
+      "method": "POST",
+      "cmdlets": [
+        "New-ZoomUser"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/assistants",
+      "hash": "7f67559d63173bb0",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomUserAssistants"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/picture",
+      "hash": "91ca200e971ac970",
+      "method": "POST",
+      "cmdlets": [
+        "Update-ZoomProfilePicture"
+      ]
+    },
+    {
+      "path": "/v2/webinars/{webinarId}/registrants",
+      "hash": "92eddad3332dda74",
+      "method": "POST",
+      "cmdlets": [
+        "Add-ZoomWebinarRegistrant"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/polls/{id}",
+      "hash": "708072fad5b466f0",
+      "method": "PUT",
+      "cmdlets": [
+        "Update-ZoomMeetingPoll"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/recordings/status",
+      "hash": "dd4a083a3e6d972d",
+      "method": "PUT",
+      "cmdlets": [
+        "Show-ZoomMeetingRecordings"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/registrants/status",
+      "hash": "b847b690fb158dc4",
+      "method": "PUT",
+      "cmdlets": [
+        "Update-ZoomMeetingRegistrantStatus"
+      ]
+    },
+    {
+      "path": "/v2/meetings/{meetingId}/status",
+      "hash": "29c8ecf42796ff9d",
+      "method": "PUT",
+      "cmdlets": [
+        "Update-ZoomMeetingStatus"
+      ]
+    },
+    {
+      "path": "/v2/phone/devices/{id}/provision_templates",
+      "hash": "83b2e8b30449b338",
+      "method": "PUT",
+      "cmdlets": [
+        "Update-ZoomPhoneDeviceProvisioningTemplate"
+      ]
+    },
+    {
+      "path": "/v2/phone/users/{id}/calling_plans",
+      "hash": "bd1538ebdb7c8922",
+      "method": "PUT",
+      "cmdlets": [
+        "Update-ZoomPhoneUserCallingPlan"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/password",
+      "hash": "8baf98309453673c",
+      "method": "PUT",
+      "cmdlets": [
+        "Update-ZoomUserPassword"
+      ]
+    },
+    {
+      "path": "/v2/users/{id}/status",
+      "hash": "d04e7306eb81636e",
+      "method": "PUT",
+      "cmdlets": [
+        "Update-ZoomUserStatus"
+      ]
+    },
+    {
+      "path": "/v2/users/{userId}/email",
+      "hash": "c056503be6e227cb",
+      "method": "PUT",
+      "cmdlets": [
+        "Update-ZoomUserEmail"
+      ]
+    },
+    {
+      "path": "/v2/webinars/{webinarId}/registrants/status",
+      "hash": "e24866905a1cc8ac",
+      "method": "PUT",
+      "cmdlets": [
+        "Update-ZoomWebinarRegistrantStatus"
+      ]
+    }
+  ]
+}

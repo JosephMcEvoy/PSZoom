@@ -1,0 +1,53 @@
+{
+  "page_count": 1,
+  "page_number": 1,
+  "page_size": 30,
+  "total_records": 3,
+  "users": [
+    {
+      "id": "KDcuGIm1QgePTO8WbOqwIQ",
+      "first_name": "Jane",
+      "last_name": "Doe",
+      "email": "jane.doe@example.com",
+      "type": 2,
+      "pmi": 1234567890,
+      "timezone": "America/Los_Angeles",
+      "verified": 1,
+      "dept": "Engineering",
+      "created_at": "2019-04-05T15:24:32Z",
+      "last_login_time": "2024-01-15T10:30:00Z",
+      "status": "active",
+      "role_id": "0"
+    },
+    {
+      "id": "ABcdefGHIjklMNO",
+      "first_name": "John",
+      "last_name": "Smith",
+      "email": "john.smith@example.com",
+      "type": 1,
+      "pmi": 9876543210,
+      "timezone": "America/New_York",
+      "verified": 1,
+      "dept": "Sales",
+      "created_at": "2020-06-15T09:00:00Z",
+      "last_login_time": "2024-01-14T14:20:00Z",
+      "status": "active",
+      "role_id": "1"
+    },
+    {
+      "id": "XYZabc123defGHI",
+      "first_name": "Bob",
+      "last_name": "Johnson",
+      "email": "bob.johnson@example.com",
+      "type": 1,
+      "pmi": 5555555555,
+      "timezone": "Europe/London",
+      "verified": 1,
+      "dept": "Marketing",
+      "created_at": "2021-01-20T11:30:00Z",
+      "last_login_time": "2024-01-10T08:45:00Z",
+      "status": "active",
+      "role_id": "1"
+    }
+  ]
+}

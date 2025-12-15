@@ -1,0 +1,252 @@
+name: API Coverage Sync
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      max_cmdlets:
+        description: 'Maximum number of cmdlets to generate (0 = unlimited)'
+        required: false
+        default: '5'
+        type: string
+      dry_run:
+        description: 'Dry run mode (no file changes)'
+        required: false
+        default: false
+        type: boolean
+      priority_filter:
+        description: 'Priority filter (high, medium, all)'
+        required: false
+        default: 'high'
+        type: choice
+        options:
+          - high
+          - medium
+          - all
+
+env:
+  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+jobs:
+  scan-api:
+    name: Scan Zoom API
+    runs-on: ubuntu-latest
+    outputs:
+      gap_count: ${{ steps.analyze.outputs.gap_count }}
+      has_gaps: ${{ steps.analyze.outputs.has_gaps }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - name: Download OpenAPI Specs
+        shell: pwsh
+        run: |
+          ./.github/scripts/Get-ZoomOpenApiSpecs.ps1
+
+      - name: Parse OpenAPI Specs
+        shell: pwsh
+        run: |
+          ./.github/scripts/ConvertFrom-OpenApiSpec.ps1
+
+      - name: Analyze PSZoom Coverage
+        shell: pwsh
+        run: |
+          ./.github/scripts/Get-PSZoomCoverage.ps1
+
+      - name: Generate Gap Report
+        id: analyze
+        shell: pwsh
+        run: |
+          $report = ./.github/scripts/Get-ApiCoverageGaps.ps1
+          $gapCount = $report.summary.newGaps
+
+          echo "gap_count=$gapCount" >> $env:GITHUB_OUTPUT
+          echo "has_gaps=$($gapCount -gt 0)" >> $env:GITHUB_OUTPUT
+
+          Write-Host "Gap Analysis Complete:"
+          Write-Host "  Total Endpoints: $($report.summary.totalEndpoints)"
+          Write-Host "  Covered: $($report.summary.covered)"
+          Write-Host "  New Gaps: $gapCount"
+
+      - name: Upload Gap Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: gap-report
+          path: |
+            data/coverage-gap-report.json
+            data/pszoom-coverage.json
+            data/zoom-api-endpoints.json
+          retention-days: 30
+
+  generate-cmdlets:
+    name: Generate New Cmdlets
+    runs-on: ubuntu-latest
+    needs: scan-api
+    if: needs.scan-api.outputs.has_gaps == 'true' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - name: Download Gap Report
+        uses: actions/download-artifact@v4
+        with:
+          name: gap-report
+          path: data/
+
+      - name: Install PSScriptAnalyzer
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module -Name PSScriptAnalyzer -Force -SkipPublisherCheck
+
+      - name: Generate Cmdlets
+        id: generate
+        shell: pwsh
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          $maxCmdlets = '${{ inputs.max_cmdlets }}'
+          if ([string]::IsNullOrEmpty($maxCmdlets)) { $maxCmdlets = '5' }
+
+          $priority = '${{ inputs.priority_filter }}'
+          if ([string]::IsNullOrEmpty($priority)) { $priority = 'high' }
+
+          $dryRun = '${{ inputs.dry_run }}' -eq 'true'
+
+          $params = @{
+            GapReportPath = 'data/coverage-gap-report.json'
+            MaxCmdlets = [int]$maxCmdlets
+            Priority = $priority
+          }
+
+          if ($dryRun) {
+            Write-Host "DRY RUN MODE - No files will be created"
+            exit 0
+          }
+
+          $result = ./.github/scripts/New-ZoomCmdletFromGap.ps1 @params
+
+          $generated = $result.summary.generated
+          echo "generated_count=$generated" >> $env:GITHUB_OUTPUT
+
+          if ($generated -gt 0) {
+            echo "has_changes=true" >> $env:GITHUB_OUTPUT
+          } else {
+            echo "has_changes=false" >> $env:GITHUB_OUTPUT
+          }
+
+      - name: Validate Generated Cmdlets
+        if: steps.generate.outputs.has_changes == 'true'
+        shell: pwsh
+        run: |
+          $validation = ./.github/scripts/Test-GeneratedCmdlets.ps1 -ResultsPath data/generation-results.json
+
+          if ($validation.summary.overallPassed -ne $validation.summary.total) {
+            Write-Error "Validation failed: $($validation.summary.overallPassed)/$($validation.summary.total) passed"
+            exit 1
+          }
+
+          Write-Host "All $($validation.summary.total) cmdlets passed validation"
+
+      - name: Upload Generation Results
+        uses: actions/upload-artifact@v4
+        if: steps.generate.outputs.has_changes == 'true'
+        with:
+          name: generation-results
+          path: data/generation-results.json
+          retention-days: 30
+
+      - name: Create Pull Request
+        if: steps.generate.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "feat: Add ${{ steps.generate.outputs.generated_count }} new API cmdlets"
+          title: "feat: Auto-generated ${{ steps.generate.outputs.generated_count }} new Zoom API cmdlets"
+          body: |
+            ## Automated API Coverage Sync
+
+            This PR was automatically generated by the API Coverage Sync workflow.
+
+            ### Changes
+            - Generated **${{ steps.generate.outputs.generated_count }}** new cmdlets
+            - All cmdlets passed syntax validation
+            - All cmdlets passed PSScriptAnalyzer checks
+
+            ### Generated Cmdlets
+            See `data/generation-results.json` for details.
+
+            ### Validation
+            - [x] Syntax validation passed
+            - [x] PSScriptAnalyzer passed
+            - [ ] Unit tests (run on merge)
+
+            ---
+            *Generated by [API Coverage Sync](.github/workflows/api-coverage-sync.yml)*
+          branch: auto/api-sync-${{ github.run_number }}
+          base: dev
+          labels: |
+            automated
+            api-sync
+          draft: false
+
+  notify-failure:
+    name: Notify on Failure
+    runs-on: ubuntu-latest
+    needs: [scan-api, generate-cmdlets]
+    if: failure()
+
+    steps:
+      - name: Create Issue on Failure
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `API Coverage Sync Failed - ${new Date().toISOString().split('T')[0]}`;
+            const body = `
+            ## API Coverage Sync Workflow Failed
+
+            **Run ID:** ${context.runId}
+            **Workflow:** [View Run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+
+            Please investigate the failure and take appropriate action.
+
+            ---
+            *This issue was automatically created by the API Coverage Sync workflow.*
+            `;
+
+            // Check if similar issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'api-sync-failure'
+            });
+
+            const existingIssue = issues.data.find(i => i.title.startsWith('API Coverage Sync Failed'));
+
+            if (existingIssue) {
+              // Add comment to existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `## Another failure detected\n\n**Run ID:** ${context.runId}\n**Workflow:** [View Run](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`
+              });
+            } else {
+              // Create new issue
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['api-sync-failure', 'automated']
+              });
+            }

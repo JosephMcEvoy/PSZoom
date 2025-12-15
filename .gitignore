@@ -1,2 +1,16 @@
+# Legacy test file (migrated to Tests/ directory)
 Test/PSZoom.Tests.ps1
+
+# IDE
 .vscode/
+*.user
+
+# Test artifacts (generated files)
+Tests/coverage.xml
+Tests/testResults.xml
+
+# Node modules (for GitHub Actions scripts)
+node_modules/
+
+# Build artifacts
+*.nupkg

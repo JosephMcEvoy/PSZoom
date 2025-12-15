@@ -1,0 +1,12 @@
+{
+  "share_recording": "publicly",
+  "recording_authentication": false,
+  "authentication_option": "",
+  "authentication_domains": "",
+  "viewer_download": true,
+  "password": "abc123",
+  "on_demand": false,
+  "approval_type": 0,
+  "send_email_to_host": true,
+  "show_social_share_buttons": true
+}

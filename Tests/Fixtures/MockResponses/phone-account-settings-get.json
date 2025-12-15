@@ -1,0 +1,155 @@
+{
+  "voicemail": {
+    "access_members_in_directory": true,
+    "delete": true,
+    "download": true,
+    "transcription": true,
+    "enable": true,
+    "sharing_voicemail": true
+  },
+  "sms": {
+    "enable": true,
+    "international_sms": false,
+    "international_sms_countries": []
+  },
+  "call_park": {
+    "enable": true,
+    "call_not_picked_up_action": 1,
+    "forward_to_extension_id": "",
+    "ring_back_time": 60
+  },
+  "e2e_encryption": {
+    "enable": true
+  },
+  "call_live_transcription": {
+    "enable": true,
+    "disclaimer": true
+  },
+  "local_survivability_mode": {
+    "enable": false
+  },
+  "external_calling_on_zoom_room_common_area": {
+    "enable": true
+  },
+  "select_outbound_caller_id": {
+    "enable": true,
+    "allow_hide_caller_id": false
+  },
+  "personal_audio_library": {
+    "enable": true
+  },
+  "voicemail_transcription": {
+    "enable": true
+  },
+  "voicemail_notification_by_email": {
+    "enable": true,
+    "include_voicemail_file": true,
+    "include_voicemail_transcription": true
+  },
+  "shared_voicemail_notification_by_email": {
+    "enable": true,
+    "include_voicemail_file": true,
+    "include_voicemail_transcription": true
+  },
+  "restricted_call_hours": {
+    "enable": false
+  },
+  "allowed_call_locations": {
+    "enable": true,
+    "locations": ["US", "CA"]
+  },
+  "check_voicemails_over_phone": {
+    "enable": true
+  },
+  "auto_call_recording": {
+    "enable": false,
+    "recording_start_prompt": true,
+    "recording_transcription": true,
+    "play_recording_beep_tone": true
+  },
+  "ad_hoc_call_recording": {
+    "enable": true,
+    "recording_start_prompt": true,
+    "recording_transcription": true,
+    "play_recording_beep_tone": true
+  },
+  "international_calling": {
+    "enable": true
+  },
+  "outbound_calling": {
+    "enable": true
+  },
+  "outbound_sms": {
+    "enable": true
+  },
+  "sms_etiquette_tool": {
+    "enable": false
+  },
+  "zoom_phone_on_mobile": {
+    "enable": true
+  },
+  "zoom_phone_on_pwa": {
+    "enable": true
+  },
+  "call_handling_forwarding_to_other_users": {
+    "enable": true
+  },
+  "call_overflow": {
+    "enable": true,
+    "call_overflow_action": 1
+  },
+  "call_transferring": {
+    "enable": true
+  },
+  "elevate_to_meeting": {
+    "enable": true
+  },
+  "hand_off_to_room": {
+    "enable": true
+  },
+  "mobile_switch_to_carrier": {
+    "enable": true
+  },
+  "delegation": {
+    "enable": true,
+    "enable_delegation_for_call_queue": false
+  },
+  "audio_intercom": {
+    "enable": true
+  },
+  "block_calls_without_caller_id": {
+    "enable": false
+  },
+  "block_external_calls": {
+    "enable": false
+  },
+  "call_queue_opt_out_reason": {
+    "enable": false
+  },
+  "auto_delete_data_after_retention_duration": {
+    "enable": false,
+    "retention_period_of_recording_in_days": 30,
+    "retention_period_of_voicemail_in_days": 30
+  },
+  "auto_call_from_third_party_apps": {
+    "enable": true
+  },
+  "override_default_port": {
+    "enable": false
+  },
+  "peer_to_peer_media": {
+    "enable": true
+  },
+  "advanced_encryption": {
+    "enable": false
+  },
+  "display_call_feedback_survey": {
+    "enable": true
+  },
+  "block_list_for_inbound_calls_and_messaging": {
+    "enable": true
+  },
+  "block_calls_as_threat": {
+    "enable": false
+  }
+}

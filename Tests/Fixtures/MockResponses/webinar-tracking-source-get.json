@@ -1,0 +1,29 @@
+{
+  "total_records": 3,
+  "tracking_sources": [
+    {
+      "id": "abc123xyz",
+      "source_name": "Email Campaign - Holiday Webinar",
+      "tracking_url": "https://zoom.us/webinar/register/WN_KDcuGIm1QgePTO8WbOqwIQ?tk=abc123xyz",
+      "visitor_count": 245,
+      "registration_count": 89,
+      "unique_viewers": 67
+    },
+    {
+      "id": "def456uvw",
+      "source_name": "LinkedIn Post",
+      "tracking_url": "https://zoom.us/webinar/register/WN_KDcuGIm1QgePTO8WbOqwIQ?tk=def456uvw",
+      "visitor_count": 523,
+      "registration_count": 156,
+      "unique_viewers": 142
+    },
+    {
+      "id": "ghi789rst",
+      "source_name": "Company Website Banner",
+      "tracking_url": "https://zoom.us/webinar/register/WN_KDcuGIm1QgePTO8WbOqwIQ?tk=ghi789rst",
+      "visitor_count": 1024,
+      "registration_count": 312,
+      "unique_viewers": 289
+    }
+  ]
+}

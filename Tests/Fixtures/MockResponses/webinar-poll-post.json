@@ -1,0 +1,60 @@
+{
+  "id": "QalIoKWLTJehBJ8e1xRrbQ",
+  "title": "Product Feature Feedback Poll",
+  "anonymous": false,
+  "status": "notstart",
+  "poll_type": 1,
+  "questions": [
+    {
+      "name": "Which new feature would you find most valuable?",
+      "type": "single",
+      "answer_required": true,
+      "answers": [
+        "Advanced analytics dashboard",
+        "Mobile app integration",
+        "API enhancements",
+        "Collaboration tools"
+      ],
+      "right_answers": [],
+      "prompts": [],
+      "show_as_dropdown": false,
+      "rating_min_value": 0,
+      "rating_max_value": 0,
+      "rating_min_label": "",
+      "rating_max_label": ""
+    },
+    {
+      "name": "How satisfied are you with the current product?",
+      "type": "rating_scale",
+      "answer_required": true,
+      "answers": [],
+      "right_answers": [],
+      "prompts": [],
+      "show_as_dropdown": false,
+      "rating_min_value": 1,
+      "rating_max_value": 10,
+      "rating_min_label": "Not satisfied",
+      "rating_max_label": "Very satisfied"
+    },
+    {
+      "name": "Select all features you currently use:",
+      "type": "multiple",
+      "answer_required": false,
+      "answers": [
+        "Video conferencing",
+        "Screen sharing",
+        "Recording",
+        "Breakout rooms",
+        "Polling",
+        "Q&A"
+      ],
+      "right_answers": [],
+      "prompts": [],
+      "show_as_dropdown": false,
+      "rating_min_value": 0,
+      "rating_max_value": 0,
+      "rating_min_label": "",
+      "rating_max_label": ""
+    }
+  ]
+}

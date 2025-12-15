@@ -1,0 +1,52 @@
+{
+  "total_records": 3,
+  "customized_numbers": [
+    {
+      "id": "cust_num_8dKm2nPqRs",
+      "phone_number": "+14155551234",
+      "phone_number_id": "pn_KDcuGIm1QgePTO8WbOqwIQ",
+      "display_name": "Main Office Line",
+      "description": "Primary outbound caller ID for sales team",
+      "site_id": "site_7xYz3mNpQr",
+      "site_name": "San Francisco HQ",
+      "country_iso_code": "US",
+      "area_code": "415",
+      "number_type": "toll",
+      "status": "active",
+      "created_at": "2024-03-15T10:30:00Z",
+      "modified_at": "2024-11-20T14:45:00Z"
+    },
+    {
+      "id": "cust_num_9eLn3oQrSt",
+      "phone_number": "+12125559876",
+      "phone_number_id": "pn_LEdvHJn2RhfQUO9XcPrxJR",
+      "display_name": "Support Hotline",
+      "description": "Customer support outbound number",
+      "site_id": "site_8yAa4nOpRs",
+      "site_name": "New York Office",
+      "country_iso_code": "US",
+      "area_code": "212",
+      "number_type": "toll",
+      "status": "active",
+      "created_at": "2024-05-22T08:15:00Z",
+      "modified_at": "2024-10-05T11:30:00Z"
+    },
+    {
+      "id": "cust_num_0fMo4pRsTu",
+      "phone_number": "+18005550100",
+      "phone_number_id": "pn_MFewIKo3SigRVP0YdQsyKS",
+      "display_name": "Toll-Free Marketing",
+      "description": "Marketing campaigns outbound caller ID",
+      "site_id": "site_7xYz3mNpQr",
+      "site_name": "San Francisco HQ",
+      "country_iso_code": "US",
+      "area_code": "800",
+      "number_type": "tollfree",
+      "status": "active",
+      "created_at": "2024-07-10T16:00:00Z",
+      "modified_at": "2024-12-01T09:20:00Z"
+    }
+  ],
+  "next_page_token": "",
+  "page_size": 30
+}

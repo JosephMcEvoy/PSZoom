@@ -1,0 +1,80 @@
+{
+  "show_in_the_browser": true,
+  "show_in_the_follow_up_email": true,
+  "third_party_survey": "",
+  "custom_survey": {
+    "title": "Post-Webinar Feedback Survey",
+    "anonymous": false,
+    "numbered_questions": true,
+    "show_question_type": false,
+    "feedback": "Thank you for completing our survey! Your feedback helps us improve future webinars.",
+    "questions": [
+      {
+        "name": "How satisfied were you with this webinar?",
+        "type": "rating_scale",
+        "answer_required": true,
+        "rating_min_value": 1,
+        "rating_max_value": 10,
+        "rating_min_label": "Not Satisfied",
+        "rating_max_label": "Extremely Satisfied"
+      },
+      {
+        "name": "Which topics covered in this webinar were most valuable to you?",
+        "type": "multiple",
+        "answer_required": false,
+        "show_as_dropdown": false,
+        "answers": [
+          "Product Overview",
+          "Technical Deep Dive",
+          "Best Practices",
+          "Q&A Session",
+          "Live Demo"
+        ]
+      },
+      {
+        "name": "How would you rate the presenter's delivery?",
+        "type": "single",
+        "answer_required": true,
+        "show_as_dropdown": false,
+        "answers": [
+          "Excellent",
+          "Good",
+          "Average",
+          "Below Average",
+          "Poor"
+        ]
+      },
+      {
+        "name": "Please rank the following aspects of the webinar from most to least important:",
+        "type": "rank_order",
+        "answer_required": false,
+        "answers": [
+          "Content Quality",
+          "Presentation Style",
+          "Visual Aids",
+          "Interactivity"
+        ],
+        "prompts": [
+          {
+            "prompt_question": "Most Important",
+            "prompt_right_answers": ["Content Quality", "Presentation Style", "Visual Aids", "Interactivity"]
+          }
+        ]
+      },
+      {
+        "name": "What did you like most about this webinar?",
+        "type": "short_answer",
+        "answer_required": false,
+        "answer_min_character": 10,
+        "answer_max_character": 200
+      },
+      {
+        "name": "Please share any additional feedback or suggestions for future webinars:",
+        "type": "long_answer",
+        "answer_required": false,
+        "answer_min_character": 0,
+        "answer_max_character": 2000
+      }
+    ]
+  }
+}

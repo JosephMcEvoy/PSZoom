@@ -1,0 +1,73 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for PSZoom
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please fill out this form to help us understand your request.
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Type
+      description: What type of feature are you requesting?
+      options:
+        - New Zoom API cmdlet
+        - Enhancement to existing cmdlet
+        - Documentation improvement
+        - Testing improvement
+        - Build/CI improvement
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature Description
+      description: A clear and concise description of the feature you'd like.
+      placeholder: Describe the feature...
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Describe the use case or problem this feature would solve.
+      placeholder: |
+        As a [type of user], I want [some goal] so that [some reason].
+    validations:
+      required: true
+
+  - type: textarea
+    id: api-endpoint
+    attributes:
+      label: Zoom API Endpoint (if applicable)
+      description: If requesting a new cmdlet, provide the Zoom API endpoint URL
+      placeholder: |
+        https://developers.zoom.us/docs/api/rest/reference/...
+
+  - type: textarea
+    id: proposed-syntax
+    attributes:
+      label: Proposed Syntax
+      description: If you have ideas about how the cmdlet should work, share them here
+      render: powershell
+      placeholder: |
+        # Example usage
+        Get-ZoomNewFeature -Parameter1 'value' -Parameter2 'value'
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternative solutions or workarounds?
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, or examples about the feature request here.

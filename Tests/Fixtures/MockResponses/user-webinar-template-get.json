@@ -1,0 +1,30 @@
+{
+  "templates": [
+    {
+      "id": "Dv2eGXsyTAKvkIG4hXnwEQ",
+      "name": "Monthly Product Update Webinar",
+      "type": 5
+    },
+    {
+      "id": "RtPqMxYzNOKLmFjHgUiWAB",
+      "name": "Quarterly Business Review",
+      "type": 6
+    },
+    {
+      "id": "XwZkLmNoPQRsTuVwXyZaBC",
+      "name": "Customer Training Session",
+      "type": 5
+    },
+    {
+      "id": "JkLmNoPqRsTuVwXyZaBcDE",
+      "name": "Weekly Team Sync",
+      "type": 9
+    },
+    {
+      "id": "FgHiJkLmNoPqRsTuVwXyZa",
+      "name": "Annual Conference Keynote",
+      "type": 6
+    }
+  ],
+  "total_records": 5
+}

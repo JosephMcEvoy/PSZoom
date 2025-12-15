@@ -1,0 +1,32 @@
+{
+  "page_count": 1,
+  "page_number": 1,
+  "page_size": 30,
+  "total_records": 2,
+  "meetings": [
+    {
+      "uuid": "aDYlohsHRtCd4ii1uC2+hA==",
+      "id": 1234567890,
+      "host_id": "KDcuGIm1QgePTO8WbOqwIQ",
+      "topic": "Weekly Team Standup",
+      "type": 2,
+      "start_time": "2024-01-20T09:00:00Z",
+      "duration": 30,
+      "timezone": "America/Los_Angeles",
+      "created_at": "2024-01-10T15:30:00Z",
+      "join_url": "https://zoom.us/j/1234567890?pwd=abc123xyz"
+    },
+    {
+      "uuid": "bEZmpisTStDe5jj2vD3+iB==",
+      "id": 9876543210,
+      "host_id": "KDcuGIm1QgePTO8WbOqwIQ",
+      "topic": "Project Planning Session",
+      "type": 2,
+      "start_time": "2024-01-22T14:00:00Z",
+      "duration": 60,
+      "timezone": "America/Los_Angeles",
+      "created_at": "2024-01-12T10:00:00Z",
+      "join_url": "https://zoom.us/j/9876543210?pwd=xyz789abc"
+    }
+  ]
+}

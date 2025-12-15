@@ -1,0 +1,19 @@
+{
+  "id": "pNL7kH3vR2WmXoZqYtB8Cg",
+  "panelists": [
+    {
+      "id": "pNL7kH3vR2WmXoZqYtB8Cg",
+      "email": "panelist1@example.com",
+      "name": "John Smith",
+      "join_url": "https://zoom.us/w/95867431245?tk=pNL7kH3vR2WmXoZqYtB8Cg&pwd=YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4",
+      "virtual_background_id": "vbg_1234567890"
+    },
+    {
+      "id": "qRM8lI4wS3XnYpAsBuC9Dh",
+      "email": "panelist2@example.com",
+      "name": "Jane Doe",
+      "join_url": "https://zoom.us/w/95867431245?tk=qRM8lI4wS3XnYpAsBuC9Dh&pwd=eXl6MTIzNDU2Nzg5MGFiY2RlZmdoaWpr",
+      "virtual_background_id": ""
+    }
+  ]
+}

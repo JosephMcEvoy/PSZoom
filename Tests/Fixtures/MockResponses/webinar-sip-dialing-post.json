@@ -1,0 +1,35 @@
+{
+  "sip_dialing_info": {
+    "uri": "sip:87654321@zoomcrc.com",
+    "passcode": "847291",
+    "h323_passcode": "847291",
+    "webinar_id": "98765432100",
+    "host_id": "KDcuGIm1QgePTO8WbOqwIQ",
+    "topic": "Q4 Product Launch Webinar",
+    "start_time": "2024-03-15T14:00:00Z",
+    "duration": 120,
+    "timezone": "America/Los_Angeles",
+    "ip_addresses": [
+      "162.255.37.11",
+      "162.255.36.11",
+      "221.122.88.195",
+      "115.114.131.7"
+    ],
+    "dial_in_numbers": [
+      {
+        "country": "US",
+        "country_name": "United States",
+        "number": "+1 669 900 6833",
+        "type": "toll"
+      },
+      {
+        "country": "US",
+        "country_name": "United States",
+        "number": "+1 888 475 4499",
+        "type": "toll-free"
+      }
+    ],
+    "global_dial_in_numbers_url": "https://zoom.us/u/adEJKLmNop",
+    "password_required": true
+  }
+}

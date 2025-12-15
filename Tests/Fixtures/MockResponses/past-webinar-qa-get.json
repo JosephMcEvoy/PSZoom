@@ -1,0 +1,67 @@
+{
+  "id": 95824378162,
+  "uuid": "gkABCDEfGH1IJKlmno==",
+  "start_time": "2024-03-15T14:00:00Z",
+  "questions": [
+    {
+      "name": "John Smith",
+      "email": "john.smith@example.com",
+      "question_details": [
+        {
+          "question": "What are the key benefits of implementing this solution in our organization?",
+          "answer": "The key benefits include improved efficiency, reduced operational costs, and enhanced collaboration across teams. Our data shows an average 40% improvement in productivity.",
+          "create_time": "2024-03-15T14:15:32Z",
+          "answer_time": "2024-03-15T14:18:45Z"
+        },
+        {
+          "question": "Is there a free trial available?",
+          "answer": "Yes, we offer a 30-day free trial with full access to all features. You can sign up on our website.",
+          "create_time": "2024-03-15T14:22:10Z",
+          "answer_time": "2024-03-15T14:24:30Z"
+        }
+      ]
+    },
+    {
+      "name": "Sarah Johnson",
+      "email": "sarah.johnson@techcorp.com",
+      "question_details": [
+        {
+          "question": "How does this integrate with existing CRM systems?",
+          "answer": "We have native integrations with Salesforce, HubSpot, and Microsoft Dynamics. For other CRMs, we provide a REST API and webhook support.",
+          "create_time": "2024-03-15T14:30:15Z",
+          "answer_time": "2024-03-15T14:33:20Z"
+        }
+      ]
+    },
+    {
+      "name": "Michael Chen",
+      "email": "m.chen@globalinc.org",
+      "question_details": [
+        {
+          "question": "What security certifications do you have?",
+          "answer": "We are SOC 2 Type II certified, GDPR compliant, and ISO 27001 certified. All data is encrypted at rest and in transit.",
+          "create_time": "2024-03-15T14:45:00Z",
+          "answer_time": "2024-03-15T14:48:12Z"
+        },
+        {
+          "question": "Can you provide a data processing agreement?",
+          "answer": "Absolutely. Our DPA is available on our website and can be customized for enterprise clients. Please contact our legal team for specific requirements.",
+          "create_time": "2024-03-15T14:50:30Z",
+          "answer_time": "2024-03-15T14:53:45Z"
+        }
+      ]
+    },
+    {
+      "name": "Emily Rodriguez",
+      "email": "emily.r@startup.io",
+      "question_details": [
+        {
+          "question": "What is the expected implementation timeline?",
+          "answer": "Typical implementation takes 2-4 weeks depending on complexity. Our professional services team provides full support throughout the process.",
+          "create_time": "2024-03-15T15:05:22Z",
+          "answer_time": "2024-03-15T15:08:40Z"
+        }
+      ]
+    }
+  ]
+}

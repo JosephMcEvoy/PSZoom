@@ -1,0 +1,109 @@
+{
+  "id": 99123456789,
+  "uuid": "gkABCDeFGhIjKlMnOpQrST==",
+  "start_time": "2024-03-15T14:00:00Z",
+  "questions": [
+    {
+      "name": "John Smith",
+      "email": "john.smith@example.com",
+      "question_details": [
+        {
+          "question": "How would you rate the webinar content?",
+          "answer": "Excellent",
+          "polling_id": "aBcDeFgH123",
+          "date_time": "2024-03-15T14:25:30Z"
+        },
+        {
+          "question": "Which topics would you like to see covered in future webinars?",
+          "answer": "Advanced Features;Best Practices",
+          "polling_id": "aBcDeFgH123",
+          "date_time": "2024-03-15T14:26:15Z"
+        }
+      ]
+    },
+    {
+      "name": "Jane Doe",
+      "email": "jane.doe@company.org",
+      "question_details": [
+        {
+          "question": "How would you rate the webinar content?",
+          "answer": "Good",
+          "polling_id": "aBcDeFgH123",
+          "date_time": "2024-03-15T14:25:45Z"
+        },
+        {
+          "question": "Which topics would you like to see covered in future webinars?",
+          "answer": "Integration Tips",
+          "polling_id": "aBcDeFgH123",
+          "date_time": "2024-03-15T14:26:20Z"
+        }
+      ]
+    },
+    {
+      "name": "Robert Johnson",
+      "email": "r.johnson@enterprise.com",
+      "question_details": [
+        {
+          "question": "How would you rate the webinar content?",
+          "answer": "Excellent",
+          "polling_id": "aBcDeFgH123",
+          "date_time": "2024-03-15T14:25:50Z"
+        },
+        {
+          "question": "Which topics would you like to see covered in future webinars?",
+          "answer": "Advanced Features;Security",
+          "polling_id": "aBcDeFgH123",
+          "date_time": "2024-03-15T14:26:25Z"
+        },
+        {
+          "question": "Would you recommend this webinar to a colleague?",
+          "answer": "Yes",
+          "polling_id": "xYzAbCdE456",
+          "date_time": "2024-03-15T14:45:10Z"
+        }
+      ]
+    },
+    {
+      "name": "Emily Chen",
+      "email": "emily.chen@startup.io",
+      "question_details": [
+        {
+          "question": "How would you rate the webinar content?",
+          "answer": "Good",
+          "polling_id": "aBcDeFgH123",
+          "date_time": "2024-03-15T14:26:00Z"
+        },
+        {
+          "question": "Would you recommend this webinar to a colleague?",
+          "answer": "Yes",
+          "polling_id": "xYzAbCdE456",
+          "date_time": "2024-03-15T14:45:20Z"
+        }
+      ]
+    },
+    {
+      "name": "Michael Brown",
+      "email": "m.brown@consulting.net",
+      "question_details": [
+        {
+          "question": "How would you rate the webinar content?",
+          "answer": "Fair",
+          "polling_id": "aBcDeFgH123",
+          "date_time": "2024-03-15T14:26:05Z"
+        },
+        {
+          "question": "Which topics would you like to see covered in future webinars?",
+          "answer": "Best Practices;Troubleshooting",
+          "polling_id": "aBcDeFgH123",
+          "date_time": "2024-03-15T14:26:30Z"
+        },
+        {
+          "question": "Would you recommend this webinar to a colleague?",
+          "answer": "Maybe",
+          "polling_id": "xYzAbCdE456",
+          "date_time": "2024-03-15T14:45:25Z"
+        }
+      ]
+    }
+  ]
+}

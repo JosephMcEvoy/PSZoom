@@ -1,0 +1,17 @@
+{
+  "webinar_id": "98765432101",
+  "action": "start",
+  "status": "connected",
+  "settings": {
+    "active_speaker_name": true,
+    "display_name": "Company Webinar Live Stream",
+    "hd_video": true,
+    "layout_type": 1,
+    "panelist_name": true
+  },
+  "start_url": "https://zoom.us/w/98765432101?tk=livestream_start_token",
+  "stream_url": "rtmp://a.rtmp.youtube.com/live2",
+  "stream_key": "xxxx-xxxx-xxxx-xxxx-xxxx",
+  "page_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  "resolution": "720p"
+}

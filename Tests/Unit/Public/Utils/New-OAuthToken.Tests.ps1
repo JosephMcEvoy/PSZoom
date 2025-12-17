@@ -12,9 +12,11 @@ Describe 'New-OAuthToken' {
 
     Context 'When requesting OAuth token' {
         BeforeEach {
-            Mock Invoke-WebRequest -ModuleName PSZoom {
+            Mock Invoke-RestMethod -ModuleName PSZoom {
                 return @{
-                    Content = '{"access_token": "mock-access-token-12345", "token_type": "bearer", "expires_in": 3600}'
+                    access_token = 'mock-access-token-12345'
+                    token_type = 'bearer'
+                    expires_in = 3600
                 }
             }
         }
@@ -25,35 +27,36 @@ Describe 'New-OAuthToken' {
             $result | Should -BeOfType [securestring]
         }
 
-        It 'Should call Invoke-WebRequest with POST method' {
+        It 'Should call Invoke-RestMethod with POST method' {
             New-OAuthToken -AccountID 'test-account' -ClientID 'test-client' -ClientSecret 'test-secret' -APIConnection 'Zoom.us'
 
-            Should -Invoke Invoke-WebRequest -ModuleName PSZoom -ParameterFilter {
+            Should -Invoke Invoke-RestMethod -ModuleName PSZoom -ParameterFilter {
                 $Method -eq 'Post'
             }
         }
 
         It 'Should include Basic Authorization header' {
-            Mock Invoke-WebRequest -ModuleName PSZoom {
-                param($headers)
-                $headers['Authorization'] | Should -BeLike 'Basic *'
+            Mock Invoke-RestMethod -ModuleName PSZoom {
+                param($Headers)
+                $Headers['Authorization'] | Should -BeLike 'Basic *'
                 return @{
-                    Content = '{"access_token": "token", "token_type": "bearer"}'
+                    access_token = 'token'
+                    token_type = 'bearer'
                 }
             }
 
             New-OAuthToken -AccountID 'test' -ClientID 'client' -ClientSecret 'secret' -APIConnection 'Zoom.us'
-            Should -Invoke Invoke-WebRequest -ModuleName PSZoom -Times 1
+            Should -Invoke Invoke-RestMethod -ModuleName PSZoom -Times 1
         }
 
         It 'Should properly encode ClientID and ClientSecret in Basic auth' {
-            Mock Invoke-WebRequest -ModuleName PSZoom {
-                param($headers)
+            Mock Invoke-RestMethod -ModuleName PSZoom {
+                param($Headers)
                 # 'testclient:testsecret' base64 encoded = 'dGVzdGNsaWVudDp0ZXN0c2VjcmV0'
                 $expectedAuth = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes('testclient:testsecret'))
-                $headers['Authorization'] | Should -Be $expectedAuth
+                $Headers['Authorization'] | Should -Be $expectedAuth
                 return @{
-                    Content = '{"access_token": "token"}'
+                    access_token = 'token'
                 }
             }
 
@@ -61,11 +64,11 @@ Describe 'New-OAuthToken' {
         }
 
         It 'Should construct correct OAuth URL with account_id' {
-            Mock Invoke-WebRequest -ModuleName PSZoom {
-                param($uri)
-                $uri | Should -Match 'account_id=myaccount'
+            Mock Invoke-RestMethod -ModuleName PSZoom {
+                param($Uri)
+                $Uri | Should -Match 'account_id=myaccount'
                 return @{
-                    Content = '{"access_token": "token"}'
+                    access_token = 'token'
                 }
             }
 
@@ -73,11 +76,11 @@ Describe 'New-OAuthToken' {
         }
 
         It 'Should use grant_type=account_credentials in URL' {
-            Mock Invoke-WebRequest -ModuleName PSZoom {
-                param($uri)
-                $uri | Should -Match 'grant_type=account_credentials'
+            Mock Invoke-RestMethod -ModuleName PSZoom {
+                param($Uri)
+                $Uri | Should -Match 'grant_type=account_credentials'
                 return @{
-                    Content = '{"access_token": "token"}'
+                    access_token = 'token'
                 }
             }
 
@@ -87,28 +90,28 @@ Describe 'New-OAuthToken' {
 
     Context 'APIConnection handling' {
         BeforeEach {
-            Mock Invoke-WebRequest -ModuleName PSZoom {
+            Mock Invoke-RestMethod -ModuleName PSZoom {
                 return @{
-                    Content = '{"access_token": "token"}'
+                    access_token = 'token'
                 }
             }
         }
 
         It 'Should use Zoom.us domain for standard Zoom' {
-            Mock Invoke-WebRequest -ModuleName PSZoom {
-                param($uri)
-                $uri | Should -Match 'zoom\.us'
-                return @{ Content = '{"access_token": "token"}' }
+            Mock Invoke-RestMethod -ModuleName PSZoom {
+                param($Uri)
+                $Uri | Should -Match 'zoom\.us'
+                return @{ access_token = 'token' }
             }
 
             New-OAuthToken -AccountID 'account' -ClientID 'client' -ClientSecret 'secret' -APIConnection 'Zoom.us'
         }
 
         It 'Should use Zoomgov.com domain for government cloud' {
-            Mock Invoke-WebRequest -ModuleName PSZoom {
-                param($uri)
-                $uri | Should -Match 'Zoomgov\.com'
-                return @{ Content = '{"access_token": "token"}' }
+            Mock Invoke-RestMethod -ModuleName PSZoom {
+                param($Uri)
+                $Uri | Should -Match 'Zoomgov\.com'
+                return @{ access_token = 'token' }
             }
 
             New-OAuthToken -AccountID 'account' -ClientID 'client' -ClientSecret 'secret' -APIConnection 'Zoomgov.com'
@@ -142,9 +145,20 @@ Describe 'New-OAuthToken' {
     }
 
     Context 'Error handling' {
-        It 'Should propagate errors from Invoke-WebRequest' {
-            Mock Invoke-WebRequest -ModuleName PSZoom {
+        It 'Should propagate errors from Invoke-RestMethod' {
+            Mock Invoke-RestMethod -ModuleName PSZoom {
                 throw [System.Net.WebException]::new('Connection failed')
+            }
+
+            { New-OAuthToken -AccountID 'account' -ClientID 'client' -ClientSecret 'secret' -APIConnection 'Zoom.us' -ErrorAction Stop } | Should -Throw
+        }
+
+        It 'Should throw when response lacks access_token' {
+            Mock Invoke-RestMethod -ModuleName PSZoom {
+                return @{
+                    error = 'invalid_client'
+                    reason = 'Invalid credentials'
+                }
             }
 
             { New-OAuthToken -AccountID 'account' -ClientID 'client' -ClientSecret 'secret' -APIConnection 'Zoom.us' -ErrorAction Stop } | Should -Throw
@@ -153,9 +167,9 @@ Describe 'New-OAuthToken' {
 
     Context 'Pipeline support' {
         BeforeEach {
-            Mock Invoke-WebRequest -ModuleName PSZoom {
+            Mock Invoke-RestMethod -ModuleName PSZoom {
                 return @{
-                    Content = '{"access_token": "pipeline-token"}'
+                    access_token = 'pipeline-token'
                 }
             }
         }

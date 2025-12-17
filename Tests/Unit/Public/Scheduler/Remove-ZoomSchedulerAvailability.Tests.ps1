@@ -91,7 +91,8 @@ Describe 'Remove-ZoomSchedulerAvailability' {
 
         It 'Should have ConfirmImpact set to High' {
             $command = Get-Command Remove-ZoomSchedulerAvailability
-            $command.Parameters['Confirm'].Attributes.ConfirmImpact | Should -Be 'High'
+            $cmdletBinding = $command.ScriptBlock.Attributes | Where-Object { $_ -is [System.Management.Automation.CmdletBindingAttribute] }
+            $cmdletBinding.ConfirmImpact | Should -Be 'High'
         }
 
         It 'Should not call API when WhatIf is specified' {

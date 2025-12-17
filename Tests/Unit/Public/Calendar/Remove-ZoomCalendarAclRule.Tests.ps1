@@ -50,7 +50,8 @@ Describe 'Remove-ZoomCalendarAclRule' {
 
         It 'Should have ConfirmImpact set to High' {
             $cmd = Get-Command Remove-ZoomCalendarAclRule
-            $cmd.ConfirmImpact | Should -Be 'High'
+            $cmdletBinding = $cmd.ScriptBlock.Attributes | Where-Object { $_ -is [System.Management.Automation.CmdletBindingAttribute] }
+            $cmdletBinding.ConfirmImpact | Should -Be 'High'
         }
     }
 

@@ -135,7 +135,7 @@ Describe 'Remove-ZoomClip' {
             $clipIds = @('clip1', 'clip2')
             $results = Remove-ZoomClip -ClipId $clipIds -Confirm:$false
             $results | Should -HaveCount 2
-            $results | Should -AllBe $true
+            $results | ForEach-Object { $_ | Should -Be $true }
         }
 
         It 'Constructs correct URL for each ClipId in array' {

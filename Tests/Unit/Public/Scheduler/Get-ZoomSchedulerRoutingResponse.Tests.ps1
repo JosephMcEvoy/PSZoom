@@ -104,7 +104,10 @@ Describe 'Get-ZoomSchedulerRoutingResponse' {
     Context 'Positional parameters' {
         BeforeEach {
             Mock Invoke-ZoomRestMethod -ModuleName PSZoom {
-                return @{}
+                return @{
+                    form_id = 'form123'
+                    response_id = 'response789'
+                }
             }
         }
 

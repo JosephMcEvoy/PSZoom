@@ -197,7 +197,10 @@ Describe 'Update-ZoomSchedulerAvailability' {
     Context 'Positional parameters' {
         BeforeEach {
             Mock Invoke-ZoomRestMethod -ModuleName PSZoom {
-                return @{}
+                return @{
+                    id = 'avail123'
+                    name = 'Updated Work Hours'
+                }
             }
         }
 

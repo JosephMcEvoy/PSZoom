@@ -112,7 +112,8 @@ Describe 'New-ZoomCalendar' {
 
         It 'Should have ConfirmImpact set to Low' {
             $cmd = Get-Command New-ZoomCalendar
-            $cmd.ConfirmImpact | Should -Be 'Low'
+            $cmdletBinding = $cmd.ScriptBlock.Attributes | Where-Object { $_ -is [System.Management.Automation.CmdletBindingAttribute] }
+            $cmdletBinding.ConfirmImpact | Should -Be 'Low'
         }
     }
 

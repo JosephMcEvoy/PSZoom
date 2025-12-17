@@ -81,7 +81,8 @@ Describe 'New-ZoomCalendarAclRule' {
 
         It 'Should have ValidateSet attribute on ScopeType' {
             $param = (Get-Command New-ZoomCalendarAclRule).Parameters['ScopeType']
-            $param.Attributes.ValidateSetAttribute | Should -Not -BeNullOrEmpty
+            $validateSet = $param.Attributes | Where-Object { $_ -is [System.Management.Automation.ValidateSetAttribute] }
+            $validateSet | Should -Not -BeNullOrEmpty
         }
     }
 

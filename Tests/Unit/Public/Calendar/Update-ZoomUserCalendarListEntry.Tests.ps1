@@ -94,7 +94,8 @@ Describe 'Update-ZoomUserCalendarListEntry' {
 
         It 'Should have ConfirmImpact set to Low' {
             $cmd = Get-Command Update-ZoomUserCalendarListEntry
-            $cmd.ConfirmImpact | Should -Be 'Low'
+            $cmdletBinding = $cmd.ScriptBlock.Attributes | Where-Object { $_ -is [System.Management.Automation.CmdletBindingAttribute] }
+            $cmdletBinding.ConfirmImpact | Should -Be 'Low'
         }
     }
 

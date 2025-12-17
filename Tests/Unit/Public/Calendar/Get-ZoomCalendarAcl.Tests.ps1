@@ -69,8 +69,9 @@ Describe 'Get-ZoomCalendarAcl' {
 
         It 'Should validate PageSize range' {
             $param = (Get-Command Get-ZoomCalendarAcl).Parameters['PageSize']
-            $param.Attributes.ValidateRangeAttribute.MinRange | Should -Be 1
-            $param.Attributes.ValidateRangeAttribute.MaxRange | Should -Be 300
+            $validateRange = $param.Attributes | Where-Object { $_ -is [System.Management.Automation.ValidateRangeAttribute] }
+            $validateRange.MinRange | Should -Be 1
+            $validateRange.MaxRange | Should -Be 300
         }
     }
 

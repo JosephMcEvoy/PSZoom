@@ -112,7 +112,10 @@ Describe 'Get-ZoomSchedulerEvent' {
     Context 'Positional parameters' {
         BeforeEach {
             Mock Invoke-ZoomRestMethod -ModuleName PSZoom {
-                return @{}
+                return @{
+                    id = 'event123'
+                    title = 'Team Meeting'
+                }
             }
         }
 

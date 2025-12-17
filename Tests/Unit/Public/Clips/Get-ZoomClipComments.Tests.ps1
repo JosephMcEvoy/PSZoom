@@ -3,7 +3,7 @@ BeforeAll {
     $script:PSZoomToken = 'mock-token'
     $script:ZoomURI = 'https://api.zoom.us/v2'
 
-    $script:MockResponse = @{
+    $script:MockResponse = [PSCustomObject]@{
         comments = @(
             @{
                 id = 'comment123'

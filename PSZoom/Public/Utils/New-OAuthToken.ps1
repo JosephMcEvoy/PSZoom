@@ -75,19 +75,23 @@ function New-OAuthToken {
         "Authorization" = "Basic $EncodedIDSecret"  
     }
             
-    # Maybe add some error handling
     try {
-        $response = Invoke-WebRequest -uri $uri -headers $headers -Method Post -UseBasicParsing
+        # Use Invoke-RestMethod instead of Invoke-WebRequest to avoid IE dependency issues
+        # and simplify JSON parsing (Invoke-RestMethod automatically parses JSON responses)
+        $response = Invoke-RestMethod -Uri $uri -Headers $headers -Method Post
     } catch {
-        $_
+        Write-Error "Failed to acquire OAuth token: $_"
+        throw
+    }
+
+    if (-not $response.access_token) {
+        Write-Error "OAuth response did not contain an access_token"
+        throw "Invalid OAuth response"
     }
 
     Write-Verbose 'Acquired token.'
-    
-    $token = ($response.content | ConvertFrom-Json).access_token
 
-    $token = ConvertTo-SecureString -String $token -AsPlainText -Force
+    $token = ConvertTo-SecureString -String $response.access_token -AsPlainText -Force
 
-    
     Write-Output $token
 }

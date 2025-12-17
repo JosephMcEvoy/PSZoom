@@ -24,7 +24,7 @@ https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/a
 #>
 
 function Update-ZoomAccountBasePlan {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     param (
         [Parameter(
             Mandatory = $True,
@@ -56,9 +56,11 @@ function Update-ZoomAccountBasePlan {
             'hosts' = $Hosts
         }
 
-        $requestBody = ConvertTo-Json $requestBody -Depth 10
-        $response = Invoke-ZoomRestMethod -Uri $Uri -Body $requestBody -Method Put
+        if ($PSCmdlet.ShouldProcess($AccountId, "Update Account Base Plan")) {
+            $requestBody = ConvertTo-Json $requestBody -Depth 10
+            $response = Invoke-ZoomRestMethod -Uri $Uri -Body $requestBody -Method Put
 
-        Write-Output $response
+            Write-Output $response
+        }
     }
 }

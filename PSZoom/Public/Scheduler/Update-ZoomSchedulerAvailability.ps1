@@ -38,7 +38,7 @@ Update a Scheduler availability configuration.
 #>
 
 function Update-ZoomSchedulerAvailability {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     param (
         [Parameter(
             Mandatory = $True,
@@ -75,10 +75,17 @@ function Update-ZoomSchedulerAvailability {
             $requestBody.Add('schedule', $Schedule)
         }
 
-        $requestBody = ConvertTo-Json $requestBody -Depth 10
+        if ($requestBody.Count -eq 0) {
+            Write-Warning "No update parameters specified. No changes will be made."
+            return
+        }
 
-        $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method PATCH
+        if ($PSCmdlet.ShouldProcess($AvailabilityId, "Update Scheduler Availability")) {
+            $requestBody = ConvertTo-Json $requestBody -Depth 10
 
-        Write-Output $response
+            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method PATCH
+
+            Write-Output $response
+        }
     }
 }

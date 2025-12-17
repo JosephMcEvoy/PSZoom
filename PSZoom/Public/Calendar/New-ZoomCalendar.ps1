@@ -93,7 +93,7 @@ function New-ZoomCalendar {
                 $requestBody.location = $Location
             }
 
-            $requestBody = $requestBody | ConvertTo-Json
+            $requestBody = $requestBody | ConvertTo-Json -Depth 10
 
             $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method POST
 

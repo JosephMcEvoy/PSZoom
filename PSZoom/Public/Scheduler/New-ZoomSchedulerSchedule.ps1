@@ -40,7 +40,7 @@ Create a new Scheduler schedule template with additional details.
 #>
 
 function New-ZoomSchedulerSchedule {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     param (
         [Parameter(
             Mandatory = $True,
@@ -85,10 +85,12 @@ function New-ZoomSchedulerSchedule {
             $requestBody.Add('duration', $Duration)
         }
 
-        $requestBody = ConvertTo-Json $requestBody -Depth 10
+        if ($PSCmdlet.ShouldProcess($Name, "Create Scheduler Schedule")) {
+            $requestBody = ConvertTo-Json $requestBody -Depth 10
 
-        $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method POST
+            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method POST
 
-        Write-Output $response
+            Write-Output $response
+        }
     }
 }

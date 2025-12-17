@@ -24,7 +24,7 @@ https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/a
 #>
 
 function Update-ZoomAccountSettings {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     param (
         [Parameter(
             Mandatory = $True,
@@ -55,9 +55,11 @@ function Update-ZoomAccountSettings {
             $Request.Query = $query.ToString()
         }
 
-        $requestBody = $Settings | ConvertTo-Json -Depth 10
-        $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method Patch
+        if ($PSCmdlet.ShouldProcess($AccountId, "Update Account Settings")) {
+            $requestBody = $Settings | ConvertTo-Json -Depth 10
+            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method Patch
 
-        Write-Output $response
+            Write-Output $response
+        }
     }
 }

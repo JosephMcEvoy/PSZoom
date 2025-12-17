@@ -31,13 +31,13 @@ function Get-ZoomAccountSettings {
     [CmdletBinding()]
     param (
         [Parameter(
-            Mandatory = $True,
+            Mandatory = $False,
             ValueFromPipeline = $True,
             ValueFromPipelineByPropertyName = $True,
             Position = 0
         )]
         [Alias('account_id', 'id')]
-        [string]$AccountId,
+        [string]$AccountId = 'me',
 
         [Parameter(
             Mandatory = $False,

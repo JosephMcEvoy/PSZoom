@@ -47,7 +47,7 @@ function Remove-ZoomSchedulerEvent {
         $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/scheduler/events/$EventId"
 
         if ($PSCmdlet.ShouldProcess($EventId, "Delete Scheduler event")) {
-            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
+            $null = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
 
             Write-Output $true
         }

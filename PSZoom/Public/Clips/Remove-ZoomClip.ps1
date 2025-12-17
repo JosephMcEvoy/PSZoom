@@ -47,7 +47,7 @@ function Remove-ZoomClip {
             if ($PSCmdlet.ShouldProcess($clip, 'Remove clip')) {
                 $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/clips/$clip"
 
-                $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
+                $null = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
 
                 Write-Output $true
             }

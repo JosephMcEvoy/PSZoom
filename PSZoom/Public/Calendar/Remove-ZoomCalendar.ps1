@@ -49,7 +49,7 @@ function Remove-ZoomCalendar {
         $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/calendars/$CalendarId"
 
         if ($PSCmdlet.ShouldProcess($CalendarId, 'Remove')) {
-            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
+            $null = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
             Write-Verbose "Calendar $CalendarId deleted."
             Write-Output $true
         }

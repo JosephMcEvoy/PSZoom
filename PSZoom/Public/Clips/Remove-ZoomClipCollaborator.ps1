@@ -63,7 +63,7 @@ function Remove-ZoomClipCollaborator {
 
             $requestBody = ConvertTo-Json $requestBody -Depth 10
 
-            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method DELETE
+            $null = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method DELETE
 
             Write-Output $true
         }

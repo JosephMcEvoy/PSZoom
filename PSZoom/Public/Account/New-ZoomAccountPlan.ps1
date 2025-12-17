@@ -48,7 +48,7 @@ https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/a
 #>
 
 function New-ZoomAccountPlan {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     param (
         [Parameter(
             Mandatory = $True,
@@ -128,9 +128,11 @@ function New-ZoomAccountPlan {
             }
         }
 
-        $requestBody = ConvertTo-Json $requestBody -Depth 10
-        $response = Invoke-ZoomRestMethod -Uri $Uri -Body $requestBody -Method Post
+        if ($PSCmdlet.ShouldProcess($AccountId, "Create Account Plan")) {
+            $requestBody = ConvertTo-Json $requestBody -Depth 10
+            $response = Invoke-ZoomRestMethod -Uri $Uri -Body $requestBody -Method Post
 
-        Write-Output $response
+            Write-Output $response
+        }
     }
 }

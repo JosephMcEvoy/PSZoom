@@ -35,7 +35,7 @@ Create a new clip upload with just a name.
 #>
 
 function New-ZoomClipUpload {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     param (
         [Parameter(
             Mandatory = $True,
@@ -62,10 +62,12 @@ function New-ZoomClipUpload {
             $requestBody.Add('description', $Description)
         }
 
-        $requestBody = ConvertTo-Json $requestBody -Depth 10
+        if ($PSCmdlet.ShouldProcess($Name, "Create Clip Upload")) {
+            $requestBody = ConvertTo-Json $requestBody -Depth 10
 
-        $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method POST
+            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method POST
 
-        Write-Output $response
+            Write-Output $response
+        }
     }
 }

@@ -61,7 +61,7 @@ function Remove-ZoomUserCalendarListEntry {
         $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/calendars/users/$UserIdentifier/calendarList/$CalendarId"
 
         if ($PSCmdlet.ShouldProcess("User: $UserIdentifier, Calendar: $CalendarId", 'Remove from Calendar List')) {
-            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
+            $null = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
             Write-Verbose "Calendar $CalendarId removed from user $UserIdentifier's calendar list."
             Write-Output $true
         }

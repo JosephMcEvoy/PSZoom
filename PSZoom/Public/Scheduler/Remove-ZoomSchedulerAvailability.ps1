@@ -47,7 +47,7 @@ function Remove-ZoomSchedulerAvailability {
         $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/scheduler/availability/$AvailabilityId"
 
         if ($PSCmdlet.ShouldProcess($AvailabilityId, "Delete Scheduler availability")) {
-            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
+            $null = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
 
             Write-Output $true
         }

@@ -52,7 +52,7 @@ function Remove-ZoomClipComment {
         if ($PSCmdlet.ShouldProcess("$ClipId - Comment: $CommentId", 'Remove clip comment')) {
             $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/clips/$ClipId/comments/$CommentId"
 
-            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
+            $null = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
 
             Write-Output $true
         }

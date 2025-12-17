@@ -35,7 +35,7 @@ Initiate a clip transfer and receive a task ID to monitor progress.
 #>
 
 function Start-ZoomClipTransfer {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     param (
         [Parameter(
             Mandatory = $True,
@@ -60,10 +60,12 @@ function Start-ZoomClipTransfer {
             to_user_id   = $ToUserId
         }
 
-        $requestBody = ConvertTo-Json $requestBody -Depth 10
+        if ($PSCmdlet.ShouldProcess("$FromUserId to $ToUserId", "Transfer Clips")) {
+            $requestBody = ConvertTo-Json $requestBody -Depth 10
 
-        $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method POST
+            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method POST
 
-        Write-Output $response
+            Write-Output $response
+        }
     }
 }

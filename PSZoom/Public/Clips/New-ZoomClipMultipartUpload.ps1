@@ -24,14 +24,16 @@ Create a new multipart upload session.
 #>
 
 function New-ZoomClipMultipartUpload {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     param ()
 
     process {
         $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/clips/files/multipart"
 
+        if ($PSCmdlet.ShouldProcess("Multipart Upload", "Create Clip Multipart Upload Session")) {
         $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Method POST
 
         Write-Output $response
+        }
     }
 }

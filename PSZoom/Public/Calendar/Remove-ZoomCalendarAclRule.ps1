@@ -56,7 +56,7 @@ function Remove-ZoomCalendarAclRule {
         $Request = [System.UriBuilder]"https://api.$ZoomURI/v2/calendars/$CalendarId/acl/$AclId"
 
         if ($PSCmdlet.ShouldProcess("Calendar: $CalendarId, ACL: $AclId", 'Remove')) {
-            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
+            $null = Invoke-ZoomRestMethod -Uri $Request.Uri -Method DELETE
             Write-Verbose "ACL rule $AclId removed from calendar $CalendarId."
             Write-Output $true
         }

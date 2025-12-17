@@ -33,7 +33,7 @@ https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#operation/a
 #>
 
 function Update-ZoomAccountOptions {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     param (
         [Parameter(
             Mandatory = $True,
@@ -87,9 +87,11 @@ function Update-ZoomAccountOptions {
         }
 
         if ($requestBody.Count -gt 0) {
-            $requestBody = ConvertTo-Json $requestBody -Depth 10
-            $response = Invoke-ZoomRestMethod -Uri $Uri -Body $requestBody -Method Patch
-            Write-Output $response
+            if ($PSCmdlet.ShouldProcess($AccountId, "Update Account Options")) {
+                $requestBody = ConvertTo-Json $requestBody -Depth 10
+                $response = Invoke-ZoomRestMethod -Uri $Uri -Body $requestBody -Method Patch
+                Write-Output $response
+            }
         }
     }
 }

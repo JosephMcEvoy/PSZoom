@@ -41,7 +41,7 @@ Update a Scheduler event's title and start time.
 #>
 
 function Update-ZoomSchedulerEvent {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $True)]
     param (
         [Parameter(
             Mandatory = $True,
@@ -108,10 +108,17 @@ function Update-ZoomSchedulerEvent {
             $requestBody.Add('status', $Status)
         }
 
-        $requestBody = ConvertTo-Json $requestBody -Depth 10
+        if ($requestBody.Count -eq 0) {
+            Write-Warning "No update parameters specified. No changes will be made."
+            return
+        }
 
-        $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method PATCH
+        if ($PSCmdlet.ShouldProcess($EventId, "Update Scheduler Event")) {
+            $requestBody = ConvertTo-Json $requestBody -Depth 10
 
-        Write-Output $response
+            $response = Invoke-ZoomRestMethod -Uri $Request.Uri -Body $requestBody -Method PATCH
+
+            Write-Output $response
+        }
     }
 }
